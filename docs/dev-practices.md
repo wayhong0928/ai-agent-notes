@@ -79,7 +79,7 @@ BDD 常被誤會成「比 TDD 更高級」的替代品，實際上它是在 TDD 
 領域驅動設計（Domain-Driven Design，DDD）由 Eric Evans 在《Domain-Driven Design: Tackling Complexity in the Heart of Software》（Addison-Wesley）提出，處理的問題是：軟體系統越複雜，程式碼裡用的詞彙跟業務端實際用的詞彙越容易脫節，脫節到一定程度，沒人能同時看懂程式碼又看懂業務邏輯。DDD 的解法分兩層：戰略設計（strategic design）決定系統要怎麼切成幾個各自獨立的範圍；戰術設計（tactical design）決定範圍內部的程式碼怎麼組織。官方的《DDD Reference》是 Evans 原書所有定義與模式的精簡版整理，額外補了三個原書沒收錄的模式[^ddd-ref]。
 
 !!! note "這本書標 2003 還是 2004"
-    兩種年份都看得到：一般書目資料多記 2003 年 8 月出版，而作者自己的網站 domainlanguage.com 在《DDD Reference》裡寫的是「Domain-Driven Design: Tackling Complexity in the Heart of Software, Addisson-Wesley 2004」，並稱之為「Eric Evans' 2004 book」[^ddd-ref]。差異來自出版日期與版權頁標示年份不同。本頁引用時以作者網站的寫法為準，不另外斷定哪一個才「對」。
+    兩種年份都看得到：出版方 Pearson／InformIT 的[書目頁](https://www.informit.com/store/domain-driven-design-tackling-complexity-in-the-heart-9780321125217)同時列出出版日期 Aug 20, 2003 與版權年 2004（ISBN 978-0-321-12521-7），而作者自己的網站 domainlanguage.com 在《DDD Reference》裡寫的是「Domain-Driven Design: Tackling Complexity in the Heart of Software, Addisson-Wesley 2004」，並稱之為「Eric Evans' 2004 book」[^ddd-ref]。本頁引用時以作者網站的寫法為準，不另外斷定哪一個才「對」。
 
 ### 核心術語
 

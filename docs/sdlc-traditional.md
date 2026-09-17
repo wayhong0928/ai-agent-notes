@@ -41,11 +41,11 @@
 
 整理者觀察：適合的場合跟瀑布式接近（需求穩定、重視可預測的驗證流程，例如醫療器材、航太軟體），代價也一樣，早期沒發現的需求誤解要等到後面才會浮現。
 
-[^istqb]: 定義原文出自 [ISTQB Glossary](https://glossary.istqb.org/en_US/term/v-model) 的 V-model 詞條（en_US，version 2）；該頁為動態載入，定義文字取自其後端 API <https://api.glossary.istqb.org/v1/terms/v-model>。循序式開發模型的並列出自 ISTQB. *Certified Tester Foundation Level Syllabus v4.0.1*，2.1.1 節（PDF 第 25 頁）：「Examples of SDLC models include: sequential development models (e.g., waterfall model, V-model)…」<https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf>。另注意德國政府的 V-Modell XT（<https://download.gsb.bund.de/BundesCIO/V-Modell_XT_Bund/V-Modell%20XT%20Bund-2.0-HTML/index.html>）是一套可裁剪、可反覆執行的公部門流程模型，名稱相近但規格比教科書式的 V 模型複雜得多，兩者不宜直接畫上等號。
+[^istqb]: 定義原文出自 [ISTQB Glossary](https://glossary.istqb.org/en_US/term/v-model) 的 V-model 詞條（en_US，version 2）；該頁為動態載入，定義文字取自其後端 API <https://api.glossary.istqb.org/v1/terms/v-model>。循序式開發模型的並列出自 ISTQB. *Certified Tester Foundation Level Syllabus v4.0.1*，2.1 節（PDF 第 25 頁）：「Examples of SDLC models include: sequential development models (e.g., waterfall model, V-model)…」<https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf>。另注意德國政府的 V-Modell XT（<https://download.gsb.bund.de/BundesCIO/V-Modell_XT_Bund/V-Modell%20XT%20Bund-2.0-HTML/index.html>）是一套可裁剪、可反覆執行的公部門流程模型，名稱相近但規格比教科書式的 V 模型複雜得多，兩者不宜直接畫上等號。
 
 ### 2.3 螺旋模型（Spiral Model）
 
-螺旋模型由 Barry Boehm 提出，同名論文先於 1986 年 8 月刊在《ACM SIGSOFT Software Engineering Notes》[^boehm1986]，1988 年 5 月在《IEEE Computer》刊出較常被引用的版本[^boehm1988]。跟瀑布式的單向線不同，螺旋模型把整個開發流程畫成一圈一圈往外擴的螺旋，每一圈都重複四個動作：訂出這一圈的目標與限制、辨識並評估風險、開發並驗證這一圈的產出（可能是原型、可能是部分系統）、規劃下一圈。核心主張是「風險決定這一圈該做多少工作、該做到多細」：風險高的地方多做原型、多驗證，風險低的地方可以直接照傳統的線性方式往下走。Boehm 在 2000 年的 SEI 特別報告裡，把螺旋模型定義成一種「風險驅動的流程模型產生器」（原文：The spiral development model is a risk-driven process model generator，該報告 1.2 節、印刷頁 3）[^boehm2000]：不同專案的風險狀況不同，跑出來的實際流程也不同，不是每個專案套的都是同一種固定順序。
+螺旋模型由 Barry Boehm 提出，同名論文先於 1986 年 8 月刊在《ACM SIGSOFT Software Engineering Notes》[^boehm1986]，1988 年 5 月在《IEEE Computer》刊出[^boehm1988]。跟瀑布式的單向線不同，螺旋模型把整個開發流程畫成一圈一圈往外擴的螺旋。Boehm 最初的圖分成四個象限：訂出目標、替代方案與限制（DETERMINE OBJECTIVES, ALTERNATIVES, CONSTRAINTS），評估替代方案、辨識並解決風險（EVALUATE ALTERNATIVES, IDENTIFY, RESOLVE RISKS），開發並驗證下一層級的產出（DEVELOP, VERIFY NEXT LEVEL PRODUCT），規劃下一階段（PLAN NEXT PHASES）——四個象限的標籤見 CMU/SEI-2000-SR-008 的 Figure 1（PDF 第 14 頁），該報告 1.2 節說明這張圖是 Boehm 1988 年論文原圖的重繪[^boehm2000]。同一份報告也把「圖上每個元素都必須照標示的順序走過一遍」列為最需要避免的誤解之一（原文：that every element in the diagram needs to be visited in the order indicated）。核心主張是「風險決定這一圈該做多少工作、該做到多細」：風險高的地方多做原型、多驗證，風險低的地方可以直接照傳統的線性方式往下走。Boehm 在 2000 年的 SEI 特別報告裡，把螺旋模型定義成一種「風險驅動的流程模型產生器」（原文：The spiral development model is a risk-driven process model generator，該報告 1.2 節、印刷頁 3）[^boehm2000]：不同專案的風險狀況不同，跑出來的實際流程也不同，不是每個專案套的都是同一種固定順序。
 
 [^boehm1986]: Boehm, B. (1986). A spiral model of software development and enhancement. *ACM SIGSOFT Software Engineering Notes*, 11(4), 14–24. <https://doi.org/10.1145/12944.12948>
 [^boehm1988]: Boehm, B. (1988). A spiral model of software development and enhancement. *IEEE Computer*, 21(5), 61–72. <https://doi.org/10.1109/2.59>
@@ -166,10 +166,10 @@ SSDF 不規定用哪種流程模型（瀑布式或敏捷式都可以套），只
 | 主張 | 來源 |
 |---|---|
 | SDLC 六階段拆解 | 整理者依業界通用拆法歸納，非逐字引用單一出處，屬於常識性架構而非個人推論 |
-| 瀑布式的單向階段結構 | Royce 1970 論文 Figure 2（印刷頁 329 前一頁的圖，圖說：Implementation steps to develop a large computer program for delivery to a customer） |
+| 瀑布式的單向階段結構 | Royce 1970 論文 Figure 2（印刷頁 329，圖說：Implementation steps to develop a large computer program for delivery to a customer） |
 | 瀑布式的適用場合與缺點 | 整理者觀察，正文已標示，無單一出處 |
 | Royce 1970 論文原文（含頁碼） | Royce, W. W. (1970). *Proceedings, IEEE WESCON*, 1–9；重印版印刷頁 328–338，引文見 329、330、334 頁，原始 PDF：<https://cse.msu.edu/~cse435/Homework/HW3/royce1970.pdf> |
-| V 模型定義（開發階段與測試層級一對一對應） | [ISTQB Glossary：V-model](https://glossary.istqb.org/en_US/term/v-model)（定義原文取自 <https://api.glossary.istqb.org/v1/terms/v-model>）、[ISTQB CTFL Syllabus v4.0.1](https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf) 2.1.1 節 |
+| V 模型定義（開發階段與測試層級一對一對應） | [ISTQB Glossary：V-model](https://glossary.istqb.org/en_US/term/v-model)（定義原文取自 <https://api.glossary.istqb.org/v1/terms/v-model>）、[ISTQB CTFL Syllabus v4.0.1](https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf) 2.1 節 |
 | V 字圖形畫法、V 模型的適用場合 | 整理者說明／整理者觀察，正文已標示，官方定義未涵蓋 |
 | 螺旋模型論文出處（1986、1988） | Boehm, B. (1986). *ACM SIGSOFT Software Engineering Notes*, 11(4), 14–24. <https://doi.org/10.1145/12944.12948>；Boehm, B. (1988). *IEEE Computer*, 21(5), 61–72. <https://doi.org/10.1109/2.59> |
 | 「風險驅動的流程模型產生器」原句 | [Boehm (2000), CMU/SEI-2000-SR-008](https://www.sei.cmu.edu/library/spiral-development-experience-principles-and-refinements-spiral-development-workshop-february-9-2000/) 1.2 節、印刷頁 3（[PDF](https://www.sei.cmu.edu/documents/5439/2000_003_001_13655.pdf)） |
