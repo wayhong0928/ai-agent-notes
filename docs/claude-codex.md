@@ -121,6 +121,72 @@ codex exec -s workspace-write -C ~/projects/demo "依 spec.md 裡的規格實作
 
 上面這兩行 PowerShell 管線寫法官方文件沒有給範例，是本站按 PowerShell 一般語法推出的通用寫法，不是官方逐字教學，用之前建議自己先跑一次確認行為符合預期。
 
+### 不指定 `-s` 的時候，預設是什麼
+
+上面那張表講的是「你主動指定 `-s` 會怎樣」。實際更常踩到的是另一半：**不指定的時候會怎樣**。這件事互動式跟非互動式的答案不一樣。
+
+| 情境 | 不指定時的行為 |
+|---|---|
+| 互動式 TUI（`codex`，不加 `exec`） | 沒有單一固定預設。官方文件寫的是 Codex 在啟動時偵測資料夾是否受版本控制再給建議：受版控的資料夾建議 `Auto`（workspace write 加 on-request 核可），未受版控的資料夾建議 `read-only` |
+| 非互動式（`codex exec`） | 固定是 `read-only`。官方原文：「By default, `codex exec` runs in a read-only sandbox.」 |
+
+另外，`codex exec` 預設要求在 git repository 裡執行，官方說明的理由是避免破壞性變更；不在 repo 裡要加 `--skip-git-repo-check` 才會跑。
+
+**常見的誤解方向**：不少人把這件事記成「每開一個新專案都要重新設定一次 workspace，否則沒辦法 CRUD」。照官方文件的描述，比較貼切的理解是：每個專案有一次性的信任判斷，不是每次手動重設。Codex 的 `config.toml` 分兩層——使用者層在 `~/.codex/config.toml`，專案層是 repo 裡的 `.codex/config.toml`——而專案層只有在你信任該專案時才會載入，官方原文是「For security, Codex loads project `.codex/` layers only when you trust the project.」；標記為不信任時，專案範圍的 `.codex/` 層（含專案本地 config、hooks、rules）會整組被略過。互動式的信任本身是明確的一個動作，官方舉的例子是啟動時的 onboarding 提示或 `/permissions`。
+
+這個方向差別會直接影響排查。讀者實際撞到的症狀通常是「在未受版控的目錄、或用 `codex exec` 的時候，因為預設唯讀所以寫不了檔、跑不了指令」，成因剛好跟「預設可以寫、只是要設定」相反。如果照後者的方向去排查，會一直在找「我是不是漏設了什麼權限」，而不是先去確認「我這次是不是根本落在唯讀預設上」——後者只要補一個 `-s workspace-write` 就解決了。
+
+（本站沒有查證 IDE 擴充套件的預設值，也不寫信任提示彈窗的逐字介面文案或任何宣稱可以設定信任層級的 TOML 欄位；這幾項在官方文件裡查無，只在第三方教學看過，不要照抄。）
+
+### 自己測一次：能不能寫檔
+
+下面這組指令是用來確認「你這台機器上的 Codex，在明確指定 `-s workspace-write` 時真的寫得了檔」，以及「不指定的時候真的是唯讀」。建立一個一次性的測試目錄就好，不要拿正在做的專案試。
+
+**第一步：建一個受版控的測試目錄，並要求 Codex 寫一個檔。** 預期結果是 `hello.txt` 出現、內容是 `ok`。
+
+Bash／macOS／Linux／Git Bash：
+
+```bash
+mkdir -p ~/codex-trust-test && git -C ~/codex-trust-test init
+codex exec -s workspace-write -C ~/codex-trust-test "在目前目錄建立 hello.txt，內容只寫 ok，然後回報你實際做了什麼"
+cat ~/codex-trust-test/hello.txt
+```
+
+Windows PowerShell：
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\codex-trust-test" | Out-Null
+git -C "$HOME\codex-trust-test" init
+codex exec -s workspace-write -C "$HOME\codex-trust-test" "在目前目錄建立 hello.txt，內容只寫 ok，然後回報你實際做了什麼"
+Get-Content "$HOME\codex-trust-test\hello.txt"
+```
+
+**第二步：同一個目錄，把 `-s workspace-write` 拿掉再跑一次。** 這次是刻意讓它落在 `codex exec` 的唯讀預設上，預期結果是檔案不會被建立，Codex 會回報它在唯讀環境下寫不了：
+
+```bash
+codex exec -C ~/codex-trust-test "在目前目錄建立 hello2.txt，內容只寫 ok"
+ls ~/codex-trust-test
+```
+
+```powershell
+codex exec -C "$HOME\codex-trust-test" "在目前目錄建立 hello2.txt，內容只寫 ok"
+Get-ChildItem "$HOME\codex-trust-test"
+```
+
+兩步跑完，第一步有檔、第二步沒檔，就代表你的環境行為跟官方描述一致，之後遇到「Codex 說它動不了檔案」時，第一個要檢查的就是這次呼叫有沒有帶 `-s workspace-write`。測完把目錄刪掉即可（`rm -rf ~/codex-trust-test`／`Remove-Item -Recurse -Force "$HOME\codex-trust-test"`）。
+
+**如果測試目錄不是 git repo**，`codex exec` 會因為 repo 檢查而不執行，要另外加 `--skip-git-repo-check`：
+
+```bash
+codex exec -s workspace-write --skip-git-repo-check -C ~/codex-trust-test "在目前目錄建立 hello.txt，內容只寫 ok"
+```
+
+```powershell
+codex exec -s workspace-write --skip-git-repo-check -C "$HOME\codex-trust-test" "在目前目錄建立 hello.txt，內容只寫 ok"
+```
+
+這組指令本身是本站依官方旗標說明組出來的驗證流程，官方文件沒有逐字給這一串；旗標與預設行為有出處（見文末資料來源），但每一步的實際輸出文字會因版本而異，以你自己跑出來的結果為準。
+
 ## 四、分工模式
 
 **Claude 規劃、Codex 執行**：先讓 Claude Code（或 `Plan`）把規格拆成可逐條驗證的條件，再把這份規格連同驗收條件交給 Codex 執行。適合規格已經明確、自包含、不需要理解特定專案脈絡規則的程式或腳本任務，例如「把這支腳本的輸出格式從 CSV 改成 JSON，欄位對照見附表」。
@@ -180,6 +246,7 @@ Claude Code 讀的是 `CLAUDE.md`，官方文件裡查無它會讀取 `AGENTS.md
 - 四種組合裡，只有「Claude Code + Codex plugin」跟「Claude Code 直接呼叫 `codex exec`」現在確定可行；「Codex 透過 MCP 呼叫 `claude mcp serve`」是實驗性、只開放工具層；「Cowork + Codex」目前查無官方整合。
 - 裝 plugin 走 `/plugin marketplace add` → `/plugin install` → `/reload-plugins` → `/codex:setup` 四步，8 個指令分工清楚：review／adversarial-review 唯讀審查，rescue 真的動手做，transfer 換到 Codex 環境接續。
 - 不裝 plugin 也能直接用 `codex exec` 搭配 `-s`、`-C`、`--skip-git-repo-check`、`-o`、stdin、`--add-dir` 這幾個已確認的旗標。
+- 不指定 `-s` 時，互動式 TUI 沒有單一固定預設（受版控建議 `Auto`、未受版控建議 `read-only`），`codex exec` 則固定預設 `read-only`；專案層 `.codex/config.toml` 只有在該專案被信任時才載入。信任是每個專案一次性的判斷，不是每次要 CRUD 都得重設，實際會撞到的症狀是唯讀寫不了檔，補 `-s workspace-write` 即可，文中附了一組兩步驟的自我測試指令。
 - 三種分工模式各有適用情境：規格明確就規劃後交出去執行，高風險變更一定要讓另一個 agent 審查，容易被誤導的事實問題交叉查證。
 - 七個坑裡最容易踩的是背景任務狀態脫鉤跟前景逾時自動轉背景，兩者都要靠檢查輸出檔案而非信任狀態訊息；Windows 上讓 Codex 自己 `git init` 也是實測會出事的地方；CLAUDE.md／AGENTS.md 各讀各的也有官方留的共用做法（`project_doc_fallback_filenames`、`@AGENTS.md` 匯入），不是只能維護兩份重複內容。
 
@@ -191,6 +258,9 @@ Claude Code 讀的是 `CLAUDE.md`，官方文件裡查無它會讀取 `AGENTS.md
 | Codex CLI reference（`codex exec` 旗標） | <https://developers.openai.com/codex/cli/reference> |
 | Codex CLI 文件 | <https://learn.chatgpt.com/docs/codex/cli> |
 | Codex sandboxing | <https://learn.chatgpt.com/docs/sandboxing> |
+| Codex agent approvals & security（啟動時依是否受版控給的建議、信任工作目錄） | <https://learn.chatgpt.com/docs/agent-approvals-security> |
+| Codex 非互動模式（`codex exec` 預設 read-only、git repo 檢查） | <https://learn.chatgpt.com/docs/non-interactive-mode> |
+| Codex config basics（`~/.codex/config.toml` 與專案層 `.codex/`、信任才載入） | <https://learn.chatgpt.com/docs/config-file/config-basic> |
 | Codex MCP client | <https://learn.chatgpt.com/docs/extend/mcp?surface=cli> |
 | Codex MCP server removal | <https://learn.chatgpt.com/docs/mcp-server> |
 | Codex AGENTS.md（含 `project_doc_fallback_filenames`） | <https://learn.chatgpt.com/docs/agent-configuration/agents-md> |

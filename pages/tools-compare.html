@@ -28,11 +28,13 @@
 <div class="navsec"><h2>實戰協作</h2><ul>
 <li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789618549">Claude Code + Codex 協作</a></li>
 <li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789618549">把教材做成 SKILL</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1789654529">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655628">Claude Code + Cowork 並用</a></li>
 </ul></div>
 <div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
-<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789618549">SDLC 與流程模型</a></li>
-<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789618549">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
-<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789618549">AI 代理時代的 SDLC</a></li>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789620815">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789620815">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789620815">AI 代理時代的 SDLC</a></li>
 </ul></div>
 <div class="navsec"><h2>官方建議設定</h2><ul>
 <li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789618549">Claude Code 設定總覽</a></li>
@@ -142,9 +144,13 @@
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">2026-09-16 起：Cowork 正在併入一般 Chat（分階段推出，尚未全面生效）</p>
+<p>Claude 官方公告 Cowork 與一般 Chat 正在合併成同一個體驗，<strong>是分階段推出，不是已經全面生效</strong>：Pro／Max 帳號正在逐步收到（即使同方案，不同帳號收到的時間點也不一樣），Team／Free 官方說「即將推出」但目前尚未開始，Enterprise 在變動前會提前至少 30 天通知、目前維持現狀不變。合併後的體驗裡沒有獨立的「Cowork 模式」可切換，原本只有 Cowork 才有的檔案操作、任務、connector、skill 能力，在任何一段對話裡都能自動用到，由 Claude 自己判斷要不要動用。上面表格裡「Cowork」這一列，對還沒收到新體驗的帳號仍然照原樣運作；已經收到新體驗的帳號，請把這一列的能力直接理解成「一般對話多了這些能力」，不是找不到 Cowork 分頁就是設定錯了 [S25][S26][S27]。</p>
+</div>
 <h2 id="_2">最容易搞混的五組</h2>
 <h3 id="1-claude-desktop-chat-vs-coworkcode">1. Claude Desktop 的 Chat 分頁 vs Cowork／Code 分頁</h3>
-<p>同一個 App 裡的三個分頁，能碰到的東西差很多。Chat 分頁本質上就是網頁版包進桌面殼，不能碰本機檔案；要讀寫本機檔案，得切到 Cowork 或 Code 分頁 [S7]。看到「我在用 Claude Desktop」這句話，不能直接假設它能動你的檔案，要先問清楚是哪個分頁。</p>
+<p>同一個 App 裡的三個分頁，能碰到的東西差很多。Chat 分頁本質上就是網頁版包進桌面殼，不能碰本機檔案；要讀寫本機檔案，得切到 Cowork 或 Code 分頁 [S7]。看到「我在用 Claude Desktop」這句話，不能直接假設它能動你的檔案，要先問清楚是哪個分頁。<strong>但這個「三分頁」的說法只適用還沒收到新體驗的帳號</strong>：2026-09-16 起 Pro／Max 帳號正分階段收到 Cowork 併入 Chat 的合併體驗，收到之後 Chat 分頁本身就能碰本機檔案，不必再切分頁 [S26]。</p>
 <h3 id="2-cowork-vs-claude-code">2. Cowork vs Claude Code</h3>
 <p>兩者共用底層的 agent 架構，但任務導向完全不同：Cowork 面向一般知識工作（整理檔案、做報表、跨應用程式），Claude Code 面向程式碼與可重跑的批次流程 [S21]。官方也特別強調，Cowork 不是 Claude Code CLI 的另一個名字 [X4]。</p>
 <h3 id="3-chatgpt-desktop-codex-vs-codex-cli">3. ChatGPT Desktop 的 Codex 分頁 vs Codex CLI</h3>
@@ -156,7 +162,7 @@
 <h2 id="_3">怎麼選</h2>
 <ul>
 <li>只是想討論、腦力激盪、潤飾一段文字 → Claude Chat 或 ChatGPT 網頁版。</li>
-<li>想做一般辦公自動化（整理檔案、寄信、跨工具彙整），不想碰終端機 → Cowork（Claude）或 ChatGPT Desktop 裡的 Work 分頁。</li>
+<li>想做一般辦公自動化（整理檔案、寄信、跨工具彙整），不想碰終端機 → Claude（Pro／Max 已收到合併體驗的帳號直接在一般對話做；尚未收到的帳號切到 Cowork 分頁 [S26]）或 ChatGPT Desktop 裡的 Work 分頁。</li>
 <li>需要讀寫本機檔案、跨檔案批次處理、要版本控制 → Claude Code 或 Codex CLI／IDE 擴充。</li>
 <li>想丟一個長跑任務、不想守在螢幕前，或要處理你本機沒有的 repo → claude.ai/code（Claude Code on the web）或 Codex cloud。</li>
 <li>想做視覺化設計、原型、投影片 → Claude Design（仍是 research preview，Pro 起）。</li>
@@ -251,6 +257,21 @@
 <td>S24</td>
 <td>support.claude.com/en/articles/13837440-use-plugins-in-claude</td>
 <td>Claude.ai／Cowork 使用 plugin 的方案與介面</td>
+</tr>
+<tr>
+<td>S25</td>
+<td>claude.com/blog/cowork-is-now-claude</td>
+<td>Cowork 與 Chat 合併公告（2026-09-16）</td>
+</tr>
+<tr>
+<td>S26</td>
+<td>support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude</td>
+<td>合併現況：各方案推出時程、分階段推出說明</td>
+</tr>
+<tr>
+<td>S27</td>
+<td>support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans</td>
+<td>Team／Enterprise 維持現狀不變</td>
 </tr>
 <tr>
 <td>O3</td>

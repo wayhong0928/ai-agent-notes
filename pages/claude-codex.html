@@ -28,11 +28,13 @@
 <div class="navsec"><h2>實戰協作</h2><ul>
 <li class="active"><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789618549">Claude Code + Codex 協作</a></li>
 <li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789618549">把教材做成 SKILL</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1789654529">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655628">Claude Code + Cowork 並用</a></li>
 </ul></div>
 <div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
-<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789618549">SDLC 與流程模型</a></li>
-<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789618549">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
-<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789618549">AI 代理時代的 SDLC</a></li>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789620815">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789620815">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789620815">AI 代理時代的 SDLC</a></li>
 </ul></div>
 <div class="navsec"><h2>官方建議設定</h2><ul>
 <li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789618549">Claude Code 設定總覽</a></li>
@@ -227,11 +229,63 @@ codex login
 <pre><code class="language-bash">codex exec -s workspace-write -C ~/projects/demo &quot;依 spec.md 裡的規格實作這個功能&quot;
 </code></pre>
 <p>上面這兩行 PowerShell 管線寫法官方文件沒有給範例，是本站按 PowerShell 一般語法推出的通用寫法，不是官方逐字教學，用之前建議自己先跑一次確認行為符合預期。</p>
-<h2 id="_3">四、分工模式</h2>
+<h3 id="-s">不指定 <code>-s</code> 的時候，預設是什麼</h3>
+<p>上面那張表講的是「你主動指定 <code>-s</code> 會怎樣」。實際更常踩到的是另一半：<strong>不指定的時候會怎樣</strong>。這件事互動式跟非互動式的答案不一樣。</p>
+<table>
+<thead>
+<tr>
+<th>情境</th>
+<th>不指定時的行為</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>互動式 TUI（<code>codex</code>，不加 <code>exec</code>）</td>
+<td>沒有單一固定預設。官方文件寫的是 Codex 在啟動時偵測資料夾是否受版本控制再給建議：受版控的資料夾建議 <code>Auto</code>（workspace write 加 on-request 核可），未受版控的資料夾建議 <code>read-only</code></td>
+</tr>
+<tr>
+<td>非互動式（<code>codex exec</code>）</td>
+<td>固定是 <code>read-only</code>。官方原文：「By default, <code>codex exec</code> runs in a read-only sandbox.」</td>
+</tr>
+</tbody>
+</table>
+<p>另外，<code>codex exec</code> 預設要求在 git repository 裡執行，官方說明的理由是避免破壞性變更；不在 repo 裡要加 <code>--skip-git-repo-check</code> 才會跑。</p>
+<p><strong>常見的誤解方向</strong>：不少人把這件事記成「每開一個新專案都要重新設定一次 workspace，否則沒辦法 CRUD」。照官方文件的描述，比較貼切的理解是：每個專案有一次性的信任判斷，不是每次手動重設。Codex 的 <code>config.toml</code> 分兩層——使用者層在 <code>~/.codex/config.toml</code>，專案層是 repo 裡的 <code>.codex/config.toml</code>——而專案層只有在你信任該專案時才會載入，官方原文是「For security, Codex loads project <code>.codex/</code> layers only when you trust the project.」；標記為不信任時，專案範圍的 <code>.codex/</code> 層（含專案本地 config、hooks、rules）會整組被略過。互動式的信任本身是明確的一個動作，官方舉的例子是啟動時的 onboarding 提示或 <code>/permissions</code>。</p>
+<p>這個方向差別會直接影響排查。讀者實際撞到的症狀通常是「在未受版控的目錄、或用 <code>codex exec</code> 的時候，因為預設唯讀所以寫不了檔、跑不了指令」，成因剛好跟「預設可以寫、只是要設定」相反。如果照後者的方向去排查，會一直在找「我是不是漏設了什麼權限」，而不是先去確認「我這次是不是根本落在唯讀預設上」——後者只要補一個 <code>-s workspace-write</code> 就解決了。</p>
+<p>（本站沒有查證 IDE 擴充套件的預設值，也不寫信任提示彈窗的逐字介面文案或任何宣稱可以設定信任層級的 TOML 欄位；這幾項在官方文件裡查無，只在第三方教學看過，不要照抄。）</p>
+<h3 id="_3">自己測一次：能不能寫檔</h3>
+<p>下面這組指令是用來確認「你這台機器上的 Codex，在明確指定 <code>-s workspace-write</code> 時真的寫得了檔」，以及「不指定的時候真的是唯讀」。建立一個一次性的測試目錄就好，不要拿正在做的專案試。</p>
+<p><strong>第一步：建一個受版控的測試目錄，並要求 Codex 寫一個檔。</strong> 預期結果是 <code>hello.txt</code> 出現、內容是 <code>ok</code>。</p>
+<p>Bash／macOS／Linux／Git Bash：</p>
+<pre><code class="language-bash">mkdir -p ~/codex-trust-test &amp;&amp; git -C ~/codex-trust-test init
+codex exec -s workspace-write -C ~/codex-trust-test &quot;在目前目錄建立 hello.txt，內容只寫 ok，然後回報你實際做了什麼&quot;
+cat ~/codex-trust-test/hello.txt
+</code></pre>
+<p>Windows PowerShell：</p>
+<pre><code class="language-powershell">New-Item -ItemType Directory -Force &quot;$HOME\codex-trust-test&quot; | Out-Null
+git -C &quot;$HOME\codex-trust-test&quot; init
+codex exec -s workspace-write -C &quot;$HOME\codex-trust-test&quot; &quot;在目前目錄建立 hello.txt，內容只寫 ok，然後回報你實際做了什麼&quot;
+Get-Content &quot;$HOME\codex-trust-test\hello.txt&quot;
+</code></pre>
+<p><strong>第二步：同一個目錄，把 <code>-s workspace-write</code> 拿掉再跑一次。</strong> 這次是刻意讓它落在 <code>codex exec</code> 的唯讀預設上，預期結果是檔案不會被建立，Codex 會回報它在唯讀環境下寫不了：</p>
+<pre><code class="language-bash">codex exec -C ~/codex-trust-test &quot;在目前目錄建立 hello2.txt，內容只寫 ok&quot;
+ls ~/codex-trust-test
+</code></pre>
+<pre><code class="language-powershell">codex exec -C &quot;$HOME\codex-trust-test&quot; &quot;在目前目錄建立 hello2.txt，內容只寫 ok&quot;
+Get-ChildItem &quot;$HOME\codex-trust-test&quot;
+</code></pre>
+<p>兩步跑完，第一步有檔、第二步沒檔，就代表你的環境行為跟官方描述一致，之後遇到「Codex 說它動不了檔案」時，第一個要檢查的就是這次呼叫有沒有帶 <code>-s workspace-write</code>。測完把目錄刪掉即可（<code>rm -rf ~/codex-trust-test</code>／<code>Remove-Item -Recurse -Force "$HOME\codex-trust-test"</code>）。</p>
+<p><strong>如果測試目錄不是 git repo</strong>，<code>codex exec</code> 會因為 repo 檢查而不執行，要另外加 <code>--skip-git-repo-check</code>：</p>
+<pre><code class="language-bash">codex exec -s workspace-write --skip-git-repo-check -C ~/codex-trust-test &quot;在目前目錄建立 hello.txt，內容只寫 ok&quot;
+</code></pre>
+<pre><code class="language-powershell">codex exec -s workspace-write --skip-git-repo-check -C &quot;$HOME\codex-trust-test&quot; &quot;在目前目錄建立 hello.txt，內容只寫 ok&quot;
+</code></pre>
+<p>這組指令本身是本站依官方旗標說明組出來的驗證流程，官方文件沒有逐字給這一串；旗標與預設行為有出處（見文末資料來源），但每一步的實際輸出文字會因版本而異，以你自己跑出來的結果為準。</p>
+<h2 id="_4">四、分工模式</h2>
 <p><strong>Claude 規劃、Codex 執行</strong>：先讓 Claude Code（或 <code>Plan</code>）把規格拆成可逐條驗證的條件，再把這份規格連同驗收條件交給 Codex 執行。適合規格已經明確、自包含、不需要理解特定專案脈絡規則的程式或腳本任務，例如「把這支腳本的輸出格式從 CSV 改成 JSON，欄位對照見附表」。</p>
 <p><strong>一方寫、另一方審</strong>：做的人不驗自己的活。Claude Code 寫完一段實作後，派 <code>/codex:review</code> 或 <code>/codex:adversarial-review</code> 讓 Codex 用乾淨的視角只看 diff 跟驗收條件審查，不要讓寫的那個 agent 自己審查自己。適合任何你要對外交付的變更，尤其是動到認證、資料寫入、金流這類高風險區塊。</p>
 <p><strong>交叉查證</strong>：同一個事實問題，讓 Claude 跟 Codex 各自查一次官方文件再比對答案。適合查證「某個 API 旗標存不存在」「某個功能哪個方案才能用」這類容易被訓練記憶誤導的問題。兩邊都查到同一個答案才比較有把握，分歧本身就是該進一步查證的訊號。</p>
-<h2 id="_4">五、已知的坑</h2>
+<h2 id="_5">五、已知的坑</h2>
 <p><strong>a. 背景模式的 job 狀態可能跟 Codex 實際進度脫鉤</strong></p>
 <p>用 <code>--background</code> 派出的任務，<code>/codex:status</code> 顯示的狀態有時跟 Codex 實際在做的事不同步。截至查證當下，<code>openai/codex-plugin-cc</code> 的 issue tracker 裡有多筆相關且仍開著的問題，例如 <a href="https://github.com/openai/codex-plugin-cc/issues/639">#639</a>（<code>result</code>／<code>cancel</code> 對存在的任務回報「找不到任務」，被中止的 worker 卻仍顯示執行中）與 <a href="https://github.com/openai/codex-plugin-cc/issues/704">#704</a>（worker 在寫入最終狀態前就掛掉，任務因此永遠顯示執行中）。</p>
 <p>避法：短任務直接用同步模式（不加 <code>--background</code>）；真的要背景跑的長任務，任務完成的判定不能只看 <code>/codex:status</code> 顯示 completed，要另外直接檢查預期的輸出檔案是否存在、內容是否正確、更新時間是否在合理範圍內。</p>
@@ -257,15 +311,16 @@ codex login
 <li>Cowork 確實已經支援 plugin，部分本機 Cowork 情境下也能執行 plugin 內含的本機 MCP server，但查無 OpenAI 官方發布過一個給 Cowork 用的 Codex plugin。<code>openai/codex-plugin-cc</code> 的 README 明確把自己定位成給 Claude Code 用的 plugin，沒有保證能在 Cowork 正常運作。來源：<a href="https://support.claude.com/en/articles/13837440-use-plugins-in-claude">Use plugins in Claude</a>。</li>
 </ol>
 <p>想找 Cowork 跟 Codex 官方整合的教學，目前應該視為查無出處，不要照抄任何寫「在 Cowork 裡輸入指令呼叫本機 <code>codex exec</code>」的舊文章；有人自己動手拼出一套本機 MCP wrapper 也不是不可能，但那是自製實驗，不是本頁能保證的做法。</p>
-<h2 id="_5">本頁重點回顧</h2>
+<h2 id="_6">本頁重點回顧</h2>
 <ul>
 <li>四種組合裡，只有「Claude Code + Codex plugin」跟「Claude Code 直接呼叫 <code>codex exec</code>」現在確定可行；「Codex 透過 MCP 呼叫 <code>claude mcp serve</code>」是實驗性、只開放工具層；「Cowork + Codex」目前查無官方整合。</li>
 <li>裝 plugin 走 <code>/plugin marketplace add</code> → <code>/plugin install</code> → <code>/reload-plugins</code> → <code>/codex:setup</code> 四步，8 個指令分工清楚：review／adversarial-review 唯讀審查，rescue 真的動手做，transfer 換到 Codex 環境接續。</li>
 <li>不裝 plugin 也能直接用 <code>codex exec</code> 搭配 <code>-s</code>、<code>-C</code>、<code>--skip-git-repo-check</code>、<code>-o</code>、stdin、<code>--add-dir</code> 這幾個已確認的旗標。</li>
+<li>不指定 <code>-s</code> 時，互動式 TUI 沒有單一固定預設（受版控建議 <code>Auto</code>、未受版控建議 <code>read-only</code>），<code>codex exec</code> 則固定預設 <code>read-only</code>；專案層 <code>.codex/config.toml</code> 只有在該專案被信任時才載入。信任是每個專案一次性的判斷，不是每次要 CRUD 都得重設，實際會撞到的症狀是唯讀寫不了檔，補 <code>-s workspace-write</code> 即可，文中附了一組兩步驟的自我測試指令。</li>
 <li>三種分工模式各有適用情境：規格明確就規劃後交出去執行，高風險變更一定要讓另一個 agent 審查，容易被誤導的事實問題交叉查證。</li>
 <li>七個坑裡最容易踩的是背景任務狀態脫鉤跟前景逾時自動轉背景，兩者都要靠檢查輸出檔案而非信任狀態訊息；Windows 上讓 Codex 自己 <code>git init</code> 也是實測會出事的地方；CLAUDE.md／AGENTS.md 各讀各的也有官方留的共用做法（<code>project_doc_fallback_filenames</code>、<code>@AGENTS.md</code> 匯入），不是只能維護兩份重複內容。</li>
 </ul>
-<h2 id="_6">資料來源</h2>
+<h2 id="_7">資料來源</h2>
 <table>
 <thead>
 <tr>
@@ -289,6 +344,18 @@ codex login
 <tr>
 <td>Codex sandboxing</td>
 <td><a href="https://learn.chatgpt.com/docs/sandboxing">https://learn.chatgpt.com/docs/sandboxing</a></td>
+</tr>
+<tr>
+<td>Codex agent approvals &amp; security（啟動時依是否受版控給的建議、信任工作目錄）</td>
+<td><a href="https://learn.chatgpt.com/docs/agent-approvals-security">https://learn.chatgpt.com/docs/agent-approvals-security</a></td>
+</tr>
+<tr>
+<td>Codex 非互動模式（<code>codex exec</code> 預設 read-only、git repo 檢查）</td>
+<td><a href="https://learn.chatgpt.com/docs/non-interactive-mode">https://learn.chatgpt.com/docs/non-interactive-mode</a></td>
+</tr>
+<tr>
+<td>Codex config basics（<code>~/.codex/config.toml</code> 與專案層 <code>.codex/</code>、信任才載入）</td>
+<td><a href="https://learn.chatgpt.com/docs/config-file/config-basic">https://learn.chatgpt.com/docs/config-file/config-basic</a></td>
 </tr>
 <tr>
 <td>Codex MCP client</td>
@@ -345,12 +412,16 @@ codex login
 <li><a href="#8">8 個指令</a></li>
 </ul>
 </li>
-<li><a href="#plugin-codex-exec">三、做法二：不裝 plugin，直接呼叫 codex exec</a></li>
-<li><a href="#_3">四、分工模式</a></li>
-<li><a href="#_4">五、已知的坑</a></li>
+<li><a href="#plugin-codex-exec">三、做法二：不裝 plugin，直接呼叫 codex exec</a><ul>
+<li><a href="#-s">不指定 -s 的時候，預設是什麼</a></li>
+<li><a href="#_3">自己測一次：能不能寫檔</a></li>
+</ul>
+</li>
+<li><a href="#_4">四、分工模式</a></li>
+<li><a href="#_5">五、已知的坑</a></li>
 <li><a href="#cowork">六、Cowork 呢</a></li>
-<li><a href="#_5">本頁重點回顧</a></li>
-<li><a href="#_6">資料來源</a></li>
+<li><a href="#_6">本頁重點回顧</a></li>
+<li><a href="#_7">資料來源</a></li>
 </ul>
 </div>
 </aside>

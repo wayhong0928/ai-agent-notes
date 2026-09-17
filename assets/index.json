@@ -48,6 +48,18 @@
   "section": "實戰協作"
  },
  {
+  "slug": "claude-code-obsidian",
+  "title": "Claude Code 接上 Obsidian",
+  "desc": "四條路徑、官方 CLI 與 MCP 的取捨",
+  "section": "實戰協作"
+ },
+ {
+  "slug": "claude-code-cowork",
+  "title": "Claude Code + Cowork 並用",
+  "desc": "帳號現況判斷、檔案交接工作流程、Dispatch 現況",
+  "section": "實戰協作"
+ },
+ {
   "slug": "sdlc-traditional",
   "title": "SDLC 與流程模型",
   "desc": "瀑布式、V 模型、螺旋模型、敏捷式各階段在做什麼",

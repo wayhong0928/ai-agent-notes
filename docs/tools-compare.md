@@ -19,10 +19,13 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 | **ChatGPT Desktop**（統一版，含 Chat／Work／Codex 分頁） | 本機殼；Chat／Work 跑在雲端，Codex 分頁依 sandbox 設定可在本機執行 [O7] | ⚠️ Codex 分頁依 sandbox mode 可讀寫本機；Chat／Work 分頁不行 [O25] | ⚠️ Codex 分頁依 sandbox mode（read-only／workspace-write／danger-full-access）[O25] | Codex 分頁：AGENTS.md✅／Skill✅／Plugin✅／Subagent✅，全方案不分級 [O28][O29][O30] | Free 即可，官方明說方案層級含 Free [O3][O7]；但功能是分批推出，不保證每個帳號當下都已經看得到 [A2b 題2] | 一個 App 打通聊天、知識工作 agent、程式碼 agent |
 | **Codex**（CLI／IDE／cloud） | CLI／IDE 擴充在本機；cloud（chatgpt.com/codex）是 OpenAI 雲端 sandbox 內的 repo checkout [O25][O26] | CLI／IDE 可讀寫本機；cloud 是雲端 checkout，不是使用者本機磁碟 [O25] | ✅ 依 sandbox mode 決定要不要先問過你 [O25] | AGENTS.md✅／Skill✅／Plugin✅／Subagent✅，全方案不分級；也能當 MCP client 接外部服務 [O28][O29][O30][X6] | Free／Go 可用，但不同介面深淺不一，官方文件之間曾出現矛盾（見下方第三、四組）[A2 §0][A2b 題5] | 本機 repo 互動、CI/CD 腳本、雲端長跑任務 |
 
+!!! warning "2026-09-16 起：Cowork 正在併入一般 Chat（分階段推出，尚未全面生效）"
+    Claude 官方公告 Cowork 與一般 Chat 正在合併成同一個體驗，**是分階段推出，不是已經全面生效**：Pro／Max 帳號正在逐步收到（即使同方案，不同帳號收到的時間點也不一樣），Team／Free 官方說「即將推出」但目前尚未開始，Enterprise 在變動前會提前至少 30 天通知、目前維持現狀不變。合併後的體驗裡沒有獨立的「Cowork 模式」可切換，原本只有 Cowork 才有的檔案操作、任務、connector、skill 能力，在任何一段對話裡都能自動用到，由 Claude 自己判斷要不要動用。上面表格裡「Cowork」這一列，對還沒收到新體驗的帳號仍然照原樣運作；已經收到新體驗的帳號，請把這一列的能力直接理解成「一般對話多了這些能力」，不是找不到 Cowork 分頁就是設定錯了 [S25][S26][S27]。
+
 ## 最容易搞混的五組
 
 ### 1. Claude Desktop 的 Chat 分頁 vs Cowork／Code 分頁
-同一個 App 裡的三個分頁，能碰到的東西差很多。Chat 分頁本質上就是網頁版包進桌面殼，不能碰本機檔案；要讀寫本機檔案，得切到 Cowork 或 Code 分頁 [S7]。看到「我在用 Claude Desktop」這句話，不能直接假設它能動你的檔案，要先問清楚是哪個分頁。
+同一個 App 裡的三個分頁，能碰到的東西差很多。Chat 分頁本質上就是網頁版包進桌面殼，不能碰本機檔案；要讀寫本機檔案，得切到 Cowork 或 Code 分頁 [S7]。看到「我在用 Claude Desktop」這句話，不能直接假設它能動你的檔案，要先問清楚是哪個分頁。**但這個「三分頁」的說法只適用還沒收到新體驗的帳號**：2026-09-16 起 Pro／Max 帳號正分階段收到 Cowork 併入 Chat 的合併體驗，收到之後 Chat 分頁本身就能碰本機檔案，不必再切分頁 [S26]。
 
 ### 2. Cowork vs Claude Code
 兩者共用底層的 agent 架構，但任務導向完全不同：Cowork 面向一般知識工作（整理檔案、做報表、跨應用程式），Claude Code 面向程式碼與可重跑的批次流程 [S21]。官方也特別強調，Cowork 不是 Claude Code CLI 的另一個名字 [X4]。
@@ -39,7 +42,7 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 ## 怎麼選
 
 - 只是想討論、腦力激盪、潤飾一段文字 → Claude Chat 或 ChatGPT 網頁版。
-- 想做一般辦公自動化（整理檔案、寄信、跨工具彙整），不想碰終端機 → Cowork（Claude）或 ChatGPT Desktop 裡的 Work 分頁。
+- 想做一般辦公自動化（整理檔案、寄信、跨工具彙整），不想碰終端機 → Claude（Pro／Max 已收到合併體驗的帳號直接在一般對話做；尚未收到的帳號切到 Cowork 分頁 [S26]）或 ChatGPT Desktop 裡的 Work 分頁。
 - 需要讀寫本機檔案、跨檔案批次處理、要版本控制 → Claude Code 或 Codex CLI／IDE 擴充。
 - 想丟一個長跑任務、不想守在螢幕前，或要處理你本機沒有的 repo → claude.ai/code（Claude Code on the web）或 Codex cloud。
 - 想做視覺化設計、原型、投影片 → Claude Design（仍是 research preview，Pro 起）。
@@ -65,6 +68,9 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 | S22 | anthropic.com/news/claude-design-anthropic-labs | Claude Design 方案可用性、research preview 狀態 |
 | S23 | support.claude.com/en/articles/12304248-manage-api-key-environment-variables-in-claude-code | 純 API key 跑 Claude Code 的計費機制 |
 | S24 | support.claude.com/en/articles/13837440-use-plugins-in-claude | Claude.ai／Cowork 使用 plugin 的方案與介面 |
+| S25 | claude.com/blog/cowork-is-now-claude | Cowork 與 Chat 合併公告（2026-09-16） |
+| S26 | support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude | 合併現況：各方案推出時程、分階段推出說明 |
+| S27 | support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans | Team／Enterprise 維持現狀不變 |
 | O3 | OpenAI 官方 X 貼文（2026-07-09 ChatGPT Work 發布，經二次來源引述） | Desktop app 全方案含 Free 可用 Chat/Work/Codex |
 | O7 | learn.chatgpt.com/docs/app | 統一版 Desktop app 的分頁切換方式 |
 | O10 | 業界慣例類推（未找到 OpenAI 專門說明此點的頁面） | API key 不含網頁 Chat 存取（信心中偏低） |

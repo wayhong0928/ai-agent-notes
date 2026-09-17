@@ -20,7 +20,7 @@
     | Sub-agents | https://code.claude.com/docs/en/sub-agents | model/effort 解析順序 |
     | Memory | https://code.claude.com/docs/en/memory | CLAUDE.md 與 MEMORY.md 上限 |
     | Skills | https://code.claude.com/docs/en/skills | progressive disclosure |
-    | Hooks guide | https://code.claude.com/docs/en/hooks-guide | hook 限制 |
+    | Hooks guide | https://code.claude.com/docs/en/hooks-guide | hook 限制、Stop hook 驗收範例 |
     | A Harness for Every Task | https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code | 動態 workflow |
     | Effective harnesses for long-running agents | https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents | 長跑任務結構 |
     | Effective context engineering | https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents | context 經濟學 |
@@ -72,6 +72,133 @@
 
 四級不是互斥的，愈重要的產出，愈值得疊加使用多級。
 
+## 三之一、把原則變成可照做的範例
+
+前面講的都是原則。這節把其中三條落到可以直接照抄的樣子（本節查證日期 2026-09-17）。這裡示範的是「原則怎麼落地」，各種機制本身怎麼設定、放在哪個資料夾，見[SKILL、Plugin、MCP 與 Subagent](extensions.md)，不在這裡重複。
+
+每個範例都標示來源等級，請先看清楚標示再照抄：
+
+- **【官方逐字】**：官方文件裡原封不動的句子或設定，本站只加中文說明。
+- **【官方改寫】**：骨架與要素來自官方，中文句子是本站依它的結構改寫的，不是官方原文。
+- **【整理者自創】**：官方沒有給這個角度的東西，是依前面的原則推出來的建議寫法，請當成建議而不是官方結論。
+
+### 對應原則 2.1／2.2：派一個只看 diff 的驗收子代理
+
+官方對這件事的描述是【官方逐字】：在乾淨子代理上下文裡跑的審查者「sees only the diff and the criteria you give it, not the reasoning that produced the change」，所以它是就結果本身作判斷[9]。
+
+官方在同一節給出的派工範例，原文如下【官方逐字】[9]：
+
+```text
+Use a subagent to review the rate limiter diff against PLAN.md. Check that
+every requirement is implemented, the listed edge cases have tests, and
+nothing outside the task's scope changed. Report gaps, not style preferences.
+```
+
+官方也把這段話的結構講明了：派工時要點名三件事——要驗的東西（name the work to check）、拿什麼當驗收標準（the plan to check it against）、什麼才算一個問題（what counts as a finding）[9]。
+
+依這三個要素改寫成中文範本，可以直接套用【官方改寫：要素來自官方，以下中文句子不是官方原文】：
+
+```text
+請開一個乾淨的子代理驗收下面這件事，只看結果，不要看我前面的討論過程。
+
+要驗的東西：<這次改動的檔案或 diff>
+驗收標準：<標準寫在哪，例如 PLAN.md、需求清單，或直接列在這裡的三條條件>
+
+請逐條檢查：
+1. 驗收標準裡的每一條是不是都真的做到了？做到的請指出在哪個檔案的哪一段。
+2. 標準裡列出的邊界情況，有沒有對應的檢查或測試？
+3. 有沒有改到這次任務範圍以外的東西？
+
+只回報會影響正確性、或違反上述標準的缺口；風格與個人偏好不用回報。
+```
+
+最後一句對應原則 2.3：官方提醒，被要求找問題的審查者通常一定會找出問題來，所以要事先講明什麼才值得回報[9]。另外，如果只是要檢查改動有沒有 bug，官方說 Claude Code 內建的 `/code-review` 就是在乾淨的子代理裡審目前的 diff 並把發現帶回主線，不必自己寫這段提示詞[9]。
+
+!!! note "沒有子代理功能的人怎麼照做"
+    【官方改寫：分工來自官方，以下是中文轉述，不是官方原文】官方另外給了一組 Writer／Reviewer 的兩個對話分工：A 視窗負責實作，B 視窗只拿到「要看哪個檔案、要找哪一類問題」這兩件事，再把 B 的輸出貼回 A 去修[9]。重點不在有沒有 subagent 這個功能，而在於驗收的那個視角沒看過實作當下的推理過程——一般聊天視窗另開一個新對話一樣做得到。
+
+### 對應原則 2.7：什麼樣的回報才算附了證據
+
+官方講證據的那一句是【官方逐字】：「Have Claude show evidence rather than asserting success: the test output, the command it ran and what it returned, or a screenshot of the result.」[4] 三種形式講得很具體：測試輸出、跑了哪一行指令與它回傳了什麼、結果的截圖。
+
+官方在同一節給的對照表，左邊是驗不了的問法，右邊是把驗收條件寫進去的問法【官方逐字，括號內為中文說明】[4]：
+
+| 不夠格：無法驗證的交辦 | 夠格：自帶檢查的交辦 |
+|---|---|
+| implement a function that validates email addresses（實作一個驗 email 的函式） | write a validateEmail function. example test cases: user@example.com is true, invalid is false, user@.com is false. run the tests after implementing（附三組具體測資，實作完把測試跑一遍） |
+| make the dashboard look better（把儀表板弄好看一點） | \[paste screenshot] implement this design. take a screenshot of the result and compare it to the original. list differences and fix them（附設計稿，做完截圖跟原稿比對，列出差異再修） |
+| the build is failing（建置壞了） | the build fails with this error: \[paste error]. fix it and verify the build succeeds. address the root cause, don't suppress the error（貼上錯誤訊息，修完要驗證建置成功，而且要處理根因，不是把錯誤壓掉） |
+
+把這張表反過來用，就是收到回報時該檢查的東西【整理者依上述官方原文歸納的清單，官方沒有直接給這份對照】：
+
+- **不夠格的回報**：「已經修好了」「應該沒問題了」「我檢查過了」「都確認過沒問題」——這幾句話沒有任何一個你可以複驗的東西，它們是斷言不是證據。
+- **夠格的回報要附三樣**：（一）跑了哪一行指令；（二）原封不動的輸出，不是它轉述的結論；（三）對照的基準是什麼——哪一份需求、哪一張設計稿、哪一個測試檔。三樣缺一樣，你就只能相信它，不能核對它。
+
+官方補的理由值得記住：當沒有可以執行的檢查時，「看起來做完了」是模型唯一拿得到的訊號[4]。
+
+### 對應第三節第 3 級：用 Stop hook 擋住「還沒驗證就說做完」
+
+第三節第 3 級講 hook 當硬性關卡。要卡的如果是「宣稱完成」這件事，對應的事件不是編輯檔案前的 `PreToolUse`，而是 Claude 結束回應時觸發的 `Stop`【整理者說明：選哪個事件是本站依原則推出來的判斷，官方文件本身只寫 Stop hook 會在 Claude 結束回應時觸發[10]】。
+
+官方給的最小範例，是用一個 prompt 型 hook 在收工前問模型「事情是不是真的都做完了」，回 `ok: false` 就把 `reason` 丟回去讓它繼續做【官方逐字】[10]：
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Check if all tasks are complete. If not, respond with {\"ok\": false, \"reason\": \"what remains to be done\"}."
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+如果要卡的是「到底有沒有真的跑過測試」，官方另給一個 agent 型 hook 的範例，它會實際去跑測試、看結果，再決定放不放行【官方逐字】[10]：
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "Verify that all unit tests pass. Run the test suite and check the results. $ARGUMENTS",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+官方把這兩種 hook 的分工一句話講完：hook 收到的輸入資料本身就夠判斷時，用 prompt hook；需要對照程式碼實際狀態才判斷得出來時，用 agent hook[10]。這兩個範例跟 [extensions.md](extensions.md) 裡那個「擋掉敏感檔案編輯」的 hook 是不同用途：那個是用機制守住紅線，這兩個是用機制守住驗收。
+
+!!! warning "三個官方講明的限制"
+    【官方改寫：三條限制都出自官方文件，以下是中文轉述，不是官方逐字原文】
+
+    - agent hook 官方標為實驗性（experimental），設定與行為可能改變，正式流程官方建議用 command hook[10]。
+    - `Stop` hook 只要 Claude 結束回應就會觸發，不是只在任務完成時觸發；使用者按中斷時不會觸發[10]。
+    - 連續阻擋八次而沒有進展之後，Claude Code 會覆蓋掉這個 Stop hook、讓回合結束[10]。
+
+針對第三點，官方給的防呆寫法是在腳本開頭讀 `stop_hook_active` 欄位，已經是被自己擋下來續跑的那一輪就直接放行【官方逐字】[10]：
+
+```bash
+#!/bin/bash
+INPUT=$(cat)
+if [ "$(echo "$INPUT" | jq -r '.stop_hook_active')" = "true" ]; then
+  exit 0  # Allow Claude to stop
+fi
+# ... rest of your hook logic
+```
+
 ## 四、動態 harness 與靜態規則表：一組取捨
 
 官方另一篇文章主張的方向，是讓模型在執行當下自己決定要不要開子代理、要隔離到什麼程度、該用哪個模型，也就是模型當場就依照眼前這個任務，即時寫出一套適合它的工作方式，而不是套用一份固定不變的清單[6]。
@@ -111,6 +238,7 @@
 - harness 是圍繞模型的工具、上下文管理與執行環境，不是模型本身的推理能力。
 - 七個可靠性原則：做事的人不驗自己、驗收官只看結果不看推理、找到的問題不必照單全收、探索交給子代理別污染主線、說明檔太長規則會被忽略、該強制的事交給機制、拿證據而非斷言。
 - 驗證力度分四級，愈重要的產出愈該疊加使用。
+- 三個可照抄的落地範例：官方的驗收子代理派工提示詞（要驗什麼、拿什麼當標準、什麼才算問題）、「附證據」與「只說做完了」的正反對照、用 `Stop` hook 在收工前強制檢查的最小設定；每個範例都標示了是官方逐字、官方改寫，還是本站自創。
 - 動態即時決定 vs 事先寫死規則，是可預測與能應變之間的取捨，沒有標準答案。
 - 多代理協作不是免費的，只有真的能拆開的任務才值得平行處理。
 - 說明檔案與記憶檔都有篇幅上限，記憶檔真正先觸頂的常常是位元組數而不是行數。
@@ -127,5 +255,7 @@
 | [6] | A Harness for Every Task | <https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code> |
 | [7] | How we built our multi-agent research system（4 倍／15 倍 token 用量對照） | <https://www.anthropic.com/engineering/multi-agent-research-system> |
 | [8] | How Claude remembers your project（CLAUDE.md、MEMORY.md 篇幅上限） | <https://code.claude.com/docs/en/memory> |
+| [9] | Best practices for Claude Code（Add an adversarial review step：驗收子代理派工範例、Writer／Reviewer 分工） | <https://code.claude.com/docs/en/best-practices> |
+| [10] | Automate actions with hooks（Stop hook 的 prompt／agent 範例、八次阻擋上限與 `stop_hook_active`） | <https://code.claude.com/docs/en/hooks-guide> |
 
 延伸：[AI Agent 怎麼運作](agent-basics.md)｜[SKILL、Plugin、MCP 與 Subagent](extensions.md)

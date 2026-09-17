@@ -35,21 +35,15 @@
 
 ### 2.2 V 模型
 
-國際軟體測試資格認證委員會（ISTQB）的官方詞彙表把 V 模型定義為：「循序式的軟體開發生命週期模型，描述從商業需求規格到交付的各個主要開發階段，與從驗收測試到元件測試的各個測試層級之間，一對一的對應關係」（原文：A sequential software development lifecycle model describing a one-for-one relationship between major phases of software development from business requirements specification to delivery, and corresponding test levels from acceptance testing to component testing）[^istqb]。同一機構的 Foundation Level 教材也把 V 模型與瀑布式並列，當成「循序式開發模型」的兩個例子[^istqb]。
+國際軟體測試資格認證委員會（ISTQB）的官方詞彙表把 V 模型定義為：「循序式的軟體開發生命週期模型，描述從商業需求規格到交付的各個主要開發階段，與從驗收測試到元件測試的各個測試層級之間，一對一的對應關係」（原文：A sequential software development lifecycle model describing a one-for-one relationship between major phases of software development from business requirements specification to delivery, and corresponding test levels from acceptance testing to component testing）[1]。同一機構的 Foundation Level 教材也把 V 模型與瀑布式並列，當成「循序式開發模型」的兩個例子[1]。
 
 **整理者說明**：這種一對一的對應關係可以畫成一個 V 字——左半邊由上往下是開發階段，右半邊由下往上是對應的測試層級——「V 模型」這個名稱看起來也是這麼來的；不過這個圖形化的畫法不在上面的官方定義裡，這裡是整理者為了方便理解而補的說明。這樣安排的用意是每個開發階段都先想好「將來要怎麼驗證這一階段做對了」：寫需求時就先想好驗收測試要測什麼，設計架構時就先想好整合測試要測什麼，測試計畫因此跟著設計同步定案，不用等程式寫完才臨時想怎麼測。
 
 整理者觀察：適合的場合跟瀑布式接近（需求穩定、重視可預測的驗證流程，例如醫療器材、航太軟體），代價也一樣，早期沒發現的需求誤解要等到後面才會浮現。
 
-[^istqb]: 定義原文出自 [ISTQB Glossary](https://glossary.istqb.org/en_US/term/v-model) 的 V-model 詞條（en_US，version 2）；該頁為動態載入，定義文字取自其後端 API <https://api.glossary.istqb.org/v1/terms/v-model>。循序式開發模型的並列出自 ISTQB. *Certified Tester Foundation Level Syllabus v4.0.1*，2.1 節（PDF 第 25 頁）：「Examples of SDLC models include: sequential development models (e.g., waterfall model, V-model)…」<https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf>。另注意德國政府的 V-Modell XT（<https://download.gsb.bund.de/BundesCIO/V-Modell_XT_Bund/V-Modell%20XT%20Bund-2.0-HTML/index.html>）是一套可裁剪、可反覆執行的公部門流程模型，名稱相近但規格比教科書式的 V 模型複雜得多，兩者不宜直接畫上等號。
-
 ### 2.3 螺旋模型（Spiral Model）
 
-螺旋模型由 Barry Boehm 提出，同名論文先於 1986 年 8 月刊在《ACM SIGSOFT Software Engineering Notes》[^boehm1986]，1988 年 5 月在《IEEE Computer》刊出[^boehm1988]。跟瀑布式的單向線不同，螺旋模型把整個開發流程畫成一圈一圈往外擴的螺旋。Boehm 最初的圖分成四個象限：訂出目標、替代方案與限制（DETERMINE OBJECTIVES, ALTERNATIVES, CONSTRAINTS），評估替代方案、辨識並解決風險（EVALUATE ALTERNATIVES, IDENTIFY, RESOLVE RISKS），開發並驗證下一層級的產出（DEVELOP, VERIFY NEXT LEVEL PRODUCT），規劃下一階段（PLAN NEXT PHASES）——四個象限的標籤見 CMU/SEI-2000-SR-008 的 Figure 1（PDF 第 14 頁），該報告 1.2 節說明這張圖是 Boehm 1988 年論文原圖的重繪[^boehm2000]。同一份報告也把「圖上每個元素都必須照標示的順序走過一遍」列為最需要避免的誤解之一（原文：that every element in the diagram needs to be visited in the order indicated）。核心主張是「風險決定這一圈該做多少工作、該做到多細」：風險高的地方多做原型、多驗證，風險低的地方可以直接照傳統的線性方式往下走。Boehm 在 2000 年的 SEI 特別報告裡，把螺旋模型定義成一種「風險驅動的流程模型產生器」（原文：The spiral development model is a risk-driven process model generator，該報告 1.2 節、印刷頁 3）[^boehm2000]：不同專案的風險狀況不同，跑出來的實際流程也不同，不是每個專案套的都是同一種固定順序。
-
-[^boehm1986]: Boehm, B. (1986). A spiral model of software development and enhancement. *ACM SIGSOFT Software Engineering Notes*, 11(4), 14–24. <https://doi.org/10.1145/12944.12948>
-[^boehm1988]: Boehm, B. (1988). A spiral model of software development and enhancement. *IEEE Computer*, 21(5), 61–72. <https://doi.org/10.1109/2.59>
-[^boehm2000]: Boehm, B.（Hansen, W. J. 編）(2000). *Spiral Development: Experience, Principles, and Refinements*（Special Report CMU/SEI-2000-SR-008）. Carnegie Mellon University／SEI. [報告頁](https://www.sei.cmu.edu/library/spiral-development-experience-principles-and-refinements-spiral-development-workshop-february-9-2000/)、[PDF 全文](https://www.sei.cmu.edu/documents/5439/2000_003_001_13655.pdf)
+螺旋模型由 Barry Boehm 提出，同名論文先於 1986 年 8 月刊在《ACM SIGSOFT Software Engineering Notes》[2]，1988 年 5 月在《IEEE Computer》刊出[3]。跟瀑布式的單向線不同，螺旋模型把整個開發流程畫成一圈一圈往外擴的螺旋。Boehm 最初的圖分成四個象限：訂出目標、替代方案與限制（DETERMINE OBJECTIVES, ALTERNATIVES, CONSTRAINTS），評估替代方案、辨識並解決風險（EVALUATE ALTERNATIVES, IDENTIFY, RESOLVE RISKS），開發並驗證下一層級的產出（DEVELOP, VERIFY NEXT LEVEL PRODUCT），規劃下一階段（PLAN NEXT PHASES）——四個象限的標籤見 CMU/SEI-2000-SR-008 的 Figure 1（PDF 第 14 頁），該報告 1.2 節說明這張圖是 Boehm 1988 年論文原圖的重繪[4]。同一份報告也把「圖上每個元素都必須照標示的順序走過一遍」列為最需要避免的誤解之一（原文：that every element in the diagram needs to be visited in the order indicated）。核心主張是「風險決定這一圈該做多少工作、該做到多細」：風險高的地方多做原型、多驗證，風險低的地方可以直接照傳統的線性方式往下走。Boehm 在 2000 年的 SEI 特別報告裡，把螺旋模型定義成一種「風險驅動的流程模型產生器」（原文：The spiral development model is a risk-driven process model generator，該報告 1.2 節、印刷頁 3）[4]：不同專案的風險狀況不同，跑出來的實際流程也不同，不是每個專案套的都是同一種固定順序。
 
 ### 2.4 迭代與增量開發
 
@@ -74,7 +68,7 @@
 
 ### 3.2 Scrum：職責歸屬、事件、產出物
 
-Scrum 是一套敏捷框架，規則寫在官方的《The Scrum Guide》，目前引用版本是 2020 年 11 月版[^scrum2020]。
+Scrum 是一套敏捷框架，規則寫在官方的《The Scrum Guide》，目前引用版本是 2020 年 11 月版[5]。
 
 **三項職責歸屬（accountabilities，合稱 Scrum Team）：**
 
@@ -82,7 +76,7 @@ Scrum 是一套敏捷框架，規則寫在官方的《The Scrum Guide》，目�
 
 - **開發者（Developers）**：每個 Sprint 負責產出可用增量（Increment）的人。
 - **產品負責人（Product Owner）**：對最大化產品價值負責，管理產品待辦清單（Product Backlog），決定要做什麼、先做什麼。
-- **Scrum Master**：建立並維護 Scrum 的運作方式，教練團隊、排除障礙，並協助組織理解 Scrum。2020 年版的原句是「Scrum Masters are true leaders who serve the Scrum Team and the larger organization」（Scrum Master 是服務 Scrum 團隊與更大的組織的真正領導者）[^scrum2020]。
+- **Scrum Master**：建立並維護 Scrum 的運作方式，教練團隊、排除障礙，並協助組織理解 Scrum。2020 年版的原句是「Scrum Masters are true leaders who serve the Scrum Team and the larger organization」（Scrum Master 是服務 Scrum 團隊與更大的組織的真正領導者）[5]。
 
 **五個事件（Events）：Sprint 本身也是一個事件，是容納其餘四個正式事件的容器：**
 
@@ -102,10 +96,7 @@ Scrum 是一套敏捷框架，規則寫在官方的《The Scrum Guide》，目�
 | Sprint Backlog（Sprint 待辦清單） | Sprint Goal：這個 Sprint 唯一的目標 |
 | Increment（增量） | Definition of Done：這塊產出要符合的品質標準 |
 
-「承諾」是 2020 年版新增的概念。官方修訂說明給的理由是這些承諾「exist to bring transparency and focus toward the progress of each artifact」（為每個產出物的進展帶來透明度與聚焦）[^scrumrev]；指南本文的說法則是「These commitments exist to reinforce empiricism and the Scrum values for the Scrum Team and their stakeholders」（強化經驗主義與 Scrum 價值觀）[^scrum2020]。
-
-[^scrum2020]: Schwaber, K., & Sutherland, J. (2020). *The Scrum Guide*. <https://scrumguides.org/scrum-guide.html>
-[^scrumrev]: Scrum Guides. Revision History（2020 年版修訂說明）. <https://scrumguides.org/revisions.html>
+「承諾」是 2020 年版新增的概念。官方修訂說明給的理由是這些承諾「exist to bring transparency and focus toward the progress of each artifact」（為每個產出物的進展帶來透明度與聚焦）[6]；指南本文的說法則是「These commitments exist to reinforce empiricism and the Scrum values for the Scrum Team and their stakeholders」（強化經驗主義與 Scrum 價值觀）[5]。
 
 ### 3.3 Kanban
 
@@ -113,28 +104,21 @@ Scrum 是一套敏捷框架，規則寫在官方的《The Scrum Guide》，目�
 
 ### 3.4 XP 極限編程（摘要）
 
-極限編程（Extreme Programming，簡稱 XP）由 Kent Beck 在《Extreme Programming Explained: Embrace Change》（Addison-Wesley，1999 年初版；2004 年與 Cynthia Andres 合著第二版）中提出，是一套把敏捷價值觀落實到工程實務細節的具體做法，包含測試先行、持續整合、結對程式設計、重構、簡單設計、共同擁有程式碼等一系列實踐。這幾項實踐的詳細做法（尤其測試先行，也就是 TDD 的起點）留到下一頁[開發實踐：TDD、BDD、DDD 與 SDD](dev-practices.md)展開，這裡只點出 XP 在 SDLC 光譜上的位置：它跟 Scrum 一樣屬於明確的敏捷框架，講的是工程師寫程式當下該怎麼做；Scrum 講的是團隊怎麼安排工作節奏；Kanban 則是官方定位為策略層級的做法，三者處理的問題不完全一樣。Agile Alliance 的公開詞彙表把 XP 列為「在軟體開發工程實務上規範最具體的敏捷框架」，列出的實踐包含 Pair Programming（結對程式設計）、Test-First Programming（測試先行）、Continuous Integration（持續整合）、Incremental Design（漸進式設計）等項目[^xpaa]。
-
-[^xpaa]: Agile Alliance. What is Extreme Programming (XP)? <https://agilealliance.org/glossary/xp/>
+極限編程（Extreme Programming，簡稱 XP）由 Kent Beck 在《Extreme Programming Explained: Embrace Change》（Addison-Wesley，1999 年初版；2004 年與 Cynthia Andres 合著第二版）中提出，是一套把敏捷價值觀落實到工程實務細節的具體做法，包含測試先行、持續整合、結對程式設計、重構、簡單設計、共同擁有程式碼等一系列實踐。這幾項實踐的詳細做法（尤其測試先行，也就是 TDD 的起點）留到下一頁[開發實踐：TDD、BDD、DDD 與 SDD](dev-practices.md)展開，這裡只點出 XP 在 SDLC 光譜上的位置：它跟 Scrum 一樣屬於明確的敏捷框架，講的是工程師寫程式當下該怎麼做；Scrum 講的是團隊怎麼安排工作節奏；Kanban 則是官方定位為策略層級的做法，三者處理的問題不完全一樣。Agile Alliance 的公開詞彙表把 XP 列為「在軟體開發工程實務上規範最具體的敏捷框架」，列出的實踐包含 Pair Programming（結對程式設計）、Test-First Programming（測試先行）、Continuous Integration（持續整合）、Incremental Design（漸進式設計）等項目[7]。
 
 ## 四、DevOps 與 CI/CD
 
 DevOps 是開發（Development）與維運（Operations）合流的做法，目標是縮短「寫完程式」到「安全上線」之間的距離。落實 DevOps 常會提到三個容易混用的詞：
 
-- **持續整合（Continuous Integration，CI）**：Martin Fowler 的定義是團隊每個成員至少每天把自己的修改整合進主線一次，每次整合都由自動化建置（含測試）驗證，儘快抓出整合上的錯誤[^ci]。前提是程式碼本身要有夠完整的自動化測試（self-testing code），沒有測試，CI 就只是「常常把可能壞掉的東西合併進主線」。
-- **持續交付（Continuous Delivery，CD）**：軟體隨時維持在「可以被部署到正式環境」的狀態，但不代表每次修改都真的會被部署上去，交付與部署是兩件事[^cd]。
-- **持續部署（Continuous Deployment）**：每一次通過流程的修改都自動被部署到正式環境，一天可能發生很多次部署。持續部署是持續交付的進一步實踐，持續交付是持續部署的前提，但持續交付不強制要求持續部署[^cd]。
+- **持續整合（Continuous Integration，CI）**：Martin Fowler 的定義是團隊每個成員至少每天把自己的修改整合進主線一次，每次整合都由自動化建置（含測試）驗證，儘快抓出整合上的錯誤[8]。前提是程式碼本身要有夠完整的自動化測試（self-testing code），沒有測試，CI 就只是「常常把可能壞掉的東西合併進主線」。
+- **持續交付（Continuous Delivery，CD）**：軟體隨時維持在「可以被部署到正式環境」的狀態，但不代表每次修改都真的會被部署上去，交付與部署是兩件事[9]。
+- **持續部署（Continuous Deployment）**：每一次通過流程的修改都自動被部署到正式環境，一天可能發生很多次部署。持續部署是持續交付的進一步實踐，持續交付是持續部署的前提，但持續交付不強制要求持續部署[9]。
 
-支撐 CI 的一個常見版本控制作法是**主幹開發（trunk-based development）**：開發者共同在一條主線（trunk）上工作，避免長期存在的功能分支，官方說法是團隊成員至少每 24 小時要合併回主幹一次[^tbd]。Google 主導的 DevOps 研究計畫 DORA 把主幹開發列為跟軟體交付表現相關的能力之一，2016 到 2017 年的研究發現同時採用主幹開發與 CI 的團隊，交付速度、穩定性等表現通常較好[^dora]。
-
-[^ci]: Fowler, M. (2006, updated). Continuous Integration. <https://martinfowler.com/articles/continuousIntegration.html>
-[^cd]: Fowler, M. Continuous Delivery. <https://martinfowler.com/bliki/ContinuousDelivery.html>
-[^tbd]: Trunk Based Development. <https://trunkbaseddevelopment.com/>
-[^dora]: DORA. Trunk-based development. <https://dora.dev/capabilities/trunk-based-development/>
+支撐 CI 的一個常見版本控制作法是**主幹開發（trunk-based development）**：開發者共同在一條主線（trunk）上工作，避免長期存在的功能分支，官方說法是團隊成員至少每 24 小時要合併回主幹一次[10]。Google 主導的 DevOps 研究計畫 DORA 把主幹開發列為跟軟體交付表現相關的能力之一，2016 到 2017 年的研究發現同時採用主幹開發與 CI 的團隊，交付速度、穩定性等表現通常較好[11]。
 
 ## 五、安全開發：NIST SSDF
 
-美國國家標準與技術研究院（NIST）在《SP 800-218：Secure Software Development Framework（SSDF）》裡，把安全開發實務整理成四個高層次的實踐群組[^ssdf]：
+美國國家標準與技術研究院（NIST）在《SP 800-218：Secure Software Development Framework（SSDF）》裡，把安全開發實務整理成四個高層次的實踐群組[12]：
 
 | 群組 | 縮寫 | NIST 原文說明 |
 |---|---|---|
@@ -143,10 +127,7 @@ DevOps 是開發（Development）與維運（Operations）合流的做法，目�
 | Produce Well-Secured Software（產出足夠安全的軟體） | PW | 透過安全的開發實務，讓每次發布的軟體只帶有最少的安全性弱點 |
 | Respond to Vulnerabilities（回應弱點） | RV | 找出軟體發布後殘留的弱點，妥善回應，並避免類似弱點未來再發生 |
 
-SSDF 不規定用哪種流程模型（瀑布式或敏捷式都可以套），只規定在整個生命週期裡，安全這件事要在哪些節點被處理到。截至查證日，正式版仍是 SP 800-218（SSDF v1.1）；NIST 已於 2025-12-17 公開 SP 800-218 Rev. 1（SSDF v1.2）的初版公開草案，尚未定案[^ssdfdraft]。
-
-[^ssdf]: NIST. Secure Software Development Framework (SSDF). <https://csrc.nist.gov/projects/ssdf>；完整規格見 [NIST SP 800-218](https://csrc.nist.gov/pubs/sp/800/218/final)。
-[^ssdfdraft]: NIST. SP 800-218 Rev. 1 (Initial Public Draft). <https://csrc.nist.gov/pubs/sp/800/218/r1/ipd>；發布清單見 <https://csrc.nist.gov/projects/ssdf/publications>。
+SSDF 不規定用哪種流程模型（瀑布式或敏捷式都可以套），只規定在整個生命週期裡，安全這件事要在哪些節點被處理到。截至查證日，正式版仍是 SP 800-218（SSDF v1.1）；NIST 已於 2025-12-17 公開 SP 800-218 Rev. 1（SSDF v1.2）的初版公開草案，尚未定案[13]。
 
 ## 六、流程模型比較與怎麼選
 
@@ -163,27 +144,27 @@ SSDF 不規定用哪種流程模型（瀑布式或敏捷式都可以套），只
 
 ## 資料來源
 
-| 主張 | 來源 |
-|---|---|
-| SDLC 六階段拆解 | 整理者依業界通用拆法歸納，非逐字引用單一出處，屬於常識性架構而非個人推論 |
-| 瀑布式的單向階段結構 | Royce 1970 論文 Figure 2（印刷頁 329，圖說：Implementation steps to develop a large computer program for delivery to a customer） |
-| 瀑布式的適用場合與缺點 | 整理者觀察，正文已標示，無單一出處 |
-| Royce 1970 論文原文（含頁碼） | Royce, W. W. (1970). *Proceedings, IEEE WESCON*, 1–9；重印版印刷頁 328–338，引文見 329、330、334 頁，原始 PDF：<https://cse.msu.edu/~cse435/Homework/HW3/royce1970.pdf> |
-| V 模型定義（開發階段與測試層級一對一對應） | [ISTQB Glossary：V-model](https://glossary.istqb.org/en_US/term/v-model)（定義原文取自 <https://api.glossary.istqb.org/v1/terms/v-model>）、[ISTQB CTFL Syllabus v4.0.1](https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf) 2.1 節 |
-| V 字圖形畫法、V 模型的適用場合 | 整理者說明／整理者觀察，正文已標示，官方定義未涵蓋 |
-| 螺旋模型論文出處（1986、1988） | Boehm, B. (1986). *ACM SIGSOFT Software Engineering Notes*, 11(4), 14–24. <https://doi.org/10.1145/12944.12948>；Boehm, B. (1988). *IEEE Computer*, 21(5), 61–72. <https://doi.org/10.1109/2.59> |
-| 「風險驅動的流程模型產生器」原句 | [Boehm (2000), CMU/SEI-2000-SR-008](https://www.sei.cmu.edu/library/spiral-development-experience-principles-and-refinements-spiral-development-workshop-february-9-2000/) 1.2 節、印刷頁 3（[PDF](https://www.sei.cmu.edu/documents/5439/2000_003_001_13655.pdf)） |
-| Agile Manifesto 四大價值、十二項原則 | [agilemanifesto.org](https://agilemanifesto.org/)、[principles.html](https://agilemanifesto.org/principles.html) |
-| Scrum 職責歸屬／事件／產出物（2020 版） | [The Scrum Guide](https://scrumguides.org/scrum-guide.html)、[下載頁](https://scrumguides.org/download) |
-| 承諾（commitments）新增的理由 | [Scrum Guides 修訂說明](https://scrumguides.org/revisions.html)、[The Scrum Guide](https://scrumguides.org/scrum-guide.html) |
-| Kanban 定義、WIP 控制原文、流動指標 | [Kanban Guide 2025.5](https://kanbanguides.org/the-kanban-guide/2025.5/) |
-| XP 起源 | Beck, K. (1999). *Extreme Programming Explained: Embrace Change*. Addison-Wesley（書籍原文無公開全文可逐字核對） |
-| XP 實踐清單 | [Agile Alliance：What is Extreme Programming (XP)?](https://agilealliance.org/glossary/xp/) |
-| 持續整合定義 | [Fowler：Continuous Integration](https://martinfowler.com/articles/continuousIntegration.html) |
-| 持續交付／持續部署差異 | [Fowler：Continuous Delivery](https://martinfowler.com/bliki/ContinuousDelivery.html) |
-| 主幹開發定義 | [trunkbaseddevelopment.com](https://trunkbaseddevelopment.com/) |
-| 主幹開發與交付表現的關聯 | [DORA：Trunk-based development](https://dora.dev/capabilities/trunk-based-development/) |
-| NIST SSDF 四個實踐群組（v1.1 正式版） | [NIST：SSDF 專案頁](https://csrc.nist.gov/projects/ssdf)、[NIST SP 800-218](https://csrc.nist.gov/pubs/sp/800/218/final) |
-| NIST SSDF v1.2 公開草案狀態 | [SP 800-218 Rev.1 IPD](https://csrc.nist.gov/pubs/sp/800/218/r1/ipd)、[SSDF 發布清單](https://csrc.nist.gov/projects/ssdf/publications) |
+| 標記 | 主張 | 來源 |
+|---|---|---|
+| — | SDLC 六階段拆解 | 整理者依業界通用拆法歸納，非逐字引用單一出處，屬於常識性架構而非個人推論 |
+| — | 瀑布式的單向階段結構 | Royce 1970 論文 Figure 2（印刷頁 329，圖說：Implementation steps to develop a large computer program for delivery to a customer） |
+| — | 瀑布式的適用場合與缺點 | 整理者觀察，正文已標示，無單一出處 |
+| — | Royce 1970 論文原文（含頁碼） | Royce, W. W. (1970). *Proceedings, IEEE WESCON*, 1–9；重印版印刷頁 328–338，引文見 329、330、334 頁，原始 PDF：<https://cse.msu.edu/~cse435/Homework/HW3/royce1970.pdf> |
+| [1] | V 模型定義（開發階段與測試層級一對一對應） | [ISTQB Glossary：V-model](https://glossary.istqb.org/en_US/term/v-model)（定義原文取自 <https://api.glossary.istqb.org/v1/terms/v-model>）、[ISTQB CTFL Syllabus v4.0.1](https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf) 2.1 節 |
+| — | V 字圖形畫法、V 模型的適用場合 | 整理者說明／整理者觀察，正文已標示，官方定義未涵蓋 |
+| [2][3] | 螺旋模型論文出處（1986、1988） | Boehm, B. (1986). *ACM SIGSOFT Software Engineering Notes*, 11(4), 14–24. <https://doi.org/10.1145/12944.12948>；Boehm, B. (1988). *IEEE Computer*, 21(5), 61–72. <https://doi.org/10.1109/2.59> |
+| [4] | 「風險驅動的流程模型產生器」原句 | [Boehm (2000), CMU/SEI-2000-SR-008](https://www.sei.cmu.edu/library/spiral-development-experience-principles-and-refinements-spiral-development-workshop-february-9-2000/) 1.2 節、印刷頁 3（[PDF](https://www.sei.cmu.edu/documents/5439/2000_003_001_13655.pdf)） |
+| — | Agile Manifesto 四大價值、十二項原則 | [agilemanifesto.org](https://agilemanifesto.org/)、[principles.html](https://agilemanifesto.org/principles.html) |
+| [5] | Scrum 職責歸屬／事件／產出物（2020 版） | [The Scrum Guide](https://scrumguides.org/scrum-guide.html)、[下載頁](https://scrumguides.org/download) |
+| [6] | 承諾（commitments）新增的理由 | [Scrum Guides 修訂說明](https://scrumguides.org/revisions.html)、[The Scrum Guide](https://scrumguides.org/scrum-guide.html) |
+| — | Kanban 定義、WIP 控制原文、流動指標 | [Kanban Guide 2025.5](https://kanbanguides.org/the-kanban-guide/2025.5/) |
+| — | XP 起源 | Beck, K. (1999). *Extreme Programming Explained: Embrace Change*. Addison-Wesley（書籍原文無公開全文可逐字核對） |
+| [7] | XP 實踐清單 | [Agile Alliance：What is Extreme Programming (XP)?](https://agilealliance.org/glossary/xp/) |
+| [8] | 持續整合定義 | [Fowler：Continuous Integration](https://martinfowler.com/articles/continuousIntegration.html) |
+| [9] | 持續交付／持續部署差異 | [Fowler：Continuous Delivery](https://martinfowler.com/bliki/ContinuousDelivery.html) |
+| [10] | 主幹開發定義 | [trunkbaseddevelopment.com](https://trunkbaseddevelopment.com/) |
+| [11] | 主幹開發與交付表現的關聯 | [DORA：Trunk-based development](https://dora.dev/capabilities/trunk-based-development/) |
+| [12] | NIST SSDF 四個實踐群組（v1.1 正式版） | [NIST：SSDF 專案頁](https://csrc.nist.gov/projects/ssdf)、[NIST SP 800-218](https://csrc.nist.gov/pubs/sp/800/218/final) |
+| [13] | NIST SSDF v1.2 公開草案狀態 | [SP 800-218 Rev.1 IPD](https://csrc.nist.gov/pubs/sp/800/218/r1/ipd)、[SSDF 發布清單](https://csrc.nist.gov/projects/ssdf/publications) |
 
 延伸：[開發實踐：TDD、BDD、DDD 與 SDD](dev-practices.md)｜[AI 代理時代的 SDLC](sdlc-ai-agent.md)

@@ -33,6 +33,8 @@ NAV = [
     ("實戰協作", [
         ("claude-codex", "Claude Code + Codex 協作", "官方 plugin、直接呼叫 CLI、Cowork 的現況"),
         ("skill-build", "把教材做成 SKILL", "安裝版與手動版的實作紀錄"),
+        ("claude-code-obsidian", "Claude Code 接上 Obsidian", "四條路徑、官方 CLI 與 MCP 的取捨"),
+        ("claude-code-cowork", "Claude Code + Cowork 並用", "帳號現況判斷、檔案交接工作流程、Dispatch 現況"),
     ]),
     ("軟體開發流程 SDLC", [
         ("sdlc-traditional", "SDLC 與流程模型", "瀑布式、V 模型、螺旋模型、敏捷式各階段在做什麼"),

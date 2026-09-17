@@ -15,7 +15,7 @@
 | 讀寫本機檔案、執行終端指令 | Claude Code：Pro 起（或純 API key 按量付費）；Codex：CLI/IDE 全方案，含 Free／Go，但官方文件對 CLI 端的說法目前不完全一致，細節見[免付費區的說明](free-tier.md#freego-codex) | Chat／ChatGPT 網頁版的「執行程式碼」是雲端沙盒工具，不會碰到你電腦上的檔案；只有 Claude Code 與 Codex CLI／IDE 是真的在本機終端跑，這是**本機檔案**與**執行指令**這兩個原因 [S7] |
 | Projects（Claude） | Pro | Free 沒有 Projects，無法把文獻、規範、教授回饋做成持久知識庫 [S3][S4] |
 | Research（Claude） | Pro | 官方明寫「Research is available for users with paid Claude plans」[S14] |
-| Cowork | Pro | 需要本機或雲端 VM 執行環境，免費帳號完全不能用 [S21] |
+| Cowork | Pro | 需要本機或雲端 VM 執行環境，免費帳號完全不能用；2026-09-16 起官方正把 Cowork 併入一般 Chat，Pro／Max 帳號分階段收到新體驗，收到之後不必再特地切到 Cowork 模式 [S21][S26] |
 | Claude Design | Pro（research preview，Enterprise 需管理員手動開啟） | 需要獨立的畫布編輯環境，目前仍是研究預覽階段功能 [S22] |
 | Subagent（Task tool） | 跟著 Claude Code 存取權走，Pro 起 | Subagent 需要獨立的系統提示詞與工具限制，只存在於 Claude Code 這套 agent 架構裡，這是**subagent**這個原因 [S17] |
 | Hooks | 跟著 Claude Code 存取權走，Pro 起 | Hooks 是在 Claude Code 特定事件（例如寫檔前、對話結束）自動觸發的機制，聊天介面沒有這種生命週期事件可以掛，這是**hooks**這個原因 [S18] |
@@ -46,6 +46,7 @@ Claude Code 和 Codex 可以互相搭配：OpenAI 官方 GitHub 組織發布了�
 | S18 | code.claude.com/docs/en/hooks-guide | Claude Code hooks 官方文件 |
 | S19 | code.claude.com/docs/en/plugins | Claude Code plugins 官方文件 |
 | S21 | support.claude.com/en/articles/13345190-get-started-with-claude-cowork | Cowork 方案可用性 |
+| S26 | support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude | Cowork／Chat 合併現況：各方案推出時程 |
 | S22 | anthropic.com/news/claude-design-anthropic-labs | Claude Design 方案可用性、research preview 狀態 |
 | S23 | support.claude.com/en/articles/12304248-manage-api-key-environment-variables-in-claude-code | 純 API key 跑 Claude Code 的計費機制 |
 | S23b | support.claude.com/en/articles/9876003-i-have-a-paid-claude-subscription-pro-max-team-or-enterprise-plans-why-do-i-have-to-pay-separately-to-use-the-claude-api-and-console | 訂閱與 API/Console 各自獨立計費 |

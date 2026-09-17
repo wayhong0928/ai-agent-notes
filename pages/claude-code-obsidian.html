@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code 接上 Obsidian｜AI Agent 筆記</title>
+<meta name="description" content="四條路徑、官方 CLI 與 MCP 的取捨">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/claude-code-obsidian.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789618549">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789618549">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789618549">付費區</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789618549">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789618549">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789618549">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789618549">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789618549">把教材做成 SKILL</a></li>
+<li class="active"><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1789654529">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655628">Claude Code + Cowork 並用</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789620815">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789620815">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789620815">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789618549">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789618549">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789618549">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 實戰協作</p>
+<article class="doc" data-updated="1789654529">
+<h1>Claude Code 接上 Obsidian</h1>
+<p class='lede'>四條路徑、官方 CLI 與 MCP 的取捨</p>
+<blockquote>
+<p>查證日期：2026-09-17。方案與功能變動快，請以官方最新說明為準。</p>
+</blockquote>
+<p>Obsidian 的 vault 本質上就是「你電腦上的一個資料夾」，裡面是一堆 Markdown 檔案，加上一個 <code>.obsidian</code> 設定目錄 [B1]。而 Claude Code 本來就是在本機終端機跑、會直接讀寫檔案的工具 [A1]。所以這件事的答案比多數人想的簡單：<strong>大部分情況你不需要任何外掛，把 vault 資料夾交給 Claude Code 就成了</strong>。MCP server 與 Obsidian 社群 plugin 是用來補「純檔案系統做不到的那幾件事」，不是入場券。</p>
+<p>這頁按「先能動、再加值」的順序寫：路徑 A 是最小可行、零安裝；路徑 B～D 各自解決一個 A 做不到的問題。每一節都附可以照抄的步驟，A 那節另外附一個確認串接成功的最小測試。</p>
+<h2 id="_1">官方有沒有專門支援？查證結果：沒有</h2>
+<p>先把這題結清，才不會有人繼續找不存在的官方文件。</p>
+<ul>
+<li>抓 <code>code.claude.com/docs/llms-full.txt</code>（Claude Code 官方文件全文，約 9.3 MB）做全文比對，<strong>「Obsidian」出現 0 次</strong>；同一份文件裡「Notion」出現 8 次（作為 MCP server 範例）[A2]。也就是說官方確實會點名特定第三方工具，只是沒點到 Obsidian。</li>
+<li><em>（整理者的查證紀錄）</em> 另外以 <code>site:code.claude.com Obsidian</code> 做站內搜尋，回傳的全是不相關的一般文件頁，沒有任何 Obsidian 相關頁面。</li>
+</ul>
+<blockquote>
+<p><strong>整理者觀察</strong>：綜合上面兩項查證，<strong>Anthropic 官方沒有任何 Obsidian 專屬整合、專屬文件或官方 plugin</strong>。這是從「文件裡查不到」推出的結論，不是官方發過的聲明。</p>
+</blockquote>
+<p>下面所有做法用到的官方機制都是通用機制（工作目錄、<code>--add-dir</code>、MCP），Obsidian 這一端的東西則來自 Obsidian 官方或社群。</p>
+<h2 id="a-vault">路徑 A：把 vault 當成工作目錄（零安裝，先做這個）</h2>
+<h3 id="_2">為什麼可行</h3>
+<p>Claude Code 的檔案存取範圍就是「工作目錄＋你額外授權的目錄」。官方提供三種加目錄的方式：啟動時的 <code>--add-dir &lt;path&gt;</code> 旗標、session 中的 <code>/add-dir</code> 指令、以及設定檔裡的 <code>permissions.additionalDirectories</code> [A3]。vault 沒有任何特殊格式，Markdown 就是 Markdown。</p>
+<h3 id="_3">步驟（照抄即可）</h3>
+<p><strong>做法一：直接進 vault 開工</strong>（最單純，適合「這次就是要整理筆記」）</p>
+<pre><code class="language-bash">cd /path/to/YourVault
+claude
+</code></pre>
+<p><strong>做法二：留在原本的專案，另外授權 vault</strong>（適合「一邊寫程式一邊記筆記」）</p>
+<pre><code class="language-bash">claude --add-dir /path/to/YourVault
+</code></pre>
+<p>或在 session 中途才想加：</p>
+<pre><code>/add-dir /path/to/YourVault
+</code></pre>
+<p><strong>做法三：寫進設定檔，每次都生效</strong>——在 <code>~/.claude/settings.json</code>：</p>
+<pre><code class="language-json">{
+  &quot;permissions&quot;: {
+    &quot;additionalDirectories&quot;: [&quot;/path/to/YourVault&quot;]
+  }
+}
+</code></pre>
+<h3 id="_4">三種做法的差別（官方明講，容易踩）</h3>
+<p><code>--add-dir</code> / <code>/add-dir</code> 加進來的目錄，除了檔案存取權，還會載入該目錄的 <code>.claude/skills/</code>、<code>.claude/commands/</code>、<code>.claude/agents/</code>；但 <code>permissions.additionalDirectories</code> 列的目錄<strong>只給檔案存取權，不載入任何設定</strong> [A3]。另外，<code>--add-dir</code> 目錄的 <code>CLAUDE.md</code> 預設<strong>不會</strong>被讀，要另外設 <code>CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1</code> 才會 [A3]。</p>
+<blockquote>
+<p><strong>整理者說明</strong>：如果你想在 vault 裡放一份 <code>CLAUDE.md</code> 來規定「筆記怎麼寫、frontmatter 有哪些欄位」，最省事的是<strong>做法一</strong>（<code>cd</code> 進 vault 再開 Claude Code），因為那時 vault 就是主工作目錄，<code>CLAUDE.md</code> 自然會被讀到。用做法二的話記得補那個環境變數。</p>
+</blockquote>
+<p>Windows 使用者另一個官方注意事項：<code>--add-dir</code>、<code>/add-dir</code> 與 <code>additionalDirectories</code> 會<strong>拒絕網路路徑</strong>（UNC share、<code>/net/&lt;host&gt;</code> automount），Windows 上請改用對應好的磁碟機代號 [A4]。vault 放在 NAS 上的人會直接撞到這條。</p>
+<h3 id="_5">最小測試：確認真的串上了</h3>
+<p>隨便挑一篇有 frontmatter 的筆記，然後對 Claude Code 說：</p>
+<pre><code>讀 /path/to/YourVault/某篇筆記.md，只回報它 frontmatter（--- 之間的 YAML）裡有哪些欄位跟值，不要改任何東西。
+</code></pre>
+<ul>
+<li><strong>回報得出欄位名稱</strong> → 路徑與讀取權限都正確，串接成功。</li>
+<li><strong>說找不到檔案或沒有權限</strong> → 路徑打錯，或是你用了做法二／三但路徑沒對上（注意 Windows 反斜線與空白字元）。</li>
+<li><strong>回報的欄位跟你在 Obsidian 裡看到的對不上</strong> → 你讀到的可能是另一個同名檔案，用完整絕對路徑再試一次。</li>
+</ul>
+<p>想順便驗寫入權限，再加一句：「在這篇筆記的 frontmatter 加一個 <code>test_by: claude</code> 欄位。」確認完記得叫它刪掉。Obsidian 的 properties 就是存成筆記最上方、以 <code>---</code> 前後包住的 YAML 區塊，欄位名與值之間是「冒號＋一個空格」，同一篇筆記裡欄位名不可重複 [B2]——這是驗證寫入格式正不正確的官方標準。</p>
+<h3 id="_6">用這條路要注意的事</h3>
+<p>以下除了標注來源的，都是<strong>整理者的操作建議</strong>，不是官方規範：</p>
+<ul>
+<li><strong><code>.obsidian/</code> 不要讓 Claude 亂動。</strong> 這個資料夾放的是該 vault 的 Obsidian 設定，位於 vault 根目錄，而且因為開頭是點，多數作業系統預設隱藏 [B1]。<em>整理者建議</em>：在 <code>~/.claude/settings.json</code> 的 <code>permissions.deny</code> 加一條 <code>Edit</code> 規則擋掉 <code>**/.obsidian/**</code>，或至少在 vault 的 <code>CLAUDE.md</code> 裡寫明「不要修改 <code>.obsidian/</code>」。壞掉的 <code>.obsidian</code> 會讓外掛設定、主題、workspace 佈局一起出事。</li>
+<li><strong>Obsidian 正開著同一個檔案時。</strong> <em>整理者觀察</em>：Obsidian 的編輯器持有記憶體中的版本，Claude Code 從檔案系統改檔，兩邊可能互相蓋掉。實務上請在讓 Claude 動某篇筆記前先把該分頁關掉，或改完之後才切回 Obsidian。官方文件對「外部程式編輯正開啟中的檔案」沒有專門說明，這點請當成經驗法則，不是保證。</li>
+<li><strong>有開 Obsidian Sync 的話，衝突有官方機制可依靠。</strong> 同一檔案在兩台裝置各自被改過就會產生衝突；Markdown 檔的衝突 Obsidian Sync 會用 Google 的 diff-match-patch 演算法自動合併，從 1.9.7 起也可以改成「建立衝突檔案」讓你自己決定，這個設定是<strong>逐裝置</strong>的 [B3]。<em>整理者建議</em>：要讓 Claude Code 大量改筆記之前，把該裝置切成「建立衝突檔案」，比事後從自動合併的重複段落裡撿回來輕鬆。</li>
+<li><strong>wikilink 與 Markdown link 是兩套語法。</strong> <em>整理者建議</em>：Claude 預設寫的是標準 Markdown 的 <code>[文字](路徑.md)</code>，如果你的 vault 習慣用 <code>[[筆記名]]</code>，請在 vault 的 <code>CLAUDE.md</code> 裡明文規定用 wikilink，否則產出的連結在 Obsidian 的關係圖譜裡不會被算成連結。同理，frontmatter 裡的內部連結依官方說明必須用引號包起來 [B2]。</li>
+<li><strong>改檔名／搬檔案不要用 <code>mv</code>。</strong> <em>整理者建議</em>：純檔案系統的移動不會更新別篇筆記裡指向它的 wikilink。要搬要改名，用下面路徑 B 的官方 CLI，或回 Obsidian 介面操作。</li>
+<li><strong>先備份或先 commit。</strong> <em>整理者建議</em>：vault 只要是 git repo，你就隨時能 <code>git diff</code> 看 Claude 到底改了什麼、隨時能還原。這是這整頁最划算的一個習慣。</li>
+</ul>
+<h2 id="b-obsidian-cliobsidian">路徑 B：補上 Obsidian 官方 CLI（處理「Obsidian 才知道的事」）</h2>
+<p><em>整理者觀察</em>：路徑 A 的盲點是，Claude Code 看到的是檔案，不是 Obsidian——改名不會更新別篇筆記裡的反向連結、抓不到「今天的日記該建在哪」、不知道你裝了哪些外掛。</p>
+<p>Obsidian 官方從 <strong>1.12 版安裝檔（1.12.7 以上）</strong> 起內建 command line interface，官方說法是「Anything you can do in Obsidian you can do from the command line」，涵蓋日記、檔案操作、搜尋、任務、標籤、properties、外掛、主題、workspace、同步、發佈等 30 多組指令；使用時 Obsidian 必須是開著的 [B4]。</p>
+<p><strong>啟用步驟</strong>（官方）[B4]：</p>
+<ol>
+<li>Settings → General</li>
+<li>開啟 <strong>Command line interface</strong></li>
+<li>依提示完成註冊（Windows 用 terminal redirector；macOS 建立 <code>/usr/local/bin/obsidian</code> symlink；Linux 把執行檔複製到 <code>~/.local/bin/obsidian</code>）</li>
+</ol>
+<p>裝好之後 Claude Code 用 Bash 工具就能直接呼叫。想知道有哪些指令，讓它跑 [G1]：</p>
+<pre><code class="language-bash">obsidian help
+</code></pre>
+<p>社群 plugin 作者也把這條當成推薦搭配：Claude Code 用 CLI 開日記、搬檔案改名並自動更新連結、搜尋 vault [G1]。</p>
+<blockquote>
+<p><strong>整理者建議</strong>：把「改名／搬檔案一律走 <code>obsidian</code> CLI，不要用 <code>mv</code>」寫進 vault 的 <code>CLAUDE.md</code>。這是路徑 A 最常見的資料損壞來源，一句話就能擋掉。</p>
+</blockquote>
+<h2 id="cmcp-server-claude-obsidian-vault">路徑 C：MCP server（讓 Claude 透過 Obsidian 本身操作 vault）</h2>
+<p>適合「Claude Code 跑在別的目錄、甚至別台機器，但要碰 vault」，或是你要的是 Obsidian 的搜尋／指令面板而不只是檔案內容。</p>
+<h3 id="_7">目前找得到、還在維護的選項</h3>
+<table>
+<thead>
+<tr>
+<th>專案</th>
+<th>型態</th>
+<th>最後更新</th>
+<th>狀態與注意事項</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>coddingtonbear/obsidian-local-rest-api</code></td>
+<td>Obsidian 社群 plugin，<strong>內建 MCP server</strong></td>
+<td>2026-08-31 [G2]</td>
+<td>目前最推薦。官方 README 直接寫「Claude Code 有原生 HTTP MCP 支援」並給出指令 [G3]。約 2.9k stars、3 個開放 issue [G2]</td>
+</tr>
+<tr>
+<td><code>MarkusPfundstein/mcp-obsidian</code></td>
+<td>獨立 Python MCP server，需搭配上面那個 plugin</td>
+<td>2026-08-31 [G4]</td>
+<td>仍在維護、約 4.4k stars，但<strong>開放 issue 有 101 個</strong> [G4]，且 README 自述只支援 <code>mcp &gt;=1.1.0,&lt;2.0.0</code>、與 mcp 2.0+ 不相容 [G5]</td>
+</tr>
+<tr>
+<td><code>iansinnott/obsidian-claude-code-mcp</code></td>
+<td>Obsidian plugin，內建 WebSocket MCP server</td>
+<td><strong>2025-06-27</strong> [G6]</td>
+<td><strong>已逾一年未更新</strong>，19 個開放 issue。<em>整理者觀察</em>：它的功能定位（<code>/ide</code> 自動探索）與路徑 D 的 Claude Code IDE 高度重疊，而後者維護較新，因此不建議新裝</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>整理者觀察</strong>：2025 年那一波「先裝 local REST API plugin，再裝一個獨立 MCP server 去接它」的兩層架構，現在大致過時了——<code>obsidian-local-rest-api</code> 自己就內建 MCP server，少一層就少一層壞。除非你有特別理由（例如需要 <code>mcp-obsidian</code> 獨有的某個工具），否則直接用下面的設定。另外 GitHub 上還有若干小型 fork 與變體（例如 <code>obsidian-mcp-router</code>），星數個位數、未經廣泛使用，這頁不列入推薦。</p>
+</blockquote>
+<h3 id="obsidian-local-rest-api-mcp">設定步驟：<code>obsidian-local-rest-api</code> 內建 MCP（照抄即可）</h3>
+<ol>
+<li>Obsidian → Settings → Community plugins → Browse，搜尋並安裝 <strong>Local REST API</strong>，啟用它 [G3]。</li>
+<li>到 Settings → Local REST API 複製你的 <strong>API key</strong> [G3]。</li>
+<li>在終端機跑（把 <code>&lt;your-api-key&gt;</code> 換掉）[G3]：</li>
+</ol>
+<pre><code class="language-bash">claude mcp add --transport http obsidian https://127.0.0.1:27124/mcp/ \
+  --header &quot;Authorization: Bearer &lt;your-api-key&gt;&quot;
+</code></pre>
+<p>或改成手寫 <code>.mcp.json</code> [G3]：</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;obsidian&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;https://127.0.0.1:27124/mcp/&quot;,
+      &quot;headers&quot;: {
+        &quot;Authorization&quot;: &quot;Bearer &lt;your-api-key&gt;&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<ol start="4">
+<li><strong>處理 TLS 憑證</strong>（<em>整理者觀察</em>：多數人會卡在這一步）。這個 plugin 啟動時自簽一張憑證，官方 README 給兩條路：到 <code>https://127.0.0.1:27124/obsidian-local-rest-api.crt</code> 下載並信任該憑證，或把 client 設成對 <code>127.0.0.1</code> 跳過 TLS 驗證。README 另外給了一條它自己標明為 insecure 的替代方案——在 Settings → Local REST API 開啟 HTTP server，改連 <code>http://127.0.0.1:27123/mcp/</code> [G3]。</li>
+</ol>
+<p><strong>最小測試</strong>：<code>/mcp</code> 看 <code>obsidian</code> 這台有沒有連上，再叫 Claude 用 MCP 工具列出 vault 根目錄的檔案。連不上通常就是第 4 步的憑證問題。</p>
+<blockquote>
+<p><strong>整理者提醒</strong>：這個 API key 是你整個 vault 的讀寫金鑰。不要把它寫進會進版控的 <code>.mcp.json</code>（專案根目錄的那份通常會被 commit），用 <code>claude mcp add --scope user</code> 或改放使用者層設定比較安全。這是操作建議，不是官方要求。</p>
+</blockquote>
+<h2 id="dobsidian-plugin-obsidian-claude-code">路徑 D：Obsidian 社群 plugin（在 Obsidian 裡直接用 Claude Code）</h2>
+<p>前面三條都是「Claude Code 去找 vault」。這條反過來：<strong>在 Obsidian 視窗裡就能用 Claude Code</strong>。以下全部來自 Obsidian 官方社群 plugin 目錄，不是 Anthropic 官方產品。</p>
+<table>
+<thead>
+<tr>
+<th>Plugin</th>
+<th>作者</th>
+<th>做什麼</th>
+<th>現況</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claudian</strong></td>
+<td>Yishen Tu</td>
+<td>把 Claude Code、Codex、Grok、Opencode 等 agent CLI 嵌進 vault，vault 直接成為 agent 的工作目錄，支援 inline 編輯與 diff 預覽、slash command、檔案／資料夾 mention、MCP</td>
+<td>目前生態系裡最成熟的一個：官方目錄顯示 210 萬次下載、v2.2.7、5 天前更新；GitHub 約 15.4k stars、2026-09-17 仍有 push [G7][G8]。需桌面版、Obsidian v1.13.0+、且本機至少裝好一套 agent CLI [G7]</td>
+</tr>
+<tr>
+<td><strong>Claude Code IDE</strong></td>
+<td>petersolopov</td>
+<td>在 Obsidian 裡跑一個 WebSocket MCP server，Claude Code 的 <code>/ide</code> 選單會自動出現 Obsidian；連上後 Claude Code 看得到你開著的檔案與選取範圍</td>
+<td>官方目錄顯示 1.6 萬次下載、v0.2.5、4 個月前更新；GitHub 2026-06-04 最後 push、0 開放 issue [G9][G1]。<strong>刻意做成唯讀</strong>：只分享選取內容與開啟中的檔名，不寫檔也不執行程式；綁 <code>127.0.0.1</code>、每 session 隨機 token [G1]</td>
+</tr>
+<tr>
+<td><strong>Claude Code Skills</strong></td>
+<td>p3nguln5</td>
+<td>在筆記裡選字、右鍵挑一個 skill，回應串流到側邊欄</td>
+<td>官方目錄顯示 2000 次下載、v1.0.5、4 個月前更新 [G10]。<em>整理者觀察</em>：以下載數與更新頻率看，規模明顯小於上面兩個。需本機已安裝並登入 Claude Code CLI（<code>claude</code> 要在 PATH 上）、僅桌面版、Obsidian 1.7.2+ [G10]</td>
+</tr>
+</tbody>
+</table>
+<p>Claude Code IDE 的作者自己把定位講得很清楚：<strong>Claude Code 本來就能直接讀寫 vault 裡的檔案，這個 plugin 補的是反方向的「編輯器上下文」</strong>——你現在開著哪篇、選了哪一段 [G1]。也就是說它跟路徑 A 是疊加關係，不是取代關係。</p>
+<blockquote>
+<p><strong>整理者觀察</strong>：三個的取向完全不同。想「在 Obsidian 裡跟 agent 對話、讓它改筆記」選 Claudian；已經習慣在終端機用 Claude Code、只是希望它知道你在看哪篇，選 Claude Code IDE（而且它唯讀，風險最低）；Claude Code Skills 適合已經把自己的寫作規則做成 skill 的人。三個都是社群作品，Anthropic 不背書也不支援。</p>
+</blockquote>
+<h2 id="claude-cowork-vault">Claude Cowork 能不能直接讀寫本機 vault？</h2>
+<p>這題的答案比預期複雜，分兩層：</p>
+<p><strong>第一層：Cowork 執行指令與程式碼的環境是隔離的，不是你的本機終端機。</strong> 官方寫「Shell commands and code Claude writes run inside that environment. Isolation protects your computer」[A5]。所以「叫 Cowork 跑一段 script 掃描我的 vault」這種用法<strong>不成立</strong>。</p>
+<p><strong>第二層（這是會被漏掉的例外）：Cowork 桌面版有官方的本機資料夾連接機制。</strong> 官方明寫「On desktop, Claude can read from and write to your local files without manual uploads or downloads」[A5]，另一篇的條件講得更死：雲端 session 要碰到你連接的本機資料夾，必須<strong>桌面 App 開著、而且該 session 是從桌面版啟動的</strong>；App 一關，session 繼續跑但碰不到本機檔案 [A6]。連接的方式是在訊息框選 Cowork，再連接你要它工作的資料夾；權限有 Manual／Auto／Skip 三種模式 [A6]。</p>
+<p><strong>所以結論是</strong>：Cowork 的確可以透過「連接本機資料夾」讀寫 vault 目錄下的 Markdown 檔，但<strong>沒有任何 Obsidian 專屬支援</strong>——<code>code.claude.com</code> 全文 0 次 Obsidian [A2]；<em>整理者查證紀錄</em>：本次讀過的兩篇 Cowork 官方說明頁 [A5][A6] 也完全沒提到 Obsidian 或任何筆記軟體。對 Cowork 而言 vault 就是一個普通資料夾。</p>
+<blockquote>
+<p><strong>整理者觀察</strong>：能連，不代表好用。Cowork 碰不到本機終端機，等於路徑 B 的 Obsidian 官方 CLI 完全用不上——改名不更新連結、開不了日記。加上「桌面 App 必須開著」這個限制，實務上要對 vault 做有結構的整理，Claude Code 仍然是比 Cowork 合適的工具。這段是操作判斷，不是官方說法。</p>
+</blockquote>
+<h2 id="_8">怎麼選（整理者觀察）</h2>
+<table>
+<thead>
+<tr>
+<th>你想做的事</th>
+<th>建議路徑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>讓 AI 幫忙整理／改寫／彙整既有筆記</td>
+<td>A（必要時加 git 版控）</td>
+</tr>
+<tr>
+<td>會涉及改名、搬檔案、開日記</td>
+<td>A ＋ B</td>
+</tr>
+<tr>
+<td>Claude Code 跑在別的專案目錄，偶爾要查筆記</td>
+<td>A 的做法二，或 C</td>
+</tr>
+<tr>
+<td>想在 Obsidian 視窗裡直接對話</td>
+<td>D（Claudian）</td>
+</tr>
+<tr>
+<td>在終端機用 Claude Code，但想讓它知道你在看哪篇</td>
+<td>A ＋ D（Claude Code IDE）</td>
+</tr>
+<tr>
+<td>手機上／不想開終端機</td>
+<td>目前沒有好答案；Cowork 需要桌面 App 開著 [A6]</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2026-09-17">資料來源（2026-09-17 查證）</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>URL</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td>code.claude.com/docs/en/overview</td>
+<td>Claude Code 在終端機／IDE／桌面／瀏覽器執行、讀寫檔案與執行指令的定位</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>code.claude.com/docs/llms-full.txt</td>
+<td>Claude Code 官方文件全文；全文比對「Obsidian」0 次、「Notion」8 次的依據</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>code.claude.com/docs/en/permissions#additional-directories-grant-file-access-not-configuration</td>
+<td><code>--add-dir</code>／<code>/add-dir</code>／<code>permissions.additionalDirectories</code> 三者差異、CLAUDE.md 需環境變數才載入</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>code.claude.com/docs/en/changelog</td>
+<td><code>--add-dir</code> 拒絕 UNC／網路路徑、Windows 需用磁碟機代號</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>support.claude.com/en/articles/13345190-get-started-with-claude-cowork</td>
+<td>Cowork 指令與程式碼在隔離環境執行；桌面版可讀寫本機檔案</td>
+</tr>
+<tr>
+<td>A6</td>
+<td>support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile</td>
+<td>Cowork 本機資料夾連接的條件（桌面 App 需開著、session 需從桌面啟動）與權限模式</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>obsidian.md/help/manage-vaults</td>
+<td>vault 即檔案系統資料夾；<code>.obsidian</code> 設定資料夾位置與隱藏特性</td>
+</tr>
+<tr>
+<td>B2</td>
+<td>obsidian.md/help/properties</td>
+<td>Obsidian properties 即筆記頂端 YAML；語法規則與內部連結需加引號</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>obsidian.md/help/sync/troubleshoot</td>
+<td>Obsidian Sync 衝突成因、diff-match-patch 自動合併、兩種衝突處理選項</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>obsidian.md/help/cli</td>
+<td>Obsidian 官方 CLI：版本需求、啟用步驟、各平台註冊方式、指令範圍</td>
+</tr>
+<tr>
+<td>G1</td>
+<td>github.com/petersolopov/obsidian-claude-ide</td>
+<td>Claude Code IDE plugin 的安裝步驟、唯讀設計、安全機制、搭配 Obsidian CLI 的建議</td>
+</tr>
+<tr>
+<td>G2</td>
+<td>api.github.com/repos/coddingtonbear/obsidian-local-rest-api</td>
+<td>該 repo 最後 push 時間、未封存、stars／開放 issue 數</td>
+</tr>
+<tr>
+<td>G3</td>
+<td>github.com/coddingtonbear/obsidian-local-rest-api（README）</td>
+<td>內建 MCP server 端點、<code>claude mcp add</code> 指令、<code>.mcp.json</code> 範例、TLS 憑證處理與 HTTP 替代方案</td>
+</tr>
+<tr>
+<td>G4</td>
+<td>api.github.com/repos/MarkusPfundstein/mcp-obsidian</td>
+<td>該 repo 最後 push 時間、stars、101 個開放 issue</td>
+</tr>
+<tr>
+<td>G5</td>
+<td>github.com/MarkusPfundstein/mcp-obsidian（README）</td>
+<td>設定方式、Python 版本需求、與 mcp 2.0+ 不相容的自述</td>
+</tr>
+<tr>
+<td>G6</td>
+<td>api.github.com/repos/iansinnott/obsidian-claude-code-mcp</td>
+<td>最後 push 為 2025-06-27、開放 issue 數（判定為停滯的依據）</td>
+</tr>
+<tr>
+<td>G7</td>
+<td>community.obsidian.md/plugins/realclaudian</td>
+<td>Claudian 的官方目錄資訊：作者、版本、更新時間、下載數、需求</td>
+</tr>
+<tr>
+<td>G8</td>
+<td>api.github.com/repos/yishentu/claudian</td>
+<td>Claudian 的 stars 與最後 push 時間</td>
+</tr>
+<tr>
+<td>G9</td>
+<td>community.obsidian.md/plugins/claude-code-ide</td>
+<td>Claude Code IDE 的官方目錄資訊：作者、版本、更新時間、下載數</td>
+</tr>
+<tr>
+<td>G10</td>
+<td>community.obsidian.md/plugins/claude-code-skills</td>
+<td>Claude Code Skills 的官方目錄資訊與執行需求</td>
+</tr>
+</tbody>
+</table>
+<p>註：A 系列為 Anthropic 官方文件，B 系列為 Obsidian 官方說明，G 系列為 GitHub 專案與 Obsidian 社群 plugin 目錄（社群作品，Anthropic 與 Obsidian 官方均不背書）。</p>
+<p>延伸：<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>｜<a href="official-config.html">Claude Code 設定總覽</a>｜<a href="paid-tier.html">付費區</a></p>
+</article>
+<nav class="pager"><a class="prev" href="skill-build.html">← 把教材做成 SKILL</a><a class="next" href="claude-code-cowork.html">Claude Code + Cowork 並用 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#_1">官方有沒有專門支援？查證結果：沒有</a></li>
+<li><a href="#a-vault">路徑 A：把 vault 當成工作目錄（零安裝，先做這個）</a><ul>
+<li><a href="#_2">為什麼可行</a></li>
+<li><a href="#_3">步驟（照抄即可）</a></li>
+<li><a href="#_4">三種做法的差別（官方明講，容易踩）</a></li>
+<li><a href="#_5">最小測試：確認真的串上了</a></li>
+<li><a href="#_6">用這條路要注意的事</a></li>
+</ul>
+</li>
+<li><a href="#b-obsidian-cliobsidian">路徑 B：補上 Obsidian 官方 CLI（處理「Obsidian 才知道的事」）</a></li>
+<li><a href="#cmcp-server-claude-obsidian-vault">路徑 C：MCP server（讓 Claude 透過 Obsidian 本身操作 vault）</a><ul>
+<li><a href="#_7">目前找得到、還在維護的選項</a></li>
+<li><a href="#obsidian-local-rest-api-mcp">設定步驟：obsidian-local-rest-api 內建 MCP（照抄即可）</a></li>
+</ul>
+</li>
+<li><a href="#dobsidian-plugin-obsidian-claude-code">路徑 D：Obsidian 社群 plugin（在 Obsidian 裡直接用 Claude Code）</a></li>
+<li><a href="#claude-cowork-vault">Claude Cowork 能不能直接讀寫本機 vault？</a></li>
+<li><a href="#_8">怎麼選（整理者觀察）</a></li>
+<li><a href="#2026-09-17">資料來源（2026-09-17 查證）</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

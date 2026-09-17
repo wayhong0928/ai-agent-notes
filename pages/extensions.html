@@ -28,11 +28,13 @@
 <div class="navsec"><h2>實戰協作</h2><ul>
 <li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789618549">Claude Code + Codex 協作</a></li>
 <li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789618549">把教材做成 SKILL</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1789654529">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655628">Claude Code + Cowork 並用</a></li>
 </ul></div>
 <div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
-<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789618549">SDLC 與流程模型</a></li>
-<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789618549">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
-<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789618549">AI 代理時代的 SDLC</a></li>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789620815">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789620815">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789620815">AI 代理時代的 SDLC</a></li>
 </ul></div>
 <div class="navsec"><h2>官方建議設定</h2><ul>
 <li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789618549">Claude Code 設定總覽</a></li>
@@ -124,6 +126,10 @@
 </tbody>
 </table>
 <p>「✅」代表官方文件明確查證到支援；「⚠️」代表有限制、有條件，或官方文件本身說法不一致；「❌」代表官方文件裡沒有查到對應機制，不是本站主觀認定不支援。Claude.ai 這欄特別把 Chat（一般對話）與 Cowork（本機或雲端 VM 裡的知識工作代理）分開講，因為官方文件裡這兩者能碰到的機制常常不一樣。</p>
+<div class="admonition warning">
+<p class="admonition-title">2026-09-16 起：Chat／Cowork 的界線正在消失（Pro／Max 分階段推出中）</p>
+<p>上表把 Claude.ai 分成 Chat 與 Cowork 兩欄，是依官方文件目前的寫法整理的。但官方已公告兩者正在合併成同一個體驗：Pro／Max 帳號分階段收到（同方案帳號時間點也不同），收到之後不再有獨立 Cowork 模式可切換，上表裡「⚠️ 只在 Cowork 執行、Chat 裡顯示灰階」這類限制對這些帳號會失效，變成同一個對話視窗、能力視需要自動啟用。Team／Free 官方說「即將推出」但目前尚未開始，Enterprise 變動前會提前至少 30 天通知、目前維持現狀——這些帳號適用的仍是上表原本的區分。查證來源與時程細節見 <a href="tools-compare.html">tools-compare.md</a> 開頭的說明 [23][24]。</p>
+</div>
 <h2 id="_2">二、每種機制的最小範例與常見誤用</h2>
 <h3 id="claudemdagentsmd">CLAUDE.md／AGENTS.md：專案事實與紅線</h3>
 <p>官方定義的分工是：「把 CLAUDE.md 當成你原本會重複解釋的內容寫下來」[1]。放事實，不是放程序；一旦某一段變成一套步驟而不是一條事實，就該搬進 SKILL。</p>
@@ -340,6 +346,16 @@ the problem, show the current code, and provide an improved version.
 <td>[22]</td>
 <td>How we built our multi-agent research system（Research 功能內部的 lead agent／subagents 架構）</td>
 <td><a href="https://www.anthropic.com/engineering/multi-agent-research-system">https://www.anthropic.com/engineering/multi-agent-research-system</a></td>
+</tr>
+<tr>
+<td>[23]</td>
+<td>Cowork is now Claude（Cowork 與 Chat 合併公告，2026-09-16）</td>
+<td><a href="https://claude.com/blog/cowork-is-now-claude">https://claude.com/blog/cowork-is-now-claude</a></td>
+</tr>
+<tr>
+<td>[24]</td>
+<td>Claude Cowork and chat are one Claude（合併現況：各方案推出時程）</td>
+<td><a href="https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude">https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude</a></td>
 </tr>
 </tbody>
 </table>

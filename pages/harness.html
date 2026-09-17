@@ -28,11 +28,13 @@
 <div class="navsec"><h2>實戰協作</h2><ul>
 <li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789618549">Claude Code + Codex 協作</a></li>
 <li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789618549">把教材做成 SKILL</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1789654529">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655628">Claude Code + Cowork 並用</a></li>
 </ul></div>
 <div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
-<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789618549">SDLC 與流程模型</a></li>
-<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789618549">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
-<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789618549">AI 代理時代的 SDLC</a></li>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789620815">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789620815">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789620815">AI 代理時代的 SDLC</a></li>
 </ul></div>
 <div class="navsec"><h2>官方建議設定</h2><ul>
 <li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789618549">Claude Code 設定總覽</a></li>
@@ -96,7 +98,7 @@
 <tr>
 <td>Hooks guide</td>
 <td>https://code.claude.com/docs/en/hooks-guide</td>
-<td>hook 限制</td>
+<td>hook 限制、Stop hook 驗收範例</td>
 </tr>
 <tr>
 <td>A Harness for Every Task</td>
@@ -159,21 +161,139 @@
 <li><strong>第二意見子代理互相駁斥</strong>，兩個獨立視角各自作答，答案一致就收，分歧本身就是最有價值的訊號，代表這裡有需要人判斷的模糊地帶。</li>
 </ol>
 <p>四級不是互斥的，愈重要的產出，愈值得疊加使用多級。</p>
+<h2 id="_3">三之一、把原則變成可照做的範例</h2>
+<p>前面講的都是原則。這節把其中三條落到可以直接照抄的樣子（本節查證日期 2026-09-17）。這裡示範的是「原則怎麼落地」，各種機制本身怎麼設定、放在哪個資料夾，見<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>，不在這裡重複。</p>
+<p>每個範例都標示來源等級，請先看清楚標示再照抄：</p>
+<ul>
+<li><strong>【官方逐字】</strong>：官方文件裡原封不動的句子或設定，本站只加中文說明。</li>
+<li><strong>【官方改寫】</strong>：骨架與要素來自官方，中文句子是本站依它的結構改寫的，不是官方原文。</li>
+<li><strong>【整理者自創】</strong>：官方沒有給這個角度的東西，是依前面的原則推出來的建議寫法，請當成建議而不是官方結論。</li>
+</ul>
+<h3 id="2122-diff">對應原則 2.1／2.2：派一個只看 diff 的驗收子代理</h3>
+<p>官方對這件事的描述是【官方逐字】：在乾淨子代理上下文裡跑的審查者「sees only the diff and the criteria you give it, not the reasoning that produced the change」，所以它是就結果本身作判斷[9]。</p>
+<p>官方在同一節給出的派工範例，原文如下【官方逐字】[9]：</p>
+<pre><code class="language-text">Use a subagent to review the rate limiter diff against PLAN.md. Check that
+every requirement is implemented, the listed edge cases have tests, and
+nothing outside the task's scope changed. Report gaps, not style preferences.
+</code></pre>
+<p>官方也把這段話的結構講明了：派工時要點名三件事——要驗的東西（name the work to check）、拿什麼當驗收標準（the plan to check it against）、什麼才算一個問題（what counts as a finding）[9]。</p>
+<p>依這三個要素改寫成中文範本，可以直接套用【官方改寫：要素來自官方，以下中文句子不是官方原文】：</p>
+<pre><code class="language-text">請開一個乾淨的子代理驗收下面這件事，只看結果，不要看我前面的討論過程。
+
+要驗的東西：&lt;這次改動的檔案或 diff&gt;
+驗收標準：&lt;標準寫在哪，例如 PLAN.md、需求清單，或直接列在這裡的三條條件&gt;
+
+請逐條檢查：
+1. 驗收標準裡的每一條是不是都真的做到了？做到的請指出在哪個檔案的哪一段。
+2. 標準裡列出的邊界情況，有沒有對應的檢查或測試？
+3. 有沒有改到這次任務範圍以外的東西？
+
+只回報會影響正確性、或違反上述標準的缺口；風格與個人偏好不用回報。
+</code></pre>
+<p>最後一句對應原則 2.3：官方提醒，被要求找問題的審查者通常一定會找出問題來，所以要事先講明什麼才值得回報[9]。另外，如果只是要檢查改動有沒有 bug，官方說 Claude Code 內建的 <code>/code-review</code> 就是在乾淨的子代理裡審目前的 diff 並把發現帶回主線，不必自己寫這段提示詞[9]。</p>
+<div class="admonition note">
+<p class="admonition-title">沒有子代理功能的人怎麼照做</p>
+<p>【官方改寫：分工來自官方，以下是中文轉述，不是官方原文】官方另外給了一組 Writer／Reviewer 的兩個對話分工：A 視窗負責實作，B 視窗只拿到「要看哪個檔案、要找哪一類問題」這兩件事，再把 B 的輸出貼回 A 去修[9]。重點不在有沒有 subagent 這個功能，而在於驗收的那個視角沒看過實作當下的推理過程——一般聊天視窗另開一個新對話一樣做得到。</p>
+</div>
+<h3 id="27_1">對應原則 2.7：什麼樣的回報才算附了證據</h3>
+<p>官方講證據的那一句是【官方逐字】：「Have Claude show evidence rather than asserting success: the test output, the command it ran and what it returned, or a screenshot of the result.」[4] 三種形式講得很具體：測試輸出、跑了哪一行指令與它回傳了什麼、結果的截圖。</p>
+<p>官方在同一節給的對照表，左邊是驗不了的問法，右邊是把驗收條件寫進去的問法【官方逐字，括號內為中文說明】[4]：</p>
+<table>
+<thead>
+<tr>
+<th>不夠格：無法驗證的交辦</th>
+<th>夠格：自帶檢查的交辦</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>implement a function that validates email addresses（實作一個驗 email 的函式）</td>
+<td>write a validateEmail function. example test cases: user@example.com is true, invalid is false, user@.com is false. run the tests after implementing（附三組具體測資，實作完把測試跑一遍）</td>
+</tr>
+<tr>
+<td>make the dashboard look better（把儀表板弄好看一點）</td>
+<td>[paste screenshot] implement this design. take a screenshot of the result and compare it to the original. list differences and fix them（附設計稿，做完截圖跟原稿比對，列出差異再修）</td>
+</tr>
+<tr>
+<td>the build is failing（建置壞了）</td>
+<td>the build fails with this error: [paste error]. fix it and verify the build succeeds. address the root cause, don't suppress the error（貼上錯誤訊息，修完要驗證建置成功，而且要處理根因，不是把錯誤壓掉）</td>
+</tr>
+</tbody>
+</table>
+<p>把這張表反過來用，就是收到回報時該檢查的東西【整理者依上述官方原文歸納的清單，官方沒有直接給這份對照】：</p>
+<ul>
+<li><strong>不夠格的回報</strong>：「已經修好了」「應該沒問題了」「我檢查過了」「都確認過沒問題」——這幾句話沒有任何一個你可以複驗的東西，它們是斷言不是證據。</li>
+<li><strong>夠格的回報要附三樣</strong>：（一）跑了哪一行指令；（二）原封不動的輸出，不是它轉述的結論；（三）對照的基準是什麼——哪一份需求、哪一張設計稿、哪一個測試檔。三樣缺一樣，你就只能相信它，不能核對它。</li>
+</ul>
+<p>官方補的理由值得記住：當沒有可以執行的檢查時，「看起來做完了」是模型唯一拿得到的訊號[4]。</p>
+<h3 id="3-stop-hook">對應第三節第 3 級：用 Stop hook 擋住「還沒驗證就說做完」</h3>
+<p>第三節第 3 級講 hook 當硬性關卡。要卡的如果是「宣稱完成」這件事，對應的事件不是編輯檔案前的 <code>PreToolUse</code>，而是 Claude 結束回應時觸發的 <code>Stop</code>【整理者說明：選哪個事件是本站依原則推出來的判斷，官方文件本身只寫 Stop hook 會在 Claude 結束回應時觸發[10]】。</p>
+<p>官方給的最小範例，是用一個 prompt 型 hook 在收工前問模型「事情是不是真的都做完了」，回 <code>ok: false</code> 就把 <code>reason</code> 丟回去讓它繼續做【官方逐字】[10]：</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;Stop&quot;: [
+      {
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;prompt&quot;,
+            &quot;prompt&quot;: &quot;Check if all tasks are complete. If not, respond with {\&quot;ok\&quot;: false, \&quot;reason\&quot;: \&quot;what remains to be done\&quot;}.&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<p>如果要卡的是「到底有沒有真的跑過測試」，官方另給一個 agent 型 hook 的範例，它會實際去跑測試、看結果，再決定放不放行【官方逐字】[10]：</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;Stop&quot;: [
+      {
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;agent&quot;,
+            &quot;prompt&quot;: &quot;Verify that all unit tests pass. Run the test suite and check the results. $ARGUMENTS&quot;,
+            &quot;timeout&quot;: 120
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<p>官方把這兩種 hook 的分工一句話講完：hook 收到的輸入資料本身就夠判斷時，用 prompt hook；需要對照程式碼實際狀態才判斷得出來時，用 agent hook[10]。這兩個範例跟 <a href="extensions.html">extensions.md</a> 裡那個「擋掉敏感檔案編輯」的 hook 是不同用途：那個是用機制守住紅線，這兩個是用機制守住驗收。</p>
+<div class="admonition warning">
+<p class="admonition-title">三個官方講明的限制</p>
+<p>【官方改寫：三條限制都出自官方文件，以下是中文轉述，不是官方逐字原文】</p>
+<ul>
+<li>agent hook 官方標為實驗性（experimental），設定與行為可能改變，正式流程官方建議用 command hook[10]。</li>
+<li><code>Stop</code> hook 只要 Claude 結束回應就會觸發，不是只在任務完成時觸發；使用者按中斷時不會觸發[10]。</li>
+<li>連續阻擋八次而沒有進展之後，Claude Code 會覆蓋掉這個 Stop hook、讓回合結束[10]。</li>
+</ul>
+</div>
+<p>針對第三點，官方給的防呆寫法是在腳本開頭讀 <code>stop_hook_active</code> 欄位，已經是被自己擋下來續跑的那一輪就直接放行【官方逐字】[10]：</p>
+<pre><code class="language-bash">#!/bin/bash
+INPUT=$(cat)
+if [ &quot;$(echo &quot;$INPUT&quot; | jq -r '.stop_hook_active')&quot; = &quot;true&quot; ]; then
+  exit 0  # Allow Claude to stop
+fi
+# ... rest of your hook logic
+</code></pre>
 <h2 id="harness_1">四、動態 harness 與靜態規則表：一組取捨</h2>
 <p>官方另一篇文章主張的方向，是讓模型在執行當下自己決定要不要開子代理、要隔離到什麼程度、該用哪個模型，也就是模型當場就依照眼前這個任務，即時寫出一套適合它的工作方式，而不是套用一份固定不變的清單[6]。</p>
 <p>這跟「事先把規則寫成一張固定的表，任務來了就照表操作」是兩種相反的路線。固定表格的好處是可預測、可以事後稽核，不用依賴模型當下判斷力夠不夠；代價是遇到表格沒設想到的情境，就會被硬套進去，反而做出奇怪的選擇。兩種路線沒有絕對的對錯，是看你更在意「可預測」還是「能應變」。</p>
 <p>這條取捨還牽出官方列出的一個失敗模式：同一件事被反覆糾正、模型還是一直錯在同樣的地方。官方的處置方式是把這段對話清掉重開，理由是錯誤的理解已經污染了這整段上下文，愈往下修正，愈是在錯誤的地基上疊加新內容[4]。這跟「再多解釋一次、再多給一個例子」是不同方向的處置，值得知道這個選項存在。</p>
-<h2 id="_3">五、多代理協作不是免費的</h2>
+<h2 id="_4">五、多代理協作不是免費的</h2>
 <p>官方分析自家的多代理研究系統時提到兩個代價：依 Anthropic 當時的資料，一個代理（agent）跑一項任務，token 用量大約是一般聊天的四倍；讓多個代理一起協作（multi-agent），token 用量則大約是一般聊天的十五倍，這個十五倍是跟一般聊天比，不是跟單一代理比。而且大多數任務裡，真正能平行拆開、彼此不互相依賴的子任務，其實比研究類任務少[7]。</p>
 <p>這條的含意是：不是每個工作都值得拆成好幾個代理同時做。一個任務值得平行處理的前提是，它真的能拆成幾塊互不依賴的子任務，如果拆出來的幾塊其實要先後接力、還要互相對照，拆開平行反而只是多花好幾倍成本，得到差不多的結果。</p>
-<h2 id="_4">六、說明檔案的篇幅上限</h2>
+<h2 id="_5">六、說明檔案的篇幅上限</h2>
 <p>延續原則 2.5，官方對兩份常駐說明檔給出具體數字：</p>
 <ul>
 <li><strong>CLAUDE.md（或 Codex 的 AGENTS.md）</strong>：建議控制在 200 行以內[8]。</li>
 <li><strong>長期記憶檔（MEMORY.md 這類 auto memory 機制）</strong>：官方訂出硬上限，200 行或 25 KB，兩個門檻先到哪個就在哪個卡住，超過的部分不會被載入[8]。</li>
 </ul>
 <p>這裡有一個容易被忽略的計算陷阱：如果你的記憶條目習慣寫得偏長，行數上限可能永遠碰不到，反而是位元組數先超標。假設每則記憶平均落在兩百位元組上下的密度，25 KB 除以每則約 200 位元組，大約等於 125 則，就會先撞上這道牆，而不是等到兩百行才被截斷。換句話說，記憶檔案該不該精簡，不能只數有幾行，要抓出真正先觸頂的是哪一個門檻。</p>
-<h2 id="_5">七、給一般使用者的實際做法</h2>
+<h2 id="_6">七、給一般使用者的實際做法</h2>
 <p>把前面六節收斂成幾件真的做得到的事：</p>
 <ol>
 <li><strong>驗收另開一個乾淨對話</strong>。請 AI 改完一件事之後，不要在同一個對話裡追問「你改得對嗎」，它會順著剛才的思路護航自己。開一個新對話，只給它驗收條件（例如「檢查有沒有失效連結、檢查格式是否一致」），不給它原本的討論過程。</li>
@@ -183,16 +303,17 @@
 <li><strong>不是每件事都值得拆成多個子代理同時做</strong>。先問這個任務真的能拆成互不依賴的幾塊嗎，拆不開的話，平行處理只是花更多成本換差不多的結果。</li>
 <li><strong>高風險的判斷（會直接影響最終決定的內容、不可逆的操作），值得多要一次第二意見</strong>，讓兩個獨立回答互相對照，分歧的地方就是你該親自拍板的地方。</li>
 </ol>
-<h2 id="_6">本頁重點回顧</h2>
+<h2 id="_7">本頁重點回顧</h2>
 <ul>
 <li>harness 是圍繞模型的工具、上下文管理與執行環境，不是模型本身的推理能力。</li>
 <li>七個可靠性原則：做事的人不驗自己、驗收官只看結果不看推理、找到的問題不必照單全收、探索交給子代理別污染主線、說明檔太長規則會被忽略、該強制的事交給機制、拿證據而非斷言。</li>
 <li>驗證力度分四級，愈重要的產出愈該疊加使用。</li>
+<li>三個可照抄的落地範例：官方的驗收子代理派工提示詞（要驗什麼、拿什麼當標準、什麼才算問題）、「附證據」與「只說做完了」的正反對照、用 <code>Stop</code> hook 在收工前強制檢查的最小設定；每個範例都標示了是官方逐字、官方改寫，還是本站自創。</li>
 <li>動態即時決定 vs 事先寫死規則，是可預測與能應變之間的取捨，沒有標準答案。</li>
 <li>多代理協作不是免費的，只有真的能拆開的任務才值得平行處理。</li>
 <li>說明檔案與記憶檔都有篇幅上限，記憶檔真正先觸頂的常常是位元組數而不是行數。</li>
 </ul>
-<h2 id="_7">資料來源</h2>
+<h2 id="_8">資料來源</h2>
 <table>
 <thead>
 <tr>
@@ -242,6 +363,16 @@
 <td>How Claude remembers your project（CLAUDE.md、MEMORY.md 篇幅上限）</td>
 <td><a href="https://code.claude.com/docs/en/memory">https://code.claude.com/docs/en/memory</a></td>
 </tr>
+<tr>
+<td>[9]</td>
+<td>Best practices for Claude Code（Add an adversarial review step：驗收子代理派工範例、Writer／Reviewer 分工）</td>
+<td><a href="https://code.claude.com/docs/en/best-practices">https://code.claude.com/docs/en/best-practices</a></td>
+</tr>
+<tr>
+<td>[10]</td>
+<td>Automate actions with hooks（Stop hook 的 prompt／agent 範例、八次阻擋上限與 <code>stop_hook_active</code>）</td>
+<td><a href="https://code.claude.com/docs/en/hooks-guide">https://code.claude.com/docs/en/hooks-guide</a></td>
+</tr>
 </tbody>
 </table>
 <p>延伸：<a href="agent-basics.html">AI Agent 怎麼運作</a>｜<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a></p>
@@ -266,12 +397,18 @@
 </ul>
 </li>
 <li><a href="#_2">三、驗證的四種力度</a></li>
+<li><a href="#_3">三之一、把原則變成可照做的範例</a><ul>
+<li><a href="#2122-diff">對應原則 2.1／2.2：派一個只看 diff 的驗收子代理</a></li>
+<li><a href="#27_1">對應原則 2.7：什麼樣的回報才算附了證據</a></li>
+<li><a href="#3-stop-hook">對應第三節第 3 級：用 Stop hook 擋住「還沒驗證就說做完」</a></li>
+</ul>
+</li>
 <li><a href="#harness_1">四、動態 harness 與靜態規則表：一組取捨</a></li>
-<li><a href="#_3">五、多代理協作不是免費的</a></li>
-<li><a href="#_4">六、說明檔案的篇幅上限</a></li>
-<li><a href="#_5">七、給一般使用者的實際做法</a></li>
-<li><a href="#_6">本頁重點回顧</a></li>
-<li><a href="#_7">資料來源</a></li>
+<li><a href="#_4">五、多代理協作不是免費的</a></li>
+<li><a href="#_5">六、說明檔案的篇幅上限</a></li>
+<li><a href="#_6">七、給一般使用者的實際做法</a></li>
+<li><a href="#_7">本頁重點回顧</a></li>
+<li><a href="#_8">資料來源</a></li>
 </ul>
 </div>
 </aside>

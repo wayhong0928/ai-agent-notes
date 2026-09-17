@@ -17,6 +17,9 @@
 
 「✅」代表官方文件明確查證到支援；「⚠️」代表有限制、有條件，或官方文件本身說法不一致；「❌」代表官方文件裡沒有查到對應機制，不是本站主觀認定不支援。Claude.ai 這欄特別把 Chat（一般對話）與 Cowork（本機或雲端 VM 裡的知識工作代理）分開講，因為官方文件裡這兩者能碰到的機制常常不一樣。
 
+!!! warning "2026-09-16 起：Chat／Cowork 的界線正在消失（Pro／Max 分階段推出中）"
+    上表把 Claude.ai 分成 Chat 與 Cowork 兩欄，是依官方文件目前的寫法整理的。但官方已公告兩者正在合併成同一個體驗：Pro／Max 帳號分階段收到（同方案帳號時間點也不同），收到之後不再有獨立 Cowork 模式可切換，上表裡「⚠️ 只在 Cowork 執行、Chat 裡顯示灰階」這類限制對這些帳號會失效，變成同一個對話視窗、能力視需要自動啟用。Team／Free 官方說「即將推出」但目前尚未開始，Enterprise 變動前會提前至少 30 天通知、目前維持現狀——這些帳號適用的仍是上表原本的區分。查證來源與時程細節見 [tools-compare.md](tools-compare.md) 開頭的說明 [23][24]。
+
 ## 二、每種機制的最小範例與常見誤用
 
 ### CLAUDE.md／AGENTS.md：專案事實與紅線
@@ -179,5 +182,7 @@ the problem, show the current code, and provide an improved version.
 | [20] | Install plugins（Cowork 開發文件，仍寫「不在 Chat 使用」，跟 [17][18] 說法不一致） | <https://claude.com/docs/cowork/guide/plugins> |
 | [21] | Inference hooks overview（Enterprise 合規機制，跟生命週期 hooks 不同性質） | <https://support.claude.com/en/articles/16059458-inference-hooks-overview> |
 | [22] | How we built our multi-agent research system（Research 功能內部的 lead agent／subagents 架構） | <https://www.anthropic.com/engineering/multi-agent-research-system> |
+| [23] | Cowork is now Claude（Cowork 與 Chat 合併公告，2026-09-16） | <https://claude.com/blog/cowork-is-now-claude> |
+| [24] | Claude Cowork and chat are one Claude（合併現況：各方案推出時程） | <https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude> |
 
 延伸：[AI Agent 怎麼運作](agent-basics.md)｜[把 AI 代理的工作環境設計得可靠](harness.md)

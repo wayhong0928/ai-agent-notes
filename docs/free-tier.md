@@ -16,7 +16,7 @@
 | Connectors（remote MCP） | ⚠️ 限 1 個自訂 connector | Pro 起數量更多但官方未列確切上限 [S12] |
 | Projects | ❌ | Free 沒有這個功能 [S3][S4] |
 | Research | ❌ | 官方明寫僅付費方案（Pro/Max/Team/Enterprise）[S14] |
-| Cowork | ❌ | 免費帳號完全不能用 [S21] |
+| Cowork | ❌ | 免費帳號完全不能用；官方已公告 Cowork 併入一般 Chat 的新體驗會擴及 Free 方案，但目前只是「即將推出」，尚未開始 [S21][S26] |
 | Claude Code | ❌ | Free 沒有，Pro 起才有，見[付費區](paid-tier.md) [S1] |
 
 ## ChatGPT Free 能用什麼
@@ -66,7 +66,7 @@ Claude Free 沒有 Projects，沒辦法把一批文獻或寫作規範固定成�
     比 Plus（25 檔）少很多，一個真實的研究專案很容易超過 5 個檔案。超過額度不是報錯就是要你砍舊檔案，開工前先盤點要放幾份檔案 [O17]。
 
 !!! warning "Claude Code、Cowork 完全不能用免費帳號"
-    這兩個經常被搞混的功能都需要付費方案（Pro 起）。免費帳號想找「本機讀寫檔案」「跨檔批次處理」的功能，會發現無論怎麼設定都用不到，因為不是設定錯了，是方案本身沒開放 [S1][S21]。
+    這兩個經常被搞混的功能都需要付費方案（Pro 起）。免費帳號想找「本機讀寫檔案」「跨檔批次處理」的功能，會發現無論怎麼設定都用不到，因為不是設定錯了，是方案本身沒開放 [S1][S21]。（2026-09-16 官方公告 Cowork 正併入一般 Chat，但 Free 方案官方說法是「即將推出」，查證當下尚未開始，這條限制暫時還成立 [S26]）
 
 !!! tip "檔案上傳有頻率上限，不是只看檔案大小"
     ChatGPT Free 的單檔大小上限雖然跟付費方案一樣是 512MB，但每天大概只能上傳 3 次；Claude Free 的檔案上傳沒有另外標注頻率限制，但受單次對話最多 20 檔、圖片與 PDF 頁數等其他上限影響 [O19][S16]。
@@ -86,6 +86,7 @@ Claude Free 沒有 Projects，沒辦法把一批文獻或寫作規範固定成�
 | S15 | support.claude.com/en/articles/8114487-what-interfaces-can-i-use-to-access-claude | 官方介面總覽 |
 | S16 | support.claude.com/en/articles/8241126-upload-files-to-claude | 檔案上傳大小/數量限制 |
 | S21 | support.claude.com/en/articles/13345190-get-started-with-claude-cowork | Cowork 免費帳號不可用 |
+| S26 | support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude | Cowork／Chat 合併現況：各方案推出時程 |
 | O1 | learn.chatgpt.com/docs/pricing | Free/Go 的 Codex 定位文案 |
 | O3 | OpenAI 官方 X 貼文（經二次來源引述） | Desktop app 全方案含 Free 可用 Codex |
 | O7 | learn.chatgpt.com/docs/app | 統一版 Desktop app 分頁切換 |
