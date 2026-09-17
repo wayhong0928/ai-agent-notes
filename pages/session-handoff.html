@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>跨 session 接力：session_log｜AI Agent 筆記</title>
+<meta name="description" content="讓下一個對話接得上進度">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/session-handoff.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789567027">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789564811">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789564836">付費區</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789566754">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789566922">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789566831">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789568662">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789571708">把教材做成 SKILL</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789606177">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789606143">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789606040">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789607976">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789607693">Hooks 與 Subagent 設定</a></li>
+<li class="active"><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789608045">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789563106">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 官方建議設定</p>
+<article class="doc" data-updated="1789608045">
+<h1>跨 session 接力：session_log</h1>
+<p class='lede'>讓下一個對話接得上進度</p>
+<blockquote>
+<p>查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。</p>
+</blockquote>
+<p><a href="agent-basics.html">AI Agent 怎麼運作</a>第二節講過，上下文視窗會滿，滿了之後 Claude Code 會自動壓縮或忘記較早的細節。這頁講的是同一個問題的另一面：<strong>一個對話（session）結束之後，下一個對話怎麼知道上次做到哪裡</strong>。這是官方機制（<code>SessionStart</code> hook）加上使用者自己設計的紀律（怎麼寫這個 log、什麼時候補）合起來解決的問題，兩者要分開看，這頁會逐段標明哪部分是官方保證、哪部分是整理者自己的做法。</p>
+<h2 id="_1">一、問題是什麼</h2>
+<p>長期用一個代理型工具做同一個專案，會遇到兩種情況：</p>
+<ol>
+<li>一次對話因為上下文滿了、你自己關掉、或工具重啟而結束，下一次開新對話時，模型完全不記得上一次做到哪、決定了什麼、還剩什麼沒做。</li>
+<li>就算同一個對話還開著，官方文件也建議在「不相關的兩個任務之間」用 <code>/clear</code> 主動重置上下文，理由是舊的失敗嘗試會污染後續判斷[2]——但重置之後一樣要面對「這個新對話怎麼接得上進度」的問題。</li>
+</ol>
+<p>如果每次都要重新跟模型解釋一遍「這個專案在做什麼、上次做到哪、還有什麼要做」，等於每次都要重講一次，這正是 CLAUDE.md 想省下來的那種重複解釋，只是對象換成了「進度」而不是「事實」。</p>
+<h2 id="sessionstart-hook">二、官方機制：<code>SessionStart</code> hook</h2>
+<p>Claude Code 的 Hooks 系統裡有一個 <code>SessionStart</code> 事件，會在<strong>每個 session 開始或恢復時</strong>觸發，<code>matcher</code> 可以進一步分辨這次啟動的來源：<code>startup</code>（全新啟動）、<code>resume</code>（接續之前的對話）、<code>clear</code>（<code>/clear</code> 之後）、<code>compact</code>（自動壓縮之後）、<code>fork</code>[1]。</p>
+<p>這個事件有一個特別的地方：多數 hook 事件的 plain-text stdout 只會寫進除錯 log，模型看不到；但 <code>SessionStart</code>（連同 <code>UserPromptSubmit</code>、<code>UserPromptExpansion</code>、<code>PostModelSwitch</code>，共四個事件）是例外，<strong>它的 plain-text stdout 會被當成上下文加進去，模型看得到也能據此行動</strong>[1]。也可以用 JSON 輸出的 <code>hookSpecificOutput.additionalContext</code> 欄位達到同樣效果，寫法更明確：</p>
+<pre><code class="language-json">{
+  &quot;hookSpecificOutput&quot;: {
+    &quot;hookEventName&quot;: &quot;SessionStart&quot;,
+    &quot;additionalContext&quot;: &quot;這裡放要注入的文字&quot;
+  }
+}
+</code></pre>
+<p><code>hookEventName</code> 是必填欄位，值要對應觸發這支 hook 的事件名稱（這裡是 <code>SessionStart</code>）；漏了這個欄位，官方範例的行為不保證成立。</p>
+<p>用一個最小範例串起來，<code>.claude/settings.json</code> 裡註冊一支腳本，session 啟動時執行：</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;SessionStart&quot;: [
+      {
+        &quot;matcher&quot;: &quot;startup&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;${CLAUDE_PROJECT_DIR}/.claude/hooks/inject-log.sh&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<p>腳本本身只要把想給模型看的文字印到 stdout 就會被接住，不需要額外處理 JSON：</p>
+<pre><code class="language-bash">#!/bin/bash
+# inject-log.sh —— 印出 session_log 最新幾筆，SessionStart 會把這段 stdout 當成上下文
+echo &quot;=== 上次進度（session_log.md 最新 3 筆） ===&quot;
+awk '/^## /{c++} c&lt;=3' &quot;$CLAUDE_PROJECT_DIR/session_log.md&quot;
+</code></pre>
+<p>到這裡為止，<code>SessionStart</code> 事件本身、它能分辨的觸發來源、stdout 會被當成上下文這三件事，都是官方 Hooks reference 直接記載的機制[1]。機制本身<strong>不規定</strong>你要注入什麼內容——那是下一節要講的部分。</p>
+<h2 id="session_logmd">三、整理者做法：<code>session_log.md</code> 怎麼寫</h2>
+<p>以下是本站整理者自己設計、用來配合上面那個官方機制的一套紀律，<strong>不是官方建議的固定格式</strong>，Claude Code 官方文件並沒有規定「進度紀錄該長什麼樣子」。這裡示範的是一種可行的做法，不是唯一做法；路徑與專案名稱全部是虛構的示例。</p>
+<h3 id="_2">檔案放哪、長什麼樣</h3>
+<p>在專案根目錄放一個 <code>session_log.md</code>，最新的一筆永遠寫在檔案<strong>頂部</strong>，方便 hook 腳本只抓前幾筆而不用讀完整個檔案：</p>
+<pre><code class="language-markdown"># session_log.md
+
+## 2026-09-15 完成資料清理腳本
+- 寫好 `scripts/clean_data.py`，跑過一次 `data/raw/2026Q3.csv`，輸出到 `data/clean/`
+- 待辦：清理後的欄位命名還沒跟報告樣板對齊，下次先做這個
+
+## 2026-09-12 專案啟動
+- 建立資料夾結構：`data/raw/`、`data/clean/`、`scripts/`
+- 確認原始資料來源與欄位定義
+</code></pre>
+<h3 id="_3">三個動作串起整個循環</h3>
+<ol>
+<li><strong>開場</strong>：Claude 看到 <code>SessionStart</code> 注入的內容之後，先用一到兩句話跟你確認「上次做到哪、這次要接著做什麼」，再開始處理新指令。這一步值得寫進專案的 CLAUDE.md，作為固定要求，例如：「開場先用 1–2 句話報告上次進度，再處理指令」——這句提醒本身放在 CLAUDE.md 裡，就只是 advisory（模型可能因為上下文太滿而忘記遵守），如果想要它保證發生，要靠更強的機制，例如在 <code>UserPromptSubmit</code> 上再掛一個檢查[3]。</li>
+<li><strong>工作中</strong>：正常做事，不用每一步都寫 log。</li>
+<li><strong>收尾</strong>：每次完成一件「有意義的工作」（一個功能、一次修復、一個決策），就在 <code>session_log.md</code> <strong>頂部</strong>補一筆，而不是等到整個對話結束才一次補完——對話可能因為上下文滿了而被自動壓縮，官方原文對自動壓縮的描述是「preserves important code and decisions while freeing space」，觸發時「Claude summarizes what matters most, including code patterns, file states, and key decisions」[2]，講的是摘要保留重點，不是東西會不見；但只存在對話裡、沒寫進 <code>session_log.md</code> 的進度細節，一旦被摘要掉就無法從摘要精確重建，這是整理者自己的推論提醒，不是官方文件的說法。</li>
+</ol>
+<h3 id="_4">為什麼要放在頂部、而不是尾端</h3>
+<p><code>SessionStart</code> 注入的內容也會佔用新 session 的上下文，如果 <code>session_log.md</code> 越寫越長，<code>hook</code> 腳本又抓整個檔案，等於每次開新對話就先吃掉一大段上下文。把最新進度放在頂部，hook 腳本只抓前幾筆（例如前 3 筆），檔案本身可以無限累積歷史記錄，但每次真正注入的量是固定的一小段——這是配合<a href="harness.html">把 AI 代理的工作環境設計得可靠</a>裡「說明檔太長，重要規則反而會被忽略」這條原則做的設計選擇，不是官方對 <code>session_log.md</code> 格式的要求，因為官方根本沒有這個檔案的格式規定。</p>
+<h2 id="_5">四、這個機制解決了什麼、沒解決什麼</h2>
+<p>解決了：下一個 session 開場就知道「上次做到哪」，不用你自己重講一遍，也不用模型憑空猜。</p>
+<p>沒解決：如果某一輪工作做完卻忘記補 <code>session_log.md</code>，這個機制不會自動幫你記得——<code>SessionStart</code> 只保證「session 開始時會注入某段內容」，內容夠不夠新、夠不夠準，取決於你有沒有紀律地在收尾時更新它。想把「必須補一筆」也變成機制保證而非自覺遵守，理論上可以在 <code>Stop</code> hook 上加一道檢查（比對本回合有沒有寫檔動作、<code>session_log.md</code> 的 mtime 有沒有更新），但這已經超出「注入進度」這件事本身，屬於進一步的自動化設計，本頁不展開。</p>
+<h2 id="_6">本頁重點回顧</h2>
+<ul>
+<li>問題：上下文有限、對話會中斷或被主動 <code>/clear</code>，下一個 session 預設不知道上次做到哪。</li>
+<li>官方機制：<code>SessionStart</code> hook 在 session 開始或恢復時觸發，能分辨 <code>startup</code>／<code>resume</code>／<code>clear</code>／<code>compact</code>／<code>fork</code> 來源，且是少數 stdout 會被當成上下文注入的事件之一。</li>
+<li>整理者做法（非官方規定）：進度記在 <code>session_log.md</code> 頂部、hook 腳本只抓最新幾筆、開場報告進度、收尾即時補記——這套紀律是為了配合官方機制、同時避免說明檔越養越大而設計的，不是 Claude Code 文件裡寫的標準做法。</li>
+<li>這個機制解決「不用重講進度」，不解決「有沒有紀律去記」；後者要嘛靠自覺，要嘛再疊加一層機制去檢查。</li>
+</ul>
+<h2 id="_7">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>來源</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1]</td>
+<td>Hooks reference（<code>SessionStart</code> 事件、<code>matcher</code> 的來源分類、stdout 注入上下文的例外規則、<code>additionalContext</code> 欄位、<code>CLAUDE_PROJECT_DIR</code>）</td>
+<td><a href="https://code.claude.com/docs/en/hooks">https://code.claude.com/docs/en/hooks</a></td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>Best practices for Claude Code（<code>/clear</code> 的使用時機、上下文被壓縮時可能遺失的內容）</td>
+<td><a href="https://code.claude.com/docs/en/best-practices">https://code.claude.com/docs/en/best-practices</a></td>
+</tr>
+<tr>
+<td>[3]</td>
+<td>Best practices for Claude Code（hooks 是 deterministic、CLAUDE.md 指示是 advisory）</td>
+<td><a href="https://code.claude.com/docs/en/best-practices">https://code.claude.com/docs/en/best-practices</a></td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="agent-basics.html">AI Agent 怎麼運作</a>｜<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>｜<a href="harness.html">把 AI 代理的工作環境設計得可靠</a></p>
+</article>
+<nav class="pager"><a class="prev" href="hooks-subagents.html">← Hooks 與 Subagent 設定</a><a class="next" href="about.html">關於這個網站 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#_1">一、問題是什麼</a></li>
+<li><a href="#sessionstart-hook">二、官方機制：SessionStart hook</a></li>
+<li><a href="#session_logmd">三、整理者做法：session_log.md 怎麼寫</a><ul>
+<li><a href="#_2">檔案放哪、長什麼樣</a></li>
+<li><a href="#_3">三個動作串起整個循環</a></li>
+<li><a href="#_4">為什麼要放在頂部、而不是尾端</a></li>
+</ul>
+</li>
+<li><a href="#_5">四、這個機制解決了什麼、沒解決什麼</a></li>
+<li><a href="#_6">本頁重點回顧</a></li>
+<li><a href="#_7">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

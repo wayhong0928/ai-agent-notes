@@ -1,0 +1,92 @@
+[
+ {
+  "slug": "tools-compare",
+  "title": "AI 介面比較總表",
+  "desc": "Claude Code、Claude Chat、Claude Desktop、Codex、ChatGPT Desktop 一張表看懂",
+  "section": "先搞懂工具"
+ },
+ {
+  "slug": "free-tier",
+  "title": "免付費區",
+  "desc": "不付錢也做得到的 AI 輔助工作流程",
+  "section": "先搞懂工具"
+ },
+ {
+  "slug": "paid-tier",
+  "title": "付費區",
+  "desc": "需要 Pro 以上或 Claude Code／Codex 才能做到的功能",
+  "section": "先搞懂工具"
+ },
+ {
+  "slug": "agent-basics",
+  "title": "AI Agent 怎麼運作",
+  "desc": "代理迴圈、工具呼叫與上下文",
+  "section": "AI Agent 原理"
+ },
+ {
+  "slug": "extensions",
+  "title": "SKILL、Plugin、MCP 與 Subagent",
+  "desc": "四種擴充機制各自解決什麼問題",
+  "section": "AI Agent 原理"
+ },
+ {
+  "slug": "harness",
+  "title": "把 AI 代理的工作環境設計得可靠",
+  "desc": "官方 harness 原則、驗證分級、多代理成本",
+  "section": "AI Agent 原理"
+ },
+ {
+  "slug": "claude-codex",
+  "title": "Claude Code + Codex 協作",
+  "desc": "官方 plugin、直接呼叫 CLI、Cowork 的現況",
+  "section": "實戰協作"
+ },
+ {
+  "slug": "skill-build",
+  "title": "把教材做成 SKILL",
+  "desc": "安裝版與手動版的實作紀錄",
+  "section": "實戰協作"
+ },
+ {
+  "slug": "sdlc-traditional",
+  "title": "SDLC 與流程模型",
+  "desc": "瀑布式、V 模型、螺旋模型、敏捷式各階段在做什麼",
+  "section": "軟體開發流程 SDLC"
+ },
+ {
+  "slug": "dev-practices",
+  "title": "開發實踐：TDD、BDD、DDD 與 SDD",
+  "desc": "寫程式時的具體方法，以及它們和 AI 代理怎麼搭配",
+  "section": "軟體開發流程 SDLC"
+ },
+ {
+  "slug": "sdlc-ai-agent",
+  "title": "AI 代理時代的 SDLC",
+  "desc": "規格、計畫、實作、驗證、交付各階段的 AI 分工",
+  "section": "軟體開發流程 SDLC"
+ },
+ {
+  "slug": "official-config",
+  "title": "Claude Code 設定總覽",
+  "desc": "CLAUDE.md、rules、settings、權限怎麼寫",
+  "section": "官方建議設定"
+ },
+ {
+  "slug": "hooks-subagents",
+  "title": "Hooks 與 Subagent 設定",
+  "desc": "自動化檢查與子代理定義",
+  "section": "官方建議設定"
+ },
+ {
+  "slug": "session-handoff",
+  "title": "跨 session 接力：session_log",
+  "desc": "讓下一個對話接得上進度",
+  "section": "官方建議設定"
+ },
+ {
+  "slug": "about",
+  "title": "關於這個網站",
+  "desc": "定位、查證原則與更新紀錄",
+  "section": "關於"
+ }
+]

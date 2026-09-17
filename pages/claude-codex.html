@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code + Codex 協作｜AI Agent 筆記</title>
+<meta name="description" content="官方 plugin、直接呼叫 CLI、Cowork 的現況">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/claude-codex.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789567027">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789564811">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789564836">付費區</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789566754">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789566922">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789566831">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li class="active"><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789568662">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789571708">把教材做成 SKILL</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789606177">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789606143">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789606040">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789607976">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789607693">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789608045">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789563106">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 實戰協作</p>
+<article class="doc" data-updated="1789568662">
+<h1>Claude Code + Codex 協作</h1>
+<p class='lede'>官方 plugin、直接呼叫 CLI、Cowork 的現況</p>
+<blockquote>
+<p>查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。本頁只寫查得到出處或實際驗證過的做法，不誇大可行性；個人的 Claude Code 規則檔、派工制度、設定檔內容不在本頁範圍內。</p>
+</blockquote>
+<p>網路上常見的教學把 Cowork 跟 Claude Code 混為一談，也常照抄已經失效的 <code>codex mcp-server</code> 設定。這頁把「哪些組合現在真的可行」講清楚，再給兩種確定可行的做法，最後列出已知的坑。</p>
+<h2 id="agent">一、為什麼要讓兩個 agent 分工</h2>
+<p>同一個模型自己審查自己寫的東西，很容易帶著「我當初是這樣想的」去護航；就算換一次對話重跑，同一顆模型在相近提示詞下產生的意見也容易系統性地往同一個方向靠攏，稱不上真正獨立的第二意見。換一個不同公司、不同模型的 agent 來審查或交叉查證，才是比較站得住腳的獨立視角。分工還有另一個現實理由：把研究、審查、實作拆給不同工具做，省下自己一個個手動比對的時間，也能各自用各自比較便宜或比較快的模型跑該做的那一段。</p>
+<p>以下四種組合，可行程度差很多，動手前先看這張表：</p>
+<table>
+<thead>
+<tr>
+<th>組合</th>
+<th>現況</th>
+<th>出處</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude Code + Codex plugin</strong>（<code>openai/codex-plugin-cc</code>）</td>
+<td>官方可行，OpenAI 官方 GitHub 組織發布，有完整安裝與操作文件</td>
+<td><a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md">openai/codex-plugin-cc README</a></td>
+</tr>
+<tr>
+<td><strong>Claude Code 直接呼叫 Codex CLI</strong>（<code>codex exec</code>）</td>
+<td>可行，不需要裝 plugin，本機裝好 Codex CLI 即可</td>
+<td><a href="https://learn.chatgpt.com/docs/codex/cli">Codex CLI 文件</a></td>
+</tr>
+<tr>
+<td><strong>Codex 透過 MCP 呼叫 <code>claude mcp serve</code></strong></td>
+<td>實驗性，兩端各自公開的 MCP 介面湊得起來，但查無官方文件明載或認證這個組合；<code>claude mcp serve</code> 只開放 Claude Code 的工具層，不是把整個 Claude 模型或 agent loop 變成可委派的對象</td>
+<td><a href="https://learn.chatgpt.com/docs/extend/mcp?surface=cli">Codex MCP client</a>、<a href="https://code.claude.com/docs/en/mcp#use-claude-code-as-an-mcp-server">Claude Code 作為 MCP server</a></td>
+</tr>
+<tr>
+<td><strong>Cowork + Codex</strong></td>
+<td>目前查無官方支援、可直接照做的整合方式</td>
+<td><a href="https://support.claude.com/en/articles/14479288-claude-cowork-architecture-overview">Cowork 架構</a>、<a href="https://learn.chatgpt.com/docs/mcp-server">Codex MCP server removal</a></td>
+</tr>
+</tbody>
+</table>
+<p>後面的做法一、做法二只處理前兩種組合；第三種留在「已知的坑」一節簡單交代，第四種留在最後的 Cowork 段落說明為什麼接不上。</p>
+<h2 id="openaicodex-plugin-cc">二、做法一：安裝 openai/codex-plugin-cc</h2>
+<p>這個 plugin 由 OpenAI 官方 GitHub 組織發布，透過本機的 Codex CLI 與 Codex App Server 執行，不是另一套獨立的引擎。</p>
+<h3 id="_1">前置條件</h3>
+<ul>
+<li>Node.js 18.18 以上。</li>
+<li>本機能執行全域 <code>codex</code> CLI，且已完成登入（可用具 Codex 權益的 ChatGPT 帳號，或 OpenAI API key）。</li>
+<li>能使用 Claude Code 的 plugin marketplace。</li>
+</ul>
+<p>來源：<a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md#requirements">Plugin README（Requirements 一節）</a></p>
+<h3 id="_2">安裝步驟</h3>
+<p>在 Claude Code 對話框依序輸入：</p>
+<pre><code class="language-text">/plugin marketplace add openai/codex-plugin-cc
+/plugin install codex@openai-codex
+/reload-plugins
+/codex:setup
+</code></pre>
+<p>若尚未安裝 Codex CLI，可讓 <code>/codex:setup</code> 協助安裝，或自己手動跑：</p>
+<pre><code class="language-bash">npm install -g @openai/codex
+codex login
+</code></pre>
+<p>在 Claude Code 對話框裡執行 shell 指令，官方 README 用的寫法是在指令前面加一個驚嘆號：</p>
+<pre><code class="language-text">!codex login
+</code></pre>
+<p>裝完可以先跑一輪測試：</p>
+<pre><code class="language-text">/codex:review --background
+/codex:status
+/codex:result
+</code></pre>
+<p>來源：<a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md#install">Plugin README（Install 一節）</a></p>
+<h3 id="8">8 個指令</h3>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>用途</th>
+<th>適合情境</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/codex:review</code></td>
+<td>對目前未提交的變更、或跟 base branch 的差異，跑唯讀的一般 review，不改程式</td>
+<td>想知道這次改動有沒有明顯 bug</td>
+</tr>
+<tr>
+<td><code>/codex:adversarial-review</code></td>
+<td>唯讀挑戰實作方向、設計取捨、隱藏假設與失敗模式，可附加自訂焦點</td>
+<td>上線前想確認某個高風險設計決策站不站得住腳，而不是找細節錯字</td>
+</tr>
+<tr>
+<td><code>/codex:rescue</code></td>
+<td>透過 <code>codex:codex-rescue</code> subagent 把 bug 調查、修復或延續任務交給 Codex，可選 model／effort</td>
+<td>想把一段任務整個交給 Codex 動手做，而不只是要意見</td>
+</tr>
+<tr>
+<td><code>/codex:transfer</code></td>
+<td>把目前 Claude Code session 匯出成 Codex thread，輸出 <code>codex resume &lt;session-id&gt;</code></td>
+<td>想離開 Claude Code，換到 Codex CLI／App 用同一份 context 接著做</td>
+</tr>
+<tr>
+<td><code>/codex:status</code></td>
+<td>查看目前 repository 裡執行中或近期的 Codex 背景任務</td>
+<td>派了背景任務想知道跑到哪了</td>
+</tr>
+<tr>
+<td><code>/codex:result</code></td>
+<td>讀取已完成任務的最終輸出，也可取得 session ID 回到 Codex 繼續</td>
+<td>背景任務跑完要看結果</td>
+</tr>
+<tr>
+<td><code>/codex:cancel</code></td>
+<td>取消正在執行的 Codex 背景任務</td>
+<td>派錯了或不想等了</td>
+</tr>
+<tr>
+<td><code>/codex:setup</code></td>
+<td>檢查 Codex CLI 是否安裝並完成登入，也可管理 review gate</td>
+<td>第一次裝好之後的健康檢查</td>
+</tr>
+</tbody>
+</table>
+<p>來源：<a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md">Plugin README（Commands 一節）</a></p>
+<h2 id="plugin-codex-exec">三、做法二：不裝 plugin，直接呼叫 <code>codex exec</code></h2>
+<p>不想裝 plugin，或想更細緻控制每次呼叫，可以在 Claude Code 裡直接叫 shell 執行 <code>codex exec</code>。以下語法已在 codex-cli 0.154.0 的 <code>--help</code> 實際確認存在：</p>
+<table>
+<thead>
+<tr>
+<th>語法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codex exec</code></td>
+<td>非互動模式執行一次任務</td>
+</tr>
+<tr>
+<td><code>-s read-only</code> / <code>-s workspace-write</code> / <code>-s danger-full-access</code></td>
+<td>三段式 sandbox：唯讀／可在工作區內編輯與跑指令／完全不設防</td>
+</tr>
+<tr>
+<td><code>-C &lt;dir&gt;</code></td>
+<td>指定要在哪個目錄執行</td>
+</tr>
+<tr>
+<td><code>--skip-git-repo-check</code></td>
+<td>目標目錄不是 git repo 時，跳過檢查直接執行</td>
+</tr>
+<tr>
+<td><code>-o</code> / <code>--output-last-message &lt;file&gt;</code></td>
+<td>把最後一則訊息寫進指定檔案</td>
+</tr>
+<tr>
+<td>從 stdin 讀 prompt（用 <code>-</code> 代表）</td>
+<td>把 prompt 內容用管線或重新導向餵進去，不用整段貼在指令列裡</td>
+</tr>
+<tr>
+<td><code>--add-dir &lt;dir&gt;</code></td>
+<td>額外授權 Codex 讀寫工作目錄以外的另一個目錄</td>
+</tr>
+<tr>
+<td><code>codex --search</code>（全域旗標，要放在 <code>exec</code> 之前）</td>
+<td>開啟網路搜尋</td>
+</tr>
+</tbody>
+</table>
+<p>來源：<a href="https://developers.openai.com/codex/cli/reference">Codex CLI reference</a>（會轉址到 <code>learn.chatgpt.com/docs/developer-commands</code>）；<code>--add-dir</code> 與三段式 sandbox 另可見官方 <a href="https://learn.chatgpt.com/docs/sandboxing">Codex sandboxing</a>。</p>
+<p><strong>範例一：唯讀研究</strong>（<code>-s read-only</code> 不會修改研究對象或專案裡的任何檔案，但 <code>-o</code> 仍會在你指定的路徑新增或覆寫 <code>report.md</code> 這一份輸出檔，這不算沙箱破例，是這個旗標本來的作用）：</p>
+<p>終端機 Bash／macOS／Linux／Windows 的 Git Bash：</p>
+<pre><code class="language-bash">codex --search exec -s read-only -o report.md - &lt; prompt.md
+</code></pre>
+<p>Windows PowerShell 沒有 <code>&lt;</code> 這種重新導向語法，改用管線把檔案內容餵給 stdin：</p>
+<pre><code class="language-powershell">Get-Content prompt.md -Raw | codex exec --search -s read-only -o report.md -
+</code></pre>
+<p>在 Claude Code 對話框裡執行以上任一行，要在指令前加驚嘆號讓它當成 shell 指令直接跑（<code>!codex --search exec ...</code>），或者不加驚嘆號、直接用一般對話請 Claude 幫你執行，讓它自己呼叫 Bash 工具。</p>
+<p><strong>範例二：可寫入的實作任務</strong>（在指定目錄裡真的改檔案、跑指令）：</p>
+<pre><code class="language-bash">codex exec -s workspace-write -C ~/projects/demo &quot;依 spec.md 裡的規格實作這個功能&quot;
+</code></pre>
+<p>上面這兩行 PowerShell 管線寫法官方文件沒有給範例，是本站按 PowerShell 一般語法推出的通用寫法，不是官方逐字教學，用之前建議自己先跑一次確認行為符合預期。</p>
+<h2 id="_3">四、分工模式</h2>
+<p><strong>Claude 規劃、Codex 執行</strong>：先讓 Claude Code（或 <code>Plan</code>）把規格拆成可逐條驗證的條件，再把這份規格連同驗收條件交給 Codex 執行。適合規格已經明確、自包含、不需要理解特定專案脈絡規則的程式或腳本任務，例如「把這支腳本的輸出格式從 CSV 改成 JSON，欄位對照見附表」。</p>
+<p><strong>一方寫、另一方審</strong>：做的人不驗自己的活。Claude Code 寫完一段實作後，派 <code>/codex:review</code> 或 <code>/codex:adversarial-review</code> 讓 Codex 用乾淨的視角只看 diff 跟驗收條件審查，不要讓寫的那個 agent 自己審查自己。適合任何你要對外交付的變更，尤其是動到認證、資料寫入、金流這類高風險區塊。</p>
+<p><strong>交叉查證</strong>：同一個事實問題，讓 Claude 跟 Codex 各自查一次官方文件再比對答案。適合查證「某個 API 旗標存不存在」「某個功能哪個方案才能用」這類容易被訓練記憶誤導的問題。兩邊都查到同一個答案才比較有把握，分歧本身就是該進一步查證的訊號。</p>
+<h2 id="_4">五、已知的坑</h2>
+<p><strong>a. 背景模式的 job 狀態可能跟 Codex 實際進度脫鉤</strong></p>
+<p>用 <code>--background</code> 派出的任務，<code>/codex:status</code> 顯示的狀態有時跟 Codex 實際在做的事不同步。截至查證當下，<code>openai/codex-plugin-cc</code> 的 issue tracker 裡有多筆相關且仍開著的問題，例如 <a href="https://github.com/openai/codex-plugin-cc/issues/639">#639</a>（<code>result</code>／<code>cancel</code> 對存在的任務回報「找不到任務」，被中止的 worker 卻仍顯示執行中）與 <a href="https://github.com/openai/codex-plugin-cc/issues/704">#704</a>（worker 在寫入最終狀態前就掛掉，任務因此永遠顯示執行中）。</p>
+<p>避法：短任務直接用同步模式（不加 <code>--background</code>）；真的要背景跑的長任務，任務完成的判定不能只看 <code>/codex:status</code> 顯示 completed，要另外直接檢查預期的輸出檔案是否存在、內容是否正確、更新時間是否在合理範圍內。</p>
+<p><strong>b. 前景執行時間過長會被自動轉成背景</strong></p>
+<p>Claude Code 的 Bash 工具預設前景逾時是 2 分鐘（120 秒），逾時的上限預設是 10 分鐘（600 秒），可以用環境變數 <code>BASH_MAX_TIMEOUT_MS</code> 調整，不是一個改不動的硬性天花板；逾時仍沒跑完時，Claude Code 不會中斷它，而是把它轉成背景執行，結果訊息會明確寫「在 120 秒逾時內沒有跑完，已轉入背景」，並給出任務 ID 與輸出檔案路徑。來源：<a href="https://code.claude.com/docs/en/tools-reference">Claude Code Tools reference</a>。</p>
+<p>這代表透過 <code>codex-plugin-cc</code> 轉發呼叫 Codex 時，即使沒有主動加 <code>--background</code>，只要單次呼叫超過這個時間，也會被 Bash 工具自動轉成背景執行；此時 agent 可能只回報「轉發完成」，字面上容易被誤讀成「Codex 已經做完」，但實際工作是否做完，仍要照上一條的做法核對輸出檔案。</p>
+<p><strong>c. Codex sandbox 預設只能寫工作目錄</strong></p>
+<p><code>workspace-write</code> 模式預設只授權寫入啟動時所在的工作目錄。要讓 Codex 動到別的目錄，用 <code>-C &lt;dir&gt;</code> 直接指定要在哪個目錄執行，或用 <code>--add-dir &lt;dir&gt;</code> 額外授權工作目錄以外的另一個目錄（兩者皆已於 <code>--help</code> 確認存在）。</p>
+<p><strong>d. 在 sandbox 裡讓 Codex 自己 <code>git init</code>，Windows 上可能整組壞掉</strong></p>
+<p>這是實際在 Windows 上遇到的狀況，不是官方文件寫的行為：在 <code>workspace-write</code> 沙箱裡讓 Codex 自己執行 <code>git init</code>，產生的 <code>.git</code> 資料夾擁有者可能是沙箱帳號而不是目前的使用者，之後在沙箱外執行 git 指令時會因為「dubious ownership」而全部失敗。避法：git 的初始化交給人或在沙箱外的 Claude Code 做，不要讓 Codex 在沙箱內自己建 repo。</p>
+<p><strong>e. <code>codex mcp-server</code> 已經移除</strong></p>
+<p>舊版 Codex 曾提供 <code>codex mcp-server</code> 指令與獨立的 <code>codex-mcp-server</code> binary，OpenAI 現行文件已明載兩者皆已移除；現在的 <code>codex app-server</code> 是給圖形介面與整合程式用的 JSON-RPC server，官方明確說它不是 MCP server，不能拿來取代舊教學裡的 <code>codex mcp-server</code> 設定。網路上還能搜到的舊版 MCP 設定範例，照抄會直接失敗。來源：<a href="https://learn.chatgpt.com/docs/mcp-server">Codex MCP server removal</a>。</p>
+<p><strong>f. review gate 會讓兩邊互相呼叫、快速燒額度</strong></p>
+<p><code>/codex:setup --enable-review-gate</code> 可以讓 Claude 收尾前自動要求 Codex review，但官方 README 明白警告這可能形成長時間的 Claude／Codex 來回迴圈，快速消耗雙方額度，不適合無人看管的情境。來源：<a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md#enabling-review-gate">Plugin README（Enabling review gate 一節）</a>。</p>
+<p><strong>g. Codex 預設不會自動讀你寫給 Claude 的 CLAUDE.md</strong></p>
+<p>Claude Code 讀的是 <code>CLAUDE.md</code>，官方文件裡查無它會讀取 <code>AGENTS.md</code> 的說明；Codex 預設讀的是 <code>AGENTS.md</code>，依 <code>~/.codex</code> 全域到專案路徑逐層合併，越接近目前目錄優先權越高。來源：<a href="https://code.claude.com/docs/en/memory">How Claude remembers your project</a>、<a href="https://learn.chatgpt.com/docs/agent-configuration/agents-md">Codex AGENTS.md</a>。</p>
+<p>這不代表兩邊只能各寫一份、內容永遠對不上，官方留了兩個共用做法：一是在 Codex 的 <code>~/.codex/config.toml</code> 設定 <code>project_doc_fallback_filenames</code>，把 <code>CLAUDE.md</code> 加進這個清單，讓 Codex 除了 <code>AGENTS.md</code> 之外也讀它；二是反過來在 Claude Code 的 <code>CLAUDE.md</code> 裡用 <code>@AGENTS.md</code> 這個匯入語法，把 <code>AGENTS.md</code> 的內容併進 Claude 讀到的 context。兩種做法都只解決「同一份內容要不要維護兩次」，不會改變預設行為本身；沒特別設定的情況下，用 <code>/codex:rescue</code> 或直接呼叫 <code>codex exec</code> 把任務交給 Codex 時，凡是 Codex 需要知道的專案脈絡（架構、紅線、命名慣例），還是要寫進當次的 prompt 裡，不能指望它自己去讀 CLAUDE.md。</p>
+<h2 id="cowork">六、Cowork 呢</h2>
+<p>截至查證日，查無 OpenAI 或 Anthropic 任何一方明確宣告支援 Cowork + Codex 的整合；這不代表技術上已經證明完全不可行，只代表目前沒有官方認證、可以照抄的做法。理由分三層：</p>
+<ol>
+<li>Cowork 的 shell 跑在 Anthropic 管理的雲端 VM，或既有 Desktop 部署下的本機專用 Linux VM，兩者都不等於使用者主機的終端機，不會繼承主機上的 <code>codex</code> 執行檔、PATH 或登入狀態。來源：<a href="https://support.claude.com/en/articles/14479288-claude-cowork-architecture-overview">Cowork architecture overview</a>。</li>
+<li>Cowork 的自訂 connector 是 remote MCP，只能填入一個 Anthropic 雲端能連進去的 URL，而 OpenAI 目前沒有提供可以填進這個欄位的官方 Codex remote MCP endpoint；已移除的 <code>codex mcp-server</code> 也不是這裡能用的東西。來源：<a href="https://learn.chatgpt.com/docs/mcp-server">Codex MCP server removal</a>。</li>
+<li>Cowork 確實已經支援 plugin，部分本機 Cowork 情境下也能執行 plugin 內含的本機 MCP server，但查無 OpenAI 官方發布過一個給 Cowork 用的 Codex plugin。<code>openai/codex-plugin-cc</code> 的 README 明確把自己定位成給 Claude Code 用的 plugin，沒有保證能在 Cowork 正常運作。來源：<a href="https://support.claude.com/en/articles/13837440-use-plugins-in-claude">Use plugins in Claude</a>。</li>
+</ol>
+<p>想找 Cowork 跟 Codex 官方整合的教學，目前應該視為查無出處，不要照抄任何寫「在 Cowork 裡輸入指令呼叫本機 <code>codex exec</code>」的舊文章；有人自己動手拼出一套本機 MCP wrapper 也不是不可能，但那是自製實驗，不是本頁能保證的做法。</p>
+<h2 id="_5">本頁重點回顧</h2>
+<ul>
+<li>四種組合裡，只有「Claude Code + Codex plugin」跟「Claude Code 直接呼叫 <code>codex exec</code>」現在確定可行；「Codex 透過 MCP 呼叫 <code>claude mcp serve</code>」是實驗性、只開放工具層；「Cowork + Codex」目前查無官方整合。</li>
+<li>裝 plugin 走 <code>/plugin marketplace add</code> → <code>/plugin install</code> → <code>/reload-plugins</code> → <code>/codex:setup</code> 四步，8 個指令分工清楚：review／adversarial-review 唯讀審查，rescue 真的動手做，transfer 換到 Codex 環境接續。</li>
+<li>不裝 plugin 也能直接用 <code>codex exec</code> 搭配 <code>-s</code>、<code>-C</code>、<code>--skip-git-repo-check</code>、<code>-o</code>、stdin、<code>--add-dir</code> 這幾個已確認的旗標。</li>
+<li>三種分工模式各有適用情境：規格明確就規劃後交出去執行，高風險變更一定要讓另一個 agent 審查，容易被誤導的事實問題交叉查證。</li>
+<li>七個坑裡最容易踩的是背景任務狀態脫鉤跟前景逾時自動轉背景，兩者都要靠檢查輸出檔案而非信任狀態訊息；Windows 上讓 Codex 自己 <code>git init</code> 也是實測會出事的地方；CLAUDE.md／AGENTS.md 各讀各的也有官方留的共用做法（<code>project_doc_fallback_filenames</code>、<code>@AGENTS.md</code> 匯入），不是只能維護兩份重複內容。</li>
+</ul>
+<h2 id="_6">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>來源</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>openai/codex-plugin-cc README</td>
+<td><a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md">https://github.com/openai/codex-plugin-cc/blob/main/README.md</a></td>
+</tr>
+<tr>
+<td>Codex CLI reference（<code>codex exec</code> 旗標）</td>
+<td><a href="https://developers.openai.com/codex/cli/reference">https://developers.openai.com/codex/cli/reference</a></td>
+</tr>
+<tr>
+<td>Codex CLI 文件</td>
+<td><a href="https://learn.chatgpt.com/docs/codex/cli">https://learn.chatgpt.com/docs/codex/cli</a></td>
+</tr>
+<tr>
+<td>Codex sandboxing</td>
+<td><a href="https://learn.chatgpt.com/docs/sandboxing">https://learn.chatgpt.com/docs/sandboxing</a></td>
+</tr>
+<tr>
+<td>Codex MCP client</td>
+<td><a href="https://learn.chatgpt.com/docs/extend/mcp?surface=cli">https://learn.chatgpt.com/docs/extend/mcp?surface=cli</a></td>
+</tr>
+<tr>
+<td>Codex MCP server removal</td>
+<td><a href="https://learn.chatgpt.com/docs/mcp-server">https://learn.chatgpt.com/docs/mcp-server</a></td>
+</tr>
+<tr>
+<td>Codex AGENTS.md（含 <code>project_doc_fallback_filenames</code>）</td>
+<td><a href="https://learn.chatgpt.com/docs/agent-configuration/agents-md">https://learn.chatgpt.com/docs/agent-configuration/agents-md</a></td>
+</tr>
+<tr>
+<td>Claude Code 作為 MCP server</td>
+<td><a href="https://code.claude.com/docs/en/mcp#use-claude-code-as-an-mcp-server">https://code.claude.com/docs/en/mcp#use-claude-code-as-an-mcp-server</a></td>
+</tr>
+<tr>
+<td>Claude Code Tools reference（Bash 逾時、<code>BASH_MAX_TIMEOUT_MS</code>、自動轉背景）</td>
+<td><a href="https://code.claude.com/docs/en/tools-reference">https://code.claude.com/docs/en/tools-reference</a></td>
+</tr>
+<tr>
+<td>How Claude remembers your project（<code>@AGENTS.md</code> 匯入語法）</td>
+<td><a href="https://code.claude.com/docs/en/memory">https://code.claude.com/docs/en/memory</a></td>
+</tr>
+<tr>
+<td>Cowork architecture overview</td>
+<td><a href="https://support.claude.com/en/articles/14479288-claude-cowork-architecture-overview">https://support.claude.com/en/articles/14479288-claude-cowork-architecture-overview</a></td>
+</tr>
+<tr>
+<td>Use plugins in Claude</td>
+<td><a href="https://support.claude.com/en/articles/13837440-use-plugins-in-claude">https://support.claude.com/en/articles/13837440-use-plugins-in-claude</a></td>
+</tr>
+<tr>
+<td>openai/codex-plugin-cc Issues #639、#704</td>
+<td><a href="https://github.com/openai/codex-plugin-cc/issues">https://github.com/openai/codex-plugin-cc/issues</a></td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="tools-compare.html">AI 介面比較總表</a>｜<a href="paid-tier.html">付費區</a>｜<a href="harness.html">把 AI 代理的工作環境設計得可靠</a></p>
+</article>
+<nav class="pager"><a class="prev" href="harness.html">← 把 AI 代理的工作環境設計得可靠</a><a class="next" href="skill-build.html">把教材做成 SKILL →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#agent">一、為什麼要讓兩個 agent 分工</a></li>
+<li><a href="#openaicodex-plugin-cc">二、做法一：安裝 openai/codex-plugin-cc</a><ul>
+<li><a href="#_1">前置條件</a></li>
+<li><a href="#_2">安裝步驟</a></li>
+<li><a href="#8">8 個指令</a></li>
+</ul>
+</li>
+<li><a href="#plugin-codex-exec">三、做法二：不裝 plugin，直接呼叫 codex exec</a></li>
+<li><a href="#_3">四、分工模式</a></li>
+<li><a href="#_4">五、已知的坑</a></li>
+<li><a href="#cowork">六、Cowork 呢</a></li>
+<li><a href="#_5">本頁重點回顧</a></li>
+<li><a href="#_6">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

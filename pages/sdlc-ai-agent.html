@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 代理時代的 SDLC｜AI Agent 筆記</title>
+<meta name="description" content="規格、計畫、實作、驗證、交付各階段的 AI 分工">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/sdlc-ai-agent.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789567027">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789564811">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789564836">付費區</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789566754">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789566922">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789566831">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789568662">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789571708">把教材做成 SKILL</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789606177">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789606143">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li class="active"><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789606040">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789607976">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789607693">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789608045">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789563106">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 軟體開發流程 SDLC</p>
+<article class="doc" data-updated="1789606040">
+<h1>AI 代理時代的 SDLC</h1>
+<p class='lede'>規格、計畫、實作、驗證、交付各階段的 AI 分工</p>
+<blockquote>
+<p>查證日期：2026-09-16。本頁只寫查得到出處或官方文件明講的做法，個人的 Claude Code 規則檔、派工制度、設定檔內容不在本頁範圍內；整理者自己的觀察會明確標示，不包裝成官方結論或研究結果。</p>
+</blockquote>
+<p><a href="sdlc-traditional.html">上一頁</a>介紹的六個 SDLC 階段跟<a href="dev-practices.html">開發實踐</a>介紹的 TDD、BDD、DDD 都沒有因為 AI 代理出現而消失：需求還是要分析，設計還是要做，程式碼還是要測試才能上線。改變的是每個階段花的力氣分布，以及風險出現的位置。</p>
+<div class="admonition note">
+<p class="admonition-title">整理者觀察</p>
+<p>以下這句是整理者的推論，不是量化研究的結論：AI 代理讓打字寫程式這個動作本身變得更快，因此風險容易往前後兩端推，前端推向「有沒有把要做的事講清楚」，後端推向「有沒有人真的檢查過產出」。這裡沒有可靠研究支持「變快了多少」的具體數字，本頁也不會寫這類數字。如果只看到「AI 讓實作變快」就直接跳過需求跟驗證，反而是常見的翻車模式。</p>
+</div>
+<h2 id="_1">一、各階段對照表</h2>
+<table>
+<thead>
+<tr>
+<th>階段</th>
+<th>AI 可以幫什麼</th>
+<th>人一定要做的事</th>
+<th>常見翻車點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需求</td>
+<td>把模糊的需求整理成條列、幫忙想沒考慮到的邊界情況、寫成可以驗證的規格</td>
+<td>決定要做什麼、為什麼要做、什麼東西算做完（範圍與優先順序永遠是人的決定）</td>
+<td>把 AI 順口寫出的規格當成使用者真正要的東西，沒回頭跟需求提出者確認</td>
+</tr>
+<tr>
+<td>設計</td>
+<td>提出架構選項、指出既有程式碼裡的模式、畫出可能的資料流</td>
+<td>決定用哪個方案、承擔取捨的責任；官方建議先進入 plan mode，讓 AI 只探索、不動手改，產出一份詳細計畫再往下走<sup id="fnref:plan"><a class="footnote-ref" href="#fn:plan">1</a></sup></td>
+<td>沒有先計畫就讓 AI 直接動手改多個檔案，改到一半才發現方向錯了，比先計畫的成本更高<sup id="fnref2:plan"><a class="footnote-ref" href="#fn:plan">1</a></sup></td>
+</tr>
+<tr>
+<td>實作</td>
+<td>大量寫程式、依既有慣例套用到多個檔案、平行處理彼此獨立的子任務</td>
+<td>檢查改動範圍有沒有超出預期、決定要不要拆給不同工具分工（例如一方寫、另一方審）</td>
+<td>讓同一個沒有隔離上下文的對話一路做到底，錯誤累積在同一段脈絡裡，越改越亂<sup id="fnref5:bp"><a class="footnote-ref" href="#fn:bp">2</a></sup></td>
+</tr>
+<tr>
+<td>測試與驗證</td>
+<td>產生測試案例、跑測試、比對輸出、找出明顯的邊界情況</td>
+<td>決定驗收條件是什麼；先讓實作者自己跑過一次可重現的檢查（測試、建置），再交給乾淨上下文的審查者只看 diff 跟驗收條件、不看原始推理過程獨立複核<sup id="fnref6:bp"><a class="footnote-ref" href="#fn:bp">2</a></sup></td>
+<td>AI 自己覺得「看起來做完了」就回報完成，沒有實際跑出證據；審查者找到的每一條建議都照單全收，變成過度工程<sup id="fnref7:bp"><a class="footnote-ref" href="#fn:bp">2</a></sup></td>
+</tr>
+<tr>
+<td>部署</td>
+<td>準備部署腳本、產生變更紀錄、檢查上線前清單</td>
+<td>對外的動作（真正推上正式環境、發送給使用者）一定要人確認，這是不可逆或高成本的行動</td>
+<td>讓自動化流程在沒有人核准的情況下直接把改動送上正式環境</td>
+</tr>
+<tr>
+<td>維護</td>
+<td>讀懂舊程式碼、總結變更歷史、依既有慣例延續開發</td>
+<td>把專案的事實與紅線寫進 CLAUDE.md／AGENTS.md，並在跨 session 銜接時把進度交代清楚</td>
+<td>說明檔案越寫越長，重要規則反而被忽略；沒寫進說明檔的慣例，換一個 session 就要重新講一次<sup id="fnref:memory"><a class="footnote-ref" href="#fn:memory">3</a></sup></td>
+</tr>
+</tbody>
+</table>
+<h2 id="spec-driven-developmentsdd">二、規格驅動開發（Spec-Driven Development，SDD）</h2>
+<h3 id="_2">是什麼</h3>
+<p>規格驅動開發是把「要做什麼、為什麼要做」寫成一份明確規格，再依規格產出技術計畫與可執行的任務清單，最後用一個收斂（convergence）步驟驗證實作是不是真的符合規格，不符合就回頭再對齊。這個定義來自 GitHub 官方的 <code>spec-kit</code> 專案，原文把核心精神講成「先決定 what 跟 why，再決定 how」（原文：Define what and why before deciding how to build it）<sup id="fnref:speckit"><a class="footnote-ref" href="#fn:speckit">4</a></sup>。<code>spec-kit</code> 把整個流程拆成幾個階段：Constitution（每個專案一次，訂出這個專案不變的原則）→ Specify（寫規格）→ Plan（技術計畫）→ Tasks（任務清單）→ Implement（實作）→ Converge（收斂，反覆進行直到實作與規格一致）<sup id="fnref2:speckit"><a class="footnote-ref" href="#fn:speckit">4</a></sup>。</p>
+<h3 id="_3">規格的定位：可執行的產出物，不是靜態文件</h3>
+<p><code>spec-kit</code> 的方法論文件把它自己的指令定位成「把規格當成可執行的產出物，而不是靜態文件」（原文：The commands embody SDD principles by treating specifications as executable artifacts rather than static documents），同一份文件也把「規格與程式碼保持同步，因為程式碼是規格產生的」列為「Living Documentation」<sup id="fnref:speckit-sdd"><a class="footnote-ref" href="#fn:speckit-sdd">5</a></sup>。落在流程上的具體差別是：規格、計畫、任務清單在整個開發過程裡持續被拿出來對照，<code>spec-kit</code> 特別設計了收斂階段，把「檢查實作有沒有符合規格」變成流程裡的固定步驟，而不是交付前才臨時檢查一次<sup id="fnref3:speckit"><a class="footnote-ref" href="#fn:speckit">4</a></sup>。</p>
+<p><strong>整理者觀察</strong>：這個差別，整理者認為本質上跟 TDD「先寫測試再寫程式碼」是同一種思路的不同層次——TDD 讓程式碼有一個自動可驗證的目標，SDD 讓整個開發過程有一個持續可對照的目標。這個類比是整理者自己下的，<code>spec-kit</code> 官方文件沒有這樣寫。</p>
+<h2 id="tddbddddd-ai">三、TDD、BDD、DDD 在 AI 代理流程裡的角色</h2>
+<h3 id="tdd-ai">TDD：給 AI 一個能自動判斷對錯的目標</h3>
+<p><a href="dev-practices.html">開發實踐</a>介紹的 TDD，套進 AI 代理流程時價值特別明顯：先寫好測試案例，等於給 AI 一個不需要人一直盯著、自己就能跑出「對／錯」訊號的檢查點。Claude Code 官方 best practices 明確建議在提示詞裡先給出驗收案例，範例把「implement a function that validates email addresses」改寫成「write a validateEmail function. example test cases: user@example.com is true, invalid is false, user@.com is false. run the tests after implementing」<sup id="fnref:bp"><a class="footnote-ref" href="#fn:bp">2</a></sup>。官方也提到一種寫作者／審查者搭配模式：「你可以對測試做類似的事：讓一個 Claude 寫測試，另一個 Claude 寫程式碼去讓測試通過」（原文：You can do something similar with tests: have one Claude write tests, then another write code to pass them）<sup id="fnref2:bp"><a class="footnote-ref" href="#fn:bp">2</a></sup>，這正是把 TDD 的紅燈綠燈循環拆給兩個獨立的執行者，避免同一個 AI 又寫測試又寫實作、又自己判定自己過關。</p>
+<div class="admonition note">
+<p class="admonition-title">整理者規則</p>
+<p>測試不能為了通過而被 AI 隨意修改。如果 AI 判斷測試一直失敗是因為測試案例本身寫錯，正確的做法是把這個判斷提出來，經人核准後才調整測試內容，不能自己直接把判斷條件改鬆再回報通過。這條不是 best practices 頁面逐字寫的規則，是整理者從「驗證要看證據」延伸出的操作準則。</p>
+</div>
+<h3 id="bddgiven-when-then">BDD：Given-When-Then 直接當成規格與驗收條件</h3>
+<p>BDD 的 Given-When-Then 情境本身就是一份可以交給 AI 代理的規格：Given 段描述前提、When 段描述要實作的動作、Then 段就是驗收條件。把一段 Gherkin 情境直接貼進提示詞，AI 代理可以照著情境實作，再依 Then 段的內容自行檢查或讓另一個審查步驟檢查，不需要額外把驗收條件翻譯成別的格式。</p>
+<h3 id="ddd-claudemdagentsmd">DDD：在 CLAUDE.md／AGENTS.md 裡寫清楚通用語言與上下文邊界</h3>
+<div class="admonition note">
+<p class="admonition-title">整理者觀察</p>
+<p>這一點目前查無官方文件把 DDD 跟 CLAUDE.md／AGENTS.md 直接連起來討論，以下是整理者依 DDD 概念與官方對 CLAUDE.md 用途的說明（放事實與紅線，見<a href="extensions.html">擴充機制頁</a>）推出的觀察，不是引用自某篇公開文件的結論：一個專案如果已經用 DDD 切好了限界上下文，把每個上下文使用的通用語言、上下文之間的邊界寫進 CLAUDE.md 或 AGENTS.md，可以降低 AI 代理在不同模組之間把同一個詞用錯意思的機率（例如前面舉的「訂單」例子：AI 代理如果不知道銷售上下文跟物流上下文各自怎麼理解「訂單」，很容易把兩邊的欄位或邏輯混在一起）。這類邊界屬於「事實」而不是「程序」，符合官方對 CLAUDE.md 該放什麼內容的判準。</p>
+</div>
+<h3 id="sdd">跟 SDD 的關係</h3>
+<p><code>spec-kit</code> 官方沒有把 TDD、BDD 當成競爭方案，而是把規格當成主要產出物，TDD、BDD 則提供可以被直接執行、判斷對錯的驗收手段，兩者互補：SDD 決定「這個階段該對照什麼規格」，TDD／BDD 決定「這個規格具體怎麼變成一個可以自動判斷過或不過的檢查」。這個互補關係，<code>spec-kit</code> 官方說明沒有逐字寫出來，是整理者對照 SDD 的收斂階段跟 TDD／BDD 的驗證機制推出的觀察。</p>
+<h2 id="cicd-ai">四、CI/CD 裡的 AI 代理</h2>
+<p>官方文件裡確實記載的兩個做法：</p>
+<ul>
+<li><strong>Claude Code GitHub Actions</strong>：Anthropic 提供 <code>anthropics/claude-code-action@v1</code> 這個 GitHub Action，用 <code>/install-github-app</code> 可以快速裝好；裝好之後可以在 PR 或 issue 留言裡用觸發字 <code>@claude</code> 呼叫，讓 Claude 分析程式碼、實作變更、推送 commit；也可以不靠留言觸發，直接給一個 <code>prompt</code> 讓它在任何 GitHub 事件（包含排程）上自動執行，例如把 issue 轉成 PR，或在 PR 開啟時自動跑程式碼審查<sup id="fnref:gha"><a class="footnote-ref" href="#fn:gha">6</a></sup>。</li>
+<li><strong>Codex GitHub Action 與非互動模式</strong>：OpenAI 官方範例使用 <code>openai/codex-action@v1</code>，底層是 <code>codex exec</code> 這個非互動執行方式，定位就是給 CI pipeline、pre-merge 檢查、排程任務用<sup id="fnref:codexci"><a class="footnote-ref" href="#fn:codexci">7</a></sup>。這個組合有幾個分開的設定要點：<ul>
+<li><strong>沙箱預設</strong>：官方非互動模式文件寫的是「By default, <code>codex exec</code> runs in a read-only sandbox」（預設跑在唯讀沙箱裡）<sup id="fnref2:codexci"><a class="footnote-ref" href="#fn:codexci">7</a></sup>。</li>
+<li><strong><code>sandbox</code> 參數</strong>：GitHub Action 的 <code>sandbox</code> 輸入可選 <code>read-only</code>、<code>workspace-write</code>、<code>danger-full-access</code>；要讓它真的修改工作區內容，就是在這裡選 <code>workspace-write</code><sup id="fnref:codexgha"><a class="footnote-ref" href="#fn:codexgha">8</a></sup>。</li>
+<li><strong><code>safety-strategy</code> 參數</strong>：預設值是 <code>drop-sudo</code>，也就是跑 Codex 之前先移除 <code>sudo</code>；另一個選項 <code>unprivileged-user</code> 會搭配 <code>codex-user</code> 輸入，改用指定的非 root 帳號執行<sup id="fnref2:codexgha"><a class="footnote-ref" href="#fn:codexgha">8</a></sup>。</li>
+<li><strong><code>chmod</code> 是排解權限錯誤，不是授權沙箱寫入</strong>：移除 sudo 之後，Codex 可能因為檔案權限而改不動 repo 檔案，官方給的做法是事先放寬工作區權限（例如 <code>chmod -R g+rwX "$GITHUB_WORKSPACE"</code>）<sup id="fnref3:codexgha"><a class="footnote-ref" href="#fn:codexgha">8</a></sup>。這跟上面的 <code>sandbox</code> 是兩件事。</li>
+<li><strong>權限分工</strong>：官方非互動模式範例把「執行 Codex 的那個 job」跟「真正開 PR 的那個 job」分開——跑 Codex 的 job 只有 <code>contents: read</code>，跑完只把 diff 當成 artifact 輸出；負責開 PR 的 job 有寫入權限，但拿不到 <code>OPENAI_API_KEY</code><sup id="fnref3:codexci"><a class="footnote-ref" href="#fn:codexci">7</a></sup>。</li>
+</ul>
+</li>
+</ul>
+<p>兩者的共同精神跟本站<a href="claude-codex.html">Claude Code + Codex 協作</a>頁講的「一方寫、另一方審」一致：讓 AI 代理進到 CI 流程，不代表跳過原本的分支保護與審查機制，反而應該讓它照著既有的 PR 流程走，而不是繞過去直接改主線。</p>
+<h2 id="_4">五、完整案例：檢查網站失效連結的腳本</h2>
+<p>以下走一遍一個小任務從需求到交付的完整過程，每一步標出人、Claude Code、Codex 各自的分工與驗收條件。</p>
+<h3 id="1">1. 需求</h3>
+<p><strong>人</strong>：提出目標，「我想知道這個網站有哪些內部連結指到不存在的檔案」，並決定範圍：只檢查本站 <code>docs/</code> 底下的相對連結，不檢查外部網址。</p>
+<p><strong>Claude Code</strong>：把這句話整理成條列需求，回頭跟人確認：要不要檢查外部連結？找到失效連結要不要自動修？輸出格式要什麼樣？</p>
+<p><strong>Codex</strong>：這一步不需要 Codex。需求釐清是人跟 Claude Code 之間的來回確認，不涉及動手實作。</p>
+<p><strong>驗收條件</strong>：需求條列裡每一條都能被驗證（「範圍限定在 docs/ 內部相對連結」可以直接檢查程式有沒有處理到外部連結），而不是停留在「幫我看看連結」這種無法驗證的描述。</p>
+<h3 id="2">2. 規格</h3>
+<p><strong>人</strong>：核准 Claude Code 整理出的範圍。</p>
+<p><strong>Claude Code</strong>：寫一份簡短規格：輸入（<code>docs/</code> 目錄）、輸出（一份表格，列出檔名、行號、連結文字、目標路徑、是否存在）、不處理的範圍（外部網址、圖片連結）、驗收條件（對一個刻意放了 3 個失效連結的測試目錄跑過，要抓出全部 3 個，不多報也不少報）。</p>
+<p><strong>Codex</strong>：這一步不需要 Codex。寫規格屬於 Claude Code 在這個分工裡的責任。</p>
+<p><strong>驗收條件</strong>：規格裡的「不處理的範圍」跟「驗收條件」都寫清楚，另一個人（或另一個 AI）光看規格就能判斷實作對不對，不用回頭問原作者在想什麼。</p>
+<h3 id="3">3. 計畫</h3>
+<p><strong>人</strong>：決定要不要進 plan mode。官方建議在「不確定該用什麼作法、改動涉及多個檔案、或對要改的程式碼不熟悉」這三種情況下用 plan mode<sup id="fnref:plan2"><a class="footnote-ref" href="#fn:plan2">9</a></sup>；這個任務符合前兩項：一開始不確定要怎麼掃描與判斷連結是否有效，而且會建立、讀取多個檔案。</p>
+<p><strong>Claude Code</strong>：進 plan mode，只讀檔案、不動手改，列出計畫：用什麼語言寫（例如 Python）、怎麼掃描 Markdown 連結語法、怎麼判斷連結目標是否存在、要不要處理相對路徑跟錨點分開判斷；計畫裡明確寫出步驟 4 打算由 Claude Code 自己實作，還是改派 Codex 執行。</p>
+<p><strong>Codex</strong>：這一步不需要 Codex。計畫階段留在 Claude Code 的 plan mode 內完成，Codex 最多是計畫裡「要不要交給它」的討論對象，不實際動作。</p>
+<p><strong>驗收條件</strong>：計畫列出具體步驟跟會動到的檔案，人看完能判斷「這樣做對不對」，不是一段空泛的散文。</p>
+<h3 id="4">4. 實作</h3>
+<p><strong>人</strong>：核准計畫，決定步驟 4 要不要改派 Codex 執行；不管哪種分工，都要求先寫測試案例再寫腳本本體。</p>
+<p><strong>Claude Code</strong>：依核准的計畫寫腳本；如果規格已經明確到可以自包含執行、不需要理解這個 vault 特有的規則，這一步也可以改派 Codex 執行，Claude Code 只需要把規格與驗收條件交給它（Claude 規劃、Codex 執行的分工模式）<sup id="fnref:codexrole"><a class="footnote-ref" href="#fn:codexrole">10</a></sup>。</p>
+<p><strong>Codex</strong>：若步驟 3 的計畫指定由 Codex 實作，這一步由 Codex 依規格與驗收條件寫腳本；若計畫指定留在 Claude Code，這一步不需要 Codex。兩種分工只能選一種，不是同一支腳本兩邊各寫一次。</p>
+<p><strong>誰寫測試</strong>：測試跟實作分開由不同執行者負責，對應官方那句「have one Claude write tests, then another write code to pass them」（讓一個 Claude 寫測試，另一個寫程式碼去讓測試通過，本頁前面已引用）<sup id="fnref3:bp"><a class="footnote-ref" href="#fn:bp">2</a></sup>。所以如果腳本本體由 Codex 寫，測試案例就由 Claude Code 先寫好；如果腳本本體留給 Claude Code，測試案例就交給另一個乾淨上下文的 Claude Code 對話或 Codex 寫。不論哪種分工，寫測試的跟寫實作的不是同一個執行者。</p>
+<p><strong>驗收條件（TDD 風格）</strong>：在寫腳本本體之前，先寫好測試案例：對一個內建 3 個已知失效連結的測試目錄跑腳本，斷言輸出剛好列出這 3 個，且行號、檔名都對得上。這一步就是把 TDD「先寫測試」的做法套進這個案例：測試案例本身就是這支腳本的驗收條件，不用等腳本寫完才臨時想怎麼測。</p>
+<h3 id="5">5. 驗證</h3>
+<p><strong>人</strong>：要求看實際執行輸出，不接受「應該沒問題」這句話。</p>
+<p><strong>誰審查</strong>：審查者不能是寫這段程式碼的那個執行者。兩種分工對應到：</p>
+<table>
+<thead>
+<tr>
+<th>步驟 4 的實作者</th>
+<th>這一步的審查者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Code</td>
+<td>另一個乾淨上下文的 Claude Code 對話，或用 Codex 的唯讀審查指令（例如 <code>/codex:review</code>）</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td>乾淨上下文的 Claude Code</td>
+</tr>
+</tbody>
+</table>
+<p>不論哪種分工，審查者只看 diff 跟驗收條件，不看實作過程中的推理，重新跑一次測試案例，並額外測邊界情況（空目錄、沒有任何連結的檔案、連結指向自己）。</p>
+<p><strong>驗收條件</strong>：貼出實際測試輸出（通過／失敗各幾條）；審查者發現的問題只處理會影響正確性的部分，其餘瑣碎建議（例如變數命名風格）可以判斷後決定不修，但要講清楚跳過了什麼。</p>
+<h3 id="6">6. 交付</h3>
+<p><strong>人</strong>：檢視最終的 diff 跟輸出範例，決定要不要真的把這支腳本排進 CI（例如接進前一節「CI/CD 裡的 AI 代理」講的排程任務，每天自動掃一次）；是否上線一定由人確認。</p>
+<p><strong>Claude Code／Codex</strong>：這一步不需要 AI 代理動作，交付與上線的決定是人的責任；如果人決定要接進 CI，可以請 Claude Code 或 Codex 協助寫排程設定檔，但那已經是另一輪「規格→實作→驗證」，不算這次案例的一部分。</p>
+<p><strong>驗收條件</strong>：排進 CI 前，先由人手動觸發執行一次，確認行為符合預期，再決定要不要交給排程自動執行；接上 CI 之後，第一次自動執行的結果也要有人看過，不是裝上去就假設它會一直正常運作。</p>
+<h2 id="ai">六、敏捷式在 AI 代理時代的變化</h2>
+<div class="admonition note">
+<p class="admonition-title">整理者觀察</p>
+<p>這一節整段是整理者對照官方文件推出的觀察，不是某篇研究的結論，也沒有量化數字支持：敏捷式方法原本假設的瓶頸是「寫程式碼要花多少時間」，Sprint 的節奏、Kanban 的 WIP 控制，都是在管理人力這個稀缺資源。如果 AI 代理讓寫程式碼這個動作變快，瓶頸有可能移到「怎麼確認 AI 寫出來的東西是對的」，也就是驗證這一段。官方 best practices 裡反覆出現的主題確實是驗證：給 AI 一個能自己跑的檢查、用乾淨上下文的審查者、用證據而非斷言判斷是否完成<sup id="fnref4:bp"><a class="footnote-ref" href="#fn:bp">2</a></sup>，但官方沒有把這個現象直接連到「敏捷式的瓶頸轉移」這個框架上，這個連結是整理者自己推的，也沒有可靠的量化研究支持「變快了多少」。</p>
+</div>
+<h2 id="_5">七、風險清單</h2>
+<table>
+<thead>
+<tr>
+<th>風險</th>
+<th>說明</th>
+<th>避法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>幻覺 API</td>
+<td>AI 生成看起來合理但實際不存在的函式、參數或套件</td>
+<td>要求 AI 附上文件連結或版本號，不確定就先查證，不要憑訓練記憶回答可查證的事實</td>
+</tr>
+<tr>
+<td>過時文件</td>
+<td>AI 訓練資料的截止日期早於工具或函式庫的最新版本，引用的用法已經失效</td>
+<td>對照官方文件的查證日期；本站<a href="claude-codex.html">Claude Code + Codex 協作</a>頁列出多個「網路教學已失效」的實例可參考</td>
+</tr>
+<tr>
+<td>秘密外洩</td>
+<td>AI 代理在對話、commit 或部署腳本裡不小心帶出金鑰、密碼</td>
+<td>金鑰只放環境變數或密鑰管理服務，絕不寫進提示詞或程式碼；commit 前檢查 diff</td>
+</tr>
+<tr>
+<td>權限過大</td>
+<td>讓 AI 代理在不必要的範圍內擁有寫入或執行權限</td>
+<td>依任務範圍給最小權限，善用<a href="agent-basics.html">權限模式與沙箱</a>的分級設計</td>
+</tr>
+<tr>
+<td>自己驗自己</td>
+<td>寫程式碼的 AI 代理同時審查自己的產出，容易帶著「我當初這樣想」去護航</td>
+<td>換一個乾淨上下文的審查者，只看 diff 跟驗收條件，見<a href="harness.html">harness 頁</a>的驗證分級</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>主張</th>
+<th>來源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Explore→Plan→Implement→Commit 四階段、plan mode 三種適用情境、驗證要看證據、寫測試再審查、對抗性審查</td>
+<td><a href="https://code.claude.com/docs/en/best-practices">Best practices for Claude Code</a></td>
+</tr>
+<tr>
+<td>CLAUDE.md 放事實不放程序</td>
+<td><a href="https://code.claude.com/docs/en/memory">How Claude remembers your project</a></td>
+</tr>
+<tr>
+<td>SDD 定義、工作流程階段</td>
+<td><a href="https://github.com/github/spec-kit">github/spec-kit</a></td>
+</tr>
+<tr>
+<td>「規格是可執行的產出物，不是靜態文件」、Living Documentation</td>
+<td><a href="https://github.com/github/spec-kit/blob/main/spec-driven.md">spec-kit：spec-driven.md</a></td>
+</tr>
+<tr>
+<td>Claude Code GitHub Actions（action 名稱、觸發字、安裝指令）</td>
+<td><a href="https://code.claude.com/docs/en/github-actions">官方文件</a></td>
+</tr>
+<tr>
+<td><code>codex exec</code> 預設唯讀沙箱、CI 使用情境、Codex job 與開 PR job 的權限分工</td>
+<td><a href="https://learn.chatgpt.com/docs/non-interactive-mode">Codex Non-interactive mode</a></td>
+</tr>
+<tr>
+<td>Codex GitHub Action 的 <code>sandbox</code>／<code>safety-strategy</code> 選項與 <code>chmod</code> 排解權限錯誤</td>
+<td><a href="https://learn.chatgpt.com/docs/github-action">Codex GitHub Action</a></td>
+</tr>
+<tr>
+<td>SDD 與 TDD 的類比、DDD 在 CLAUDE.md 的應用、敏捷式瓶頸轉移的推論</td>
+<td>整理者觀察，正文已標示，查無官方出處</td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="sdlc-traditional.html">SDLC 與流程模型</a>｜<a href="dev-practices.html">開發實踐：TDD、BDD、DDD 與 SDD</a>｜<a href="claude-codex.html">Claude Code + Codex 協作</a>｜<a href="harness.html">把 AI 代理的工作環境設計得可靠</a></p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:plan">
+<p><a href="https://code.claude.com/docs/en/best-practices">Best practices for Claude Code</a>，「Explore first, then plan, then code」一節。官方在該節寫出建議的四個階段：Explore、Plan、Implement、Commit（原文：The recommended workflow has four phases），並說明 Explore 階段用 plan mode 讓 Claude 只讀檔案、不做修改（原文：Claude reads files and answers questions without making changes）。&#160;<a class="footnote-backref" href="#fnref:plan" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:plan" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:bp">
+<p><a href="https://code.claude.com/docs/en/best-practices">Best practices for Claude Code</a>。&#160;<a class="footnote-backref" href="#fnref:bp" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:bp" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:bp" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref4:bp" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref5:bp" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref6:bp" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref7:bp" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:memory">
+<p><a href="https://code.claude.com/docs/en/memory">How Claude remembers your project</a>。&#160;<a class="footnote-backref" href="#fnref:memory" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:speckit">
+<p>GitHub. spec-kit. <a href="https://github.com/github/spec-kit">https://github.com/github/spec-kit</a>。&#160;<a class="footnote-backref" href="#fnref:speckit" title="Jump back to footnote 4 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:speckit" title="Jump back to footnote 4 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:speckit" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:speckit-sdd">
+<p>GitHub. spec-kit：<em>Spec-Driven Development</em> 方法論文件. <a href="https://github.com/github/spec-kit/blob/main/spec-driven.md">https://github.com/github/spec-kit/blob/main/spec-driven.md</a>（引文見「Living Documentation」與指令說明段落）。&#160;<a class="footnote-backref" href="#fnref:speckit-sdd" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:gha">
+<p><a href="https://code.claude.com/docs/en/github-actions">Claude Code GitHub Actions</a>。&#160;<a class="footnote-backref" href="#fnref:gha" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+<li id="fn:codexci">
+<p><a href="https://learn.chatgpt.com/docs/non-interactive-mode">Codex Non-interactive mode</a>。&#160;<a class="footnote-backref" href="#fnref:codexci" title="Jump back to footnote 7 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:codexci" title="Jump back to footnote 7 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:codexci" title="Jump back to footnote 7 in the text">&#8617;</a></p>
+</li>
+<li id="fn:codexgha">
+<p><a href="https://learn.chatgpt.com/docs/github-action">Codex GitHub Action</a>。&#160;<a class="footnote-backref" href="#fnref:codexgha" title="Jump back to footnote 8 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:codexgha" title="Jump back to footnote 8 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:codexgha" title="Jump back to footnote 8 in the text">&#8617;</a></p>
+</li>
+<li id="fn:plan2">
+<p><a href="https://code.claude.com/docs/en/best-practices">Best practices for Claude Code</a>，Explore first, then plan, then code 一節。&#160;<a class="footnote-backref" href="#fnref:plan2" title="Jump back to footnote 9 in the text">&#8617;</a></p>
+</li>
+<li id="fn:codexrole">
+<p>分工模式詳見<a href="claude-codex.html">Claude Code + Codex 協作</a>。&#160;<a class="footnote-backref" href="#fnref:codexrole" title="Jump back to footnote 10 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+</article>
+<nav class="pager"><a class="prev" href="dev-practices.html">← 開發實踐：TDD、BDD、DDD 與 SDD</a><a class="next" href="official-config.html">Claude Code 設定總覽 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#_1">一、各階段對照表</a></li>
+<li><a href="#spec-driven-developmentsdd">二、規格驅動開發（Spec-Driven Development，SDD）</a><ul>
+<li><a href="#_2">是什麼</a></li>
+<li><a href="#_3">規格的定位：可執行的產出物，不是靜態文件</a></li>
+</ul>
+</li>
+<li><a href="#tddbddddd-ai">三、TDD、BDD、DDD 在 AI 代理流程裡的角色</a><ul>
+<li><a href="#tdd-ai">TDD：給 AI 一個能自動判斷對錯的目標</a></li>
+<li><a href="#bddgiven-when-then">BDD：Given-When-Then 直接當成規格與驗收條件</a></li>
+<li><a href="#ddd-claudemdagentsmd">DDD：在 CLAUDE.md／AGENTS.md 裡寫清楚通用語言與上下文邊界</a></li>
+<li><a href="#sdd">跟 SDD 的關係</a></li>
+</ul>
+</li>
+<li><a href="#cicd-ai">四、CI/CD 裡的 AI 代理</a></li>
+<li><a href="#_4">五、完整案例：檢查網站失效連結的腳本</a><ul>
+<li><a href="#1">1. 需求</a></li>
+<li><a href="#2">2. 規格</a></li>
+<li><a href="#3">3. 計畫</a></li>
+<li><a href="#4">4. 實作</a></li>
+<li><a href="#5">5. 驗證</a></li>
+<li><a href="#6">6. 交付</a></li>
+</ul>
+</li>
+<li><a href="#ai">六、敏捷式在 AI 代理時代的變化</a></li>
+<li><a href="#_5">七、風險清單</a></li>
+<li><a href="#_6">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

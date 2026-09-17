@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hooks 與 Subagent 設定｜AI Agent 筆記</title>
+<meta name="description" content="自動化檢查與子代理定義">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/hooks-subagents.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789567027">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789564811">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789564836">付費區</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789566754">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789566922">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789566831">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789568662">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789571708">把教材做成 SKILL</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789606177">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789606143">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789606040">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789607976">Claude Code 設定總覽</a></li>
+<li class="active"><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789607693">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789608045">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789563106">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 官方建議設定</p>
+<article class="doc" data-updated="1789607693">
+<h1>Hooks 與 Subagent 設定</h1>
+<p class='lede'>自動化檢查與子代理定義</p>
+<blockquote>
+<p>查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。</p>
+</blockquote>
+<p><a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>那頁把 Hooks 跟 Subagent 放進一張總表，講了它們各自解決什麼問題。這頁把兩者的實際設定方式攤開來講：事件有哪些、設定寫在哪個檔案、frontmatter 每個欄位實際的語意，以及一個可以直接照抄的最小範例。</p>
+<h2 id="hooks">一、Hooks：把「一定要發生」的事變成機制</h2>
+<h3 id="_1">事件清單</h3>
+<p><code>settings.json</code> 的 <code>hooks</code> 底下可以掛的事件，依生命週期分組，官方 Hooks reference 目前列出約 33 種，這裡列常用的幾組[1]：</p>
+<table>
+<thead>
+<tr>
+<th>分組</th>
+<th>事件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每個 session 一次</td>
+<td><code>SessionStart</code>、<code>SessionEnd</code>、<code>Setup</code></td>
+</tr>
+<tr>
+<td>每個回合</td>
+<td><code>UserPromptSubmit</code>、<code>Stop</code>、<code>StopFailure</code></td>
+</tr>
+<tr>
+<td>每次工具呼叫</td>
+<td><code>PreToolUse</code>、<code>PostToolUse</code>、<code>PostToolUseFailure</code>、<code>PermissionRequest</code>、<code>PermissionDenied</code></td>
+</tr>
+<tr>
+<td>Agent 相關</td>
+<td><code>SubagentStart</code>、<code>SubagentStop</code>、<code>TaskCreated</code>、<code>TaskCompleted</code></td>
+</tr>
+<tr>
+<td>設定與環境</td>
+<td><code>ConfigChange</code>、<code>FileChanged</code>、<code>CwdChanged</code>、<code>PreCompact</code>、<code>PostCompact</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">設定寫在哪裡、長什麼樣</h3>
+<p>Hooks 設定寫在 <code>settings.json</code>（使用者層 <code>~/.claude/settings.json</code> 或專案層 <code>.claude/settings.json</code>，見<a href="official-config.html">Claude Code 設定總覽</a>的五層優先序）。<code>hooks</code> 是一個物件，key 是事件名稱，值是一個陣列，每個項目含 <code>matcher</code>（篩選何時觸發，可以是工具名、regex，或像 <code>SessionStart</code> 這種事件專屬的來源字串）與 <code>hooks</code>（真正要跑的處理器陣列）[1]。Handler 類型有五種：<code>command</code>（跑 shell 指令）、<code>http</code>（打 HTTP request）、<code>mcp_tool</code>（呼叫 MCP 工具）、<code>prompt</code>（送給 Claude 模型判斷）、<code>agent</code>（開一個 subagent）[1]。</p>
+<h3 id="_3">官方範例：編輯完自動跑格式化</h3>
+<p><code>code.claude.com/docs/en/hooks-guide</code> 的官方範例，<code>PostToolUse</code> 搭配 <code>Edit|Write</code> matcher，編輯完成後自動跑 Prettier：</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;PostToolUse&quot;: [
+      {
+        &quot;matcher&quot;: &quot;Edit|Write&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;jq -r '.tool_input.file_path' | xargs npx prettier --write&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<p>這個範例可以直接照抄：把它貼進 <code>.claude/settings.json</code>，前提是專案已經裝了 <code>prettier</code> 且 <code>jq</code> 在 PATH 裡。想擋掉某個動作而不是事後處理，改用 <code>PreToolUse</code> 並讓腳本以 <code>exit 2</code> 結束——<strong><code>exit 2</code> 是唯一保證阻擋該動作的訊號</strong>，官方原文：exit 0 依 JSON 輸出決定，exit 1 或 3 以上多數事件視為非阻擋性錯誤、動作照常進行，只有 exit 2 是「阻擋性錯誤，無論 JSON 輸出寫什麼都會阻擋」[1]。腳本用 <code>"${CLAUDE_PROJECT_DIR}/.claude/hooks/xxx.sh"</code> 這種寫法引用，<code>CLAUDE_PROJECT_DIR</code> 是官方保證會設定好的環境變數，指向 session 啟動時的專案根目錄，不受目前工作目錄影響[1]。</p>
+<h3 id="_4">安全注意事項</h3>
+<ul>
+<li><strong>Hooks 是使用者自訂的 shell 指令，以你的權限、在你的環境裡執行</strong>——不是模型自己決定要不要跑，這正是它比 CLAUDE.md 指示更「決定性」的原因：官方原文「hooks are deterministic and guarantee the action happens」，對照 CLAUDE.md 指示是「advisory」[3]。也因此，寫錯的 hook 有真實的系統風險，不是頂多讓模型多囉唆一句。</li>
+<li>Hooks 在 subagent 內同樣生效：subagent 呼叫工具時，<code>PreToolUse</code>／<code>PostToolUse</code> 跟主線對話一樣觸發已設定的 hooks[1]。</li>
+<li>Managed policy 可以設 <code>allowManagedHooksOnly</code>，限制只跑組織管理來源的 hooks，使用者／專案／本機／plugin 的 hooks 全部被擋，而且使用者端的關閉開關對 managed hooks 無效[1]。</li>
+<li>多個 hook 掛在同一個高頻事件（例如 <code>PreToolUse</code>）上會平行執行[1]；平行執行是否會拖慢回應速度，官方 Hooks reference 沒有說明，這裡不臆測。</li>
+</ul>
+<h2 id="subagent">二、Subagent：定義檔與欄位語意</h2>
+<h3 id="_5">放在哪裡</h3>
+<p><code>.claude/agents/*.md</code>（專案層，適合團隊共用，走版控）或 <code>~/.claude/agents/*.md</code>（使用者層，跨你所有專案生效）；Plugin 也可以在自己的 <code>agents/</code> 目錄裡帶 subagent 定義[2]。</p>
+<h3 id="frontmatter">frontmatter 欄位</h3>
+<p>只有 <code>name</code> 與 <code>description</code> 是必填，其餘全部可省略，省略時各自有預設行為：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>必填</th>
+<th>語意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>是</td>
+<td>唯一識別名（小寫字母＋連字號）</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>是</td>
+<td>決定 Claude 何時該把任務委派給這個 subagent</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td>否</td>
+<td>允許使用的工具白名單；<strong>省略則繼承所有 subagent 可用的工具</strong>，不是「什麼都不能用」</td>
+</tr>
+<tr>
+<td><code>disallowedTools</code></td>
+<td>否</td>
+<td>要從可用工具裡移除的黑名單</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>否</td>
+<td><code>sonnet</code>／<code>opus</code>／<code>haiku</code>／<code>fable</code>／完整 model ID（如 <code>claude-opus-5</code>）／<code>inherit</code>（繼承目前主線用的模型）</td>
+</tr>
+<tr>
+<td><code>permissionMode</code></td>
+<td>否</td>
+<td><code>default</code>／<code>acceptEdits</code>／<code>auto</code>／<code>dontAsk</code>／<code>bypassPermissions</code>／<code>plan</code>／<code>manual</code>，語意同<a href="official-config.html">Claude Code 設定總覽</a>第四節的 permission mode</td>
+</tr>
+<tr>
+<td><code>maxTurns</code></td>
+<td>否</td>
+<td>最多跑幾個 agentic turn，超過就強制停止</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>否</td>
+<td>這個 subagent 啟動時預先載進上下文的 skill 清單</td>
+</tr>
+<tr>
+<td><code>mcpServers</code></td>
+<td>否</td>
+<td>這個 subagent 可以使用的 MCP servers</td>
+</tr>
+<tr>
+<td><code>hooks</code></td>
+<td>否</td>
+<td>只在這個 subagent 生效範圍內的額外 hooks</td>
+</tr>
+<tr>
+<td><code>memory</code></td>
+<td>否</td>
+<td>持久記憶範圍：<code>user</code>／<code>project</code>／<code>local</code></td>
+</tr>
+<tr>
+<td><code>isolation</code></td>
+<td>否</td>
+<td>設 <code>worktree</code> 讓這個 subagent 跑在獨立的 git worktree 裡</td>
+</tr>
+<tr>
+<td><code>background</code></td>
+<td>否</td>
+<td>設 <code>true</code> 讓這個 subagent 在背景執行</td>
+</tr>
+<tr>
+<td><code>omitClaudeMd</code></td>
+<td>否</td>
+<td>設 <code>true</code> 時啟動不載入 CLAUDE.md</td>
+</tr>
+<tr>
+<td><code>effort</code></td>
+<td>否</td>
+<td>推理強度：<code>low</code>／<code>medium</code>／<code>high</code>／<code>xhigh</code>／<code>max</code></td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>否</td>
+<td>顯示用顏色：<code>red</code>／<code>blue</code>／<code>green</code>／<code>yellow</code>／<code>purple</code>／<code>orange</code>／<code>pink</code>／<code>cyan</code></td>
+</tr>
+<tr>
+<td><code>initialPrompt</code></td>
+<td>否</td>
+<td>這個 agent 被當成主線 session agent 執行時，自動當第一則使用者訊息送出</td>
+</tr>
+<tr>
+<td><code>experimental</code></td>
+<td>否</td>
+<td>實驗性選項的 map（例如 <code>cacheTtl: 5m</code> 或 <code>1h</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>範例（官方文件節錄）[2]：</p>
+<pre><code class="language-markdown">---
+name: code-improver
+description: Scans files and suggests improvements for readability, performance, and best practices
+tools: Read, Grep, Glob
+model: sonnet
+memory: project
+---
+
+You are a code improvement specialist. For each issue you find, explain
+the problem, show the current code, and provide an improved version.
+</code></pre>
+<p>這個定義檔本身只有 <code>Read</code>、<code>Grep</code>、<code>Glob</code> 三個工具，代表它連檔案都不能改，只能讀跟搜尋——<code>tools</code> 欄位一旦寫了，就是完整覆蓋預設清單，不是在預設清單上追加。</p>
+<h3 id="agent-agent">內建 agent 跟自訂 agent 的差別</h3>
+<p>官方內建幾種現成的 agent 類型，不用自己寫定義檔[2]：</p>
+<table>
+<thead>
+<tr>
+<th>內建 agent</th>
+<th>定位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Explore</code></td>
+<td>唯讀工具（Write／Edit 被拒），跳過 CLAUDE.md 與 git status 以維持輕量，用於檔案發現與程式碼搜尋</td>
+</tr>
+<tr>
+<td><code>Plan</code></td>
+<td>唯讀工具，用於 plan mode 下的程式庫研究</td>
+</tr>
+<tr>
+<td><code>general-purpose</code></td>
+<td>所有 subagent 可用工具都開，用於需要探索＋修改、複雜推理、多步驟依賴的任務</td>
+</tr>
+<tr>
+<td><code>claude</code></td>
+<td>無法歸類到專門 agent 時的萬用選項</td>
+</tr>
+<tr>
+<td><code>statusline-setup</code></td>
+<td>設定 status line</td>
+</tr>
+<tr>
+<td><code>claude-code-guide</code></td>
+<td>回答 Claude Code 功能問題</td>
+</tr>
+</tbody>
+</table>
+<p>跟自訂 agent 的差別只在於：內建 agent 不需要你寫 <code>.claude/agents/*.md</code>，工具範圍與模型已經被官方先設定好；自訂 agent 則是你自己決定 <code>tools</code>、<code>model</code>、<code>permissionMode</code> 這些欄位，換取更精確地控制它能碰到什麼、用什麼模型跑。</p>
+<h2 id="_6">三、各自適合解決什麼問題</h2>
+<p><strong>Hooks 適合</strong>：某件事必須每次都發生，不能靠模型自己記得（格式化、擋下對敏感檔案的修改、session 結束時記一筆狀態）。<strong>不適合</strong>：需要模型判斷「這種情況要不要做」的事——hooks 的 <code>command</code> 類型本身不理解語意，只認腳本邏輯；需要模型判斷的情境該用 <code>prompt</code> 或 <code>agent</code> 類型的 hook，或乾脆交給 CLAUDE.md／skill。</p>
+<p><strong>Subagent 適合</strong>：任務會產生大量你不需要留在主線上下文裡的雜訊（搜尋結果、檔案內容、log）；想針對特定任務限制工具或權限；工作自成一體，可以只回傳摘要；不同類型的任務需要不同模型跑[2]。<strong>不適合</strong>：需要頻繁來回、逐步微調的任務——subagent 預設從零上下文開始（除非明確要求 fork 繼承上下文），來回討論的成本反而比留在主線更高；多個階段要共用大量上下文（規劃→實作→測試）的連續工作，也不適合硬拆成獨立 subagent[2]。</p>
+<p>兩者也可以疊在一起用：hook 觸發一個 <code>agent</code> 類型的處理器，等於「機制保證會發生」加上「交給一個獨立視角判斷」，例如 <code>Stop</code> hook 掛一個驗證用的 subagent，任務結束前強制跑一次獨立審查。</p>
+<h2 id="_7">本頁重點回顧</h2>
+<ul>
+<li>Hooks 設定在 <code>settings.json</code>，<code>matcher</code> 篩觸發時機，<code>hooks</code> 陣列放實際處理器；五種 handler 類型裡 <code>command</code> 最常見。</li>
+<li><code>exit 2</code> 是唯一保證阻擋動作的訊號，其他 exit code 大多視為非阻擋性錯誤。</li>
+<li>Subagent 定義檔只有 <code>name</code>／<code>description</code> 必填，<code>tools</code> 省略＝繼承全部工具、寫了＝完整覆蓋不是疊加。</li>
+<li>內建 agent（Explore／Plan／general-purpose 等）省去自己寫定義檔的功夫，自訂 agent 換取更精確的工具與模型控制。</li>
+<li>Hooks 解決「必須每次發生」，Subagent 解決「需要獨立乾淨視角」，兩者可以疊加使用。</li>
+</ul>
+<h2 id="_8">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>來源</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1]</td>
+<td>Hooks reference（事件清單、設定格式、handler 類型、exit code 語意、安全注意事項）</td>
+<td><a href="https://code.claude.com/docs/en/hooks">https://code.claude.com/docs/en/hooks</a></td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>Create custom subagents（frontmatter 欄位、內建 agent、使用建議）</td>
+<td><a href="https://code.claude.com/docs/en/sub-agents">https://code.claude.com/docs/en/sub-agents</a></td>
+</tr>
+<tr>
+<td>[3]</td>
+<td>Best practices for Claude Code（hooks 是 deterministic、CLAUDE.md 是 advisory）</td>
+<td><a href="https://code.claude.com/docs/en/best-practices">https://code.claude.com/docs/en/best-practices</a></td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>｜<a href="official-config.html">Claude Code 設定總覽</a>｜<a href="harness.html">把 AI 代理的工作環境設計得可靠</a></p>
+</article>
+<nav class="pager"><a class="prev" href="official-config.html">← Claude Code 設定總覽</a><a class="next" href="session-handoff.html">跨 session 接力：session_log →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#hooks">一、Hooks：把「一定要發生」的事變成機制</a><ul>
+<li><a href="#_1">事件清單</a></li>
+<li><a href="#_2">設定寫在哪裡、長什麼樣</a></li>
+<li><a href="#_3">官方範例：編輯完自動跑格式化</a></li>
+<li><a href="#_4">安全注意事項</a></li>
+</ul>
+</li>
+<li><a href="#subagent">二、Subagent：定義檔與欄位語意</a><ul>
+<li><a href="#_5">放在哪裡</a></li>
+<li><a href="#frontmatter">frontmatter 欄位</a></li>
+<li><a href="#agent-agent">內建 agent 跟自訂 agent 的差別</a></li>
+</ul>
+</li>
+<li><a href="#_6">三、各自適合解決什麼問題</a></li>
+<li><a href="#_7">本頁重點回顧</a></li>
+<li><a href="#_8">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>免付費區｜AI Agent 筆記</title>
+<meta name="description" content="不付錢也做得到的 AI 輔助工作流程">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/free-tier.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789567027">AI 介面比較總表</a></li>
+<li class="active"><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789564811">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789564836">付費區</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789566754">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789566922">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789566831">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789568662">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789571708">把教材做成 SKILL</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789606177">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789606143">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789606040">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789607976">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789607693">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789608045">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789563106">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 先搞懂工具</p>
+<article class="doc" data-updated="1789564811">
+<h1>免付費區</h1>
+<p class='lede'>不付錢也做得到的 AI 輔助工作流程</p>
+<blockquote>
+<p>查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。</p>
+</blockquote>
+<p>免費帳號能做的事，比多數人想的多一些，但也有幾個明確做不到的邊界。這頁只講「不花錢能做到哪裡」；需要付費才能解鎖的部分，見<a href="paid-tier.html">付費區</a>；不確定該用哪個介面，先看<a href="tools-compare.html">AI 介面比較總表</a>。</p>
+<h2 id="claude-free">Claude Free 能用什麼</h2>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>狀態</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Chat（網頁／手機）</td>
+<td>✅</td>
+<td>一般對話，Free 就有 [S3][S15]</td>
+</tr>
+<tr>
+<td>Artifacts</td>
+<td>✅</td>
+<td>不是付費限定，Free 就能產生可互動內容 [S3]</td>
+</tr>
+<tr>
+<td>網路搜尋</td>
+<td>✅</td>
+<td>Free 即有 [S3]</td>
+</tr>
+<tr>
+<td>Skills</td>
+<td>✅</td>
+<td>需要另外開啟 code execution [S9][S9b]</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>✅ 預設開啟</td>
+<td>Free／Pro／Max 都預設開，Team／Enterprise 要管理員開 [S10]</td>
+</tr>
+<tr>
+<td>Connectors（remote MCP）</td>
+<td>⚠️ 限 1 個自訂 connector</td>
+<td>Pro 起數量更多但官方未列確切上限 [S12]</td>
+</tr>
+<tr>
+<td>Projects</td>
+<td>❌</td>
+<td>Free 沒有這個功能 [S3][S4]</td>
+</tr>
+<tr>
+<td>Research</td>
+<td>❌</td>
+<td>官方明寫僅付費方案（Pro/Max/Team/Enterprise）[S14]</td>
+</tr>
+<tr>
+<td>Cowork</td>
+<td>❌</td>
+<td>免費帳號完全不能用 [S21]</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>❌</td>
+<td>Free 沒有，Pro 起才有，見<a href="paid-tier.html">付費區</a> [S1]</td>
+</tr>
+</tbody>
+</table>
+<h2 id="chatgpt-free">ChatGPT Free 能用什麼</h2>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>狀態</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ChatGPT 網頁版／手機 App</td>
+<td>✅</td>
+<td>[A2 §1]</td>
+</tr>
+<tr>
+<td>Desktop App（Chat／Work／Codex 三種模式）</td>
+<td>✅</td>
+<td>官方明說桌面 App 對所有方案（含 Free）開放 Chat、Work、Codex [O3][O7]</td>
+</tr>
+<tr>
+<td>Projects</td>
+<td>✅ 5 檔／專案</td>
+<td>檔案數上限比付費方案低（Plus 25 檔、Pro 40 檔）[O17]</td>
+</tr>
+<tr>
+<td>Canvas</td>
+<td>✅</td>
+<td>功能與付費方案一致 [O18]</td>
+</tr>
+<tr>
+<td>網路搜尋</td>
+<td>✅</td>
+<td>未公開確切次數上限 [O20]</td>
+</tr>
+<tr>
+<td>Deep Research</td>
+<td>✅ 輕量版</td>
+<td>額度比 Plus／Pro 少 [O21]</td>
+</tr>
+<tr>
+<td>Connectors／Apps</td>
+<td>⚠️ 僅內建 App，不能加自訂 connector 或 MCP</td>
+<td>Plus 起才有 Developer Mode 可加自訂 MCP [O22]</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>✅ 預設開啟</td>
+<td>[O24]</td>
+</tr>
+<tr>
+<td>檔案上傳</td>
+<td>⚠️ 512MB／檔，但頻率約 3 次／天</td>
+<td>Plus 約 80 次／3 小時，Pro 幾乎無限 [O19]</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td>✅ 可用，但各介面深淺不同</td>
+<td>見下方專節</td>
+</tr>
+</tbody>
+</table>
+<h3 id="freego-codex">Free／Go 帳號用 Codex 要注意的地方</h3>
+<p>官方對 Free／Go 帳號能不能用 Codex，本身在不同文件上出現過落差：定價頁把 Free（$0）與 Go（$8）都列為 Codex 的方案，文案分別是「探索 Codex 在小型程式任務上的能力」「用 Codex 處理輕量程式任務」；但 Codex CLI 所在的 GitHub 專案 README，登入建議文字只列出 Plus、Pro、Business、Edu、Enterprise，沒有提到 Free／Go。查證後確認官方並沒有真的排除 Free／Go。GitHub README 那段文字是「建議」用語，沒有寫「僅限」，屬於列舉不完整，不是禁止規定；桌面 App 的官方頁面也明確把 Codex 分頁列為所有方案（含 Free）都能用的功能 [A2 §0][A2b 題5]。</p>
+<div class="admonition note">
+<p class="admonition-title">看到「Codex 只有付費方案能用」這種舊教學，先查一次現況</p>
+<p>這條資訊的性質是「官方文件彼此打過架，後來查證確認是舊文件沒跟上」，不是單純的功能限制。教學網站或部落格如果還在講 Free／Go 不能用 Codex，很可能是抄了那份沒更新的 GitHub README。</p>
+</div>
+<h2 id="_1">兩個免費帳號可行的工作流程</h2>
+<h3 id="claude-free_1">流程一：Claude Free + 手動貼上文獻摘要</h3>
+<p>Claude Free 沒有 Projects，沒辦法把一批文獻或寫作規範固定成一個持久的知識庫，每次新對話都要重新提供脈絡。可行的做法：</p>
+<ol>
+<li>把要討論的文獻摘要、規範或前一輪結論整理成一段文字，貼在對話開頭當「這次要用的脈絡」。</li>
+<li>一次只處理一個具體問題（例如「幫我比較這三篇的研究方法差異」），不要指望它記得上一次對話。</li>
+<li>需要長期保留脈絡時，把重要結論另外存到自己的筆記檔案裡，不要依賴 Claude 的記憶。Free 雖然有 Memory 預設開啟 [S10]，但那是跨對話的一般偏好記憶，不是 Projects 等級、可掛文件的知識庫。</li>
+</ol>
+<h3 id="chatgpt-free-app-codex">流程二：ChatGPT Free 桌面 App 的 Codex 分頁做小型程式任務</h3>
+<ol>
+<li>安裝統一版 ChatGPT Desktop App，登入 Free 帳號，切到 Codex 分頁 [O7]。</li>
+<li>針對範圍明確、單一檔案或小型腳本的任務下指令（例如「幫我寫一個整理 CSV 的 Python 腳本」），不要一次丟整個大型專案，因為 Free 帳號的定位就是「quick coding tasks」[O1]。</li>
+<li>Codex 依 sandbox mode 決定能不能直接讀寫本機檔案與執行指令，第一次使用時注意它問你的權限確認，不要看到「建議」就一律同意 [O25]。</li>
+</ol>
+<h2 id="_2">免費版常見的坑</h2>
+<div class="admonition warning">
+<p class="admonition-title">Connectors 只能接 1 個</p>
+<p>Claude Free 的自訂 connector（remote MCP）上限是 1 個，不是「先接看看，之後再加」。如果你的工作流程需要同時接文獻管理器、雲端硬碟、資料庫，免費帳號會卡在這裡，得先想清楚優先接哪一個 [S12]。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">ChatGPT Free 的 Projects 只有 5 個檔案額度</p>
+<p>比 Plus（25 檔）少很多，一個真實的研究專案很容易超過 5 個檔案。超過額度不是報錯就是要你砍舊檔案，開工前先盤點要放幾份檔案 [O17]。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Claude Code、Cowork 完全不能用免費帳號</p>
+<p>這兩個經常被搞混的功能都需要付費方案（Pro 起）。免費帳號想找「本機讀寫檔案」「跨檔批次處理」的功能，會發現無論怎麼設定都用不到，因為不是設定錯了，是方案本身沒開放 [S1][S21]。</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">檔案上傳有頻率上限，不是只看檔案大小</p>
+<p>ChatGPT Free 的單檔大小上限雖然跟付費方案一樣是 512MB，但每天大概只能上傳 3 次；Claude Free 的檔案上傳沒有另外標注頻率限制，但受單次對話最多 20 檔、圖片與 PDF 頁數等其他上限影響 [O19][S16]。</p>
+</div>
+<h2 id="2026-09-16">資料來源（2026-09-16 查證）</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>URL</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1</td>
+<td>support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan</td>
+<td>Claude Code 方案門檻</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>claude.com/pricing</td>
+<td>各方案功能總覽</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>support.claude.com/en/articles/11049762-choose-a-claude-plan</td>
+<td>方案選擇指南</td>
+</tr>
+<tr>
+<td>S9</td>
+<td>support.claude.com/en/articles/12512180-use-skills-in-claude</td>
+<td>Skills 使用方式</td>
+</tr>
+<tr>
+<td>S9b</td>
+<td>support.claude.com/en/articles/12512176-what-are-skills</td>
+<td>Skills 方案可用性</td>
+</tr>
+<tr>
+<td>S10</td>
+<td>support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context</td>
+<td>Memory 各方案預設開關</td>
+</tr>
+<tr>
+<td>S12</td>
+<td>support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp</td>
+<td>Free 自訂 connector 限 1 個</td>
+</tr>
+<tr>
+<td>S14</td>
+<td>support.claude.com/en/articles/11088861-use-research-on-claude</td>
+<td>Research 僅付費方案</td>
+</tr>
+<tr>
+<td>S15</td>
+<td>support.claude.com/en/articles/8114487-what-interfaces-can-i-use-to-access-claude</td>
+<td>官方介面總覽</td>
+</tr>
+<tr>
+<td>S16</td>
+<td>support.claude.com/en/articles/8241126-upload-files-to-claude</td>
+<td>檔案上傳大小/數量限制</td>
+</tr>
+<tr>
+<td>S21</td>
+<td>support.claude.com/en/articles/13345190-get-started-with-claude-cowork</td>
+<td>Cowork 免費帳號不可用</td>
+</tr>
+<tr>
+<td>O1</td>
+<td>learn.chatgpt.com/docs/pricing</td>
+<td>Free/Go 的 Codex 定位文案</td>
+</tr>
+<tr>
+<td>O3</td>
+<td>OpenAI 官方 X 貼文（經二次來源引述）</td>
+<td>Desktop app 全方案含 Free 可用 Codex</td>
+</tr>
+<tr>
+<td>O7</td>
+<td>learn.chatgpt.com/docs/app</td>
+<td>統一版 Desktop app 分頁切換</td>
+</tr>
+<tr>
+<td>O17</td>
+<td>help.openai.com「Using Projects in ChatGPT」等（WebSearch 摘要）</td>
+<td>Projects 各方案檔案數上限</td>
+</tr>
+<tr>
+<td>O18</td>
+<td>help.openai.com「What is the canvas feature」等（WebSearch 摘要）</td>
+<td>Canvas 各方案可用性</td>
+</tr>
+<tr>
+<td>O19</td>
+<td>help.openai.com 檔案上傳相關文章（WebSearch 摘要，未能精確定位單一文號）</td>
+<td>檔案大小/頻率上限</td>
+</tr>
+<tr>
+<td>O20</td>
+<td>help.openai.com Free tier FAQ（WebSearch 摘要）</td>
+<td>Free 網路搜尋無公開次數上限</td>
+</tr>
+<tr>
+<td>O21</td>
+<td>help.openai.com Deep Research 相關文章（WebSearch 摘要）</td>
+<td>Deep Research 各方案額度差異</td>
+</tr>
+<tr>
+<td>O22</td>
+<td>help.openai.com/en/articles/11487775-connectors-in-chatgpt；12003714</td>
+<td>Connectors 各方案差異</td>
+</tr>
+<tr>
+<td>O24</td>
+<td>help.openai.com「Memory FAQ」（WebSearch 摘要）</td>
+<td>Memory 各方案預設開關</td>
+</tr>
+<tr>
+<td>O25</td>
+<td>learn.chatgpt.com/docs/sandboxing</td>
+<td>Codex sandbox 三模式</td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="tools-compare.html">AI 介面比較總表</a>｜<a href="paid-tier.html">付費區</a></p>
+</article>
+<nav class="pager"><a class="prev" href="tools-compare.html">← AI 介面比較總表</a><a class="next" href="paid-tier.html">付費區 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#claude-free">Claude Free 能用什麼</a></li>
+<li><a href="#chatgpt-free">ChatGPT Free 能用什麼</a><ul>
+<li><a href="#freego-codex">Free／Go 帳號用 Codex 要注意的地方</a></li>
+</ul>
+</li>
+<li><a href="#_1">兩個免費帳號可行的工作流程</a><ul>
+<li><a href="#claude-free_1">流程一：Claude Free + 手動貼上文獻摘要</a></li>
+<li><a href="#chatgpt-free-app-codex">流程二：ChatGPT Free 桌面 App 的 Codex 分頁做小型程式任務</a></li>
+</ul>
+</li>
+<li><a href="#_2">免費版常見的坑</a></li>
+<li><a href="#2026-09-16">資料來源（2026-09-16 查證）</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

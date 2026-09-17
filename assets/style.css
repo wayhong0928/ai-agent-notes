@@ -1,0 +1,351 @@
+/* AI Agent 筆記 —— 共用樣式 */
+
+:root {
+  --bg: #fbfaf7;
+  --bg-soft: #f3f1eb;
+  --panel: #ffffff;
+  --ink: #23211d;
+  --ink-soft: #57534a;
+  --ink-faint: #8b857a;
+  --rule: #e0dbd0;
+  --rule-soft: #ece8df;
+  --accent: #7a4a2b;
+  --accent-soft: #f0e5dc;
+  --accent-ink: #5c3520;
+  --mark: #f6e7a8;
+  --warn-bg: #fdf3e7;
+  --warn-rule: #d9a45b;
+  --ok-bg: #eef5ec;
+  --ok-rule: #7fa06f;
+  --code-bg: #f2efe8;
+  --nav-w: 268px;
+  --toc-w: 220px;
+  --serif: "Noto Serif TC", "Source Han Serif TC", "PingFang TC", "Songti TC", Georgia, serif;
+  --sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, "Courier New", monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161513;
+    --bg-soft: #1e1d1a;
+    --panel: #1c1b18;
+    --ink: #e8e4dc;
+    --ink-soft: #b3ada1;
+    --ink-faint: #857f74;
+    --rule: #34322d;
+    --rule-soft: #2a2926;
+    --accent: #d9a173;
+    --accent-soft: #2e2620;
+    --accent-ink: #e8bd94;
+    --mark: #5a4c1e;
+    --warn-bg: #2c231a;
+    --warn-rule: #a8763a;
+    --ok-bg: #1e2a1e;
+    --ok-rule: #5f7a52;
+    --code-bg: #232220;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #161513; --bg-soft: #1e1d1a; --panel: #1c1b18;
+  --ink: #e8e4dc; --ink-soft: #b3ada1; --ink-faint: #857f74;
+  --rule: #34322d; --rule-soft: #2a2926;
+  --accent: #d9a173; --accent-soft: #2e2620; --accent-ink: #e8bd94;
+  --mark: #5a4c1e; --warn-bg: #2c231a; --warn-rule: #a8763a;
+  --ok-bg: #1e2a1e; --ok-rule: #5f7a52; --code-bg: #232220;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+
+body {
+  margin: 0;
+  padding-left: var(--nav-w);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.85;
+  -webkit-text-size-adjust: 100%;
+}
+
+a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+a:hover { border-bottom-color: var(--accent); }
+
+.skip {
+  position: absolute; left: -9999px; top: 0; background: var(--accent); color: #fff;
+  padding: .5rem 1rem; z-index: 200; border: 0;
+}
+.skip:focus { left: 0; }
+
+/* ---------- 側邊導覽 ---------- */
+.sidenav {
+  position: fixed; inset: 0 auto 0 0; width: var(--nav-w);
+  background: var(--bg-soft); border-right: 1px solid var(--rule);
+  overflow-y: auto; padding: 1.4rem 1.1rem 3rem; z-index: 50;
+  /* 內容太長時仍可捲動，但不顯示捲軸本身（滑鼠滾輪／觸控／鍵盤照常可用） */
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.sidenav::-webkit-scrollbar { display: none; }
+.brand { display: flex; align-items: center; gap: .6rem; border: 0; margin-bottom: 1.1rem; color: var(--ink); }
+.brand-mark { font-size: 1.5rem; color: var(--accent); }
+.brand-text { font-family: var(--serif); font-weight: 700; font-size: 1.08rem; line-height: 1.3; letter-spacing: .02em; }
+.brand-text small { font-weight: 400; font-size: .76rem; color: var(--ink-faint); letter-spacing: .18em; }
+
+.navsearch input {
+  width: 100%; padding: .45rem .65rem; font: inherit; font-size: .86rem;
+  border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); color: var(--ink);
+}
+.navsec { margin-top: 1.4rem; }
+.navsec h2 {
+  font-size: .9rem; line-height: 1.5; color: var(--ink-faint);
+  font-weight: 400; margin: 0 0 .5rem; text-transform: none;
+}
+.navsec ul { list-style: none; margin: 0; padding: 0; }
+.navsec li { margin: 0; }
+.navsec li a {
+  display: block; padding: .3rem .6rem; border: 0; border-radius: 5px;
+  font-size: .9rem; line-height: 1.5; color: var(--ink-soft);
+}
+.navsec li a:hover { background: var(--accent-soft); color: var(--accent-ink); }
+.navsec li.active > a { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
+.navsec li.hide { display: none; }
+.navsec-toggle {
+  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+  width: 100%; padding: 0; border: 0; background: transparent; color: inherit;
+  text-align: left; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+  /* 部分瀏覽器對 <button> 的 font shorthand 繼承不完整，逐項明確指定，
+     確保跟收合前的 .navsec h2 文字樣式完全一致 */
+  font-family: inherit; font-size: inherit; font-weight: inherit;
+  font-style: inherit; line-height: inherit; letter-spacing: inherit;
+  text-transform: inherit;
+}
+.navsec-toggle::after { content: "\25B8"; font-size: .85rem; transition: transform .15s ease; }
+.navsec:not(.collapsed) > h2 .navsec-toggle::after { transform: rotate(90deg); }
+.navsec.collapsed > ul { display: none; }
+
+.navtoggle {
+  display: none; position: fixed; top: .7rem; left: .7rem; z-index: 60;
+  background: var(--panel); color: var(--ink); border: 1px solid var(--rule);
+  border-radius: 7px; width: 2.4rem; height: 2.4rem; font-size: 1.1rem; cursor: pointer;
+}
+
+/* ---------- 版面 ---------- */
+.wrap {
+  margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 1fr) var(--toc-w);
+  gap: 2.5rem; max-width: 1180px; padding: 2.4rem 2.2rem 4rem;
+}
+.wrap.solo { grid-template-columns: minmax(0, 1fr); max-width: 1000px; }
+main { min-width: 0; }
+
+.crumb { font-size: .8rem; color: var(--ink-faint); margin: 0 0 1.2rem; letter-spacing: .05em; }
+.crumb a { color: var(--ink-faint); }
+
+/* ---------- 內文排版 ---------- */
+.doc h1 {
+  font-family: var(--serif); font-size: 1.95rem; line-height: 1.4; margin: 0 0 .5rem;
+  letter-spacing: .01em;
+}
+.lede { color: var(--ink-soft); font-size: 1rem; margin: 0 0 2rem; padding-bottom: 1.2rem; border-bottom: 2px solid var(--rule); }
+
+.doc h2 {
+  font-family: var(--serif); font-size: 1.4rem; margin: 2.8rem 0 .9rem;
+  padding-top: .9rem; border-top: 1px solid var(--rule); line-height: 1.5;
+}
+.doc h3 { font-size: 1.1rem; margin: 2rem 0 .6rem; color: var(--accent-ink); line-height: 1.6; }
+.doc h4 { font-size: .98rem; margin: 1.4rem 0 .4rem; color: var(--ink-soft); }
+
+.doc p { margin: 0 0 1.05rem; }
+.doc ul, .doc ol { margin: 0 0 1.15rem; padding-left: 1.5rem; }
+.doc li { margin: .3rem 0; }
+.doc li > ul, .doc li > ol { margin: .3rem 0; }
+
+.doc strong { font-weight: 700; }
+.doc em { font-style: normal; background: linear-gradient(transparent 62%, var(--mark) 62%); }
+
+blockquote {
+  margin: 1.4rem 0; padding: .3rem 0 .3rem 1.1rem;
+  border-left: 3px solid var(--accent); color: var(--ink-soft);
+  font-family: var(--serif);
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.4rem 0; }
+/* h2 自己已有 border-top，緊接在 h2 前的 hr 會疊出雙線，隱藏掉 */
+.doc hr:has(+ h2) { display: none; }
+
+code {
+  font-family: var(--mono); font-size: .87em; background: var(--code-bg);
+  padding: .12em .38em; border-radius: 4px;
+}
+pre {
+  background: var(--code-bg); border: 1px solid var(--rule-soft); border-radius: 8px;
+  padding: .9rem 1rem; overflow-x: auto; line-height: 1.6;
+}
+pre code { background: none; padding: 0; font-size: .85rem; }
+
+/* ---------- 表格 ---------- */
+.doc table {
+  width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: .9rem;
+  background: var(--panel);
+}
+.doc thead th {
+  text-align: left; background: var(--bg-soft); border-bottom: 2px solid var(--rule);
+  padding: .55rem .7rem; font-weight: 600; white-space: nowrap;
+}
+.doc td, .doc th { border-bottom: 1px solid var(--rule-soft); padding: .55rem .7rem; vertical-align: top; }
+.doc tbody tr:hover { background: var(--bg-soft); }
+.doc table + p { margin-top: -.4rem; }
+
+/* 讓寬表格可以自己捲動 */
+.doc table { display: block; overflow-x: auto; white-space: normal; }
+@media (min-width: 900px) { .doc table { display: table; } }
+
+/* ---------- 提示框（admonition） ---------- */
+.admonition {
+  margin: 1.4rem 0; padding: .9rem 1.1rem; border-radius: 8px;
+  background: var(--bg-soft); border: 1px solid var(--rule); font-size: .94rem;
+}
+.admonition > :last-child { margin-bottom: 0; }
+.admonition-title { font-weight: 700; margin: 0 0 .45rem; font-size: .9rem; letter-spacing: .03em; }
+.admonition.warning, .admonition.danger { background: var(--warn-bg); border-color: var(--warn-rule); }
+.admonition.warning .admonition-title, .admonition.danger .admonition-title { color: var(--warn-rule); }
+.admonition.tip, .admonition.note { background: var(--ok-bg); border-color: var(--ok-rule); }
+.admonition.tip .admonition-title, .admonition.note .admonition-title { color: var(--ok-rule); }
+
+/* ---------- 檢查清單 ---------- */
+li.chk { list-style: none; margin-left: -1.3rem; }
+li.chk input { margin-right: .5rem; transform: translateY(1px); accent-color: var(--accent); }
+
+/* ---------- 右側目錄 ---------- */
+.toc {
+  position: sticky; top: 2.4rem; align-self: start; max-height: calc(100vh - 5rem);
+  overflow-y: auto; font-size: .82rem; line-height: 1.6; border-left: 1px solid var(--rule);
+  padding-left: 1rem;
+}
+.toc h2 { font-size: .72rem; letter-spacing: .2em; color: var(--ink-faint); margin: 0 0 .6rem; font-weight: 600; }
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc ul ul { padding-left: .75rem; }
+.toc a { color: var(--ink-soft); border: 0; display: block; padding: .16rem 0; }
+.toc a:hover { color: var(--accent-ink); }
+.toc a.here { color: var(--accent-ink); font-weight: 600; }
+
+/* ---------- 頁尾與翻頁 ---------- */
+.pager { display: flex; justify-content: space-between; gap: 1rem; margin: 3rem 0 0; font-size: .9rem; }
+.pager a {
+  border: 1px solid var(--rule); border-radius: 8px; padding: .6rem .9rem;
+  background: var(--panel); max-width: 48%;
+}
+.pager .next { margin-left: auto; text-align: right; }
+
+.foot {
+  margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--rule);
+  font-size: .82rem; color: var(--ink-faint);
+}
+.foot p { margin: .3rem 0; }
+
+/* ---------- 首頁 ---------- */
+.hero {
+  padding: 3.2rem 0 2.4rem; border-bottom: 2px solid var(--rule); margin-bottom: 2.4rem;
+}
+.hero h1 { font-family: var(--serif); font-size: 2.5rem; line-height: 1.35; margin: 0 0 .8rem; letter-spacing: .01em; }
+.hero p { color: var(--ink-soft); margin: 0 0 .8rem; }
+.hero .tag {
+  display: inline-block; font-size: .74rem; letter-spacing: .18em; color: var(--accent);
+  border: 1px solid var(--accent-soft); background: var(--accent-soft);
+  border-radius: 99px; padding: .18rem .8rem; margin-bottom: 1rem;
+}
+
+.homesearch { margin: 0 0 2.6rem; }
+.homesearch input {
+  width: 100%; max-width: 30rem; padding: .7rem 1rem; font: inherit;
+  border: 1px solid var(--rule); border-radius: 10px; background: var(--panel); color: var(--ink);
+}
+
+.mapsec { margin: 0 0 2.6rem; }
+.mapsec > h2 {
+  font-family: var(--serif); font-size: 1.15rem; margin: 0 0 .1rem;
+  display: flex; align-items: baseline; gap: .7rem;
+}
+.mapsec > h2 .num { font-size: .72rem; letter-spacing: .2em; color: var(--ink-faint); font-family: var(--sans); }
+.mapsec > .secdesc { color: var(--ink-faint); font-size: .85rem; margin: 0 0 1rem; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: .9rem; }
+.card {
+  display: block; border: 1px solid var(--rule); border-radius: 10px; background: var(--panel);
+  padding: .95rem 1.05rem; color: var(--ink); transition: border-color .15s, transform .15s;
+}
+.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.card h3 { margin: 0 0 .3rem; font-size: .98rem; color: var(--accent-ink); line-height: 1.5; }
+.card p { margin: 0; font-size: .84rem; color: var(--ink-soft); line-height: 1.65; }
+.card.hide { display: none; }
+
+.flowbox {
+  border: 1px solid var(--rule); border-radius: 12px; background: var(--panel);
+  padding: 1.4rem 1.2rem; margin: 0 0 2.6rem; overflow-x: auto;
+}
+.flowbox h2 { font-family: var(--serif); font-size: 1.15rem; margin: 0 0 1rem; }
+.flow { display: flex; gap: .5rem; align-items: stretch; min-width: 640px; }
+.flow .step {
+  flex: 1; border: 1px solid var(--rule); border-radius: 9px; padding: .7rem .8rem;
+  background: var(--bg-soft); position: relative;
+}
+.flow .step b { display: block; font-size: .88rem; margin-bottom: .25rem; color: var(--accent-ink); }
+.flow .step span { font-size: .78rem; color: var(--ink-soft); line-height: 1.55; display: block; }
+.flow .arrow { align-self: center; color: var(--ink-faint); font-size: 1.1rem; }
+
+.notice {
+  border: 1px solid var(--warn-rule); background: var(--warn-bg); border-radius: 10px;
+  padding: 1rem 1.2rem; font-size: .9rem; margin: 0 0 2.4rem;
+}
+.notice b { display: block; margin-bottom: .35rem; }
+.notice ol { margin: .4rem 0 .4rem 1.2rem; padding: 0; }
+
+/* ---------- 主題切換（視覺上併入側邊導覽列右上角；用 position: fixed
+   而非放在 .sidenav 內的 absolute，因為 .sidenav 在手機版有 transform，
+   會讓內部的 fixed 子元素改成相對 .sidenav 定位，導致收合時按鈕也跟著消失） */
+.themebtn {
+  position: fixed; top: 1.4rem; left: calc(var(--nav-w) - 3.2rem); z-index: 60;
+  width: 2.1rem; height: 2.1rem; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--rule); background: var(--panel); color: var(--ink); font-size: .95rem;
+}
+
+/* ---------- 響應式 ---------- */
+@media (max-width: 1080px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); }
+  .toc { display: none; }
+}
+@media (max-width: 860px) {
+  body { font-size: 15.5px; }
+  .sidenav { transform: translateX(-100%); transition: transform .22s ease; box-shadow: 0 0 30px rgba(0,0,0,.18); }
+  .sidenav.open { transform: none; }
+  .navtoggle { display: block; }
+  body { padding-left: 0; }
+  .wrap { padding: 3.4rem 1.15rem 3rem; }
+  .hero { padding-top: 1.6rem; }
+  .hero h1 { font-size: 1.9rem; }
+  .pager { flex-direction: column; }
+  .pager a { max-width: none; }
+  .pager .next { text-align: left; }
+  /* 導覽列收合時，按鈕改停在畫面右上角（跟左上角的漢堡選單對稱），
+     不管導覽列開關都能點到 */
+  .themebtn { top: .7rem; left: auto; right: .7rem; }
+  /* 研究五階段流程圖：原本靠 min-width: 640px + 橫向捲動，窄螢幕改垂直堆疊 */
+  .flow { flex-direction: column; min-width: 0; }
+  .flow .arrow { align-self: center; transform: rotate(90deg); }
+}
+
+/* ---------- 列印 ---------- */
+@media print {
+  .sidenav, .toc, .navtoggle, .pager, .themebtn, .skip, .navsearch { display: none !important; }
+  body { padding-left: 0; }
+  .wrap { margin: 0; display: block; max-width: none; padding: 0; }
+  body { font-size: 11pt; background: #fff; color: #000; }
+  .doc h2 { break-after: avoid; }
+  .doc table, .admonition, blockquote { break-inside: avoid; }
+  a { color: #000; border: 0; }
+}

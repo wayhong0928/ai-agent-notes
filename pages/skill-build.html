@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>把教材做成 SKILL｜AI Agent 筆記</title>
+<meta name="description" content="安裝版與手動版的實作紀錄">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/skill-build.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789567027">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789564811">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789564836">付費區</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789566754">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789566922">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789566831">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789568662">Claude Code + Codex 協作</a></li>
+<li class="active"><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789571708">把教材做成 SKILL</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789606177">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789606143">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789606040">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789607976">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789607693">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789608045">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789563106">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 實戰協作</p>
+<article class="doc" data-updated="1789571708">
+<h1>把教材做成 SKILL</h1>
+<p class='lede'>安裝版與手動版的實作紀錄</p>
+<blockquote>
+<p>查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。</p>
+</blockquote>
+<p>這一頁記錄一次真實發生的改造：把一批教材，從「使用者自己複製貼上的提示詞」，變成能用 <code>/plugin install</code> 裝進 Claude Code 的 SKILL。前半段是故事，包含一次規則被實務經驗糾正的真實教訓，都沒有美化；後半段是一套任何人都能照抄的步驟。</p>
+<p>案例背景是一組給資管碩士論文寫作用的 SKILL，公開在 <a href="https://github.com/wayhong0928/mis-thesis-skills">wayhong0928/mis-thesis-skills</a>（MIT 授權）。<strong>這個案例只是拿來示範方法，不是本頁的重點</strong>：不寫論文的讀者，可以直接跳到第十一節「一套可以照抄的步驟」，把「研究問題稽核」換成你自己領域裡任何一套「你已經整理好、會重複套用的判準或檢查清單」，例如程式碼 review checklist、客服應答準則、教學備課流程，都適用同一套方法。中間幾節講的架構決策、SKILL 互相分工的設計、evaluation 怎麼跑、規則被使用者糾正的過程，都是可以直接搬過去的通用經驗，跟「這是不是論文」無關。</p>
+<hr />
+<h2 id="_1">一、起點：為什麼要做這件事</h2>
+<p>同一類任務連續貼第三次同樣的提示詞，就該包成 SKILL，這是很多 AI 代理工具教學都會提到的一條經驗法則。<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>也介紹過 SKILL 與 Plugin 這兩個機制的基本結構。但這些都只是「講」，真正能裝的東西是零。</p>
+<p>於是決定親自做一次，順便把整個過程寫下來，這頁本身就是一次實戰示範。</p>
+<hr />
+<h2 id="skill-plugin">二、先搞懂兩個概念：SKILL 與 Plugin 到底是什麼</h2>
+<p>兩個名詞的規格細節（SKILL 的最小結構、<code>plugin.json</code> 的必填欄位、plugin 的資料夾配置）統一寫在<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>，這裡不重複。以下只講這兩個機制在這次案例裡實際扮演的角色。</p>
+<h3 id="21-skill">2.1 SKILL：一個資料夾，裝的是「程序」不是「事實」</h3>
+<p>一個 SKILL 最小就是一個資料夾裡放一個 <code>SKILL.md</code>，檔案開頭的 frontmatter 寫 <code>name</code> 與 <code>description</code>。這次的案例除了 <code>SKILL.md</code>，還多開一層 <code>references/</code> 放判準表與檢查清單：</p>
+<pre><code>skills/research-question-audit/
+├── SKILL.md
+└── references/
+    ├── gap-and-innovation.md
+    ├── question-forms.md
+    └── audit-checklist.md
+</code></pre>
+<p><strong>觸發機制的關鍵是 <code>description</code></strong>，而且運作方式是分層展開的（progressive disclosure）：對話一開始，Claude 只會先讀進所有已安裝 SKILL 的 <code>name</code> 與 <code>description</code> 這種輕量摘要，不會整份 <code>SKILL.md</code> 都先塞進脈絡；只有判斷目前任務跟某個 <code>description</code> 描述的情境相符，才會把那份 <code>SKILL.md</code> 的完整內容展開讀進來；再往下，<code>SKILL.md</code> 裡如果指到 <code>references/</code> 底下的補充檔案，也是等真的需要引用時才展開讀取。這也是這次幾個 SKILL 都能把完整的判準表、例句庫、檢查清單整份放進 <code>references/</code> 的原因：平常這些內容完全不佔用對話的脈絡空間，只有真的用到的那一份才會被讀進來。</p>
+<p><code>description</code> 寫得好不好，直接決定 Claude 會不會在對的時機自動叫用這個 SKILL、會不會在不該用的時候誤觸發。這也是後面第七節要專門跑評測的原因之一。</p>
+<h3 id="22-plugin-skill">2.2 Plugin：把多個 SKILL 包起來，變成可安裝、可分享的單位</h3>
+<p>一個 SKILL 是本機資料夾，不透過任何機制也能用（Claude.ai 可以直接把資料夾包成 zip 上傳、Codex 可以用 <code>$skill-installer</code> 或直接放進它掃描的路徑，見第九節）。但若要在 Claude Code 裡提供可安裝、可版本化、可持續更新的發布體驗，通常會再包一層 plugin，也就是一個 <code>.claude-plugin/plugin.json</code> 加上放在根目錄的 <code>skills/</code>（欄位與資料夾配置見<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>）。這裡只需要記住一件事：<strong>一個 plugin 底下可以放不只一個 SKILL</strong>，這次的案例就是同一個 plugin（<code>thesis-toolkit</code>）底下放了 <code>research-direction-finding</code>、<code>research-question-audit</code> 與 <code>academic-writing-discipline</code> 三個 SKILL 資料夾。</p>
+<p><strong>要讓別人透過 <code>/plugin install</code> 裝得到，還需要再包一層：marketplace。</strong> Marketplace 是由 <code>.claude-plugin/marketplace.json</code> 定義的 plugin 目錄，裡面列出這個 marketplace 收錄哪些 plugin、各自的原始碼在哪裡。它不一定要是獨立的 repo，<code>marketplace.json</code> 裡每個 plugin 的 <code>source</code> 欄位可以用 <code>./plugins/&lt;plugin名稱&gt;</code> 這種相對路徑，直接指向同一個 repo 底下的資料夾。使用者的安裝流程分兩步：先把 marketplace 加進自己的 Claude Code（<code>/plugin marketplace add &lt;repo擁有者&gt;/&lt;marketplace repo&gt;</code>），再從這個 marketplace 裡挑要裝的 plugin（<code>/plugin install &lt;plugin名稱&gt;@&lt;marketplace名稱&gt;</code>）。</p>
+<p>這次實際的案例，就是同一個 repo 同時當 marketplace 也裝 plugin：repo 根目錄的 <code>.claude-plugin/marketplace.json</code> 用相對路徑指向同一個 repo 裡的 <code>plugins/thesis-toolkit</code>，這個 plugin 底下的 <code>skills/</code> 子目錄放了三個 SKILL 資料夾。層層往下：<strong>marketplace 裝 plugin，plugin 裝 SKILL，SKILL 裝判準與參考資料</strong>，但 marketplace 跟 plugin 這兩層可以共用同一個 repo，不必分開兩個 repo 維護。</p>
+<hr />
+<h2 id="_2">三、架構決策：先做一個階段，不做全流程</h2>
+<p>想清楚這兩個概念之後，第一個要決定的不是內容，是形狀。派了一個規劃用的 agent，讀過既有教材、查過 Claude Code 的 plugin marketplace 官方格式，回來給了兩個決定：</p>
+<ol>
+<li><strong>先做單一階段起步</strong>：只挑研究問題發想這個階段做稽核，不貪心做「從發想到口試」的全流程 SKILL。理由很直接：範圍越大，判準之間打架的機率越高，先驗證一個階段能不能跑通，比一開始就攤大餅划算。</li>
+<li><strong>用 plugin marketplace 格式</strong>：一個 repo 同時放 marketplace 定義跟一個 plugin，plugin 底下放多個 SKILL 資料夾。以後要加下一個階段（例如文獻回顧稽核），就是往同一個 plugin 底下加一個新的 SKILL 資料夾，不用重新設計架構。</li>
+</ol>
+<p>這個決定後來證明是對的：中途實際加了第二個、第三個 SKILL，都完全沒有動到既有結構，只是多開一個資料夾。</p>
+<div class="admonition tip">
+<p class="admonition-title">這條決策不限於論文教材</p>
+<p>「先做窄、可以無痛加寬」這個判準跟內容領域無關。任何想把一批教材做成 SKILL 的人，第一步都可以先問自己：這批教材裡最獨立、最容易單獨驗證的一塊是哪一塊，先做那一塊，而不是想著一次把整套流程都做完。</p>
+</div>
+<hr />
+<h2 id="skill">四、SKILL 一：研究方向收斂怎麼做出來的</h2>
+<p>先講清楚一件事：這其實是<strong>第三個</strong>做出來的 SKILL，時間上排在最後。放在三個 SKILL 的最前面講，是因為它在研究流程上排最前面：一個人要先有方向，才輪得到題目被稽核，才輪得到文字被修。後面兩節按實際建置的時間順序講，讀者不要誤以為建置順序也是這樣。</p>
+<p>這個 SKILL 管的是「完全沒有方向、或只有一個模糊領域興趣的人，怎麼收斂出一個具體到能寫成一句話的研究想法」。它跟研究問題稽核（下一節）刻意設計成互補：稽核是「你已經有想法，我來挑毛病」；收斂是「你還沒有想法，我陪你找」。兩者管的階段不一樣，也刻意不重疊。</p>
+<p><strong>這個定位不是憑空想出來的，是研究問題稽核 SKILL 自己留下的接口。</strong> 研究問題稽核的前置檢查段落（<code>research-question-audit/SKILL.md</code> 第 1 節）早就明文寫著：如果使用者連一個模糊方向都沒有，就告訴他「建議先用收斂漏斗（領域 → 主題 → 子題 → 題目 → 研究問題，五層逐步收斂）自己收斂出一個初步方向，帶著具體想法回來，我再幫你稽核」，然後停止，不勉強往下跑判準。這段話指名了方法（收斂漏斗），卻沒有給工具。第三個 SKILL 做的事，就是把這個被指名但沒被實作的方法，做成真正能用的工具。兩個 SKILL 的邊界因此是天然對上的，不需要事後協調。</p>
+<div class="admonition tip">
+<p class="admonition-title">這段的教訓</p>
+<p>一個設計良好的 SKILL，會在它拒絕服務的地方，留下下一個 SKILL 該長什麼樣的規格。研究問題稽核沒有含糊帶過「我不管這個」，而是具體寫出了替代方案的形狀（五層漏斗），這讓後續要不要做、做成什麼樣，幾乎不用重新設計。</p>
+</div>
+<p><strong>三條起步策略，來自使用者自己找題目時的實際經驗</strong>：翻頂級期刊與研討會的主題分類找感興趣的子領域、讀學長姊論文的未來研究建議、或延伸指導老師手上的計畫。寫進 SKILL 時做了一個分流判斷：前兩條走完整的收斂漏斗（領域 → 主題 → 子題 → 題目 → 研究問題，一次推進一層）；第三條<strong>刻意跳過整個漏斗</strong>。</p>
+<p>為什麼第三條要跳過：延伸老師的計畫，本質上是題目已經被指派了。這種情況下使用者真正要判斷的是「這個計畫裡哪一塊，能單獨撐起一篇碩士論文」，這是可行性與獨立貢獻的判斷，跟興趣沒有關係。硬套一套為興趣收斂設計的漏斗，只會浪費時間在問一個已經不成立的問題（「你對什麼有興趣」對一個題目已經被指派的人沒有意義），所以這條策略直接請使用者把計畫目標與自己被分配的部分寫成一句話，交棒給研究問題稽核去判斷可行性，不走漏斗。</p>
+<div class="admonition warning">
+<p class="admonition-title">這段的教訓</p>
+<p>同一個目標下的不同起點，未必都該走同一條流程。把例外硬塞進主流程、靠一堆條件判斷去繞過不適用的步驟，比多寫一條獨立的分支更貴：分支寫起來是一次性成本，硬塞進主流程之後，往後每次修流程都要重新確認這個例外還有沒有被正確繞過。</p>
+</div>
+<p>「翻頂級期刊與研討會分類法」這條策略要能真的被使用者執行，前提是手上得有一份分類目錄可以翻。所以附帶做了一份期刊與研討會清單，同時放進 SKILL 的 <code>references/venues.md</code>，也放進原始網站的一個對應頁面，兩邊共用同一份查證結果。</p>
+<p><strong>建置過程中還抓到一個真的會出事的機制問題</strong>：當時以為某個索引檔是一份「頁面註冊表」，把新頁面手動登記進去，以為這樣就會被建置出來。查了建置腳本的原始碼才發現整個想法是反的：那份索引檔不是輸入，是<strong>建置產出物</strong>：腳本裡那份硬編碼的導覽清單才是唯一權威來源，建置流程是從導覽清單推導出扁平頁面清單、再產生並覆寫索引檔。真正決定要產出哪些頁面的，從頭到尾只有那份導覽清單，它既不掃描內容目錄，也不讀索引檔。所以那次手動編輯出了兩層問題：第一層，新頁面的 html 根本沒被產出，因為導覽清單裡沒有它；第二層，連手動編輯過的索引檔本身也在下一次建置時被覆寫掉，改了等於沒改。</p>
+<div class="admonition warning">
+<p class="admonition-title">這段的教訓</p>
+<p>動手改一份設定檔之前，先確認它在這套流程裡是輸入還是輸出。改在輸出物上，不只不會生效，下一次建置還會把這份修改整個抹掉。而且「我已經把它寫進去了」這種以動作為準的自我驗收完全看不出這個問題，要改成以產出物為準：去看該產生的檔案是不是真的出現，而不是看自己有沒有寫入成功。</p>
+</div>
+<p>這個 SKILL 的評測案例包含一個邊界測試：使用者已經有一句話研究想法時，SKILL 應該拒絕越界，把人交棒給研究問題稽核，而不是繼續往下引導。<strong>這組評測已經跑完</strong>（詳見第七節），結果是：使用者的一句話研究想法確實沒有被誤拉進從零收斂的流程，但實際命中這個邊界的，是 Claude Code 在三個 SKILL 同時可用時自動路由到研究問題稽核，而不是研究方向收斂自己開口說「這已超出我的範圍，交給另一個 SKILL」。效果一樣，但發生的機制跟原本設計的不完全一樣，這個落差記錄在第七節。</p>
+<hr />
+<h2 id="skill_1">五、SKILL 二：研究問題稽核怎麼做出來的</h2>
+<p>第一個做的 SKILL，管的是「這個研究問題站不站得住腳」，跟文字寫得好不好無關。</p>
+<p><strong>素材來源</strong>：既有教材裡講研究問題怎麼問、假說怎麼推導、研究架構怎麼搭的內容，加上研究缺口有哪五種分類的整理，還有一段角色扮演式的壓力測試提示詞，用來審查研究點子的價值與可行性。這些內容本來是寫給人讀的散文加檢查清單，讀者得自己一條一條對照著看。</p>
+<p><strong>提煉過程</strong>：把這些內容轉譯成一套「一次跑完、不分輪次」的稽核流程，總共拆成七個檢查點：研究缺口分類、收斂程度、題目定案六問、六種壞題目長相比對、研究問題句型與常見錯誤、目的到結論的一致性檢查鏈、對抗式審查。每個檢查點都要求輸出明確的「通過／不通過／不適用」判定，不能只給模糊的感想。</p>
+<p><strong>設計上的一個關鍵決定</strong>：這個 SKILL 明確不做「陪使用者從零發想題目」這件事。如果使用者連一個模糊方向都沒有，SKILL 會直接說「這個工具是用來稽核已經有的想法，不是幫你發想」，然後停下來，不勉強往下跑判準。稽核跟發想是兩件不同的事，硬要一個 SKILL 兩件都做，通常會兩件都做不好。</p>
+<p><strong>後來的調整</strong>：使用者用過初版稽核報告後，覺得只列出「不通過／不確定」的問題清單不夠，知道哪裡有問題，跟知道怎麼解決問題，中間還有一段距離。這個調整的細節見第八節。</p>
+<hr />
+<h2 id="skill_2">六、SKILL 三：學術寫作品質稽核怎麼做出來的</h2>
+<p>第二個做的 SKILL，管的是「這段文字寫得對不對、像不像人寫的、論證撐不撐得住」，跟研究設計邏輯無關，兩者刻意分工、互不重疊。</p>
+<p><strong>素材來源</strong>：一份完整的中文學術寫作紀律頁面，涵蓋因果動詞紀律、句子的構句原則、台灣學術用語對照表、APA 7 中文化格式、連接詞與標點慣例、去 AI 感的十二個特徵。這一頁本來就整理得夠完整，是這次提煉起來最直接的素材。</p>
+<p><strong>提煉過程</strong>：把原本頁面裡的替換表、grep 自檢指令、正反例整理成一個「單輪結構化輸出」的判準庫：使用者貼一段文字進來，一次跑完全部判準，輸出一份標明嚴重程度、原句、問題、改法的清單，不追問、不分多輪。</p>
+<p><strong>中途的一次規則修正</strong>：草稿寫進 SKILL 的第一版，把「橫斷面研究不能寫因果」的規則照搬，而且搬得比原意更死，「影響」跟「導致」一樣被列進了同一張禁用詞清單。使用者看過草稿後指出這是錯的：問卷調查在同時符合三個條件時（理論文獻支持因果方向、用迴歸或路徑分析明確區分自變數與依變數、模型中控制了背景變數），寫「具有顯著正向影響」是可以接受、甚至是安全專業的慣例寫法，不該一律判定不通過。真正該抓的問題，是<strong>同一句話或同一節裡因果語言與相關語言前後矛盾</strong>，而不是「用了『影響』這個詞」本身。這個修正同時套用回原始教材與 SKILL 本身，兩邊的判準現在是一致的。</p>
+<div class="admonition warning">
+<p class="admonition-title">這段的教訓</p>
+<p>先寫死一條規則，再被使用者的實務經驗糾正，這件事會反覆發生，不是寫錯一次就永遠不會再錯。規則寫得越死、越像非黑即白的禁用詞清單，越容易忽略「有條件允許」這種真實世界常見的中間狀態。</p>
+</div>
+<p><strong>評測後補的一個輸出格式缺口</strong>：見下一節。</p>
+<hr />
+<h2 id="skill-creator">七、用 skill-creator 做評測：誠實面對「差異不大」</h2>
+<p>兩個 SKILL 都寫完規則，不代表真的有用。使用者提醒了一件容易被忽略的事：<strong>要檢查的不只是「觸發時機準不準」（該用的時候有沒有自動叫用），還有「用了之後輸出品質真的比較好嗎」</strong>。這兩件事都不能靠感覺判斷。</p>
+<p>於是叫用了 Anthropic 官方的 <code>skill-creator</code> plugin，對三個 SKILL 各自跑過完整的評測流程：設計一組測試案例、平行跑「有 SKILL」跟「沒有 SKILL 的基準版」兩條線做比較、用可量化的判準逐項打分、最後產出一份 benchmark 報告。研究方向收斂在前兩輪評測時還不存在，是後補的第三輪，5 個測試案例整體結果為正向（有 SKILL 那組的判準通過率平均比沒有 SKILL 高出三成左右），其中差距最大的一題是「使用者答不出方向該不該繼續追問」：有 SKILL 引導時正確判斷該停下來送去讀文獻，沒有引導時則是換個問法繼續追問，這正好是 SKILL 補上使用者自己想不到的判準的典型例子。</p>
+<p>評測結果誠實得有點意外：Sonnet 5 本身對這類任務的基礎能力並不弱，SKILL 帶來的差異化價值，<strong>不是「解鎖一個模型原本做不到的能力」，而是保證判準的完整覆蓋、把用詞固定在同一套判準庫裡、讓輸出格式一致到可以規模化比較</strong>。換句話說，SKILL 的價值更接近「品管流程」，不是「能力升級」。</p>
+<p>評測過程也真的在學術寫作品質稽核那個 SKILL 上抓到一個產品缺口：報告只列出診斷出來的問題清單，漏了一項使用者實際會需要的輸出，也就是<strong>把診斷出來的問題整合成一句可以直接拿去用的完整修改句</strong>。單看問題清單，使用者還是得自己動手把好幾條建議兜成一句話；補上這個輸出項之後，才算真正把「知道哪裡錯」跟「怎麼改」接起來。</p>
+<p><strong>後來又跑了一輪測試，這次抓到的不是輸出格式缺口，是判準本身的盲點</strong>：文獻回顧稽核那部分的判準，設計了一套「論證鏈四步」與「關係詞測試」，用來檢查兩篇文獻是不是真的在對話、而不是各講各的。跑評測時餵了一段刻意設計成有缺陷的文獻回顧：兩篇引用文獻只證明「某個現象很普遍」，卻被拿去論證「某個理論機制在這裡適用」，這是把「症狀存在」偷換成「機制被驗證」的推論跳躍。結果 SKILL 版本完全沒抓到這個跳躍：它照著「關係詞測試」跑了一輪，確認兩篇文獻確實有好好對話（一篇延伸另一篇的方法），checkbox 打勾就繼續往下走，甚至還稱讚那句有問題的整合句寫得不錯；反而是沒有這套判準的基準版，靠一般的批判性閱讀，直接就抓到「這只能證明現象存在，不能證明機制被驗證」這個核心問題。</p>
+<p><strong>根因</strong>：「關係詞測試」本身只檢查兩篇文獻的關係對不對，沒有再往下問一句「這兩篇加起來，證明的東西跟結論句宣稱的東西是同一件事嗎」。換句話說，SKILL 把稽核者的注意力鎖進框架規定要檢查的幾個點，框架沒明講要查的地方，反而比沒有框架時更容易被放過。結構化清單保證了覆蓋率，但覆蓋率不等於沒有盲區，清單以外的東西一樣需要保留一般性的批判判斷，不能假設「跑完清單就代表跑完了」。找到根因後在判準檔補了一段「陳述強度核對」的提醒，重跑同一個案例，這次就精準抓到了。</p>
+<div class="admonition tip">
+<p class="admonition-title">這段的教訓</p>
+<p>評測前先假設「SKILL 一定比較好」是一種偷懶。跑完才知道差異可能沒有想像中大，這個誠實的結果本身就是有價值的資訊，它告訴你 SKILL 該往哪個方向改善（一致性與覆蓋率）。更進一步的教訓是：結構化檢查清單本身也可能變成新的盲點來源。清單保證了「清單上的東西不會漏」，但沒辦法保證「清單以外的東西不會被忽略」，甚至可能因為稽核者的注意力被清單規定的檢查點占滿，反而比完全沒有清單時更容易錯過清單沒設計到的問題。清單寫完之後要拿真實案例反覆測，看它會不會把使用者的注意力鎖死在錯的地方。</p>
+</div>
+<hr />
+<h2 id="_3">八、給研究問題稽核加的逐項引導功能</h2>
+<p>初版的研究問題稽核 SKILL 跑完，只會輸出一份「通過／不通過／不確定」的問題清單。使用者用過之後回饋：知道哪裡有問題，跟知道怎麼把問題解決，中間還有一段距離。清單列完就結束，使用者拿到一堆紅字，還是不知道該怎麼下手。</p>
+<p>於是加了第二階段：報告結尾主動邀請使用者「要不要一項一項帶你想清楚」，使用者同意後才切換成引導模式，依邏輯先後排序待處理項目，一次只問一項，避免同一個問題來回問超過兩次導致卡死，答不出來就先記下待查證，往下一項走。這個設計刻意跟第一階段的「一次跑完全部判準」分開，不混在一起，是因為兩者的節奏根本不一樣：稽核要快、要一次看到全貌；引導要慢、要一次只處理一件事。</p>
+<hr />
+<h2 id="_4">九、最終產出：怎麼安裝</h2>
+<p>完成的東西是一個 repo，<a href="https://github.com/wayhong0928/mis-thesis-skills">wayhong0928/mis-thesis-skills</a>（MIT 授權，公開），同時身兼 marketplace 跟 plugin 容器：根目錄的 <code>.claude-plugin/marketplace.json</code> 用相對路徑指向同一個 repo 裡的 <code>plugins/thesis-toolkit</code>，plugin 底下有三個 SKILL：研究方向收斂、研究問題稽核，跟學術寫作品質稽核。三個 SKILL 可以先後套用在同一份草稿上，互不重疊。</p>
+<p>不同介面的安裝方式不一樣，因為不是每個介面都支援 plugin marketplace 這套格式：</p>
+<table>
+<thead>
+<tr>
+<th>介面</th>
+<th>安裝方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude Code</strong></td>
+<td>先加入 marketplace，再安裝裡面的 plugin，詳細步驟見下方</td>
+</tr>
+<tr>
+<td><strong>Claude Cowork</strong></td>
+<td>Customize → Plugins → Add marketplace，在欄位填入 <code>wayhong0928/mis-thesis-skills</code>，走 GUI 流程；跟 Claude Code 是同一套 marketplace 格式，只是介面換成圖形化</td>
+</tr>
+<tr>
+<td><strong>Claude.ai 網頁版</strong></td>
+<td>付費方案（Pro、Max、Team、Enterprise）可在 Customize → Plugins 直接安裝 plugin，也可以用 Add marketplace 加入 GitHub repository 或 git URL；步驟見下方。只想裝單一 SKILL、不想動用 marketplace 時，仍可在 Customize → Skills 上傳單一資料夾包的 zip。要注意 Claude.ai 的 <code>description</code> 欄位上限只有 200 字元，比 Claude Code 短，同一份 SKILL 搬過去可能要把 description 重寫得更精簡</td>
+</tr>
+<tr>
+<td><strong>OpenAI Codex</strong></td>
+<td>官方也支援 SKILL 這個開放格式（<code>name</code>＋<code>description</code> 是雙方相容的核心欄位），但走的是不同路徑：Codex 依序掃描目前工作目錄、上層目錄、repo 根目錄底下的 <code>.agents/skills</code>，再加上個人層的 <code>$HOME/.agents/skills</code> 與系統層的 <code>/etc/codex/skills</code>。這不是 Claude Code／Cowork 用的 plugin marketplace 機制，marketplace 是 Claude 生態系專屬的打包與發布方式，不等於 SKILL 格式本身。官方文件沒有寫死「從指定 repo 安裝」這個動作要用哪個旗標，<code>$skill-installer</code> 官方說明是可以要求它從其他 repository 下載，所以實際做法是用自然語言告訴它路徑，例如在 Codex 裡輸入「請用 <code>$skill-installer</code> 從 <code>https://github.com/wayhong0928/mis-thesis-skills</code> 這個 repo 的 <code>plugins/thesis-toolkit/skills/research-question-audit</code> 路徑安裝這個 SKILL」；也可以不假手安裝指令，直接把該路徑底下的資料夾複製或用 symlink 放進上面任一掃描路徑，兩邊共用同一份檔案。裝新 SKILL 後 Codex 通常會自動偵測到，偵測不到就重開 Codex。Claude Code 專屬的進階欄位（例如工具權限白名單）Codex 不支援，但不會因此壞掉，只是少了那部分免詢問權限的體驗</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">為什麼要特別列這張表</p>
+<p>同一份 SKILL 在不同介面能不能裝、怎麼裝，取決於各家支援哪一層格式：SKILL.md 本身是開放標準，Claude 生態系用的 plugin marketplace 是另一層打包與發布方式，兩者不能混為一談。動手打包之前先查清楚目標讀者實際用的是哪個介面、走哪一層，免得包好了才發現裝不上去。</p>
+</div>
+<h3 id="claude-code">Claude Code 詳細安裝步驟：三種方法任選一種</h3>
+<p>以下三種方法裝的是同一個東西，效果一樣，差別只在你想自己打指令、用滑鼠點選單，還是懶得記指令、直接請 Claude Code 代勞。指令語法查證自官方文件，版本穩定；選單畫面的按鈕文字會隨版本更新，這裡只描述分頁名稱，不逐字描述按鈕上寫什麼字，避免日後畫面改版跟教學內容對不上。</p>
+<p><strong>方法一：指令法（最建議，兩行打完就好）</strong></p>
+<p>打開 Claude Code，在對話框依序輸入以下兩行，每行輸完按 Enter，等上一行顯示成功訊息再輸入下一行：</p>
+<p>第一行，把這個 repo 登記成一個可安裝的 marketplace 來源：</p>
+<pre><code>/plugin marketplace add wayhong0928/mis-thesis-skills
+</code></pre>
+<p>第二行，安裝這個 marketplace 裡面實際的 plugin：</p>
+<pre><code>/plugin install thesis-toolkit@mis-thesis-skills
+</code></pre>
+<p><code>thesis-toolkit@mis-thesis-skills</code> 這個寫法讀作「安裝 <code>mis-thesis-skills</code> 這個 marketplace 裡名叫 <code>thesis-toolkit</code> 的 plugin」。一個 marketplace 底下可能放不只一個 plugin，所以要指名裝哪一個，不能只寫 marketplace 名稱。兩行都成功後，開一個新對話，三個 SKILL（研究方向收斂、研究問題稽核、學術寫作品質稽核）就會依你貼的內容自動被叫用，不用再手動切換或啟用。</p>
+<p><strong>方法二：互動選單（滑鼠點選，不用背指令）</strong></p>
+<p>在對話框只打 <code>/plugin</code>（後面不接任何字），會跳出一個分頁式介面，用 Tab 或 Shift+Tab 在分頁間切換，分頁名稱是 <strong>Discover</strong>（瀏覽可裝的 plugin）、<strong>Installed</strong>（已裝清單）、<strong>Marketplaces</strong>（管理 marketplace 來源）、<strong>Errors</strong>、<strong>Stats</strong>。操作順序：</p>
+<ol>
+<li>切到 <strong>Marketplaces</strong> 分頁，把這個 repo（<code>wayhong0928/mis-thesis-skills</code>）加進去</li>
+<li>加完後切到 <strong>Discover</strong> 或 <strong>Installed</strong> 分頁，找到 <code>thesis-toolkit</code> 這個 plugin</li>
+<li>選擇安裝範圍，會看到 <strong>User</strong>、<strong>Project</strong>、<strong>Local</strong> 三個選項，個人自己用選 <strong>User</strong> 就好，之後不管開哪個資料夾的對話都能用到</li>
+</ol>
+<p><strong>方法三：直接請 Claude Code 幫你裝</strong></p>
+<p>把 repo 網址複製給 Claude Code，用一般對話的方式請它處理，例如：</p>
+<pre><code>請幫我安裝這個 Claude Code plugin marketplace：
+https://github.com/wayhong0928/mis-thesis-skills
+裡面要裝的 plugin 叫 thesis-toolkit。
+</code></pre>
+<p>Claude Code 收到後，實際上做的事跟方法一是同一件事，它會執行對應的安裝指令，只是把「查兩行指令的確切語法」交給它處理，過程中可能會先問你要不要授權它執行。</p>
+<div class="admonition warning">
+<p class="admonition-title">誠實提醒</p>
+<p>這個方法沒有經過官方文件逐版本背書，本站也還沒實測過每個版本都適用；如果它卡住、說做不到，或裝完沒生效，回頭用方法一自己手打那兩行指令。方法一是本站逐字對照官方語法、最容易排錯的方法，但網路狀況、GitHub 權限、Claude Code 版本、管理員政策或 marketplace 格式寫錯，都可能讓任何一種方法失敗，沒有一種寫法能保證每次都成功。</p>
+</div>
+<h3 id="claudeai">Claude.ai 網頁版安裝步驟</h3>
+<p>付費方案（Pro、Max、Team、Enterprise）也能直接裝，不需要 Claude Code：</p>
+<ol>
+<li>開左側選單的 <strong>Customize</strong>，切到 <strong>Plugins</strong> 分頁。</li>
+<li>找 <strong>Personal plugins</strong> 區塊，點 <strong>+</strong> 再選 <strong>Add marketplace</strong>。</li>
+<li>選 <strong>Add from a repository</strong>，欄位填入 <code>wayhong0928/mis-thesis-skills</code>（GitHub repository 或 git URL 都接受）。</li>
+<li>加入後回到 Plugins 分頁點 <strong>Browse plugins</strong>，找到 <code>thesis-toolkit</code> 裝上去。</li>
+</ol>
+<p>只想裝單一 SKILL、不想管 marketplace 時，另一條路是把單個 SKILL 資料夾包成 zip，在 Customize → Skills 手動上傳；這條路才需要注意 200 字元的 <code>description</code> 上限。</p>
+<hr />
+<h2 id="claude-codecodex">十、沒有 Claude Code／Codex、也沒有付費方案的讀者：手動版怎麼用</h2>
+<p>三個 SKILL 都公開在 <a href="https://github.com/wayhong0928/mis-thesis-skills">wayhong0928/mis-thesis-skills</a>，<code>plugins/thesis-toolkit/skills/&lt;skill名稱&gt;/</code> 底下。但不是每個人都有 Claude Code、Cowork 或付費的 Claude.ai／Codex 帳號。如果你只有免費額度的 ChatGPT、Gemini，或 Claude.ai 網頁版的免費對話（裝不了 plugin），一樣可以用這三個 SKILL 的判準，只是要自己動手貼，不能靠 <code>/plugin install</code> 或網頁版的 Add marketplace。</p>
+<h3 id="skillmd">為什麼不能直接把 SKILL.md 整份貼過去就好</h3>
+<p>第二節解釋過，SKILL 的運作靠 progressive disclosure：<code>SKILL.md</code> 本身只是骨架，正文提到「詳見 <code>references/xxx.md</code>」的地方，是 Claude Code 在真的需要時才把那份檔案的內容展開讀進來。手動貼給一個沒有這層機制的對話工具時，這個展開動作不會自動發生，AI 只會看到「詳見 references/xxx.md」這句話，卻拿不到那份檔案的實際內容，等於叫它去查一張它手上沒有的表。三個 SKILL 裡最依賴 <code>references/</code> 的判準（研究缺口的五種定義、六種壞題目的判準、因果動詞的完整規則），沒有這份展開，正文的檢查點會變成空殼。</p>
+<h3 id="references">判斷哪些 references 非貼不可</h3>
+<p>不是每份 <code>references/</code> 檔案都同等重要。判斷標準是：<strong>拿掉這份檔案，正文的判準還能不能被具體執行</strong>。能執行的可以先省，效果打折但堪用；不能執行的一定要貼，否則對應的檢查點直接失效。</p>
+<table>
+<thead>
+<tr>
+<th>SKILL</th>
+<th>一定要貼的 references（缺了對應檢查點就失效）</th>
+<th>可以先省的 references</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>研究方向收斂</td>
+<td><code>convergence-funnel.md</code>（五層漏斗每層的引導問題與判準）</td>
+<td><code>venues.md</code>、<code>progress-note-template.md</code>、<code>handoff-to-literature.md</code></td>
+</tr>
+<tr>
+<td>研究問題稽核</td>
+<td><code>gap-and-innovation.md</code>、<code>question-forms.md</code>、<code>audit-checklist.md</code>（三份分別對應檢查點 A、E、C+D+G），建議整組一起貼</td>
+<td>無，三份都是必要展開</td>
+</tr>
+<tr>
+<td>學術寫作品質稽核</td>
+<td><code>sentence-and-causal.md</code>、<code>taiwan-usage-apa.md</code>、<code>ai-flavor-and-argument.md</code>（分別對應因果動詞、用語格式、去 AI 感三大判準）</td>
+<td><code>chapter-structure.md</code>（只在稽核緒論或方法章草稿時才用得到）、<code>grep-checks.sh</code>（本機批次檢查用，貼給對話式 AI 沒有意義）</td>
+</tr>
+</tbody>
+</table>
+<p>SKILL.md 正文本身幾乎都要整份貼，流程邏輯、檢查點定義、輸出格式都直接寫在正文裡，不在 references 裡，這點跟上面的判斷不衝突。</p>
+<h3 id="_5">具體做法</h3>
+<ol>
+<li><strong>每次都開一個新對話</strong>。手動版沒有持久記憶，對話越長、累積的無關內容越多，AI 越容易「忘記」前面訂下的判準，這不是使用者做錯了什麼，是機制本身的落差。</li>
+<li>依上表把 SKILL.md 正文與判斷為必要的 references 全文貼進去，每一份前面加一行「以下是 <code>xxx.md</code> 的內容」方便 AI 分辨來源。</li>
+<li>最後加一句<strong>「請完全按照上面的規則跑，不要用你自己的判斷取代規則裡寫的判準，也不要省略任何一個檢查點」</strong>。這句話是必要的：沒有 SKILL 機制強制觸發時，AI 有時會混用自己既有的知識回答，反而稀釋掉判準的一致性。</li>
+</ol>
+<p>以研究問題稽核為例，起手式長這樣（其餘兩個 SKILL 依樣造句）：</p>
+<pre><code>你現在要扮演「研究問題稽核」的角色。以下依序貼給你四份文件：
+① 完整的稽核流程與輸出格式規範
+② 五種研究缺口的判準與例句
+③ 研究問題句型表與常見錯誤
+④ 題目定案六問、六種壞題目長相、對抗式審查的完整版
+
+請完全依照這四份文件裡寫的規則跑，不要用你自己的判斷取代規則裡的判準，
+也不要省略任何一個檢查點。
+
+=== ① SKILL.md 正文 ===
+（貼上全文）
+
+=== ② gap-and-innovation.md ===
+（貼上全文）
+
+=== ③ question-forms.md ===
+（貼上全文）
+
+=== ④ audit-checklist.md ===
+（貼上全文）
+
+我的研究想法是：（你自己的一句話研究想法）
+</code></pre>
+<h3 id="_6">誠實的限制</h3>
+<ul>
+<li>沒有 progressive disclosure，每次都要重貼整包；對話拉長後 AI 判準鬆動是正常現象，發現苗頭要重申一次規則，不是使用者的問題。</li>
+<li>不同家 AI 對長 prompt 的遵從度不一樣，效果不保證跟裝了真正的 SKILL 一致，這是工具機制的落差，不是使用者做錯。</li>
+<li>這個手動版本身<strong>沒有跑過評測</strong>。跟第七節那三輪評測不是同一件事：那三輪比較的是「有 SKILL」跟「沒有 SKILL 的基準版」，不是「真 SKILL」跟「手動貼」。手動貼的效果目前誠實地說是「不知道」，沒驗證過就不誇大。</li>
+</ul>
+<hr />
+<h2 id="skill_3">十一、如果你也想把教材變成 SKILL：一套可以照抄的步驟</h2>
+<p>以下這套步驟，是從上面的實作過程回頭整理出來的，跟前面的具體內容無關，任何「把一份你已經整理好的教材或檢查清單，變成可重複執行的 SKILL」的任務都適用，不限於論文寫作，程式碼審查規範、教學備課流程、客服應答準則都是同一套步驟。</p>
+<h3 id="1">1. 盤點原料</h3>
+<p>先把所有可能用得上的來源列出來：既有文件、你自己的私人筆記、你手上已經在用的提示詞範本。每一項標明「涵蓋了什麼、缺了什麼」。原料盤點不清楚，後面每一步都會做白工，例如漏掉某個來源，寫到一半才發現規則不完整，得回頭重寫。</p>
+<h3 id="2">2. 去重與分層</h3>
+<p>同一件事在不同來源裡可能出現不只一次，措辭還不一樣。分層的原則是：底層放跨情境都成立的通用規則，上層放特定情境才適用的細規則，上層可以覆寫底層，但重複的內容只留一處。分層之後，你才看得出來哪些是「這個 SKILL 一定要收」，哪些是「這個情境才需要，換個情境就該拿掉」。</p>
+<h3 id="3">3. 授權與來源檢查</h3>
+<p>任何萃取自他人著作、部落格、課程教材的內容，<strong>在動手寫進 SKILL 之前</strong>先確認授權條款允許到什麼程度。不確定的時候，先當作「不能收進公開版本」處理，而不是先收進去、等有人反映才處理。查不到明確聲明時，去查原始出處的官方頁面或授權頁，這是查得到的事實，不用用猜的。</p>
+<h3 id="4">4. 可檢查化</h3>
+<p>把抽象的原則改寫成「能被逐條判定通過或不通過」的形式，而不是一段籠統的敘述。例如「文字要通順」沒辦法檢查，「連續三句字數差在 4 字以內要標記」就可以。判準能不能被明確判定，直接決定這個 SKILL 用起來是不是每次都一致，還是每次都憑感覺。</p>
+<h3 id="5">5. 正反例與紅線標注</h3>
+<p>容易被誤解的規則，配一組具體的例子：什麼情況該判不通過，什麼情況其實是例外、可以放行。規則用講的容易顯得抽象，配上例子才真正可執行，這也是最容易被漏掉、但最值得花時間補的一步。</p>
+<h3 id="6">6. 用真實評測驗證，不要只憑直覺</h3>
+<p>寫完不代表有用。找一組測試案例，實際比較「有這個 SKILL」跟「沒有這個 SKILL」的輸出差在哪裡，用可量化的方式打分，不要只憑感覺覺得「應該有幫助」。如果評測結果顯示差異不大，誠實面對這個結果，去想 SKILL 真正的價值在哪裡（通常是一致性與覆蓋率，而不是能力升級），而不是硬凹一個好看的結論。</p>
+<h3 id="7">7. 分層發布</h3>
+<p>公開發布的部分，嚴格收窄到「可以獨立溯源、跟任何有授權疑慮的來源無關」的範圍；跟個人專屬經驗、他人原創框架綁在一起的部分，留在自己的私人筆記裡，不要為了讓 SKILL 看起來更完整就一起打包對外發布。</p>
+<hr />
+<h2 id="_7">本頁重點回顧</h2>
+<ul>
+<li>起點是一條很多教學都提過的經驗法則：連續貼第三次同樣的提示詞，就該包成 SKILL。這次是親自示範一次完整的過程，案例雖然取材自論文寫作，方法本身跟領域無關。</li>
+<li>SKILL 是資料夾＋<code>SKILL.md</code>，靠 <code>description</code> 決定觸發時機，用 progressive disclosure 分層展開內容，平常不佔用對話脈絡；Plugin 是把多個 SKILL 包起來、在 Claude Code 裡可安裝可分享的單位（Claude.ai 直接上傳 zip、Codex 直接放進掃描路徑則不需要 Plugin 這層）；Marketplace 是由 <code>.claude-plugin/marketplace.json</code> 定義的 plugin 目錄，可以獨立成一個 repo，也可以跟它收錄的 plugin 放在同一個 repo，要先加 marketplace 再裝 plugin。</li>
+<li>架構決策先做窄後做寬：單一階段起步，用 plugin marketplace 格式，未來加階段只是加資料夾，不用重新設計。</li>
+<li>三個 SKILL 的分工清楚：一個管還沒有方向的人怎麼收出一個方向，一個管研究設計邏輯站不站得住腳，一個管文字與格式品質，互不重疊，也各自從不同的來源提煉。</li>
+<li>一個設計良好的 SKILL，會在它拒絕服務的地方留下下一個 SKILL 該長什麼樣的規格：研究問題稽核指名了收斂漏斗這個方法卻沒給工具，第三個 SKILL 補的正是那個工具。</li>
+<li>同一個目標下的不同起點，未必都該走同一條流程：延伸老師計畫這條起步策略本質是可行性判斷，不是興趣判斷，刻意跳過收斂漏斗直接交棒稽核，比硬塞進主流程划算。</li>
+<li>規則寫得太死一樣會出錯：因果動詞規則被使用者的實務經驗糾正，教訓是規則要留有條件允許的空間，不是非黑即白的禁用詞清單。</li>
+<li>動手改一份設定檔之前先確認它是輸入還是輸出：手動改建置產出物不但不生效，下次建置還會被整個覆寫，要用產出物本身（html 檔案是否真的出現）驗收，不能只看自己有沒有寫入成功。</li>
+<li>評測不能省，而且要誠實面對「差異不大」這種結果：SKILL 的價值常常是一致性與覆蓋率，不是能力升級；評測也真的抓到一個輸出格式的缺口並修好。三個 SKILL 目前都已完成評測。</li>
+<li>結構化檢查清單本身也可能變成新的盲點：一次評測抓到判準本身把稽核者的注意力鎖進清單規定要查的點，反而錯過清單沒設計到的更深層問題：沒有清單的基準版靠一般批判性閱讀，反而抓到了清單版漏掉的核心破綻。清單保證覆蓋率，不保證沒有盲區，這兩者不能混為一談。</li>
+<li>稽核報告只列問題清單還不夠，主動邀請、同意才進入的逐項引導模式，是把「知道有問題」帶到「解決問題」的關鍵一步。</li>
+<li>同一份 SKILL 在不同介面能不能裝、怎麼裝不一樣，動手包裝前先確認目標介面支不支援 plugin marketplace 格式；Codex 走的是 <code>.agents/skills</code> 這條完全不同的路徑，有自己的 <code>$skill-installer</code> 安裝指令。</li>
+<li>沒有 Claude Code／Codex 的讀者也能用：把 SKILL.md 正文＋判斷為必要的 references 一起貼給任何對話式 AI，並明講「不要用自己的判斷取代規則」；哪些 references 非貼不可，判斷標準是拿掉它對應的檢查點還能不能執行，這個手動版本身沒有跑過評測，效果不保證跟真 SKILL 一致。</li>
+<li>把教材變成 SKILL 的七步，跟具體內容無關：盤點原料、去重分層、授權檢查、可檢查化、正反例、真實評測、分層發布。</li>
+</ul>
+<hr />
+<h2 id="_8">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>來源</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1]</td>
+<td>Extend agents with skills（SKILL.md 結構、放置位置）</td>
+<td><a href="https://code.claude.com/docs/en/skills">https://code.claude.com/docs/en/skills</a></td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>Plugins reference（plugin.json、目錄結構限制）</td>
+<td><a href="https://code.claude.com/docs/en/plugins-reference">https://code.claude.com/docs/en/plugins-reference</a></td>
+</tr>
+<tr>
+<td>[3]</td>
+<td>Build skills（Codex/ChatGPT Skills 掃描路徑、<code>$skill-installer</code>、與 Plugins 關係）</td>
+<td><a href="https://learn.chatgpt.com/docs/build-skills">https://learn.chatgpt.com/docs/build-skills</a></td>
+</tr>
+<tr>
+<td>[4]</td>
+<td>Use plugins in Claude（Claude.ai 網頁版／Cowork 安裝 plugin、Add marketplace 的步驟）</td>
+<td><a href="https://support.claude.com/en/articles/13837440-use-plugins-in-claude">https://support.claude.com/en/articles/13837440-use-plugins-in-claude</a></td>
+</tr>
+<tr>
+<td>[5]</td>
+<td>wayhong0928/mis-thesis-skills（本頁案例的實際 repo）</td>
+<td><a href="https://github.com/wayhong0928/mis-thesis-skills">https://github.com/wayhong0928/mis-thesis-skills</a></td>
+</tr>
+<tr>
+<td>[6]</td>
+<td>How to create custom skills（Claude.ai 的 <code>description</code> 200 字元上限）</td>
+<td><a href="https://support.claude.com/en/articles/12512198-how-to-create-custom-skills">https://support.claude.com/en/articles/12512198-how-to-create-custom-skills</a></td>
+</tr>
+<tr>
+<td>[7]</td>
+<td>Claude Code plugin marketplaces（marketplace 可與 plugin 同一個 repo，相對路徑 <code>source</code>）</td>
+<td><a href="https://code.claude.com/docs/en/plugin-marketplaces">https://code.claude.com/docs/en/plugin-marketplaces</a></td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>｜<a href="claude-codex.html">Claude Code + Codex 協作</a>｜<a href="https://wayhong0928.github.io/mis-thesis-guide/pages/ai-agents.html">AI 代理工具懶人包（原站）</a>｜<a href="https://wayhong0928.github.io/mis-thesis-guide/pages/prompts.html">AI 提示詞範本（原站）</a></p>
+</article>
+<nav class="pager"><a class="prev" href="claude-codex.html">← Claude Code + Codex 協作</a><a class="next" href="sdlc-traditional.html">SDLC 與流程模型 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#_1">一、起點：為什麼要做這件事</a></li>
+<li><a href="#skill-plugin">二、先搞懂兩個概念：SKILL 與 Plugin 到底是什麼</a><ul>
+<li><a href="#21-skill">2.1 SKILL：一個資料夾，裝的是「程序」不是「事實」</a></li>
+<li><a href="#22-plugin-skill">2.2 Plugin：把多個 SKILL 包起來，變成可安裝、可分享的單位</a></li>
+</ul>
+</li>
+<li><a href="#_2">三、架構決策：先做一個階段，不做全流程</a></li>
+<li><a href="#skill">四、SKILL 一：研究方向收斂怎麼做出來的</a></li>
+<li><a href="#skill_1">五、SKILL 二：研究問題稽核怎麼做出來的</a></li>
+<li><a href="#skill_2">六、SKILL 三：學術寫作品質稽核怎麼做出來的</a></li>
+<li><a href="#skill-creator">七、用 skill-creator 做評測：誠實面對「差異不大」</a></li>
+<li><a href="#_3">八、給研究問題稽核加的逐項引導功能</a></li>
+<li><a href="#_4">九、最終產出：怎麼安裝</a><ul>
+<li><a href="#claude-code">Claude Code 詳細安裝步驟：三種方法任選一種</a></li>
+<li><a href="#claudeai">Claude.ai 網頁版安裝步驟</a></li>
+</ul>
+</li>
+<li><a href="#claude-codecodex">十、沒有 Claude Code／Codex、也沒有付費方案的讀者：手動版怎麼用</a><ul>
+<li><a href="#skillmd">為什麼不能直接把 SKILL.md 整份貼過去就好</a></li>
+<li><a href="#references">判斷哪些 references 非貼不可</a></li>
+<li><a href="#_5">具體做法</a></li>
+<li><a href="#_6">誠實的限制</a></li>
+</ul>
+</li>
+<li><a href="#skill_3">十一、如果你也想把教材變成 SKILL：一套可以照抄的步驟</a><ul>
+<li><a href="#1">1. 盤點原料</a></li>
+<li><a href="#2">2. 去重與分層</a></li>
+<li><a href="#3">3. 授權與來源檢查</a></li>
+<li><a href="#4">4. 可檢查化</a></li>
+<li><a href="#5">5. 正反例與紅線標注</a></li>
+<li><a href="#6">6. 用真實評測驗證，不要只憑直覺</a></li>
+<li><a href="#7">7. 分層發布</a></li>
+</ul>
+</li>
+<li><a href="#_7">本頁重點回顧</a></li>
+<li><a href="#_8">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

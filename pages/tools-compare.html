@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 介面比較總表｜AI Agent 筆記</title>
+<meta name="description" content="Claude Code、Claude Chat、Claude Desktop、Codex、ChatGPT Desktop 一張表看懂">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/tools-compare.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li class="active"><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789567027">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789564811">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789564836">付費區</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789566754">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789566922">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789566831">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789568662">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789571708">把教材做成 SKILL</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789606177">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789606143">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789606040">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789607976">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789607693">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789608045">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789563106">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 先搞懂工具</p>
+<article class="doc" data-updated="1789567027">
+<h1>AI 介面比較總表</h1>
+<p class='lede'>Claude Code、Claude Chat、Claude Desktop、Codex、ChatGPT Desktop 一張表看懂</p>
+<blockquote>
+<p>查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。</p>
+</blockquote>
+<p>Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常互相借用（Cowork、Work、Codex 分頁、Codex App……），第一次接觸很容易搞錯。這頁把八種常見介面放進同一張表對照，再挑出最容易搞混的五組單獨說明。每一格背後都有來源，標記沿用查證文件的原始編號（<code>S</code>＝Claude 官方來源、<code>O</code>＝ChatGPT／Codex 官方來源、<code>X</code>＝補充查證來源），對照表列在頁尾；查無明確資料的格子直接寫「查無」，不用推測填補。</p>
+<h2 id="_1">主表：介面 × 方案</h2>
+<p>「✅」可用、「❌」不可用、「⚠️」有限制或需額外條件、「？」查無或官方文件互相矛盾。</p>
+<table>
+<thead>
+<tr>
+<th>介面</th>
+<th>跑在哪裡</th>
+<th>讀寫本機檔案</th>
+<th>執行指令／程式碼</th>
+<th>Skill／Plugin／MCP</th>
+<th>最低方案</th>
+<th>適合做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude Chat</strong>（網頁／手機）</td>
+<td>Anthropic 雲端伺服器 [S7]</td>
+<td>❌ 不能 [S7]</td>
+<td>⚠️ 只有雲端的 code execution 沙盒工具，不是本機終端 [S7]</td>
+<td>Skill✅／Plugin⚠️（付費方案可在網頁版 Chat 使用，但官方文件說法不一致，見<a href="extensions.html">擴充機制比較</a>）[S24]／MCP（remote）✅ 免費帳號限 1 個自訂 connector [S9b][S12]</td>
+<td>Free 即可 [S3][S15]</td>
+<td>問答、腦力激盪、潤飾文字</td>
+</tr>
+<tr>
+<td><strong>Claude Desktop</strong>（Chat 分頁）</td>
+<td>本機安裝的殼，Chat 分頁內容仍跑在雲端 [S7]</td>
+<td>❌ Chat 分頁本身不行 [S7]</td>
+<td>⚠️ 同 Chat，雲端沙盒 [S7]</td>
+<td>同 Claude Chat，另可加本機 MCP（desktop extensions）[S13]</td>
+<td>Free 可用 Chat 分頁；Cowork／Code 分頁要付費方案 [S3][S7]</td>
+<td>一個 App 內同時裝 Chat／Cowork／Code</td>
+</tr>
+<tr>
+<td><strong>Cowork</strong>（Desktop 第三分頁／web／mobile beta）</td>
+<td>預設是雲端 VM，既有 Desktop 部署也可能用本機專用 Linux VM [X4]</td>
+<td>✅ 本機或雲端 VM 內讀寫，需 Claude Desktop 保持開啟連線 [S21][X4]</td>
+<td>✅ 隔離 VM 內可跑 shell／程式碼，但不等於主機終端，不能叫它直接跑主機上的 <code>codex exec</code> [X4]</td>
+<td>Skill✅／Plugin✅（可包含在主機執行的 local MCP server）／MCP（remote connector）✅ [S9b][X4]</td>
+<td>Pro 起，免付費帳號完全不可用 [S21]</td>
+<td>整理檔案、做報表、寄信、跨應用文書工作</td>
+</tr>
+<tr>
+<td><strong>Claude Code</strong>（CLI／Desktop Code 分頁／網頁／IDE）</td>
+<td>CLI／IDE 擴充／Desktop 本機；claude.ai/code 是 Anthropic 管理的雲端 VM [S7][S8]</td>
+<td>✅ CLI／IDE／Desktop 可讀寫本機；網頁版是雲端 VM 內的 repo，不是使用者本機磁碟 [S7][S8]</td>
+<td>✅ 本機終端指令（CLI／IDE／Desktop）[S1]</td>
+<td>Skill✅／Plugin✅／MCP（本機＋remote）✅／Subagent✅／Hooks✅ [S9b][S17][S18][S19][S20]</td>
+<td>Free 沒有；Pro 起，也能純用 API key 按量付費、不吃訂閱額度 [S1][S23]</td>
+<td>跨檔批次處理、程式開發、可重跑流程</td>
+</tr>
+<tr>
+<td><strong>Claude Design</strong>（canvas 設計工具）</td>
+<td>？查無：官方說明沒提到跑在本機還是雲端 [S22]</td>
+<td>？查無 [S22]</td>
+<td>？查無 [S22]</td>
+<td>？查無：官方說明沒列出 Skill／Plugin／MCP 支援 [S22]</td>
+<td>Free 未提及；Pro 起（research preview）；Enterprise 預設關閉，需管理員手動開啟 [S22]</td>
+<td>對著畫面拖拉調整產出設計稿、原型、投影片、one-pager，而不是純寫 prompt [S22]</td>
+</tr>
+<tr>
+<td><strong>ChatGPT</strong>（網頁／手機）</td>
+<td>OpenAI 雲端伺服器 [O10]</td>
+<td>❌ 不能 [O10]</td>
+<td>？查無：本次查證沒有涵蓋 ChatGPT 網頁版程式碼執行工具的細節</td>
+<td>Connectors／Apps✅（Free 僅內建 App，Plus 起可加自訂 MCP）[O22]</td>
+<td>Free 即可 [A2 §1]</td>
+<td>問答、寫作、Deep Research</td>
+</tr>
+<tr>
+<td><strong>ChatGPT Desktop</strong>（統一版，含 Chat／Work／Codex 分頁）</td>
+<td>本機殼；Chat／Work 跑在雲端，Codex 分頁依 sandbox 設定可在本機執行 [O7]</td>
+<td>⚠️ Codex 分頁依 sandbox mode 可讀寫本機；Chat／Work 分頁不行 [O25]</td>
+<td>⚠️ Codex 分頁依 sandbox mode（read-only／workspace-write／danger-full-access）[O25]</td>
+<td>Codex 分頁：AGENTS.md✅／Skill✅／Plugin✅／Subagent✅，全方案不分級 [O28][O29][O30]</td>
+<td>Free 即可，官方明說方案層級含 Free [O3][O7]；但功能是分批推出，不保證每個帳號當下都已經看得到 [A2b 題2]</td>
+<td>一個 App 打通聊天、知識工作 agent、程式碼 agent</td>
+</tr>
+<tr>
+<td><strong>Codex</strong>（CLI／IDE／cloud）</td>
+<td>CLI／IDE 擴充在本機；cloud（chatgpt.com/codex）是 OpenAI 雲端 sandbox 內的 repo checkout [O25][O26]</td>
+<td>CLI／IDE 可讀寫本機；cloud 是雲端 checkout，不是使用者本機磁碟 [O25]</td>
+<td>✅ 依 sandbox mode 決定要不要先問過你 [O25]</td>
+<td>AGENTS.md✅／Skill✅／Plugin✅／Subagent✅，全方案不分級；也能當 MCP client 接外部服務 [O28][O29][O30][X6]</td>
+<td>Free／Go 可用，但不同介面深淺不一，官方文件之間曾出現矛盾（見下方第三、四組）[A2 §0][A2b 題5]</td>
+<td>本機 repo 互動、CI/CD 腳本、雲端長跑任務</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">最容易搞混的五組</h2>
+<h3 id="1-claude-desktop-chat-vs-coworkcode">1. Claude Desktop 的 Chat 分頁 vs Cowork／Code 分頁</h3>
+<p>同一個 App 裡的三個分頁，能碰到的東西差很多。Chat 分頁本質上就是網頁版包進桌面殼，不能碰本機檔案；要讀寫本機檔案，得切到 Cowork 或 Code 分頁 [S7]。看到「我在用 Claude Desktop」這句話，不能直接假設它能動你的檔案，要先問清楚是哪個分頁。</p>
+<h3 id="2-cowork-vs-claude-code">2. Cowork vs Claude Code</h3>
+<p>兩者共用底層的 agent 架構，但任務導向完全不同：Cowork 面向一般知識工作（整理檔案、做報表、跨應用程式），Claude Code 面向程式碼與可重跑的批次流程 [S21]。官方也特別強調，Cowork 不是 Claude Code CLI 的另一個名字 [X4]。</p>
+<h3 id="3-chatgpt-desktop-codex-vs-codex-cli">3. ChatGPT Desktop 的 Codex 分頁 vs Codex CLI</h3>
+<p>兩者功能幾乎等價，共用同一顆引擎與認證機制，差別只在你在哪個視窗操作：Codex 分頁在統一版 ChatGPT Desktop App 裡，CLI 是獨立的終端機視窗 [O15]。</p>
+<h3 id="4-codex-app-chatgpt-desktop2026-07-09">4. Codex 桌面 App 已經併入 ChatGPT Desktop（2026-07-09）</h3>
+<p>Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 4 日上線），但已於 2026-07-09 併入統一版 ChatGPT Desktop App。「Codex Desktop app」作為獨立產品現在已經不存在，只是那個統一 App 裡的一個分頁；查到教別人「去下載獨立 Codex App」的舊教學，已經過時 [X1][X2][O7][A2b 題1]。</p>
+<h3 id="5-codex-mcp-server">5. <code>codex mcp-server</code> 教學已失效</h3>
+<p>舊版 Codex 曾提供 <code>codex mcp-server</code> 指令與獨立的 <code>codex-mcp-server</code> binary，但 OpenAI 現行文件已明載兩者都已移除。現在的 <code>codex app-server</code> 是給圖形介面與整合程式用的 JSON-RPC server，官方明確說它不是 MCP server，不能拿來取代舊教學裡的 <code>codex mcp-server</code> 設定 [X5][X6]。網路上還能搜到的舊版設定檔範例，直接照抄會失敗。</p>
+<h2 id="_3">怎麼選</h2>
+<ul>
+<li>只是想討論、腦力激盪、潤飾一段文字 → Claude Chat 或 ChatGPT 網頁版。</li>
+<li>想做一般辦公自動化（整理檔案、寄信、跨工具彙整），不想碰終端機 → Cowork（Claude）或 ChatGPT Desktop 裡的 Work 分頁。</li>
+<li>需要讀寫本機檔案、跨檔案批次處理、要版本控制 → Claude Code 或 Codex CLI／IDE 擴充。</li>
+<li>想丟一個長跑任務、不想守在螢幕前，或要處理你本機沒有的 repo → claude.ai/code（Claude Code on the web）或 Codex cloud。</li>
+<li>想做視覺化設計、原型、投影片 → Claude Design（仍是 research preview，Pro 起）。</li>
+<li>只有免費帳號、想先試試程式碼代理 → ChatGPT Free／Go 裡的 Codex（尤其桌面 App 內最明確可用）；Claude Code 免費帳號完全用不到，見<a href="free-tier.html">免付費區</a>。</li>
+</ul>
+<h2 id="2026-09-16">資料來源（2026-09-16 查證）</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>URL</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1</td>
+<td>support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan</td>
+<td>Claude Code 於 Pro/Max 的可用性</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>claude.com/pricing</td>
+<td>五種方案功能總覽</td>
+</tr>
+<tr>
+<td>S7</td>
+<td>code.claude.com/docs/en/overview</td>
+<td>Claude Code 五種 surface 官方總覽</td>
+</tr>
+<tr>
+<td>S8</td>
+<td>code.claude.com/docs/en/claude-code-on-the-web</td>
+<td>claude.ai/code 雲端 session 的可用性與限制</td>
+</tr>
+<tr>
+<td>S9b</td>
+<td>support.claude.com/en/articles/12512176-what-are-skills</td>
+<td>Skills 方案可用性</td>
+</tr>
+<tr>
+<td>S12</td>
+<td>support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp</td>
+<td>Remote MCP 自訂 connector 方案別數量限制</td>
+</tr>
+<tr>
+<td>S13</td>
+<td>support.claude.com/en/articles/11725091-when-to-use-desktop-and-web-connectors</td>
+<td>Remote vs local connector 差異</td>
+</tr>
+<tr>
+<td>S15</td>
+<td>support.claude.com/en/articles/8114487-what-interfaces-can-i-use-to-access-claude</td>
+<td>官方介面總覽</td>
+</tr>
+<tr>
+<td>S17</td>
+<td>code.claude.com/docs/en/sub-agents</td>
+<td>Claude Code subagent 官方文件</td>
+</tr>
+<tr>
+<td>S18</td>
+<td>code.claude.com/docs/en/hooks-guide</td>
+<td>Claude Code hooks 官方文件</td>
+</tr>
+<tr>
+<td>S19</td>
+<td>code.claude.com/docs/en/plugins</td>
+<td>Claude Code plugins 官方文件</td>
+</tr>
+<tr>
+<td>S20</td>
+<td>code.claude.com/docs/en/mcp</td>
+<td>Claude Code 連接 MCP 官方文件</td>
+</tr>
+<tr>
+<td>S21</td>
+<td>support.claude.com/en/articles/13345190-get-started-with-claude-cowork</td>
+<td>Cowork 方案可用性、本機檔案存取</td>
+</tr>
+<tr>
+<td>S22</td>
+<td>anthropic.com/news/claude-design-anthropic-labs</td>
+<td>Claude Design 方案可用性、research preview 狀態</td>
+</tr>
+<tr>
+<td>S23</td>
+<td>support.claude.com/en/articles/12304248-manage-api-key-environment-variables-in-claude-code</td>
+<td>純 API key 跑 Claude Code 的計費機制</td>
+</tr>
+<tr>
+<td>S24</td>
+<td>support.claude.com/en/articles/13837440-use-plugins-in-claude</td>
+<td>Claude.ai／Cowork 使用 plugin 的方案與介面</td>
+</tr>
+<tr>
+<td>O3</td>
+<td>OpenAI 官方 X 貼文（2026-07-09 ChatGPT Work 發布，經二次來源引述）</td>
+<td>Desktop app 全方案含 Free 可用 Chat/Work/Codex</td>
+</tr>
+<tr>
+<td>O7</td>
+<td>learn.chatgpt.com/docs/app</td>
+<td>統一版 Desktop app 的分頁切換方式</td>
+</tr>
+<tr>
+<td>O10</td>
+<td>業界慣例類推（未找到 OpenAI 專門說明此點的頁面）</td>
+<td>API key 不含網頁 Chat 存取（信心中偏低）</td>
+</tr>
+<tr>
+<td>O15</td>
+<td>learn.chatgpt.com/docs/ide</td>
+<td>Codex IDE 擴充與 CLI 的關係</td>
+</tr>
+<tr>
+<td>O22</td>
+<td>help.openai.com/en/articles/11487775-connectors-in-chatgpt；12003714</td>
+<td>Connectors/Apps/MCP 各方案差異</td>
+</tr>
+<tr>
+<td>O25</td>
+<td>learn.chatgpt.com/docs/sandboxing</td>
+<td>Codex sandbox 三模式定義</td>
+</tr>
+<tr>
+<td>O26</td>
+<td>learn.chatgpt.com/docs/cloud</td>
+<td>Codex cloud 運作方式</td>
+</tr>
+<tr>
+<td>O28</td>
+<td>learn.chatgpt.com/docs/agent-configuration/agents-md</td>
+<td>AGENTS.md 讀取順序與上限</td>
+</tr>
+<tr>
+<td>O29</td>
+<td>learn.chatgpt.com/docs/build-skills</td>
+<td>Codex/ChatGPT Skills 定義</td>
+</tr>
+<tr>
+<td>O30</td>
+<td>learn.chatgpt.com/docs/agent-configuration/subagents</td>
+<td>Codex subagents 設定方式</td>
+</tr>
+<tr>
+<td>X1</td>
+<td>openai.com/index/introducing-the-codex-app/</td>
+<td>Codex 獨立桌面 App 上線時間</td>
+</tr>
+<tr>
+<td>X2</td>
+<td>openai.com/index/chatgpt-for-your-most-ambitious-work/</td>
+<td>ChatGPT Work 發布、Codex App 併入時間</td>
+</tr>
+<tr>
+<td>X4</td>
+<td>support.claude.com/en/articles/14479288-claude-cowork-architecture-overview</td>
+<td>Cowork 實際執行位置（雲端 VM／本機 Linux VM）</td>
+</tr>
+<tr>
+<td>X5</td>
+<td>learn.chatgpt.com/docs/mcp-server</td>
+<td>Codex MCP server 移除公告</td>
+</tr>
+<tr>
+<td>X6</td>
+<td>github.com/openai/codex/blob/main/codex-rs/app-server/README.md</td>
+<td>Codex App Server 定位說明</td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="free-tier.html">免付費區</a>｜<a href="paid-tier.html">付費區</a>｜<a href="claude-codex.html">Claude Code + Codex 協作</a></p>
+</article>
+<nav class="pager"><a class="next" href="free-tier.html">免付費區 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#_1">主表：介面 × 方案</a></li>
+<li><a href="#_2">最容易搞混的五組</a><ul>
+<li><a href="#1-claude-desktop-chat-vs-coworkcode">1. Claude Desktop 的 Chat 分頁 vs Cowork／Code 分頁</a></li>
+<li><a href="#2-cowork-vs-claude-code">2. Cowork vs Claude Code</a></li>
+<li><a href="#3-chatgpt-desktop-codex-vs-codex-cli">3. ChatGPT Desktop 的 Codex 分頁 vs Codex CLI</a></li>
+<li><a href="#4-codex-app-chatgpt-desktop2026-07-09">4. Codex 桌面 App 已經併入 ChatGPT Desktop（2026-07-09）</a></li>
+<li><a href="#5-codex-mcp-server">5. codex mcp-server 教學已失效</a></li>
+</ul>
+</li>
+<li><a href="#_3">怎麼選</a></li>
+<li><a href="#2026-09-16">資料來源（2026-09-16 查證）</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

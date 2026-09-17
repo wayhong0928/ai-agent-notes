@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code 設定總覽｜AI Agent 筆記</title>
+<meta name="description" content="CLAUDE.md、rules、settings、權限怎麼寫">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/official-config.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789567027">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789564811">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789564836">付費區</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789566754">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789566922">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789566831">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789568662">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789571708">把教材做成 SKILL</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789606177">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789606143">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789606040">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li class="active"><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789607976">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789607693">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789608045">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789563106">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 官方建議設定</p>
+<article class="doc" data-updated="1789607976">
+<h1>Claude Code 設定總覽</h1>
+<p class='lede'>CLAUDE.md、rules、settings、權限怎麼寫</p>
+<blockquote>
+<p>查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。</p>
+</blockquote>
+<p>前面幾頁講的是<a href="agent-basics.html">AI Agent 怎麼運作</a>、<a href="extensions.html">各種擴充機制解決什麼問題</a>、<a href="harness.html">怎麼把工作環境設計得可靠</a>——都是原理層。這頁換一個角度，只回答一個問題：<strong>Claude Code 官方文件建議怎麼設定</strong>。內容照官方文件的說法整理，不包含任何個人或特定專案的客製規則；你自己專案要怎麼寫，是另一回事，這頁只負責把官方定義的介面講清楚。</p>
+<h2 id="claudemd">一、CLAUDE.md：放在哪、寫什麼</h2>
+<p>CLAUDE.md 依檔案位置分四層，載入順序由廣到窄；子目錄的 CLAUDE.md 不在啟動時載入，而是 Claude 讀到該子目錄底下的檔案時才動態載入[1]：</p>
+<table>
+<thead>
+<tr>
+<th>範圍</th>
+<th>位置</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>組織管理政策</td>
+<td>macOS <code>/Library/Application Support/ClaudeCode/CLAUDE.md</code>；Linux/WSL <code>/etc/claude-code/CLAUDE.md</code>；Windows <code>C:\Program Files\ClaudeCode\CLAUDE.md</code></td>
+<td>IT／DevOps 統一管理的組織規範</td>
+</tr>
+<tr>
+<td>使用者層</td>
+<td><code>~/.claude/CLAUDE.md</code></td>
+<td>個人跨專案偏好</td>
+</tr>
+<tr>
+<td>專案層</td>
+<td><code>./CLAUDE.md</code> 或 <code>./.claude/CLAUDE.md</code></td>
+<td>團隊共用，走版控</td>
+</tr>
+<tr>
+<td>本機專案層</td>
+<td><code>./CLAUDE.local.md</code></td>
+<td>個人在這個專案的偏好，建議加進 <code>.gitignore</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>這四層是全部串接進同一個上下文，不是互相覆蓋。</strong> 從檔案系統根目錄往下排到目前工作目錄，越接近啟動目錄的檔案排在越後面（越晚被讀到）；同一層裡 <code>CLAUDE.local.md</code> 排在 <code>CLAUDE.md</code> 之後[1]。</p>
+<p>官方對「該寫什麼」給了一句判準：「把 CLAUDE.md 當成你原本會重複解釋的內容寫下來」[1]。以下對照表出自 best practices 文件（節錄）[6]：</p>
+<table>
+<thead>
+<tr>
+<th>該放</th>
+<th>不該放</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude 猜不到的 Bash 指令</td>
+<td>Claude 讀程式碼就能推出的東西</td>
+</tr>
+<tr>
+<td>與預設不同的風格規則</td>
+<td>標準語言慣例</td>
+</tr>
+<tr>
+<td>測試指令與慣用測試工具</td>
+<td>詳細 API 文件（改連結）</td>
+</tr>
+<tr>
+<td>repo 禮節（分支命名、PR 慣例）</td>
+<td>常變動的資訊</td>
+</tr>
+<tr>
+<td>專屬本專案的架構決策</td>
+<td>長篇說明教學</td>
+</tr>
+</tbody>
+</table>
+<p>篇幅上限：<strong>官方建議每個 CLAUDE.md 檔案控制在 200 行以內</strong>，理由是「檔案越長，越消耗上下文，模型遵從度也越低」[1]；判斷該不該留的問題是「拿掉這一行，模型會不會因此犯錯？」[6]答不出來就刪，或搬進<a href="extensions.html">SKILL</a>。單檔硬上限是 4 MiB，超過會被整檔跳過不載入[1]。</p>
+<p><code>/init</code> 會分析程式庫自動生成一版 CLAUDE.md 起點；若已存在 CLAUDE.md，<code>/init</code> 改為建議增修而不覆寫，也會嘗試併入既有的 Cursor rules 或 Copilot rules[1]。CLAUDE.md 內可用 <code>@path/to/file</code> 語法匯入其他檔案（相對路徑以「引用它的那個檔案」為基準，可遞迴匯入，最深 4 層）；只是要在文字中「提到」某個路徑而不想觸發匯入，用反引號包起來即可[1]。</p>
+<p>Claude Code 讀的是 <code>CLAUDE.md</code>，不讀 <code>AGENTS.md</code>；若專案已經有 <code>AGENTS.md</code>（例如同時給 Codex 用），官方建議建一個 <code>CLAUDE.md</code> 用 <code>@AGENTS.md</code> 匯入它，下面再加 Claude 專屬指示[1]。</p>
+<h2 id="clauderules-claudemd">二、<code>.claude/rules/</code>：把 CLAUDE.md 拆成主題檔</h2>
+<p><code>.claude/rules/</code> 是把 CLAUDE.md 內容拆成多個主題檔的機制，適合大型專案：每個檔案專注一個主題，<code>.md</code> 檔會遞迴掃描子目錄。沒有 <code>paths</code> frontmatter 的 rule，會在啟動時整份載入，優先度跟 <code>.claude/CLAUDE.md</code> 相同；官方的區分方式是：全程都要在上下文裡的規則用 rules，不需要一直佔上下文、只在特定任務才用得到的工作方式則建議改用 skill[1]。</p>
+<p>要把規則限定在特定檔案類型才生效，用 YAML frontmatter 的 <code>paths</code> 欄位：</p>
+<pre><code class="language-markdown">---
+paths:
+  - &quot;src/api/**/*.ts&quot;
+---
+
+# API Development Rules
+
+- All API endpoints must include input validation
+- Use the standard error response format
+</code></pre>
+<p>只有 Claude 讀到符合 <code>paths</code> 模式的檔案時才會觸發載入這份規則，不是每次工具呼叫都觸發[1]。使用者層 <code>~/.claude/rules/</code> 對每個專案都生效，且會在專案層 rule 之前先載入[1]。</p>
+<div class="admonition warning">
+<p class="admonition-title">已知限制：<code>paths</code> 在部分版本可能不生效</p>
+<p>GitHub 上有多筆社群回報的 issue，指出 <code>paths</code> frontmatter 在特定版本、特定情境（例如使用者層 rule、或由 Write 觸發而非 Read 觸發時）不生效或行為跟文件描述不符。這些是社群回報的 bug 追蹤，不是官方文件本體的承諾內容；本站查證時（2026-09-16）未能確認這些 issue 目前的修復狀態對應到哪個確切版本號。如果你設定了 <code>paths</code> 卻發現規則沒被載入，先確認自己的版本號，再去查目前官方 issue tracker 的最新狀態，不要預設是自己語法寫錯了。</p>
+<p>官方 <code>docs/en/memory</code> 另外記載了幾個與 <code>paths</code> 相關、已標明修復版本的具體缺陷，可以拿來先對一下自己的版本號：symlink 路徑比對到 v2.1.198 才支援、無效的 glob pattern 曾在 v2.1.207 之前讓 Read 工具對該規則涵蓋的所有檔案失敗、<code>--setting-sources</code> 排除 <code>project</code> 時仍載入部分規則的問題到 v2.1.211 修正、brace 展開過多曾在 v2.1.217 之前讓 CLI 啟動卡住或崩潰[1]。這幾個是文件明確記載的修復點，跟上面列的社群 issue 是不同的兩份清單，沒有一一對應關係。</p>
+</div>
+<h2 id="settingsjson">三、settings.json：五層優先序</h2>
+<p>官方定義的設定來源，由高到低共五層[2]：</p>
+<table>
+<thead>
+<tr>
+<th>優先序</th>
+<th>來源</th>
+<th>檔案</th>
+<th>適合放</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1（最高）</td>
+<td>Managed settings</td>
+<td><code>managed-settings.json</code>／MDM／console 的 server-managed settings</td>
+<td>組織強制的安全政策，個人無法覆蓋（少數安全 key 例外）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Command line</td>
+<td><code>claude --settings '{...}'</code></td>
+<td>只在這次啟動生效的臨時設定</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Project local</td>
+<td><code>.claude/settings.local.json</code></td>
+<td>個人在這個專案的設定，自動排除版控</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Shared project</td>
+<td><code>.claude/settings.json</code></td>
+<td>團隊共用，走版控</td>
+</tr>
+<tr>
+<td>5（最低）</td>
+<td>User</td>
+<td><code>~/.claude/settings.json</code></td>
+<td>個人跨專案設定</td>
+</tr>
+</tbody>
+</table>
+<p>「同一個 key 在多處出現，採用優先序最高那層的值」是一般規則，但<strong>清單型 key 例外</strong>：像 <code>permissions.allow</code> 這種清單，多處設定會<strong>合併</strong>而非互相覆蓋，每個檔案都可以各自新增規則[2]。少數安全性 key（例如 <code>disableClaudeAiConnectors</code>、<code>isolatePeerMachines</code>）則反過來，只要任一層設成更嚴格的值就會被採用，即使 managed 設定更寬鬆[2]。</p>
+<h2 id="allowaskdeny-permission-mode">四、權限：allow／ask／deny 與 permission mode</h2>
+<h3 id="_1">規則語法與評估順序</h3>
+<p>規則格式是 <code>Tool</code> 或 <code>Tool(specifier)</code>，例如：</p>
+<pre><code class="language-json">{
+  &quot;permissions&quot;: {
+    &quot;allow&quot;: [&quot;Bash(npm run *)&quot;, &quot;Bash(git commit *)&quot;],
+    &quot;deny&quot;: [&quot;Bash(git push *)&quot;]
+  }
+}
+</code></pre>
+<p><strong>評估順序固定是 deny 先、再 ask、再 allow，同一順序內先比對到就先套用，規則寬窄不影響順序</strong>[3]。這意味著一條寬的 deny 規則會擋掉所有符合的呼叫，就算另外寫了更精確的 allow 規則也開不了例外。官方也提醒 wildcard 位置：<code>*</code> 要放在子指令之後，<code>Bash(git log *)</code> 只允許 <code>git log</code> 系列指令，<code>Bash(git *)</code> 才是允許所有 git 指令[3]。</p>
+<h3 id="permission-modeshifttab">permission mode：六種，<code>Shift+Tab</code> 只切三種</h3>
+<p>官方目前列出<strong>六種</strong> permission mode，不是坊間常聽到的四種；<code>Shift+Tab</code> 的預設循環只切換其中三種，其他模式要另外用旗標或設定啟用[4]。<strong>Pro／Max／Team 方案的內建起始模式是 <code>auto</code></strong>，其他方案的內建起始模式才是 <code>default</code>（Manual）[4]：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>說明</th>
+<th>在 <code>Shift+Tab</code> 循環裡嗎</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default</code>（UI 標示 Manual）</td>
+<td>只有讀取類動作（讀檔、Grep 等）不用問；其餘工具每次都會問，不是「第一次問完就自動放行」——除非你自己在提示框選過「Yes, and don't ask again」，那條規則才會存下來（存法依工具類型而異：Bash 指令與 WebFetch 網域是永久存進該 repo 的規則，檔案編輯只到這個 session 結束為止）[3]</td>
+<td>是（循環起點）</td>
+</tr>
+<tr>
+<td><code>acceptEdits</code></td>
+<td>自動接受檔案編輯與常見檔案系統指令（<code>mkdir</code>、<code>mv</code> 等）</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>plan</code></td>
+<td>只讀檔、跑唯讀指令做研究，不編輯原始檔</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td>自動核准工具呼叫，背後由分類器模型做安全檢查</td>
+<td>只有這個功能對你的方案可用時才加入</td>
+</tr>
+<tr>
+<td><code>dontAsk</code></td>
+<td>原本會詢問的呼叫全部自動拒絕</td>
+<td>不會，需另外設定</td>
+</tr>
+<tr>
+<td><code>bypassPermissions</code></td>
+<td>跳過權限詢問（含對 <code>.git</code>、<code>.claude</code> 等受保護路徑的寫入）</td>
+<td>預設不在循環裡，須先用旗標或設定啟用，啟用後插在 <code>plan</code> 之後</td>
+</tr>
+</tbody>
+</table>
+<p>官方對 <code>bypassPermissions</code> 的警告原文：「Only use this mode in isolated environments like containers, VMs, or dev containers without internet access, where Claude Code cannot damage your host system.」[4] 更完整的 agent 迴圈與 Codex 沙箱模式對照，見<a href="agent-basics.html">AI Agent 怎麼運作</a>第三節。</p>
+<h3 id="sandbox-os">sandbox：另一層 OS 層邊界</h3>
+<p><code>/sandbox</code> 是 Claude Code 內建的 OS 層隔離，限制 Bash／PowerShell 指令的檔案系統與網路存取，跟 permission rules 是互補的兩層：permission rules 在工具執行前判斷「能不能用」，sandbox 是對「已經在執行的行程」做作業系統層的邊界，不管模型選擇跑什麼指令都會被擋下[5]。支援平台是 macOS（內建）與 Linux／WSL2（需裝 <code>bubblewrap</code> 與 <code>socat</code>），原生 Windows 不支援[5]。官方也提醒，靠 Bash 規則比對指令文字本身很脆弱（例如 deny <code>curl</code> 擋不住 <code>/usr/bin/curl</code>），真正的邊界要靠 sandbox 或 <code>WebFetch(domain:...)</code> 這類白名單機制[3][5]。</p>
+<h2 id="system-prompt">五、官方沒公開的東西：system prompt</h2>
+<p><strong>官方明確表示 system prompt 沒有公開全文。</strong> 原文：「Claude Code's system prompt isn't published. To give Claude standing instructions, use CLAUDE.md files or the <code>--append-system-prompt</code> flag.」[2] 本頁不引用、也不轉述任何非官方管道流出的版本，只列官方公開、可以拿來調整 Claude 行為的介面：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>作用機制</th>
+<th>適用情境</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CLAUDE.md</strong></td>
+<td>以系統提示詞之後的一則訊息形式注入，不改動系統提示詞本身</td>
+<td>想讓 Claude 一直記得專案慣例</td>
+</tr>
+<tr>
+<td><strong><code>--append-system-prompt</code></strong></td>
+<td>附加到系統提示詞尾端，不移除原有內容</td>
+<td>啟動時加一次性補充指示</td>
+</tr>
+<tr>
+<td><strong><code>--system-prompt</code></strong></td>
+<td>完全取代預設系統提示詞</td>
+<td>需要完全自訂角色，但要自己補齊工具指引與安全規則</td>
+</tr>
+<tr>
+<td><strong>Output styles</strong></td>
+<td>改變 Claude Code 給模型的預設指示，套用到每一次回應</td>
+<td>想固定改變角色、語氣、輸出格式，且要重複用在多個 session</td>
+</tr>
+</tbody>
+</table>
+<p>自訂 output style 是一個放在 <code>~/.claude/output-styles</code>（使用者層）或 <code>.claude/output-styles</code>（專案層）的 Markdown 檔，<code>keep-coding-instructions: true</code> 決定要不要保留內建的軟體工程指示（預設不保留，適合完全換角色的情境，例如寫作助手）[7]。用 <code>--system-prompt</code> 完全取代時，預設工具是否保留、內建安全規則是否保留、環境背景資訊是否自動帶入，這三項都<strong>不再自動維持，要自己補上</strong>[8]。</p>
+<h2 id="_2">本頁重點回顧</h2>
+<ul>
+<li>CLAUDE.md 分四層、全部串接進上下文；官方判準是「拿掉這行會不會讓 Claude 犯錯」，答不出來就刪或搬進 skill。</li>
+<li><code>.claude/rules/</code> 是拆分 CLAUDE.md 的機制，<code>paths</code> frontmatter 限定生效範圍，但有查無修復狀態的已知 bug，遇到規則沒生效先查版本號。</li>
+<li>settings.json 五層優先序，managed 最高、user 最低；清單型 key 是合併而非覆蓋。</li>
+<li>權限規則永遠 deny 先評估；permission mode 有六種，<code>Shift+Tab</code> 只切三種。</li>
+<li>system prompt 官方未公開全文，只能透過 CLAUDE.md、<code>--append-system-prompt</code>、<code>--system-prompt</code>、output styles 這幾個公開介面間接調整。</li>
+</ul>
+<h2 id="_3">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>來源</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1]</td>
+<td>How Claude remembers your project（CLAUDE.md、<code>.claude/rules/</code>、<code>/init</code>、<code>@import</code>）</td>
+<td><a href="https://code.claude.com/docs/en/memory">https://code.claude.com/docs/en/memory</a></td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>Settings files and precedence（五層優先序、system prompt 未公開聲明）</td>
+<td><a href="https://code.claude.com/docs/en/settings">https://code.claude.com/docs/en/settings</a></td>
+</tr>
+<tr>
+<td>[3]</td>
+<td>Configure permissions（allow/ask/deny 語法、評估順序、wildcard 警告）</td>
+<td><a href="https://code.claude.com/docs/en/permissions">https://code.claude.com/docs/en/permissions</a></td>
+</tr>
+<tr>
+<td>[4]</td>
+<td>Choose a permission mode（六種模式、<code>Shift+Tab</code> 循環規則）</td>
+<td><a href="https://code.claude.com/docs/en/permission-modes">https://code.claude.com/docs/en/permission-modes</a></td>
+</tr>
+<tr>
+<td>[5]</td>
+<td>Configure the sandboxed Bash tool（sandbox 模式、平台支援）</td>
+<td><a href="https://code.claude.com/docs/en/sandboxing">https://code.claude.com/docs/en/sandboxing</a></td>
+</tr>
+<tr>
+<td>[6]</td>
+<td>Best practices for Claude Code（CLAUDE.md 篇幅建議）</td>
+<td><a href="https://code.claude.com/docs/en/best-practices">https://code.claude.com/docs/en/best-practices</a></td>
+</tr>
+<tr>
+<td>[7]</td>
+<td>Output styles（自訂 output style 格式）</td>
+<td><a href="https://code.claude.com/docs/en/output-styles">https://code.claude.com/docs/en/output-styles</a></td>
+</tr>
+<tr>
+<td>[8]</td>
+<td>Modifying system prompts（Agent SDK，四種自訂方式比較表）</td>
+<td><a href="https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts">https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts</a></td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="agent-basics.html">AI Agent 怎麼運作</a>｜<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>｜<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a></p>
+</article>
+<nav class="pager"><a class="prev" href="sdlc-ai-agent.html">← AI 代理時代的 SDLC</a><a class="next" href="hooks-subagents.html">Hooks 與 Subagent 設定 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#claudemd">一、CLAUDE.md：放在哪、寫什麼</a></li>
+<li><a href="#clauderules-claudemd">二、.claude/rules/：把 CLAUDE.md 拆成主題檔</a></li>
+<li><a href="#settingsjson">三、settings.json：五層優先序</a></li>
+<li><a href="#allowaskdeny-permission-mode">四、權限：allow／ask／deny 與 permission mode</a><ul>
+<li><a href="#_1">規則語法與評估順序</a></li>
+<li><a href="#permission-modeshifttab">permission mode：六種，Shift+Tab 只切三種</a></li>
+<li><a href="#sandbox-os">sandbox：另一層 OS 層邊界</a></li>
+</ul>
+</li>
+<li><a href="#system-prompt">五、官方沒公開的東西：system prompt</a></li>
+<li><a href="#_2">本頁重點回顧</a></li>
+<li><a href="#_3">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>
