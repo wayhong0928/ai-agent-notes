@@ -16,14 +16,14 @@
 <a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
-<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789655763">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789655763">免付費區</a></li>
-<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789655763">付費區</a></li>
-<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1789788616">Projects 功能</a></li>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789789001">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789789001">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789789001">付費區</a></li>
+<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1789789001">Projects 功能</a></li>
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789618549">AI Agent 怎麼運作</a></li>
-<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789655763">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789789001">SKILL、Plugin、MCP 與 Subagent</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
@@ -43,7 +43,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789618549">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789789001">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -302,7 +302,11 @@ Get-ChildItem &quot;$HOME\codex-trust-test&quot;
 <p><strong>f. review gate 會讓兩邊互相呼叫、快速燒額度</strong></p>
 <p><code>/codex:setup --enable-review-gate</code> 可以讓 Claude 收尾前自動要求 Codex review，但官方 README 明白警告這可能形成長時間的 Claude／Codex 來回迴圈，快速消耗雙方額度，不適合無人看管的情境。來源：<a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md#enabling-review-gate">Plugin README（Enabling review gate 一節）</a>。</p>
 <p><strong>g. Codex 預設不會自動讀你寫給 Claude 的 CLAUDE.md</strong></p>
-<p>Claude Code 讀的是 <code>CLAUDE.md</code>，官方文件裡查無它會讀取 <code>AGENTS.md</code> 的說明；Codex 預設讀的是 <code>AGENTS.md</code>，依 <code>~/.codex</code> 全域到專案路徑逐層合併，越接近目前目錄優先權越高。來源：<a href="https://code.claude.com/docs/en/memory">How Claude remembers your project</a>、<a href="https://learn.chatgpt.com/docs/agent-configuration/agents-md">Codex AGENTS.md</a>。</p>
+<p>Claude Code 讀的是 <code>CLAUDE.md</code>；Codex 預設讀的是 <code>AGENTS.md</code>，依 <code>~/.codex</code> 全域到專案路徑逐層合併，越接近目前目錄優先權越高。來源：<a href="https://learn.chatgpt.com/docs/agent-configuration/agents-md">Codex AGENTS.md</a>。</p>
+<div class="admonition note">
+<p class="admonition-title">v2.1.277 起（2026-09-18）：只要有 CLAUDE.md，這條說明不受影響</p>
+<p>這個版本開始，Claude Code 在<strong>完全沒有 CLAUDE.md</strong> 的專案裡也會直接讀 <code>AGENTS.md</code>，不用再靠下面講的 <code>@AGENTS.md</code> 匯入。但只要工作目錄或其上層有任何 <code>CLAUDE.md</code>，行為就跟上面寫的一樣：讀 <code>CLAUDE.md</code>，不會去讀 <code>AGENTS.md</code>。判定範圍、<code>/config</code> 的四個選項見<a href="official-config.html">Claude Code 設定總覽</a>第一節。來源：<a href="https://code.claude.com/docs/en/memory">How Claude remembers your project</a>。</p>
+</div>
 <p>這不代表兩邊只能各寫一份、內容永遠對不上，官方留了兩個共用做法：一是在 Codex 的 <code>~/.codex/config.toml</code> 設定 <code>project_doc_fallback_filenames</code>，把 <code>CLAUDE.md</code> 加進這個清單，讓 Codex 除了 <code>AGENTS.md</code> 之外也讀它；二是反過來在 Claude Code 的 <code>CLAUDE.md</code> 裡用 <code>@AGENTS.md</code> 這個匯入語法，把 <code>AGENTS.md</code> 的內容併進 Claude 讀到的 context。兩種做法都只解決「同一份內容要不要維護兩次」，不會改變預設行為本身；沒特別設定的情況下，用 <code>/codex:rescue</code> 或直接呼叫 <code>codex exec</code> 把任務交給 Codex 時，凡是 Codex 需要知道的專案脈絡（架構、紅線、命名慣例），還是要寫進當次的 prompt 裡，不能指望它自己去讀 CLAUDE.md。</p>
 <h2 id="cowork">六、Cowork 呢</h2>
 <p>截至查證日，查無 OpenAI 或 Anthropic 任何一方明確宣告支援 Cowork + Codex 的整合；這不代表技術上已經證明完全不可行，只代表目前沒有官方認證、可以照抄的做法。理由分三層：</p>
@@ -319,7 +323,7 @@ Get-ChildItem &quot;$HOME\codex-trust-test&quot;
 <li>不裝 plugin 也能直接用 <code>codex exec</code> 搭配 <code>-s</code>、<code>-C</code>、<code>--skip-git-repo-check</code>、<code>-o</code>、stdin、<code>--add-dir</code> 這幾個已確認的旗標。</li>
 <li>不指定 <code>-s</code> 時，互動式 TUI 沒有單一固定預設（受版控建議 <code>Auto</code>、未受版控建議 <code>read-only</code>），<code>codex exec</code> 則固定預設 <code>read-only</code>；專案層 <code>.codex/config.toml</code> 只有在該專案被信任時才載入。信任是每個專案一次性的判斷，不是每次要 CRUD 都得重設，實際會撞到的症狀是唯讀寫不了檔，補 <code>-s workspace-write</code> 即可，文中附了一組兩步驟的自我測試指令。</li>
 <li>三種分工模式各有適用情境：規格明確就規劃後交出去執行，高風險變更一定要讓另一個 agent 審查，容易被誤導的事實問題交叉查證。</li>
-<li>七個坑裡最容易踩的是背景任務狀態脫鉤跟前景逾時自動轉背景，兩者都要靠檢查輸出檔案而非信任狀態訊息；Windows 上讓 Codex 自己 <code>git init</code> 也是實測會出事的地方；CLAUDE.md／AGENTS.md 各讀各的也有官方留的共用做法（<code>project_doc_fallback_filenames</code>、<code>@AGENTS.md</code> 匯入），不是只能維護兩份重複內容。</li>
+<li>七個坑裡最容易踩的是背景任務狀態脫鉤跟前景逾時自動轉背景，兩者都要靠檢查輸出檔案而非信任狀態訊息；Windows 上讓 Codex 自己 <code>git init</code> 也是實測會出事的地方；CLAUDE.md／AGENTS.md 各讀各的也有官方留的共用做法（<code>project_doc_fallback_filenames</code>、<code>@AGENTS.md</code> 匯入），不是只能維護兩份重複內容——v2.1.277 起 Claude Code 在完全沒有 CLAUDE.md 時也會直接讀 AGENTS.md，但有 CLAUDE.md 的專案不受影響，細節見<a href="official-config.html">Claude Code 設定總覽</a>。</li>
 </ul>
 <h2 id="_7">資料來源</h2>
 <table>

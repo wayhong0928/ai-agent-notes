@@ -31,7 +31,20 @@ CLAUDE.md 依檔案位置分四層，載入順序由廣到窄；子目錄的 CLA
 
 `/init` 會分析程式庫自動生成一版 CLAUDE.md 起點；若已存在 CLAUDE.md，`/init` 改為建議增修而不覆寫，也會嘗試併入既有的 Cursor rules 或 Copilot rules[1]。CLAUDE.md 內可用 `@path/to/file` 語法匯入其他檔案（相對路徑以「引用它的那個檔案」為基準，可遞迴匯入，最深 4 層）；只是要在文字中「提到」某個路徑而不想觸發匯入，用反引號包起來即可[1]。
 
-Claude Code 讀的是 `CLAUDE.md`，不讀 `AGENTS.md`；若專案已經有 `AGENTS.md`（例如同時給 Codex 用），官方建議建一個 `CLAUDE.md` 用 `@AGENTS.md` 匯入它，下面再加 Claude 專屬指示[1]。
+**只要工作目錄或其任何上層目錄有 `CLAUDE.md`（含 `.claude/CLAUDE.md`、`CLAUDE.local.md`），Claude Code 的行為就跟以前完全一樣：只讀 CLAUDE.md，不會去讀 AGENTS.md。** 這是 v2.1.277（2026-09-18 發布）之前唯一的行為，也是 v2.1.277 之後、有 CLAUDE.md 時的預設行為：若專案已經有 `AGENTS.md`（例如同時給 Codex 用）但還沒有 `CLAUDE.md`，官方原本建議建一個 `CLAUDE.md` 用 `@AGENTS.md` 匯入它，下面再加 Claude 專屬指示，這個做法現在仍然可用[1]。
+
+!!! note "v2.1.277 起（2026-09-18）：專案完全沒有 CLAUDE.md 時，Claude Code 才會直接讀 AGENTS.md"
+    官方 changelog 原文：「Added AGENTS.md support: in a project with no CLAUDE.md, Claude Code reads AGENTS.md instead; change it under "Project instructions" in `/config` (not yet on Bedrock, Vertex or Foundry)」[9]。
+
+    判定範圍是工作目錄本身加上它的所有上層目錄，官方原文：「Claude reads AGENTS.md only when you have no CLAUDE.md in your working directory or above it.」其中任何一層有 `CLAUDE.md`、`.claude/CLAUDE.md` 或 `CLAUDE.local.md`，就不會觸發讀取 `AGENTS.md`[1]。
+
+    兩者都存在時，預設值 `claude-md-or-agents-md` 只讀 `CLAUDE.md`；要兩個都讀，得到 `/config` 把「Project instructions」改成 `claude-md-and-agents-md`（每個目錄先讀 `CLAUDE.md` 再讀 `AGENTS.md`，兩者都載入）。另外兩個選項是 `claude-md`（只讀 `CLAUDE.md`，等於關掉這個新功能）與 `managed-only`（只讀組織 managed CLAUDE.md 與 auto memory，連使用者層、專案層 `CLAUDE.md` 都不讀）[1]。
+
+    使用者層 `~/.claude/CLAUDE.md`、組織的 managed CLAUDE.md、`.claude/rules/` 都不算進判定範圍，會跟 `AGENTS.md` 一起載入。子目錄裡的 `AGENTS.md`，只在 Claude 用 Read 工具讀到該子目錄底下的檔案、且那個子目錄自己沒有上述三種 `CLAUDE.md` 檔時才會載入。以前官方建議的 `@AGENTS.md` 匯入語法仍然可用，官方明講「Keeping the import never makes Claude read AGENTS.md twice」，不會被重複讀取[1]。
+
+    不支援這個新行為的情況：v2.1.277 之前的版本；不會向 Anthropic 抓 feature flag 的環境（例如用 Amazon Bedrock、Vertex、Foundry 等第三方供應商，或停用了 telemetry）；升級後的第一個 session（下一個 session 才生效）；設了 `disableAllHooks` 或 `allowManagedHooksOnly`，或在 `/plugin` 停用了內建的 `agents-md` plugin。這些情況下 `/config` 裡也不會出現「Project instructions」這個設定項[1]。
+
+    **最小檢查步驟**：想確認自己目前讀的是哪個檔案，跑 `/config` 看「Project instructions」目前設什麼值；或看 session 開頭有沒有出現類似「no CLAUDE.md found; AGENTS.md loaded: ...」的提示行。直接讀取的 `AGENTS.md` 不會出現在 `/memory` 或 `/context` 的 Memory files 清單裡（除非是被 `CLAUDE.md` 用 `@AGENTS.md` 匯入進去的），這時官方建議改問 Claude「你的 project instructions 寫什麼」來確認[1]。
 
 ## 二、`.claude/rules/`：把 CLAUDE.md 拆成主題檔
 
@@ -124,6 +137,7 @@ paths:
 ## 本頁重點回顧
 
 - CLAUDE.md 分四層、全部串接進上下文；官方判準是「拿掉這行會不會讓 Claude 犯錯」，答不出來就刪或搬進 skill。
+- v2.1.277 起（2026-09-18），完全沒有 CLAUDE.md 的專案會直接讀 AGENTS.md；有 CLAUDE.md 就跟以前一樣不會去讀，`/config` 的「Project instructions」可以改成同時讀兩者。
 - `.claude/rules/` 是拆分 CLAUDE.md 的機制，`paths` frontmatter 限定生效範圍，但有查無修復狀態的已知 bug，遇到規則沒生效先查版本號。
 - settings.json 五層優先序，managed 最高、user 最低；清單型 key 是合併而非覆蓋。
 - 權限規則永遠 deny 先評估；permission mode 有六種，`Shift+Tab` 只切三種。
@@ -141,5 +155,6 @@ paths:
 | [6] | Best practices for Claude Code（CLAUDE.md 篇幅建議） | <https://code.claude.com/docs/en/best-practices> |
 | [7] | Output styles（自訂 output style 格式） | <https://code.claude.com/docs/en/output-styles> |
 | [8] | Modifying system prompts（Agent SDK，四種自訂方式比較表） | <https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts> |
+| [9] | Claude Code changelog（v2.1.277，2026-09-18，AGENTS.md support） | <https://code.claude.com/docs/en/changelog> |
 
 延伸：[AI Agent 怎麼運作](agent-basics.md)｜[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[Hooks 與 Subagent 設定](hooks-subagents.md)

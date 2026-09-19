@@ -19,7 +19,7 @@
 
 ## 一之二、每種機制解決什麼問題、什麼時候載入、放在哪裡
 
-- **CLAUDE.md／AGENTS.md**：解決「讓代理每次啟動都知道專案的事實與規矩，不用每次重講一遍」；啟動時整份載入，全程留在上下文裡；放在專案根目錄或 `~/.claude/`（Claude Code），`~/.codex/`＋專案路徑逐層（Codex）。Claude Code 讀 `CLAUDE.md`[1]；Codex 讀 `AGENTS.md`，逐層合併，越接近目前目錄優先權越高[2]；Claude.ai 沒有 CLAUDE.md 這個檔案機制，但 Projects 的 Project instructions 用途類似：都能讓一組指示套用到之後每一次對話，只是載入方式與作用範圍不同（Project instructions 是整個 Project 的設定，不是依檔案路徑逐層載入）；Cowork 另有跨 session 的 Global instructions，跟針對單一本機資料夾的 Folder instructions[15][16]。
+- **CLAUDE.md／AGENTS.md**：解決「讓代理每次啟動都知道專案的事實與規矩，不用每次重講一遍」；啟動時整份載入，全程留在上下文裡；放在專案根目錄或 `~/.claude/`（Claude Code），`~/.codex/`＋專案路徑逐層（Codex）。Claude Code 讀 `CLAUDE.md`[1]（v2.1.277 起，2026-09-18，專案完全沒有 CLAUDE.md 時也會直接讀 AGENTS.md；有 CLAUDE.md 就跟以前一樣不讀，細節見[Claude Code 設定總覽](official-config.md)[25]）；Codex 讀 `AGENTS.md`，逐層合併，越接近目前目錄優先權越高[2]；Claude.ai 沒有 CLAUDE.md 這個檔案機制，但 Projects 的 Project instructions 用途類似：都能讓一組指示套用到之後每一次對話，只是載入方式與作用範圍不同（Project instructions 是整個 Project 的設定，不是依檔案路徑逐層載入）；Cowork 另有跨 session 的 Global instructions，跟針對單一本機資料夾的 Folder instructions[15][16]。
 - **SKILL**：解決「把一套會重複用到的程序、檢查清單變成隨需載入的知識，不佔用平時的上下文」；只有 Claude 判斷相關、或使用者手動叫用時才載入完整內容；放在 `.claude/skills/<name>/SKILL.md`（專案或個人層）。Claude Code 支援[3]；Codex 遵循「open agent skills standard」[4]；Claude.ai 需另外開啟 code execution[5]。
 - **MCP**：解決「讓代理連上外部工具與資料（文獻庫、資料庫、雲端硬碟），不必自己捏造答案」；設定好之後，工具定義預設延後載入，代理實際要用某個工具時才載入細節[1]；放在 `.mcp.json`（專案層）／`~/.claude.json`（使用者層，Claude Code），`codex mcp` 管理（Codex）。Claude Code 支援本機＋遠端[6]；Codex「continues to support external MCP servers」[7]；Claude.ai 僅遠端 connector，Free 帳號限 1 個自訂連接[8]。
 - **Subagent**：解決「需要一個獨立、乾淨的視角處理某件事，不污染主線對話的上下文」；主線判斷該任務適合委派時，另開一個獨立上下文執行；放在 `.claude/agents/<name>.md`（Claude Code），`~/.codex/agents/` 或 `.codex/agents/` 的 TOML 檔（Codex）。Claude Code 支援[9]；Codex 支援[10]；Claude.ai 分開看：Cowork 官方公開有 sub-agent coordination，會把複雜工作拆成小任務、平行協調多個工作流；一般 Chat／Projects 查無使用者可自訂的通用 subagent 介面（Research 功能內部用 lead agent 加 subagents，但那是內部架構，不是使用者自己能設定的機制）[16][17][22]。
@@ -193,5 +193,6 @@ the problem, show the current code, and provide an improved version.
 | [22] | How we built our multi-agent research system（Research 功能內部的 lead agent／subagents 架構） | <https://www.anthropic.com/engineering/multi-agent-research-system> |
 | [23] | Cowork is now Claude（Cowork 與 Chat 合併公告，2026-09-16） | <https://claude.com/blog/cowork-is-now-claude> |
 | [24] | Claude Cowork and chat are one Claude（合併現況：各方案推出時程） | <https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude> |
+| [25] | Claude Code changelog（v2.1.277，2026-09-18，AGENTS.md support） | <https://code.claude.com/docs/en/changelog> |
 
 延伸：[AI Agent 怎麼運作](agent-basics.md)｜[把 AI 代理的工作環境設計得可靠](harness.md)

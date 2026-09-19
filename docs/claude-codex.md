@@ -227,7 +227,10 @@ Claude Code 的 Bash 工具預設前景逾時是 2 分鐘（120 秒），逾時�
 
 **g. Codex 預設不會自動讀你寫給 Claude 的 CLAUDE.md**
 
-Claude Code 讀的是 `CLAUDE.md`，官方文件裡查無它會讀取 `AGENTS.md` 的說明；Codex 預設讀的是 `AGENTS.md`，依 `~/.codex` 全域到專案路徑逐層合併，越接近目前目錄優先權越高。來源：[How Claude remembers your project](https://code.claude.com/docs/en/memory)、[Codex AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)。
+Claude Code 讀的是 `CLAUDE.md`；Codex 預設讀的是 `AGENTS.md`，依 `~/.codex` 全域到專案路徑逐層合併，越接近目前目錄優先權越高。來源：[Codex AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)。
+
+!!! note "v2.1.277 起（2026-09-18）：只要有 CLAUDE.md，這條說明不受影響"
+    這個版本開始，Claude Code 在**完全沒有 CLAUDE.md** 的專案裡也會直接讀 `AGENTS.md`，不用再靠下面講的 `@AGENTS.md` 匯入。但只要工作目錄或其上層有任何 `CLAUDE.md`，行為就跟上面寫的一樣：讀 `CLAUDE.md`，不會去讀 `AGENTS.md`。判定範圍、`/config` 的四個選項見[Claude Code 設定總覽](official-config.md)第一節。來源：[How Claude remembers your project](https://code.claude.com/docs/en/memory)。
 
 這不代表兩邊只能各寫一份、內容永遠對不上，官方留了兩個共用做法：一是在 Codex 的 `~/.codex/config.toml` 設定 `project_doc_fallback_filenames`，把 `CLAUDE.md` 加進這個清單，讓 Codex 除了 `AGENTS.md` 之外也讀它；二是反過來在 Claude Code 的 `CLAUDE.md` 裡用 `@AGENTS.md` 這個匯入語法，把 `AGENTS.md` 的內容併進 Claude 讀到的 context。兩種做法都只解決「同一份內容要不要維護兩次」，不會改變預設行為本身；沒特別設定的情況下，用 `/codex:rescue` 或直接呼叫 `codex exec` 把任務交給 Codex 時，凡是 Codex 需要知道的專案脈絡（架構、紅線、命名慣例），還是要寫進當次的 prompt 裡，不能指望它自己去讀 CLAUDE.md。
 
@@ -248,7 +251,7 @@ Claude Code 讀的是 `CLAUDE.md`，官方文件裡查無它會讀取 `AGENTS.md
 - 不裝 plugin 也能直接用 `codex exec` 搭配 `-s`、`-C`、`--skip-git-repo-check`、`-o`、stdin、`--add-dir` 這幾個已確認的旗標。
 - 不指定 `-s` 時，互動式 TUI 沒有單一固定預設（受版控建議 `Auto`、未受版控建議 `read-only`），`codex exec` 則固定預設 `read-only`；專案層 `.codex/config.toml` 只有在該專案被信任時才載入。信任是每個專案一次性的判斷，不是每次要 CRUD 都得重設，實際會撞到的症狀是唯讀寫不了檔，補 `-s workspace-write` 即可，文中附了一組兩步驟的自我測試指令。
 - 三種分工模式各有適用情境：規格明確就規劃後交出去執行，高風險變更一定要讓另一個 agent 審查，容易被誤導的事實問題交叉查證。
-- 七個坑裡最容易踩的是背景任務狀態脫鉤跟前景逾時自動轉背景，兩者都要靠檢查輸出檔案而非信任狀態訊息；Windows 上讓 Codex 自己 `git init` 也是實測會出事的地方；CLAUDE.md／AGENTS.md 各讀各的也有官方留的共用做法（`project_doc_fallback_filenames`、`@AGENTS.md` 匯入），不是只能維護兩份重複內容。
+- 七個坑裡最容易踩的是背景任務狀態脫鉤跟前景逾時自動轉背景，兩者都要靠檢查輸出檔案而非信任狀態訊息；Windows 上讓 Codex 自己 `git init` 也是實測會出事的地方；CLAUDE.md／AGENTS.md 各讀各的也有官方留的共用做法（`project_doc_fallback_filenames`、`@AGENTS.md` 匯入），不是只能維護兩份重複內容——v2.1.277 起 Claude Code 在完全沒有 CLAUDE.md 時也會直接讀 AGENTS.md，但有 CLAUDE.md 的專案不受影響，細節見[Claude Code 設定總覽](official-config.md)。
 
 ## 資料來源
 

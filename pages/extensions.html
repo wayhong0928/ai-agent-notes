@@ -16,14 +16,14 @@
 <a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
-<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789655763">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789655763">免付費區</a></li>
-<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789655763">付費區</a></li>
-<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1789788616">Projects 功能</a></li>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789789001">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789789001">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789789001">付費區</a></li>
+<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1789789001">Projects 功能</a></li>
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789618549">AI Agent 怎麼運作</a></li>
-<li class="active"><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789655763">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li class="active"><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789789001">SKILL、Plugin、MCP 與 Subagent</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
@@ -43,13 +43,13 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789618549">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789789001">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
 <main id="main">
 <p class="crumb"><a href="../index.html">首頁</a> ／ AI Agent 原理</p>
-<article class="doc" data-updated="1789655763">
+<article class="doc" data-updated="1789789001">
 <h1>SKILL、Plugin、MCP 與 Subagent</h1>
 <p class='lede'>四種擴充機制各自解決什麼問題</p>
 <blockquote>
@@ -108,7 +108,7 @@
 </table>
 <h2 id="_2">一之二、每種機制解決什麼問題、什麼時候載入、放在哪裡</h2>
 <ul>
-<li><strong>CLAUDE.md／AGENTS.md</strong>：解決「讓代理每次啟動都知道專案的事實與規矩，不用每次重講一遍」；啟動時整份載入，全程留在上下文裡；放在專案根目錄或 <code>~/.claude/</code>（Claude Code），<code>~/.codex/</code>＋專案路徑逐層（Codex）。Claude Code 讀 <code>CLAUDE.md</code>[1]；Codex 讀 <code>AGENTS.md</code>，逐層合併，越接近目前目錄優先權越高[2]；Claude.ai 沒有 CLAUDE.md 這個檔案機制，但 Projects 的 Project instructions 用途類似：都能讓一組指示套用到之後每一次對話，只是載入方式與作用範圍不同（Project instructions 是整個 Project 的設定，不是依檔案路徑逐層載入）；Cowork 另有跨 session 的 Global instructions，跟針對單一本機資料夾的 Folder instructions[15][16]。</li>
+<li><strong>CLAUDE.md／AGENTS.md</strong>：解決「讓代理每次啟動都知道專案的事實與規矩，不用每次重講一遍」；啟動時整份載入，全程留在上下文裡；放在專案根目錄或 <code>~/.claude/</code>（Claude Code），<code>~/.codex/</code>＋專案路徑逐層（Codex）。Claude Code 讀 <code>CLAUDE.md</code>[1]（v2.1.277 起，2026-09-18，專案完全沒有 CLAUDE.md 時也會直接讀 AGENTS.md；有 CLAUDE.md 就跟以前一樣不讀，細節見<a href="official-config.html">Claude Code 設定總覽</a>[25]）；Codex 讀 <code>AGENTS.md</code>，逐層合併，越接近目前目錄優先權越高[2]；Claude.ai 沒有 CLAUDE.md 這個檔案機制，但 Projects 的 Project instructions 用途類似：都能讓一組指示套用到之後每一次對話，只是載入方式與作用範圍不同（Project instructions 是整個 Project 的設定，不是依檔案路徑逐層載入）；Cowork 另有跨 session 的 Global instructions，跟針對單一本機資料夾的 Folder instructions[15][16]。</li>
 <li><strong>SKILL</strong>：解決「把一套會重複用到的程序、檢查清單變成隨需載入的知識，不佔用平時的上下文」；只有 Claude 判斷相關、或使用者手動叫用時才載入完整內容；放在 <code>.claude/skills/&lt;name&gt;/SKILL.md</code>（專案或個人層）。Claude Code 支援[3]；Codex 遵循「open agent skills standard」[4]；Claude.ai 需另外開啟 code execution[5]。</li>
 <li><strong>MCP</strong>：解決「讓代理連上外部工具與資料（文獻庫、資料庫、雲端硬碟），不必自己捏造答案」；設定好之後，工具定義預設延後載入，代理實際要用某個工具時才載入細節[1]；放在 <code>.mcp.json</code>（專案層）／<code>~/.claude.json</code>（使用者層，Claude Code），<code>codex mcp</code> 管理（Codex）。Claude Code 支援本機＋遠端[6]；Codex「continues to support external MCP servers」[7]；Claude.ai 僅遠端 connector，Free 帳號限 1 個自訂連接[8]。</li>
 <li><strong>Subagent</strong>：解決「需要一個獨立、乾淨的視角處理某件事，不污染主線對話的上下文」；主線判斷該任務適合委派時，另開一個獨立上下文執行；放在 <code>.claude/agents/&lt;name&gt;.md</code>（Claude Code），<code>~/.codex/agents/</code> 或 <code>.codex/agents/</code> 的 TOML 檔（Codex）。Claude Code 支援[9]；Codex 支援[10]；Claude.ai 分開看：Cowork 官方公開有 sub-agent coordination，會把複雜工作拆成小任務、平行協調多個工作流；一般 Chat／Projects 查無使用者可自訂的通用 subagent 介面（Research 功能內部用 lead agent 加 subagents，但那是內部架構，不是使用者自己能設定的機制）[16][17][22]。</li>
@@ -345,6 +345,11 @@ the problem, show the current code, and provide an improved version.
 <td>[24]</td>
 <td>Claude Cowork and chat are one Claude（合併現況：各方案推出時程）</td>
 <td><a href="https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude">https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude</a></td>
+</tr>
+<tr>
+<td>[25]</td>
+<td>Claude Code changelog（v2.1.277，2026-09-18，AGENTS.md support）</td>
+<td><a href="https://code.claude.com/docs/en/changelog">https://code.claude.com/docs/en/changelog</a></td>
 </tr>
 </tbody>
 </table>

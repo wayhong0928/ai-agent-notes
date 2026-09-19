@@ -16,14 +16,14 @@
 <a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
-<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789655763">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789655763">免付費區</a></li>
-<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789655763">付費區</a></li>
-<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1789788616">Projects 功能</a></li>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789789001">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789789001">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789789001">付費區</a></li>
+<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1789789001">Projects 功能</a></li>
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789618549">AI Agent 怎麼運作</a></li>
-<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789655763">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789789001">SKILL、Plugin、MCP 與 Subagent</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
@@ -43,7 +43,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789618549">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789789001">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -123,7 +123,16 @@
 </table>
 <p>篇幅上限：<strong>官方建議每個 CLAUDE.md 檔案控制在 200 行以內</strong>，理由是「檔案越長，越消耗上下文，模型遵從度也越低」[1]；判斷該不該留的問題是「拿掉這一行，模型會不會因此犯錯？」[6]答不出來就刪，或搬進<a href="extensions.html">SKILL</a>。單檔硬上限是 4 MiB，超過會被整檔跳過不載入[1]。</p>
 <p><code>/init</code> 會分析程式庫自動生成一版 CLAUDE.md 起點；若已存在 CLAUDE.md，<code>/init</code> 改為建議增修而不覆寫，也會嘗試併入既有的 Cursor rules 或 Copilot rules[1]。CLAUDE.md 內可用 <code>@path/to/file</code> 語法匯入其他檔案（相對路徑以「引用它的那個檔案」為基準，可遞迴匯入，最深 4 層）；只是要在文字中「提到」某個路徑而不想觸發匯入，用反引號包起來即可[1]。</p>
-<p>Claude Code 讀的是 <code>CLAUDE.md</code>，不讀 <code>AGENTS.md</code>；若專案已經有 <code>AGENTS.md</code>（例如同時給 Codex 用），官方建議建一個 <code>CLAUDE.md</code> 用 <code>@AGENTS.md</code> 匯入它，下面再加 Claude 專屬指示[1]。</p>
+<p><strong>只要工作目錄或其任何上層目錄有 <code>CLAUDE.md</code>（含 <code>.claude/CLAUDE.md</code>、<code>CLAUDE.local.md</code>），Claude Code 的行為就跟以前完全一樣：只讀 CLAUDE.md，不會去讀 AGENTS.md。</strong> 這是 v2.1.277（2026-09-18 發布）之前唯一的行為，也是 v2.1.277 之後、有 CLAUDE.md 時的預設行為：若專案已經有 <code>AGENTS.md</code>（例如同時給 Codex 用）但還沒有 <code>CLAUDE.md</code>，官方原本建議建一個 <code>CLAUDE.md</code> 用 <code>@AGENTS.md</code> 匯入它，下面再加 Claude 專屬指示，這個做法現在仍然可用[1]。</p>
+<div class="admonition note">
+<p class="admonition-title">v2.1.277 起（2026-09-18）：專案完全沒有 CLAUDE.md 時，Claude Code 才會直接讀 AGENTS.md</p>
+<p>官方 changelog 原文：「Added AGENTS.md support: in a project with no CLAUDE.md, Claude Code reads AGENTS.md instead; change it under "Project instructions" in <code>/config</code> (not yet on Bedrock, Vertex or Foundry)」[9]。</p>
+<p>判定範圍是工作目錄本身加上它的所有上層目錄，官方原文：「Claude reads AGENTS.md only when you have no CLAUDE.md in your working directory or above it.」其中任何一層有 <code>CLAUDE.md</code>、<code>.claude/CLAUDE.md</code> 或 <code>CLAUDE.local.md</code>，就不會觸發讀取 <code>AGENTS.md</code>[1]。</p>
+<p>兩者都存在時，預設值 <code>claude-md-or-agents-md</code> 只讀 <code>CLAUDE.md</code>；要兩個都讀，得到 <code>/config</code> 把「Project instructions」改成 <code>claude-md-and-agents-md</code>（每個目錄先讀 <code>CLAUDE.md</code> 再讀 <code>AGENTS.md</code>，兩者都載入）。另外兩個選項是 <code>claude-md</code>（只讀 <code>CLAUDE.md</code>，等於關掉這個新功能）與 <code>managed-only</code>（只讀組織 managed CLAUDE.md 與 auto memory，連使用者層、專案層 <code>CLAUDE.md</code> 都不讀）[1]。</p>
+<p>使用者層 <code>~/.claude/CLAUDE.md</code>、組織的 managed CLAUDE.md、<code>.claude/rules/</code> 都不算進判定範圍，會跟 <code>AGENTS.md</code> 一起載入。子目錄裡的 <code>AGENTS.md</code>，只在 Claude 用 Read 工具讀到該子目錄底下的檔案、且那個子目錄自己沒有上述三種 <code>CLAUDE.md</code> 檔時才會載入。以前官方建議的 <code>@AGENTS.md</code> 匯入語法仍然可用，官方明講「Keeping the import never makes Claude read AGENTS.md twice」，不會被重複讀取[1]。</p>
+<p>不支援這個新行為的情況：v2.1.277 之前的版本；不會向 Anthropic 抓 feature flag 的環境（例如用 Amazon Bedrock、Vertex、Foundry 等第三方供應商，或停用了 telemetry）；升級後的第一個 session（下一個 session 才生效）；設了 <code>disableAllHooks</code> 或 <code>allowManagedHooksOnly</code>，或在 <code>/plugin</code> 停用了內建的 <code>agents-md</code> plugin。這些情況下 <code>/config</code> 裡也不會出現「Project instructions」這個設定項[1]。</p>
+<p><strong>最小檢查步驟</strong>：想確認自己目前讀的是哪個檔案，跑 <code>/config</code> 看「Project instructions」目前設什麼值；或看 session 開頭有沒有出現類似「no CLAUDE.md found; AGENTS.md loaded: ...」的提示行。直接讀取的 <code>AGENTS.md</code> 不會出現在 <code>/memory</code> 或 <code>/context</code> 的 Memory files 清單裡（除非是被 <code>CLAUDE.md</code> 用 <code>@AGENTS.md</code> 匯入進去的），這時官方建議改問 Claude「你的 project instructions 寫什麼」來確認[1]。</p>
+</div>
 <h2 id="clauderules-claudemd">二、<code>.claude/rules/</code>：把 CLAUDE.md 拆成主題檔</h2>
 <p><code>.claude/rules/</code> 是把 CLAUDE.md 內容拆成多個主題檔的機制，適合大型專案：每個檔案專注一個主題，<code>.md</code> 檔會遞迴掃描子目錄。沒有 <code>paths</code> frontmatter 的 rule，會在啟動時整份載入，優先度跟 <code>.claude/CLAUDE.md</code> 相同；官方的區分方式是：全程都要在上下文裡的規則用 rules，不需要一直佔上下文、只在特定任務才用得到的工作方式則建議改用 skill[1]。</p>
 <p>要把規則限定在特定檔案類型才生效，用 YAML frontmatter 的 <code>paths</code> 欄位：</p>
@@ -282,6 +291,7 @@ paths:
 <h2 id="_2">本頁重點回顧</h2>
 <ul>
 <li>CLAUDE.md 分四層、全部串接進上下文；官方判準是「拿掉這行會不會讓 Claude 犯錯」，答不出來就刪或搬進 skill。</li>
+<li>v2.1.277 起（2026-09-18），完全沒有 CLAUDE.md 的專案會直接讀 AGENTS.md；有 CLAUDE.md 就跟以前一樣不會去讀，<code>/config</code> 的「Project instructions」可以改成同時讀兩者。</li>
 <li><code>.claude/rules/</code> 是拆分 CLAUDE.md 的機制，<code>paths</code> frontmatter 限定生效範圍，但有查無修復狀態的已知 bug，遇到規則沒生效先查版本號。</li>
 <li>settings.json 五層優先序，managed 最高、user 最低；清單型 key 是合併而非覆蓋。</li>
 <li>權限規則永遠 deny 先評估；permission mode 有六種，<code>Shift+Tab</code> 只切三種。</li>
@@ -336,6 +346,11 @@ paths:
 <td>[8]</td>
 <td>Modifying system prompts（Agent SDK，四種自訂方式比較表）</td>
 <td><a href="https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts">https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts</a></td>
+</tr>
+<tr>
+<td>[9]</td>
+<td>Claude Code changelog（v2.1.277，2026-09-18，AGENTS.md support）</td>
+<td><a href="https://code.claude.com/docs/en/changelog">https://code.claude.com/docs/en/changelog</a></td>
 </tr>
 </tbody>
 </table>
