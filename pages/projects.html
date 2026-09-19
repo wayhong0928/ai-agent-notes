@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects 功能｜AI Agent 筆記</title>
+<meta name="description" content="舊版知識庫、新版 beta、Claude Code 本機專案，三種「Projects」分清楚">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/projects.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789655763">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789655763">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789655763">付費區</a></li>
+<li class="active"><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1789788616">Projects 功能</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789618549">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789655763">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789655763">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789618549">把教材做成 SKILL</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1789655763">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655763">Claude Code + Cowork 並用</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789655763">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789655763">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789655763">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789618549">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789618549">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789618549">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 先搞懂工具</p>
+<article class="doc" data-updated="1789788616">
+<h1>Projects 功能</h1>
+<p class='lede'>舊版知識庫、新版 beta、Claude Code 本機專案，三種「Projects」分清楚</p>
+<blockquote>
+<p>查證日期：2026-09-19。這頁在寫的當下經過兩位查證者交叉核對，發現<a href="free-tier.html">免付費區</a>與<a href="paid-tier.html">付費區</a>先前寫的「Free 沒有 Projects」是錯的，已經回頭更正，見第 4 節。方案與功能變動很快，請以官方最新說明為準。</p>
+</blockquote>
+<p>「Projects」這個詞，2026-09 這幾週在 Claude 生態裡同時指兩層東西：一個是 claude.ai 用了很久的知識庫型 Projects，另一個是 2026-09 剛在 Claude Code 上線的新版 beta。官方文件把兩者定位成同一條功能線的新舊版本，這點第 1 節先講清楚，免得跟<a href="tools-compare.html">AI 介面比較總表</a>或<a href="claude-code-cowork.html">Claude Code + Cowork</a>的分類方式搞混。</p>
+<h2 id="1-projects">1. 現在有幾種「Projects」</h2>
+<p>先講結論：<strong>是同一條功能線的新舊兩版，正在交接，不是兩個獨立產品。</strong></p>
+<p>官方 Claude Code 文件在講新版 Projects 跟既有功能的關係時，明白把 claude.ai chat／Cowork 那個「先前的 Projects 體驗」跟新版擺在一起比較，原文：「Projects in claude.ai chat and Cowork: the earlier Projects experience, which groups conversations and reference files without threads or a coordinator. Those projects keep working as they do today <strong>until the redesigned experience reaches them</strong>。」[C1] 舊版目前照常運作，但官方講的方向很明確：新版最終會取代舊版，不是兩條永遠並行的產品線。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>舊版 Projects（claude.ai chat／Cowork）</th>
+<th>新版 Projects（beta，先從 Claude Code 推出）</th>
+<th>Claude Code 本機的「專案」</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是什麼</td>
+<td>自成一體的知識庫＋對話歷史 [S1]</td>
+<td>一個協調對話，Claude 拆出多個雲端 thread 平行處理工作 [C1]</td>
+<td><code>CLAUDE.md</code> 分層＋<code>.claude/</code> 設定＋auto memory，不是一個「產品功能」，是本機運作機制 [C2]</td>
+</tr>
+<tr>
+<td>現在能不能用</td>
+<td>全方案可用（含 Free，上限 5 個），見第 4 節</td>
+<td>公開 beta，僅 Pro／Max，分階段推出</td>
+<td>只要在用 Claude Code 就自動存在，沒有方案門檻問題</td>
+</tr>
+<tr>
+<td>跟另外兩種的關係</td>
+<td>會被新版逐步取代，官方沒給時間表 [C1]</td>
+<td>會載入所在 repository 的 <code>CLAUDE.md</code>，見第 6 節 [C1]</td>
+<td>新版 Projects 的每個 thread 都會讀它，但<strong>不會</strong>讀你本機的 CLAUDE.md 或本機 auto memory [C1]</td>
+</tr>
+</tbody>
+</table>
+<p>第 2–4 節講舊版，第 5 節講 Claude Code 本機的「專案」概念，第 6 節講新版 beta。</p>
+<h2 id="2-claudeai-projects">2. 舊版 claude.ai Projects 能放多少東西</h2>
+<p>Projects 讓你建立自成一體的工作空間，各自有獨立的對話歷史與知識庫，可以上傳文件、文字、程式碼給該 Project 底下所有對話共用 [S1]。</p>
+<ul>
+<li><strong>單檔上限</strong>：知識庫檔案每檔 30MB，數量本身沒有寫死上限，但總量受 context window 容量限制 [S5]。這跟一般對話直接上傳檔案是兩組不同的限制，一般對話上傳單檔可以到 500MB、單次對話最多 20 檔 [S5]，Project 知識庫的 30MB 限制只管「長期放在 Project 裡當共用情境」的檔案。</li>
+<li><strong>RAG 模式，只有付費方案有</strong>：知識庫內容接近 context window 上限時，官方會自動切換成 RAG（Retrieval-Augmented Generation）模式，原文「expand capacity by up to 10x while maintaining response quality」[S1]。<strong>這個擴充只對 Pro／Max／Team／Enterprise 開放</strong>，Free 帳號的 Project 知識庫沒有這層擴充，滿了就是滿了。</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">跟一般對話上傳檔案的差異，記一句話就好</p>
+<p>一般對話上傳檔案是「這次對話用一次」；Project 知識庫是「這個 Project 底下每一次新對話都看得到」。要長期重複用同一批文獻或規範，才值得放進 Project，不然直接在對話裡貼檔案更快。</p>
+</div>
+<h2 id="3-project-instructions">3. Project instructions 怎麼寫</h2>
+<p>在 Project 的知識庫區塊可以設定「Set project instructions」，官方原文：「Claude will use these instructions for all the chats within the project.」[S2]</p>
+<p><strong>跟帳號層級疊加的關係</strong>：帳號層級的「Instructions for Claude」＋ Project instructions ＋ 所選 Style，三層會一起套用在 Project 裡的每一則回覆上 [S3]。沒有查到官方明確講清楚三層衝突時誰蓋過誰，這題只能標記部分查無。</p>
+<p><strong>字數上限，老實講查無</strong>：本次查證沒有在官方頁面看到「舊版 Project instructions 上限幾個字」的逐字說明；網路上流傳的「約 8,000 字元」對不到任何官方原文，不建議當成確定數字引用。倒是新版 beta Projects 的 Project instructions 有明確數字，官方原文「up to 16,000 characters」[C1]，但那是第 6 節講的新版，不能拿來當舊版的答案。</p>
+<h2 id="4-free-5">4. 各方案差異：Free 可以用，上限 5 個</h2>
+<div class="admonition warning">
+<p class="admonition-title">2026-09-19 更正：本站先前寫「Free 沒有 Projects」是錯的</p>
+<p>這頁與<a href="free-tier.html">免付費區</a>、<a href="paid-tier.html">付費區</a>原本都寫「Free 沒有 Projects」。經過兩位查證者各自直接讀 claude.com/pricing 與官方說明文章後確認：<strong>Free 帳號可以用 Projects，最多建立 5 個</strong>。開放時間查無，官方沒有寫是哪一天開始的。</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>Projects 可用性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free</td>
+<td>✅ 最多 5 個（claude.com/pricing 原文「Up to 5」；support 文章原文「Free users can create a maximum of five projects」）[P1][S1]</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>✅ 無限量，且知識庫接近上限時可用 RAG 擴充容量 [P1][S1]</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>✅ 同 Pro [S1]</td>
+</tr>
+<tr>
+<td>Team</td>
+<td>✅ 另有分享與協作管理 [S1][S2]</td>
+</tr>
+<tr>
+<td>Enterprise</td>
+<td>✅ 同 Team [S1][S2]</td>
+</tr>
+</tbody>
+</table>
+<p>分享與協作僅 Team／Enterprise 開放：可用信箱單一分享，也可貼上信箱清單批次分享；權限分「Can view」（唯讀）與「Can edit」（可改指示、管理知識庫、管理成員）兩級 [S1][S2]。</p>
+<h2 id="5-claude-code">5. Claude Code 本機的「專案」是另一套邏輯</h2>
+<p>Claude Code 側講的「專案」，不是 claude.ai 那種產品功能，是靠 <code>CLAUDE.md</code> 分層＋<code>.claude/</code> 設定＋auto memory 這三件事撐起來的本機運作機制 [C2]。完整的分層規則、<code>.claude/rules/*.md</code> 怎麼拆檔、auto memory 四種類型，<a href="official-config.html">官方設定總覽</a>已經寫過，這裡不重複。</p>
+<p><strong>跟 claude.ai Projects 之間，目前查無官方同步機制。</strong> <code>code.claude.com/docs/en/memory</code> 全文沒有提到 claude.ai Projects；社群這邊把「串接 claude.ai Project 到 Claude Code」明確列為尚未實現的 feature request（GitHub issue #2511、#64779）[GH1][GH2]，也有第三方工具 <code>claudesync</code> 想自己搭橋，但那是非官方的社群方案。這題不寫成「兩者永遠獨立」比較誠實，因為官方已經表態新版 Projects 最終會取代舊版（見第 1 節）；取代之後兩邊會不會互通，本次查證沒有找到答案，只能標記查無。</p>
+<h2 id="6-projects-beta-claude-code">6. 新版 Projects beta：先從 Claude Code 推出</h2>
+<p>新版是一個「協調型」對話：丟任務進去，Claude 會拆出多個 thread，每個 thread 是一個獨立的雲端 session（cloud session），在自己的 branch 上跑，關掉筆電也能繼續執行。官方原文：「A project is one ongoing conversation where Claude coordinates a stream of related work for you.」[C1]</p>
+<p><strong>每個新 thread 會自動載入什麼、不會載入什麼</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>單一 repository 的 project</th>
+<th>多個 repository 的 project</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CLAUDE.md</code></td>
+<td>啟動時載入</td>
+<td>每個 repository 的都載入</td>
+</tr>
+<tr>
+<td>Skills、agents、commands（<code>.claude/</code> 底下）</td>
+<td>載入</td>
+<td>每個 repository 的都載入</td>
+</tr>
+<tr>
+<td>Plugins（<code>.claude/settings.json</code> 啟用的）</td>
+<td>載入</td>
+<td>每個 repository 的都載入，衝突時以 Project settings 的設定為準</td>
+</tr>
+<tr>
+<td>Permission 規則、hooks、<code>env</code>（<code>.claude/settings.json</code>）</td>
+<td>套用到該 thread</td>
+<td><strong>不套用</strong>（改由多個 repository 上層目錄的設定決定，沒有單一 repository 的檔案可讀）[C1]</td>
+</tr>
+</tbody>
+</table>
+<p>原文明確切這條線：「Threads don't pick up anything from the Claude Code setup on your own machine.」[C1] 這句話只吃 repo 裡版控的 <code>CLAUDE.md</code>／skills／plugins，不吃你本機的 <code>~/.claude/CLAUDE.md</code> 或本機 auto memory。但<strong>不是只認 <code>CLAUDE.md</code></strong>：在 claude.ai 帳號層啟用的 skills，同樣會載入每個新 thread，跟 repo 裡的 skills 是兩條獨立的來源 [C1]。</p>
+<p><strong>方案限制與推出順序</strong>：目前只開放 Pro／Max，且是分階段推送，官方原文：「Projects are in public beta on Pro and Max plans and rolling out gradually, <strong>starting with accounts that have used cloud sessions and don't have existing projects in claude.ai chat or Cowork</strong>. They aren't available on Team or Enterprise plans yet.」[C1] 這句話交代了三件事：新版目前只給還沒有舊版 Projects 的帳號、之後會擴大到 Team／Enterprise、也會擴大到 chat 與 Cowork，不會永遠只綁在 Claude Code。</p>
+<p><strong>Project instructions 與 Project memory</strong>：Project instructions 上限 16,000 字元，每個新 thread 與協調對話都會收到 [C1]；Project memory 是 Claude 自己寫的筆記（需求、決策、雷點），每個 thread 啟動時讀索引檔 <code>MEMORY.md</code>，跟 Claude Code 本機的 auto memory 是分開機制，只是都用 <code>MEMORY.md</code> 這個命名概念 [C1][C2]。</p>
+<p><strong>不能碰什麼</strong>：thread 只能動 GitHub repository，以及使用者上傳到 project 的檔案／資料夾／Google Drive 資料夾，官方原文：「not on files or tools that exist only on your machine」[C1]。本機資料庫、VPN 後面的服務都碰不到。</p>
+<h2 id="7-chatgpt-projectsnotebooklm">7. 跟 ChatGPT Projects、NotebookLM 比一比</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>claude.ai Projects（舊版）</th>
+<th>ChatGPT Projects</th>
+<th>NotebookLM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能放什麼</td>
+<td>檔案＋project instructions [S1][S2]</td>
+<td>檔案＋instructions，指示只在該 project 生效並蓋過全域自訂指示（信心中，WebSearch 摘要）[O1]</td>
+<td>「來源」：文件、網頁、影音等</td>
+</tr>
+<tr>
+<td>免費方案能不能用</td>
+<td>✅ 上限 5 個 [P1][S1]</td>
+<td>部分開放，但檔案數上限比付費方案低（信心中，數字未能對到官方逐字稿，不建議照抄）[O1]</td>
+<td>Standard 層 50 個來源／notebook（信心高）[G1]</td>
+</tr>
+<tr>
+<td>容量擴充機制</td>
+<td>付費方案接近上限時切 RAG，最多擴充 10 倍 [S1]</td>
+<td>查無對應機制的官方逐字說明</td>
+<td>沒有擴充機制，是硬性的來源數量上限（依方案 50–600 個）[G1]</td>
+</tr>
+<tr>
+<td>是否保證只依上傳內容回答</td>
+<td>查無官方逐字保證；RAG 模式講的是「擴充容量」不是「限定只用這些資料」</td>
+<td>查無官方逐字保證</td>
+<td>官方原文「the model uses the sources you upload to answer your questions」，信心高 [G2]</td>
+</tr>
+</tbody>
+</table>
+<p>ChatGPT 這欄的數字信心普遍偏低，官方頁面本次查證兩次都回傳 403，只能靠搜尋引擎的摘要交叉核對，不是直接讀到逐字原文。讀者要拿這幾個數字去做重要決定前，建議自己再查一次官方頁面。</p>
+<h2 id="8-cowork-chat-project">8. Cowork 併入 Chat 之後，Project 多了什麼</h2>
+<p>2026-09-16 Cowork 併入 Chat 的公告裡，Projects 被重新定義成「在每一段對話裡都能用」，官方原文（出自 support 文章，不是部落格）：「Projects: Keep files, instructions, and context together for related work. <strong>Projects work in every conversation.</strong>」[S4]</p>
+<p>實際差異：合併前，本機資料夾讀寫是 Cowork 分頁的專屬能力，要先切分頁才能用；合併後，「In Claude Desktop, give Claude access to a folder on your computer so it can read, organize, and create files there.」[S4] 一般對話本身就能碰本機資料夾，不必再切到獨立的 Cowork 模式。</p>
+<p><strong>這個轉變的關鍵是「誰決定要不要動用」</strong>：不是使用者手動切換分頁才觸發，而是 Claude 在一般對話裡自己判斷這次任務要不要用到本機檔案、connector 或其他原本限定 Cowork 才有的能力。已授權的資料夾範圍不變，但觸發方式從「使用者手動切模式」變成「Claude 自行判斷」，在意本機檔案安全的人要知道這個行為轉變，細節與逐步操作見<a href="claude-code-cowork.html">Claude Code + Cowork 並用</a>。</p>
+<p>rollout 狀態：Pro／Max 分階段推送，「More plans will follow soon, and Enterprise admins will hear from us at least 30 days before anything changes.」[B1]</p>
+<h2 id="2026-09-19">資料來源（2026-09-19 查證）</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>URL</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1</td>
+<td>support.claude.com/en/articles/9517075-what-are-projects</td>
+<td>舊版 Projects 總覽、RAG 模式、Free 上限 5 個</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects</td>
+<td>建立/管理、Project instructions 入口、記憶分離、Team/Enterprise 分享權限</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features</td>
+<td>Instructions／Project instructions／Style 疊加關係</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude</td>
+<td>合併後 Projects「work in every conversation」定義、本機資料夾存取</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>support.claude.com/en/articles/8241126-upload-files-to-claude</td>
+<td>Project 知識庫 30MB/檔上限；一般對話上傳 500MB/檔對照</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>claude.com/pricing</td>
+<td>方案功能表，Free「Up to 5」逐字</td>
+</tr>
+<tr>
+<td>C1</td>
+<td>code.claude.com/docs/en/claude-projects</td>
+<td>新版 Projects beta 完整機制：thread、CLAUDE.md/skills/plugins 載入規則、16,000 字元上限、方案限制、與舊版關係</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>code.claude.com/docs/en/memory</td>
+<td>Claude Code CLAUDE.md 分層、auto memory 機制</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>claude.com/blog/cowork-is-now-claude</td>
+<td>Cowork／Chat 合併公告，分階段推出時程</td>
+</tr>
+<tr>
+<td>GH1</td>
+<td>github.com/anthropics/claude-code/issues/2511</td>
+<td>「連接 claude.ai Projects 到 Claude Code」feature request（尚未實現）</td>
+</tr>
+<tr>
+<td>GH2</td>
+<td>github.com/anthropics/claude-code/issues/64779</td>
+<td>同上，另一則 issue</td>
+</tr>
+<tr>
+<td>O1</td>
+<td>help.openai.com「Projects in ChatGPT」等（WebSearch 摘要，官方頁面本次 WebFetch 回傳 403）</td>
+<td>ChatGPT Projects 指示範圍、方案別檔案數（信心中～低）</td>
+</tr>
+<tr>
+<td>G1</td>
+<td>support.google.com/gemininotebook/answer/16213268</td>
+<td>NotebookLM 各方案來源數量上限</td>
+</tr>
+<tr>
+<td>G2</td>
+<td>support.google.com/notebooklm/answer/16215270</td>
+<td>單一來源上限、只依來源回答的官方敘述</td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="free-tier.html">免付費區</a>｜<a href="paid-tier.html">付費區</a>｜<a href="tools-compare.html">AI 介面比較總表</a>｜<a href="claude-code-cowork.html">Claude Code + Cowork 並用</a>｜<a href="official-config.html">Claude Code 設定總覽</a></p>
+</article>
+<nav class="pager"><a class="prev" href="paid-tier.html">← 付費區</a><a class="next" href="agent-basics.html">AI Agent 怎麼運作 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#1-projects">1. 現在有幾種「Projects」</a></li>
+<li><a href="#2-claudeai-projects">2. 舊版 claude.ai Projects 能放多少東西</a></li>
+<li><a href="#3-project-instructions">3. Project instructions 怎麼寫</a></li>
+<li><a href="#4-free-5">4. 各方案差異：Free 可以用，上限 5 個</a></li>
+<li><a href="#5-claude-code">5. Claude Code 本機的「專案」是另一套邏輯</a></li>
+<li><a href="#6-projects-beta-claude-code">6. 新版 Projects beta：先從 Claude Code 推出</a></li>
+<li><a href="#7-chatgpt-projectsnotebooklm">7. 跟 ChatGPT Projects、NotebookLM 比一比</a></li>
+<li><a href="#8-cowork-chat-project">8. Cowork 併入 Chat 之後，Project 多了什麼</a></li>
+<li><a href="#2026-09-19">資料來源（2026-09-19 查證）</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

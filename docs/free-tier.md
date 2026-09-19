@@ -14,7 +14,7 @@
 | Skills | ✅ | 需要另外開啟 code execution [S9][S9b] |
 | Memory | ✅ 預設開啟 | Free／Pro／Max 都預設開，Team／Enterprise 要管理員開 [S10] |
 | Connectors（remote MCP） | ⚠️ 限 1 個自訂 connector | Pro 起數量更多但官方未列確切上限 [S12] |
-| Projects | ❌ | Free 沒有這個功能 [S3][S4] |
+| Projects | ✅ 上限 5 個 | **2026-09-19 更正**：先前這裡寫「Free 沒有這個功能」是錯的，Free 能用 Projects，最多 5 個，但沒有付費方案才有的 RAG 知識庫擴充；完整說明見[Projects 功能](projects.md) [S3][S28] |
 | Research | ❌ | 官方明寫僅付費方案（Pro/Max/Team/Enterprise）[S14] |
 | Cowork | ❌ | 免費帳號完全不能用；官方已公告 Cowork 併入一般 Chat 的新體驗會擴及 Free 方案，但目前只是「即將推出」，尚未開始 [S21][S26] |
 | Claude Code | ❌ | Free 沒有，Pro 起才有，見[付費區](paid-tier.md) [S1] |
@@ -43,13 +43,15 @@
 
 ## 兩個免費帳號可行的工作流程
 
-### 流程一：Claude Free + 手動貼上文獻摘要
+### 流程一：Claude Free 的 Projects 額度有限時，手動貼上文獻摘要
 
-Claude Free 沒有 Projects，沒辦法把一批文獻或寫作規範固定成一個持久的知識庫，每次新對話都要重新提供脈絡。可行的做法：
+> **2026-09-19 更正**：這裡原本寫「Claude Free 沒有 Projects」，查證後發現是錯的，Free 帳號其實可以用 Projects，只是上限 5 個，且沒有付費方案才有的 RAG 知識庫擴充。完整說明見[Projects 功能](projects.md)。以下流程改成「額度用完之後怎麼辦」。
 
-1. 把要討論的文獻摘要、規範或前一輪結論整理成一段文字，貼在對話開頭當「這次要用的脈絡」。
-2. 一次只處理一個具體問題（例如「幫我比較這三篇的研究方法差異」），不要指望它記得上一次對話。
-3. 需要長期保留脈絡時，把重要結論另外存到自己的筆記檔案裡，不要依賴 Claude 的記憶。Free 雖然有 Memory 預設開啟 [S10]，但那是跨對話的一般偏好記憶，不是 Projects 等級、可掛文件的知識庫。
+Claude Free 能建立最多 5 個 Project，把常用的文獻或寫作規範固定成持久知識庫，但額度有限，用完就要用別的方法撐過去：
+
+1. 優先把「長期都會反覆用到」的核心文獻或規範放進 Project 知識庫，5 個額度要精打細算，不要隨手開新的。
+2. 超過 5 個 Project、或臨時性的一次性任務，改回手動貼上摘要：把要討論的文獻摘要、規範或前一輪結論整理成一段文字，貼在對話開頭當「這次要用的脈絡」。
+3. 需要長期保留脈絡時，把重要結論另外存到自己的筆記檔案裡，不要只依賴 Claude 的 Memory。Free 雖然有 Memory 預設開啟 [S10]，但那是跨對話的一般偏好記憶，不是 Projects 等級、可掛文件的知識庫。
 
 ### 流程二：ChatGPT Free 桌面 App 的 Codex 分頁做小型程式任務
 
@@ -86,6 +88,7 @@ Claude Free 沒有 Projects，沒辦法把一批文獻或寫作規範固定成�
 | S15 | support.claude.com/en/articles/8114487-what-interfaces-can-i-use-to-access-claude | 官方介面總覽 |
 | S16 | support.claude.com/en/articles/8241126-upload-files-to-claude | 檔案上傳大小/數量限制 |
 | S21 | support.claude.com/en/articles/13345190-get-started-with-claude-cowork | Cowork 免費帳號不可用 |
+| S28 | support.claude.com/en/articles/9517075-what-are-projects | 2026-09-19 補查：Projects 方案可用性更正（Free 上限 5 個），RAG 模式僅付費方案 |
 | S26 | support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude | Cowork／Chat 合併現況：各方案推出時程 |
 | O1 | learn.chatgpt.com/docs/pricing | Free/Go 的 Codex 定位文案 |
 | O3 | OpenAI 官方 X 貼文（經二次來源引述） | Desktop app 全方案含 Free 可用 Codex |
@@ -99,4 +102,4 @@ Claude Free 沒有 Projects，沒辦法把一批文獻或寫作規範固定成�
 | O24 | help.openai.com「Memory FAQ」（WebSearch 摘要） | Memory 各方案預設開關 |
 | O25 | learn.chatgpt.com/docs/sandboxing | Codex sandbox 三模式 |
 
-延伸：[AI 介面比較總表](tools-compare.md)｜[付費區](paid-tier.md)
+延伸：[AI 介面比較總表](tools-compare.md)｜[付費區](paid-tier.md)｜[Projects 功能](projects.md)

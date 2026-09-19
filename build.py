@@ -24,6 +24,7 @@ NAV = [
         ("tools-compare", "AI 介面比較總表", "Claude Code、Claude Chat、Claude Desktop、Codex、ChatGPT Desktop 一張表看懂"),
         ("free-tier", "免付費區", "不付錢也做得到的 AI 輔助工作流程"),
         ("paid-tier", "付費區", "需要 Pro 以上或 Claude Code／Codex 才能做到的功能"),
+        ("projects", "Projects 功能", "舊版知識庫、新版 beta、Claude Code 本機專案，三種「Projects」分清楚"),
     ]),
     ("AI Agent 原理", [
         ("agent-basics", "AI Agent 怎麼運作", "代理迴圈、工具呼叫與上下文"),

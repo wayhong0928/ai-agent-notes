@@ -13,7 +13,7 @@
 | 功能 | 最低方案 | 為什麼要 Claude Code／Codex 或付費方案才做得到 |
 |---|---|---|
 | 讀寫本機檔案、執行終端指令 | Claude Code：Pro 起（或純 API key 按量付費）；Codex：CLI/IDE 全方案，含 Free／Go，但官方文件對 CLI 端的說法目前不完全一致，細節見[免付費區的說明](free-tier.md#freego-codex) | Chat／ChatGPT 網頁版的「執行程式碼」是雲端沙盒工具，不會碰到你電腦上的檔案；只有 Claude Code 與 Codex CLI／IDE 是真的在本機終端跑，這是**本機檔案**與**執行指令**這兩個原因 [S7] |
-| Projects（Claude） | Pro | Free 沒有 Projects，無法把文獻、規範、教授回饋做成持久知識庫 [S3][S4] |
+| Projects（Claude） | Free 上限 5 個；Pro 起無限量＋RAG 擴充 | **2026-09-19 更正**：先前這裡寫「Free 沒有 Projects」是錯的，Free 其實能用、但上限 5 個且沒有 RAG 擴充；Pro 起無限量，且知識庫接近上限時會自動切換 RAG 模式擴充容量最多 10 倍，完整說明見[Projects 功能](projects.md) [S3][S24] |
 | Research（Claude） | Pro | 官方明寫「Research is available for users with paid Claude plans」[S14] |
 | Cowork | Pro | 需要本機或雲端 VM 執行環境，免費帳號完全不能用；2026-09-16 起官方正把 Cowork 併入一般 Chat，Pro／Max 帳號分階段收到新體驗，收到之後不必再特地切到 Cowork 模式 [S21][S26] |
 | Claude Design | Pro（research preview，Enterprise 需管理員手動開啟） | 需要獨立的畫布編輯環境，目前仍是研究預覽階段功能 [S22] |
@@ -50,8 +50,9 @@ Claude Code 和 Codex 可以互相搭配：OpenAI 官方 GitHub 組織發布了�
 | S22 | anthropic.com/news/claude-design-anthropic-labs | Claude Design 方案可用性、research preview 狀態 |
 | S23 | support.claude.com/en/articles/12304248-manage-api-key-environment-variables-in-claude-code | 純 API key 跑 Claude Code 的計費機制 |
 | S23b | support.claude.com/en/articles/9876003-i-have-a-paid-claude-subscription-pro-max-team-or-enterprise-plans-why-do-i-have-to-pay-separately-to-use-the-claude-api-and-console | 訂閱與 API/Console 各自獨立計費 |
+| S24 | support.claude.com/en/articles/9517075-what-are-projects | 2026-09-19 補查：Projects 方案可用性更正（Free 上限 5 個），RAG 模式僅付費方案 |
 | O1 | learn.chatgpt.com/docs/pricing | Codex 各方案定價與定位文案 |
 | O11 | openai.com/index/chatgpt-for-your-most-ambitious-work/（WebSearch 摘要） | ChatGPT Work 各方案上線順序 |
 | O29 | learn.chatgpt.com/docs/build-skills | Codex/ChatGPT Skills、Plugins 關係 |
 
-延伸：[免付費區](free-tier.md)｜[AI 介面比較總表](tools-compare.md)｜[Claude Code + Codex 協作](claude-codex.md)
+延伸：[免付費區](free-tier.md)｜[AI 介面比較總表](tools-compare.md)｜[Claude Code + Codex 協作](claude-codex.md)｜[Projects 功能](projects.md)

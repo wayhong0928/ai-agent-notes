@@ -2,20 +2,29 @@
 
 > 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。
 
-看懂[代理迴圈](agent-basics.md)之後，下一個常見的卡點是：SKILL、Plugin、MCP、Subagent、Hooks，這幾個詞經常混著用，但它們解決的問題完全不同。這頁把六種擴充機制放進一張表，再逐一給最小範例跟常見誤用，最後給一份「該用哪一種」的決策清單。
+看懂[代理迴圈](agent-basics.md)之後，下一個常見的卡點是：SKILL、Plugin、MCP、Subagent、Hooks，這幾個詞經常混著用，但它們解決的問題完全不同。這頁先用一張精簡的支援矩陣對照六種擴充機制，再逐一給解決什麼問題、最小範例跟常見誤用，最後給一份「該用哪一種」的決策清單。
 
-## 一、六種機制一張表
+## 一、六種機制支援矩陣
 
-| 機制 | 解決什麼問題 | 什麼時候載入 | 放在哪裡 | Claude Code | Codex | Claude.ai（Chat／Cowork） |
-|---|---|---|---|---|---|---|
-| **CLAUDE.md／AGENTS.md** | 讓代理每次啟動都知道專案的事實與規矩，不用每次重講一遍 | 啟動時整份載入，全程留在上下文裡 | 專案根目錄或 `~/.claude/`（Claude Code）；`~/.codex/`＋專案路徑逐層（Codex） | ✅ 讀 `CLAUDE.md`[1] | ✅ 讀 `AGENTS.md`，逐層合併，越接近目前目錄優先權越高[2] | ⚠️ 沒有 CLAUDE.md 這個檔案機制，但 Projects 的 Project instructions 用途類似：都能讓一組指示套用到之後每一次對話，只是載入方式與作用範圍不同（Project instructions 是整個 Project 的設定，不是依檔案路徑逐層載入）；Cowork 另有跨 session 的 Global instructions，跟針對單一本機資料夾的 Folder instructions[15][16] |
-| **SKILL** | 把一套會重複用到的程序、檢查清單變成隨需載入的知識，不佔用平時的上下文 | 只有 Claude 判斷相關、或使用者手動叫用時才載入完整內容 | `.claude/skills/<name>/SKILL.md`（專案或個人層） | ✅[3] | ✅，遵循「open agent skills standard」[4] | ✅ 需另外開啟 code execution[5] |
-| **MCP** | 讓代理連上外部工具與資料（文獻庫、資料庫、雲端硬碟），不必自己捏造答案 | 設定好之後，工具定義預設延後載入，代理實際要用某個工具時才載入細節[1] | `.mcp.json`（專案層）／`~/.claude.json`（使用者層，Claude Code）；`codex mcp` 管理（Codex） | ✅ 本機＋遠端[6] | ✅，「continues to support external MCP servers」[7] | ⚠️ 僅遠端 connector，Free 帳號限 1 個自訂連接[8] |
-| **Subagent** | 需要一個獨立、乾淨的視角處理某件事，不污染主線對話的上下文 | 主線判斷該任務適合委派時，另開一個獨立上下文執行 | `.claude/agents/<name>.md`（Claude Code）；`~/.codex/agents/` 或 `.codex/agents/` 的 TOML 檔（Codex） | ✅[9] | ✅[10] | ⚠️ 分開看：Cowork 官方公開有 sub-agent coordination，會把複雜工作拆成小任務、平行協調多個工作流；一般 Chat／Projects 查無使用者可自訂的通用 subagent 介面（Research 功能內部用 lead agent 加 subagents，但那是內部架構，不是使用者自己能設定的機制）[16][17][22] |
-| **Plugin** | 把 SKILL、Subagent、Hooks、MCP 設定打包成一個可安裝、可分享、可版控的單位 | 安裝後在啟動時載入其中的元件 | 需要 `.claude-plugin/plugin.json`，其餘元件目錄放在 plugin 根目錄（Claude Code）；Codex／ChatGPT 共用「Plugins 目錄」發佈機制[11] | ✅[11] | ✅，Codex 側的 skill 可打包成 plugin 發佈[4] | ⚠️ 官方文件目前說法不一致：較新的 Help Center 文章說付費方案（Pro／Max／Team／Enterprise）可以在 Web Chat、Claude Desktop 的 Chat 分頁、Cowork 安裝並使用 plugin；但另一份官方 Cowork 開發文件仍寫「不在 Chat 使用」。即使 Chat 能裝 plugin，裡面包的 subagent 跟 hooks 也只在 Cowork 執行，Chat 裡會顯示成灰階[17][18][19][20] |
-| **Hooks** | 把「一定要做到」的檢查變成機制強制執行，而不是寫在說明檔裡靠模型自己記得 | 對應事件觸發時（例如編輯檔案前、session 結束時）自動執行 | `settings.json` 的 `hooks` 欄位（Claude Code）；`hooks.json` 或 `config.toml` 的 `[hooks]`（Codex） | ✅[12] | ✅，「Hooks are an extensibility framework for Codex」[13] | ⚠️ 分開看：Cowork 可以執行 plugin 裡包的 hooks；一般 Chat 不執行，畫面上會顯示成灰階。Enterprise 另有一套「inference hooks」，是組織端把推論內容送去自己的端點做核准／拒絕政策判斷的合規機制，跟這裡講的生命週期 hooks 不是同一件事，一句話帶過即可[17][21] |
+「✅」代表官方文件明確查證到支援；「⚠️」代表有限制、有條件，或官方文件本身說法不一致；「❌」代表官方文件裡沒有查到對應機制，不是本站主觀認定不支援。Claude.ai 一欄把 Chat（一般對話）與 Cowork（本機或雲端 VM 裡的知識工作代理）合併標示，因為官方文件裡這兩者能碰到的機制常常不一樣，差異細節與完整來源標記在下方「一之二」逐項說明。
 
-「✅」代表官方文件明確查證到支援；「⚠️」代表有限制、有條件，或官方文件本身說法不一致；「❌」代表官方文件裡沒有查到對應機制，不是本站主觀認定不支援。Claude.ai 這欄特別把 Chat（一般對話）與 Cowork（本機或雲端 VM 裡的知識工作代理）分開講，因為官方文件裡這兩者能碰到的機制常常不一樣。
+| 機制 | Claude Code | Codex | Claude.ai（Chat／Cowork） |
+|---|:---:|:---:|:---:|
+| CLAUDE.md／AGENTS.md | ✅ | ✅ | ⚠️近似機制 |
+| SKILL | ✅ | ✅ | ✅需開code exec |
+| MCP | ✅本機＋遠端 | ✅ | ⚠️僅遠端 |
+| Subagent | ✅ | ✅ | ⚠️僅Cowork |
+| Plugin | ✅ | ✅ | ⚠️說法不一 |
+| Hooks | ✅ | ✅ | ⚠️僅Cowork執行 |
+
+## 一之二、每種機制解決什麼問題、什麼時候載入、放在哪裡
+
+- **CLAUDE.md／AGENTS.md**：解決「讓代理每次啟動都知道專案的事實與規矩，不用每次重講一遍」；啟動時整份載入，全程留在上下文裡；放在專案根目錄或 `~/.claude/`（Claude Code），`~/.codex/`＋專案路徑逐層（Codex）。Claude Code 讀 `CLAUDE.md`[1]；Codex 讀 `AGENTS.md`，逐層合併，越接近目前目錄優先權越高[2]；Claude.ai 沒有 CLAUDE.md 這個檔案機制，但 Projects 的 Project instructions 用途類似：都能讓一組指示套用到之後每一次對話，只是載入方式與作用範圍不同（Project instructions 是整個 Project 的設定，不是依檔案路徑逐層載入）；Cowork 另有跨 session 的 Global instructions，跟針對單一本機資料夾的 Folder instructions[15][16]。
+- **SKILL**：解決「把一套會重複用到的程序、檢查清單變成隨需載入的知識，不佔用平時的上下文」；只有 Claude 判斷相關、或使用者手動叫用時才載入完整內容；放在 `.claude/skills/<name>/SKILL.md`（專案或個人層）。Claude Code 支援[3]；Codex 遵循「open agent skills standard」[4]；Claude.ai 需另外開啟 code execution[5]。
+- **MCP**：解決「讓代理連上外部工具與資料（文獻庫、資料庫、雲端硬碟），不必自己捏造答案」；設定好之後，工具定義預設延後載入，代理實際要用某個工具時才載入細節[1]；放在 `.mcp.json`（專案層）／`~/.claude.json`（使用者層，Claude Code），`codex mcp` 管理（Codex）。Claude Code 支援本機＋遠端[6]；Codex「continues to support external MCP servers」[7]；Claude.ai 僅遠端 connector，Free 帳號限 1 個自訂連接[8]。
+- **Subagent**：解決「需要一個獨立、乾淨的視角處理某件事，不污染主線對話的上下文」；主線判斷該任務適合委派時，另開一個獨立上下文執行；放在 `.claude/agents/<name>.md`（Claude Code），`~/.codex/agents/` 或 `.codex/agents/` 的 TOML 檔（Codex）。Claude Code 支援[9]；Codex 支援[10]；Claude.ai 分開看：Cowork 官方公開有 sub-agent coordination，會把複雜工作拆成小任務、平行協調多個工作流；一般 Chat／Projects 查無使用者可自訂的通用 subagent 介面（Research 功能內部用 lead agent 加 subagents，但那是內部架構，不是使用者自己能設定的機制）[16][17][22]。
+- **Plugin**：解決「把 SKILL、Subagent、Hooks、MCP 設定打包成一個可安裝、可分享、可版控的單位」；安裝後在啟動時載入其中的元件；需要 `.claude-plugin/plugin.json`，其餘元件目錄放在 plugin 根目錄（Claude Code），Codex／ChatGPT 共用「Plugins 目錄」發佈機制[11]。Claude Code 支援[11]；Codex 側的 skill 可打包成 plugin 發佈[4]；Claude.ai 官方文件目前說法不一致：較新的 Help Center 文章說付費方案（Pro／Max／Team／Enterprise）可以在 Web Chat、Claude Desktop 的 Chat 分頁、Cowork 安裝並使用 plugin；但另一份官方 Cowork 開發文件仍寫「不在 Chat 使用」。即使 Chat 能裝 plugin，裡面包的 subagent 跟 hooks 也只在 Cowork 執行，Chat 裡會顯示成灰階[17][18][19][20]。
+- **Hooks**：解決「把『一定要做到』的檢查變成機制強制執行，而不是寫在說明檔裡靠模型自己記得」；對應事件觸發時（例如編輯檔案前、session 結束時）自動執行；放在 `settings.json` 的 `hooks` 欄位（Claude Code），`hooks.json` 或 `config.toml` 的 `[hooks]`（Codex）。Claude Code 支援[12]；Codex「Hooks are an extensibility framework for Codex」[13]；Claude.ai 分開看：Cowork 可以執行 plugin 裡包的 hooks；一般 Chat 不執行，畫面上會顯示成灰階。Enterprise 另有一套「inference hooks」，是組織端把推論內容送去自己的端點做核准／拒絕政策判斷的合規機制，跟這裡講的生命週期 hooks 不是同一件事，一句話帶過即可[17][21]。
 
 !!! warning "2026-09-16 起：Chat／Cowork 的界線正在消失（Pro／Max 分階段推出中）"
     上表把 Claude.ai 分成 Chat 與 Cowork 兩欄，是依官方文件目前的寫法整理的。但官方已公告兩者正在合併成同一個體驗：Pro／Max 帳號分階段收到（同方案帳號時間點也不同），收到之後不再有獨立 Cowork 模式可切換，上表裡「⚠️ 只在 Cowork 執行、Chat 裡顯示灰階」這類限制對這些帳號會失效，變成同一個對話視窗、能力視需要自動啟用。Team／Free 官方說「即將推出」但目前尚未開始，Enterprise 變動前會提前至少 30 天通知、目前維持現狀——這些帳號適用的仍是上表原本的區分。查證來源與時程細節見 [tools-compare.md](tools-compare.md) 開頭的說明 [23][24]。
