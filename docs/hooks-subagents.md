@@ -59,6 +59,8 @@ Hooks 設定寫在 `settings.json`（使用者層 `~/.claude/settings.json` 或�
 
 `.claude/agents/*.md`（專案層，適合團隊共用，走版控）或 `~/.claude/agents/*.md`（使用者層，跨你所有專案生效）；Plugin 也可以在自己的 `agents/` 目錄裡帶 subagent 定義[2]。
 
+這頁只列欄位語意；`background` 實際怎麼換工具集、`isolation: worktree` 怎麼真的擋下越界指令、`SendMessage` 怎麼續問一個已完成的 subagent、多代理成本三層倍數怎麼算，見專篇[Subagent 入門與實戰](subagent.md)。
+
 ### frontmatter 欄位
 
 只有 `name` 與 `description` 是必填，其餘全部可省略，省略時各自有預設行為：

@@ -36,6 +36,12 @@
   "section": "AI Agent 原理"
  },
  {
+  "slug": "subagent",
+  "title": "Subagent 入門與實戰",
+  "desc": "frontmatter 全欄位、background／isolation: worktree 實際行為、SendMessage 續問、多代理成本",
+  "section": "AI Agent 原理"
+ },
+ {
   "slug": "mcp",
   "title": "MCP 入門與實戰",
   "desc": "五分鐘裝好第一個、scope／OAuth 怎麼選、Windows 踩坑實錄",

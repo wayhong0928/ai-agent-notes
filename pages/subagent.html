@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subagent 入門與實戰｜AI Agent 筆記</title>
+<meta name="description" content="frontmatter 全欄位、background／isolation: worktree 實際行為、SendMessage 續問、多代理成本">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/subagent.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789789001">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789789001">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789789001">付費區</a></li>
+<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1789789001">Projects 功能</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789618549">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789793561">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li class="active"><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1789832687">Subagent 入門與實戰</a></li>
+<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1789793561">MCP 入門與實戰</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1789793561">好用工具清單</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789791080">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789618549">把教材做成 SKILL</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1789655763">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655763">Claude Code + Cowork 並用</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789655763">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789655763">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789655763">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789791080">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789618549">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789793561">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ AI Agent 原理</p>
+<article class="doc" data-updated="1789832687">
+<h1>Subagent 入門與實戰</h1>
+<p class='lede'>frontmatter 全欄位、background／isolation: worktree 實際行為、SendMessage 續問、多代理成本</p>
+<blockquote>
+<p>查證日期：2026-09-19。方案與功能變動快，請以官方最新說明為準。</p>
+</blockquote>
+<p><a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>那頁已經把 Subagent 放進六種擴充機制的總表比較過；<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>整理過 frontmatter 每個欄位的語意與內建 agent 清單。這頁只挖 Subagent 這一項，把上面兩頁沒空間深入的部分補齊：官方文件實際定義的 18 個欄位（含前兩頁沒收錄的 <code>fable</code>／<code>background</code>／<code>omitClaudeMd</code>／<code>effort</code>／<code>initialPrompt</code>／<code>experimental</code> 六項）、<code>background</code> 欄位怎麼偷偷換掉工具清單、<code>isolation: worktree</code> 實際怎麼擋住越界的指令、<code>SendMessage</code> 怎麼續問一個已經跑完的 subagent，以及多代理協作真正的成本是多少倍。</p>
+<h2 id="1-subagent">1. Subagent 是什麼、什麼時候該用</h2>
+<p>官方原文把使用時機講得很直接：「Use one when a side task would flood your main conversation with search results, logs, or file contents you won't reference again: the subagent does that work in its own context and returns only the summary. Define a custom subagent when you keep spawning the same kind of worker with the same instructions.」[1] 白話說：一個側支任務如果會把主對話塞滿你不會再看第二次的搜尋結果、log、檔案內容，就該交給 subagent，讓它在自己的 context 裡做完，只把摘要帶回來；如果你發現自己一直在重複派同一種工人、給同一套指示，就該把它定義成一個可重複使用的自訂 subagent。</p>
+<p>官方列出四個具體好處[1]：</p>
+<ul>
+<li><strong>保留 context</strong>：把探索與實作留在自己的視窗，不進主對話</li>
+<li><strong>強制邊界</strong>：限制某個 subagent 能用哪些工具</li>
+<li><strong>重複使用</strong>：使用者層 subagent 可以跨專案共用</li>
+<li><strong>專門化行為</strong>：針對特定領域寫聚焦的 system prompt</li>
+</ul>
+<p>反過來，什麼時候不該用 subagent，<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>第三節已經整理過官方的說法（需要頻繁來回微調、多階段共用大量 context 的任務不適合），這裡不重複。</p>
+<div class="admonition note">
+<p class="admonition-title">Subagent 只在一個 session 內生效</p>
+<p>官方原文提醒範圍邊界：「Subagents work within a single session. To run many independent sessions in parallel and monitor them from one place, see background agents. For separate sessions that pass messages to each other, see cross-session messaging. For a coordinated team of sessions Claude spawns and supervises, see agent teams.」[1] 這頁只談「同一個 session 裡的 subagent」；agent view（<code>claude agents</code>）、agent teams、跨 session 傳訊是另外三個機制，本頁第 8 節簡單帶過，不是本頁重點。</p>
+</div>
+<h2 id="2-agent">2. 內建 agent</h2>
+<p>Claude Code 內建幾種不用自己寫定義檔的 agent[1]：</p>
+<table>
+<thead>
+<tr>
+<th>內建 agent</th>
+<th>模型</th>
+<th>定位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Explore</code></td>
+<td>繼承主對話的模型，在 Claude API 上最高只到 Opus</td>
+<td>唯讀，跳過 CLAUDE.md 與 git status 以維持輕量，用於檔案發現與程式碼搜尋</td>
+</tr>
+<tr>
+<td><code>Plan</code></td>
+<td>依<a href="#4-fable">模型解析順序</a></td>
+<td>唯讀，用於 plan mode 下的程式庫研究</td>
+</tr>
+<tr>
+<td><code>general-purpose</code></td>
+<td>同上</td>
+<td>所有 subagent 可用工具都開，用於需要探索＋修改、複雜推理、多步驟依賴的任務</td>
+</tr>
+<tr>
+<td><code>claude</code></td>
+<td>同上</td>
+<td>無法歸類到專門 agent 時的萬用選項，所有 subagent 可用工具都開；也是<a href="#8-agent-viewagent-teams-dynamic-workflows">背景 session</a> 被派工時的預設 agent</td>
+</tr>
+<tr>
+<td><code>statusline-setup</code></td>
+<td>Sonnet</td>
+<td>設定 status line</td>
+</tr>
+<tr>
+<td><code>claude-code-guide</code></td>
+<td>Haiku</td>
+<td>回答 Claude Code 功能問題</td>
+</tr>
+</tbody>
+</table>
+<p>內建 subagent 在互動 session 裡預設就註冊好，要限制它們[1]：</p>
+<ul>
+<li>擋掉特定內建類型：把它加進 <code>permissions.deny</code></li>
+<li>完全不讓 Claude 委派給任何 subagent：直接擋 <code>Agent</code> 這個工具本身</li>
+<li>只想拿掉 <code>Explore</code>／<code>Plan</code>：設環境變數 <code>CLAUDE_CODE_DISABLE_EXPLORE_PLAN_AGENTS=1</code>（v2.1.198 起），Claude 會改成自己直接讀檔探索</li>
+<li>Agent SDK／非互動模式想拿掉全部內建類型、只用自己的：設 <code>CLAUDE_AGENT_SDK_DISABLE_BUILTIN_AGENTS=1</code></li>
+</ul>
+<h2 id="3-agentfrontmatter">3. 自訂 agent：frontmatter 全欄位</h2>
+<p><code>.claude/agents/*.md</code>（專案層）或 <code>~/.claude/agents/*.md</code>（使用者層）放一個 Markdown 檔，YAML frontmatter 只有 <code>name</code> 與 <code>description</code> 必填，官方文件實際列出的完整欄位如下[1]：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>必填</th>
+<th>語意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>是</td>
+<td>小寫字母＋連字號；不能含 <code>:</code>（保留給 plugin 範圍識別符如 <code>my-plugin:reviewer</code>）；Hook 收到這個值時欄位名是 <code>agent_type</code></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>是</td>
+<td>決定 Claude 何時該委派給這個 subagent</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td>否</td>
+<td>允許工具的白名單；省略則繼承所有 subagent 可用工具；清單裡沒有任何一項解析得出實際工具時，subagent 通常直接拒絕啟動並報錯</td>
+</tr>
+<tr>
+<td><code>disallowedTools</code></td>
+<td>否</td>
+<td>黑名單，從繼承或指定的清單裡移除；<code>Bash(git push *)</code> 這種帶條件的寫法會整個工具一起移除，不是只擋那個條件</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>否</td>
+<td><code>sonnet</code>／<code>opus</code>／<code>haiku</code>／<code>fable</code>／完整 model ID（如 <code>claude-opus-5</code>）／<code>inherit</code>；省略則依<a href="#4-fable">模型解析順序</a>決定</td>
+</tr>
+<tr>
+<td><code>permissionMode</code></td>
+<td>否</td>
+<td><code>default</code>／<code>acceptEdits</code>／<code>auto</code>／<code>dontAsk</code>／<code>bypassPermissions</code>／<code>plan</code>／<code>manual</code>（<code>manual</code> 是 <code>default</code> 的別名，v2.1.200 起）；plugin 提供的 subagent 忽略這個欄位</td>
+</tr>
+<tr>
+<td><code>maxTurns</code></td>
+<td>否</td>
+<td>最多跑幾個 agentic turn；到上限時輸出會標記為 partial，可以用 <code>SendMessage</code><a href="#7-sendmessage">續問</a>繼續</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>否</td>
+<td>啟動時預先載進 context 的 skill 清單</td>
+</tr>
+<tr>
+<td><code>mcpServers</code></td>
+<td>否</td>
+<td>這個 subagent 可用的 MCP servers</td>
+</tr>
+<tr>
+<td><code>hooks</code></td>
+<td>否</td>
+<td>只在這個 subagent 生效範圍的額外 hooks</td>
+</tr>
+<tr>
+<td><code>memory</code></td>
+<td>否</td>
+<td>持久記憶範圍：<code>user</code>／<code>project</code>／<code>local</code></td>
+</tr>
+<tr>
+<td><code>isolation</code></td>
+<td>否</td>
+<td>設 <code>worktree</code> 讓 subagent 跑在獨立 git worktree，細節見<a href="#6-background-isolation-worktree">第 6 節</a></td>
+</tr>
+<tr>
+<td><code>background</code></td>
+<td>否</td>
+<td>設 <code>true</code> 讓這個 subagent 即使 Claude 想立刻拿結果也留在背景執行；細節見<a href="#6-background-isolation-worktree">第 6 節</a></td>
+</tr>
+<tr>
+<td><code>omitClaudeMd</code></td>
+<td>否</td>
+<td>設 <code>true</code> 啟動時不載入使用者／專案／本機層的 CLAUDE.md（managed policy 檔仍會載入）；當這個 agent 被當成主線 session agent 執行（<code>--agent</code> 或 <code>agent</code> 設定）時，這個欄位會被忽略</td>
+</tr>
+<tr>
+<td><code>effort</code></td>
+<td>否</td>
+<td>這個 subagent 啟用時的推理強度：<code>low</code>／<code>medium</code>／<code>high</code>／<code>xhigh</code>／<code>max</code>，覆蓋 session 的 effort 設定，預設繼承 session；可用等級依模型而定</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>否</td>
+<td>顯示用顏色</td>
+</tr>
+<tr>
+<td><code>initialPrompt</code></td>
+<td>否</td>
+<td>這個 agent 被當成主線 session agent 執行時，自動當作第一則使用者訊息送出，會被前置在使用者實際輸入的提示之前；會經過 command／skill 處理</td>
+</tr>
+<tr>
+<td><code>experimental</code></td>
+<td>否</td>
+<td>實驗性選項的 map；目前唯一有效的鍵是 <code>cacheTtl</code>（<code>5m</code> 或 <code>1h</code>），決定這個 subagent 請求的 prompt cache 存活時間，只從 subagent 定義檔讀取這個欄位</td>
+</tr>
+</tbody>
+</table>
+<p><code>--agents</code> CLI 旗標接受 JSON，每個 agent 除了 <code>prompt</code>（對應 Markdown 檔的內文部分，等同 system prompt），只支援上表其中 15 個欄位：<code>description</code>、<code>tools</code>、<code>disallowedTools</code>、<code>model</code>、<code>permissionMode</code>、<code>mcpServers</code>、<code>hooks</code>、<code>maxTurns</code>、<code>skills</code>、<code>initialPrompt</code>、<code>memory</code>、<code>effort</code>、<code>background</code>、<code>omitClaudeMd</code>、<code>isolation</code>；<code>color</code> 與 <code>experimental</code> 只能寫在定義檔裡[1]。</p>
+<div class="admonition tip">
+<p class="admonition-title"><code>tools</code> 與 <code>disallowedTools</code> 同時設定時</p>
+<p>官方原文：「If both are set, <code>disallowedTools</code> is applied first, then <code>tools</code> is resolved against the remaining pool. A tool listed in both is removed.」[1] 兩個欄位都接受 MCP server 層級的萬用寫法，<code>mcp__&lt;server&gt;</code> 或 <code>mcp__&lt;server&gt;__*</code> 代表整台伺服器的所有工具；<code>disallowedTools</code> 裡的 <code>mcp__*</code> 則會移除所有 MCP 工具。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">frontmatter 寫錯會被靜默跳過，不是報錯給你看</p>
+<p><code>name</code> 以 <code>-</code> 開頭或含 <code>:</code>、有 <code>name</code> 沒 <code>description</code>、YAML 解析不出來，這三種情況 Claude Code 都是把整個檔案跳過、只寫進 debug log，不會在對話裡提醒你這個 subagent 沒生效。跑 <code>claude --debug</code> 才看得到；也可以先跑 <code>claude plugin validate</code> 對著 <code>.claude/agents</code> 或 <code>~/.claude/agents</code> 檢查[1]。</p>
+</div>
+<h2 id="4-fable">4. 模型怎麼選：<code>fable</code> 是什麼、解析順序</h2>
+<p>官方文件目前列出的 model alias 是 <code>sonnet</code>、<code>opus</code>、<code>haiku</code>、<code>fable</code> 四種，另外也接受完整 model ID 或 <code>inherit</code>[1]。官方文件對 <code>fable</code> 本身沒有進一步說明是什麼模型、定位是什麼。這裡只如實轉述欄位表裡列了這個值，不臆測。</p>
+<p>Claude 呼叫 subagent 時，實際套用的模型依這個順序解析（由高到低）[1]：</p>
+<ol>
+<li>這次派工當下傳入的 <code>model</code> 參數</li>
+<li>subagent 定義檔的 <code>model</code> frontmatter（<code>inherit</code> 代表用主線目前的模型）</li>
+<li><code>CLAUDE_CODE_SUBAGENT_MODEL</code> 環境變數（設成 model alias 或 model ID 時才生效）</li>
+<li>主線對話目前的模型</li>
+</ol>
+<p><code>CLAUDE_CODE_SUBAGENT_MODEL</code> 只是預設值，subagent 定義檔或派工當下傳的參數仍然優先。要讓每個 subagent（含內建的 Explore／Plan、teammate、workflow agent）都強制套用同一個模型，要另外設 <code>CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1</code>（v2.1.257 起）；開啟後 Claude 連派工時都不能再指定模型，只有 fork、以及設了 <code>model: inherit</code> 的 skill-in-subagent 例外[1]。</p>
+<h2 id="5">5. 工具怎麼被過濾</h2>
+<p>Subagent 繼承主線對話可用的內建工具與 MCP 工具，但會經過兩層過濾[1]：</p>
+<p><strong>第一層，不管 <code>tools</code> 欄位寫了什麼都會被拿掉的工具</strong>：<code>Agent</code>（在委派深度已到上限時；fork 裡這個工具會保留在清單但實際呼叫會回錯誤）、<code>AskUserQuestion</code>、<code>EndConversation</code>、<code>EnterPlanMode</code>、<code>ExitPlanMode</code>（除非該 subagent 的 <code>permissionMode</code> 是 <code>plan</code>）、<code>ScheduleWakeup</code>、<code>TaskOutput</code>、<code>WaitForMcpServers</code>、<code>Workflow</code>。</p>
+<p><strong>第二層只套用在背景執行的 subagent 身上</strong>（背景是<a href="#6-background-isolation-worktree">預設值</a>）。除了跟著第一層規則走的 <code>Agent</code> 與 <code>ExitPlanMode</code>，背景 subagent 只保留這些內建工具：<code>Read</code>、<code>Grep</code>、<code>Glob</code>、<code>Bash</code>、<code>PowerShell</code>、<code>Edit</code>、<code>Write</code>、<code>NotebookEdit</code>、<code>WebFetch</code>、<code>WebSearch</code>、<code>TodoWrite</code>、<code>Skill</code>、<code>ToolSearch</code>、<code>EnterWorktree</code>、<code>ExitWorktree</code>、<code>Monitor</code>、<code>TaskStop</code>、<code>SendMessage</code>、<code>Artifact</code>，加上要回報用的 <code>SubagentHandback</code>；MCP 工具則全部保留。其餘內建工具，就算寫在 <code>tools</code> 欄位裡也一樣被拿掉，同一份定義檔在前景跟背景會解析出不同的工具集，這個移除動作不會報錯，除非移除後 <code>tools</code> 清單完全解析不出任何工具[1]。</p>
+<p>fork 會跳過這兩層過濾，直接拿到主線對話一模一樣的工具池[1]。</p>
+<h2 id="6-background-isolation-worktree">6. <code>background</code> 與 <code>isolation: worktree</code> 的實際行為</h2>
+<h3 id="backgroundsubagent">background：subagent 到底在前景還是背景跑</h3>
+<p>官方原文定義兩者的差別：「Foreground subagents block the main conversation until complete. Permission prompts are passed through to you as they come up. Background subagents run concurrently while you continue working.」背景 subagent 遇到需要核准的工具呼叫時，會把提示浮到你的主 session 上並標明是哪個 subagent 在問；核准就讓它繼續，按 Esc 只拒絕那一次工具呼叫，不會連帶停掉整個 subagent[1]。</p>
+<p>Claude 用 Agent 工具派 subagent 時，會依序檢查以下條件決定前景還是背景[1]：</p>
+<ol>
+<li>如果是某個 agent team teammate（in-process）自己派出的 subagent，一律跑前景；teammate 的定義檔若設了 <code>background: true</code> 會直接被拒絕派工</li>
+<li>你設了 <code>CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1</code>，一律跑前景</li>
+<li><strong>fork mode 開啟時</strong>（互動 session 預設就是開的）：一律跑背景，Claude 沒辦法要求前景</li>
+<li>fork mode 關閉時：預設背景，只有 Claude 需要立刻拿到結果才跑前景；要讓某個 subagent 即使 Claude 想要結果也留在背景，就在它的 frontmatter 設 <code>background: true</code></li>
+</ol>
+<p>背景 subagent 的結果是以「完成通知」的形式，在之後的某一輪送回主線；如果你這時候問進度，Claude 只能回報「還在跑」，不能編造結果（v2.1.211 前偶爾會誤報未完成的結果）[1]。背景 subagent 可以在自己的回合結束後仍讓一個背景 Bash／PowerShell 指令繼續跑，指令結束時會收到通知[1]。</p>
+<h3 id="isolation-worktree">isolation: worktree：怎麼真的擋住越界的指令</h3>
+<p>官方原文：「A subagent starts in the main conversation's current working directory... To give the subagent an isolated copy of the repository instead, set <code>isolation: worktree</code>.」[1] 設了之後，它的 Bash／PowerShell 指令都會被限制跑在自己的 worktree 裡：如果指令的工作目錄解析結果落到主 checkout（例如 worktree 目錄在 subagent 跑到一半時被刪掉），指令會直接失敗回錯誤，不是靜默放行（v2.1.203 前不會擋）[1]。</p>
+<p>這個檢查涵蓋整個「你啟動 Claude Code 那個目錄所在的 repository」；如果你自己的 session 本身就跑在一個 linked worktree 裡，檢查範圍還會包含那個 worktree 連回去的主 checkout（v2.1.210 前只檢查啟動目錄本身）。針對 Bash 指令，Claude Code 另外檢查指令內容本身：擋掉會把 git 重導向到主 checkout 的指令，也會拒絕它無法從指令文字判斷出「裡面呼叫的 git 是否留在 worktree 內」的指令（例如指令名稱是執行時才算出來的）。PowerShell 只做工作目錄檢查，<code>Monitor</code> 工具走跟 Bash 一樣的雙重檢查[1]。worktree 用完會自動清掉，前提是 subagent 沒有做出任何改動（frontmatter 欄位表原文：「The worktree is automatically cleaned up if the subagent makes no changes」）[1]。</p>
+<p>當主線對話自己就跑在一個 worktree 裡時，這套檢查同時套用在 session 本身和它派出的每一個 subagent，包括沒設 <code>isolation: worktree</code> 的[1]。</p>
+<h2 id="7-sendmessage">7. SendMessage 續問</h2>
+<p>官方工具參考裡對 <code>SendMessage</code> 的定義：「Sends a message to another agent: an agent team teammate, a subagent it resumes by agent ID or name, or one of your other Claude Code sessions, on this machine or beyond it.」[6] 續問一個已經跑完的 subagent，不需要重新開一次 Agent 呼叫：「When Claude sends a completed subagent a message with the <code>SendMessage</code> tool, the subagent resumes in the background without a new <code>Agent</code> invocation... The resumed run keeps the tool set from where the subagent first ran and can keep reading the prompt cache the original run warmed.」[1] 也就是說，續問時 subagent 沿用它第一次跑的時候是前景還是背景所決定的工具集，而且還能繼續吃到原本那次跑暖的 prompt cache，不是從零開始。</p>
+<p><code>SendMessage</code> 本身不需要開啟 agent teams 才能用，只有 <code>shutdown_request</code>、<code>plan_approval_response</code> 這種結構化的 team-protocol 訊息才需要[1]。一個有 <code>SendMessage</code> 工具的 subagent 自己也能發訊息續問別的 agent；在互動 session 裡，被續問的 agent 完成後會回報給續問它的那個 subagent，不是直接跳回你的主對話，續問的一方會等結果才結束自己的工作[1]。</p>
+<p>subagent 要看到誰可以被 <code>SendMessage</code> 到，靠的是啟動時附帶的「sibling roster」（一則系統提醒，列出 <code>main</code> 跟這個 session 裡每一個有名字的 agent）。這則提醒只在該 subagent 的工具清單裡有 <code>SendMessage</code>、且至少有另一個 agent 已經有名字時才會出現，而且是啟動當下的快照，之後才取名的 agent 不會補進去（v2.1.206 起）[1]。</p>
+<div class="admonition note">
+<p class="admonition-title">同名保護</p>
+<p>v2.1.199 起，<code>SendMessage</code> 會檢查一個名字現在是不是仍指向它先前接觸過的同一個 agent。如果有個新 agent 重用了舊名字（例如重新派的背景 agent 剛好取了一樣的名字），Claude Code 會拒絕送出而不是送錯對象，並且在錯誤裡告訴 Claude 這個名字現在指向誰，讓它改用當初拿到的 agent ID 重新定位。這個檢查只在目前這個對話裡有效，<code>/clear</code> 之後會重置[1]。</p>
+</div>
+<h2 id="8-agent-viewagent-teams-dynamic-workflows">8. 其他多代理機制：agent view、agent teams 與 dynamic workflows</h2>
+<p>Subagent 只是 Claude Code 五種「同時處理多件事」的做法之一，官方對照表如下（翻譯自原文）[2]：</p>
+<table>
+<thead>
+<tr>
+<th>做法</th>
+<th>給你什麼</th>
+<th>什麼時候用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subagent</td>
+<td>一個 session 內委派的工人，在自己的 context 做側支任務，只回傳摘要</td>
+<td>側支任務會把主對話塞滿你不會再看的搜尋結果、log、檔案內容</td>
+</tr>
+<tr>
+<td>Agent view（<code>claude agents</code>，研究預覽）</td>
+<td>一個畫面派工並監控多個跑在背景的 session</td>
+<td>有好幾個獨立任務要交出去，只想大致看狀態、需要時才介入</td>
+</tr>
+<tr>
+<td>Agent teams（實驗性，預設關閉）</td>
+<td>多個協調中的 session，共用任務清單與代理間訊息，由一個 lead 管理</td>
+<td>想讓 Claude 把一個專案拆成幾塊、分派、並讓工人保持同步</td>
+</tr>
+<tr>
+<td>Projects（claude.ai/code 或桌面版，Pro／Max 公開 beta）</td>
+<td>一個持續進行的對話，Claude 自己開好幾條雲端平行 thread</td>
+<td>工作橫跨好幾天到幾週，希望電腦關機也繼續跑，只想講一次目標</td>
+</tr>
+<tr>
+<td>Dynamic workflows</td>
+<td>一支跑很多 subagent、互相交叉核對結果的腳本，處理一次對話輪不完的工作</td>
+<td>任務大到超出手動協調的規模，或想要多方交叉驗證的結果</td>
+</tr>
+</tbody>
+</table>
+<p>每一種底層的工人都是 Claude session；要接別的工具，一律透過 <a href="mcp.html">MCP server</a>[2]。</p>
+<h3 id="workflow-dynamic-workflows">Workflow 工具與 dynamic workflows</h3>
+<p>Dynamic workflow 是一支由 Claude 寫出來、在背景由 runtime 執行的 JavaScript 腳本，一次協調多個 subagent，適合「單一對話輪協調不完」或「想把協調過程寫成可重跑的腳本」的任務，例如全庫規模的 bug 排查、500 個檔案的搬遷、需要互相核對來源的研究問題、或值得從多個角度分別起草再比較的高風險計畫[3]。</p>
+<p>跟 subagent／skill／agent team 最本質的差異是「誰握著計畫」：subagent 跟 agent team 是 Claude（或 lead agent）逐輪決定下一步做什麼，中間結果留在 context window 裡；workflow 是把整個迴圈、分支邏輯、中間結果都搬進腳本本身，Claude 的 context 只看得到最終答案[3]。</p>
+<p>內建的 <code>/deep-research</code> 就是一個現成的 workflow，會針對一個問題從多個角度平行搜尋、交叉核對來源、對每個論點投票，回傳一份已經濾掉沒通過交叉核對的引用報告[3]。要臨時把單一任務跑成 workflow，在提示裡加關鍵字 <code>ultracode</code>，或者直接用自己的話講「用 workflow 做」也算數；<code>/effort ultracode</code> 則是讓 Claude 對整個 session 裡每個像樣的任務都自動規劃 workflow[3]。</p>
+<p>跑 workflow 前 Claude Code 通常會先問是否放行，這個提示會依權限模式而不同；在 <code>claude -p</code> 與 Agent SDK 裡完全不會跳出這個提示，改用一般的權限規則決定，其中最直接的是在 allow 規則裡放 <code>Workflow</code>（放行所有 workflow）或 <code>Workflow(&lt;name&gt;)</code>（只放行某個已存檔的 workflow）[3]。跑起來的 workflow 可以用 <code>/workflows</code> 監看每個階段的 agent 數、token 用量與經過時間[3]。這也是為什麼<a href="#5">第 5 節</a>提到 <code>Workflow</code> 本身被第一層過濾器整批拿掉：subagent 不能自己再派一個 workflow。</p>
+<div class="admonition note">
+<p class="admonition-title">併發上限</p>
+<p>一個 session 裡同時跑滿 20 個 subagent 時，再用 Agent 工具派下一個會直接失敗、報 <code>Concurrent subagent limit reached</code>，Claude 收到的錯誤訊息會註明不要重試；等執行中的數量降到門檻以下才能再派。要調整這個上限，設環境變數 <code>CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS</code>。啟用 ultracode 的 session 不受這個限制[1]。</p>
+</div>
+<h2 id="9">9. 成本：三層倍數，不能互換引用</h2>
+<p>官方分析自家多代理研究系統時給過一個常被引用的數字，逐字如下：「In our data, agents typically use about 4× more tokens than chat interactions, and multi-agent systems use about 15× more tokens than chats.」[5] 也就是「一般聊天」對「單一 agent」對「多代理系統」，是 1 倍、約 4 倍、約 15 倍。15 倍的比較基準是一般聊天，不是單一 agent。</p>
+<p>另一個常被搞混的數字來自完全不同的文件，官方原文：「Agent teams use approximately 7x more tokens than standard sessions when teammates run in plan mode, because each teammate maintains its own context window and runs as a separate Claude instance.」[4] 這個 7 倍限定在「teammate 跑 plan mode」這個情境，比較基準是標準 session，跟前面的 15 倍是兩篇不同文件、兩個不同系統、不同比較基準，<strong>不可互換引用</strong>。<a href="harness.html">把 AI 代理的工作環境設計得可靠</a>第五節點出過同一組 4 倍／15 倍數字，這裡補上 agent teams 那個獨立的 7 倍，並且明講兩者不能混為一談。</p>
+<p>官方給的省 token 建議跟這組倍數是同一個脈絡，摘要幾條跟 subagent 直接相關的[4]：</p>
+<ul>
+<li>機械型 subagent 指定 <code>model: haiku</code>，架構決策才留給 Opus</li>
+<li>把跑測試、抓文件、處理 log 這類冗長操作丟給 subagent，讓完整輸出留在 subagent 的 context，只帶摘要回主線</li>
+<li>agent team 要用 Sonnet 當 teammate、團隊人數盡量小、派工提示聚焦、工作做完就關掉 teammate</li>
+</ul>
+<h2 id="10-codex">10. Codex 的對應設定</h2>
+<p>Codex 的 subagent 定義放在 TOML 檔：<code>~/.codex/agents/</code>（個人層）或 <code>.codex/agents/</code>（專案層），每個檔案定義一個自訂 agent。必填三個欄位：<code>name</code>、<code>description</code>、<code>developer_instructions</code>；也可以在同一個檔案裡帶其他 <code>config.toml</code> 支援的鍵，例如 <code>model</code>、<code>model_reasoning_effort</code>、<code>sandbox_mode</code>、<code>mcp_servers</code>、<code>skills.config</code>，省略的設定會從父層繼承[7]。</p>
+<pre><code class="language-toml">name = &quot;pr_explorer&quot;
+description = &quot;Read-only codebase explorer for gathering evidence before changes are proposed.&quot;
+model = &quot;gpt-5.6-luna&quot;
+model_reasoning_effort = &quot;medium&quot;
+sandbox_mode = &quot;read-only&quot;
+developer_instructions = &quot;&quot;&quot;
+Stay in exploration mode.
+Trace the real execution path, cite files and symbols, and avoid proposing fixes unless the parent agent asks for them.
+Prefer fast search and targeted file reads over broad scans.
+&quot;&quot;&quot;
+</code></pre>
+<p>Codex 內建三種現成 agent：<code>default</code>（萬用備援）、<code>worker</code>（專注實作與修復）、<code>explorer</code>（偏重程式庫探索的唯讀 agent）。自訂 agent 的檔名不一定要跟 <code>name</code> 欄位一致，但 <code>name</code> 才是真正的識別依據；如果自訂 agent 的名字跟內建 agent 撞名，自訂的優先[7]。</p>
+<p>全域設定放在 <code>config.toml</code> 的 <code>[agents]</code> 區塊[7]：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>型別</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agents.enabled</code></td>
+<td>boolean</td>
+<td>開關多代理工具，預設 <code>true</code></td>
+</tr>
+<tr>
+<td><code>agents.max_concurrent_threads_per_session</code></td>
+<td>number</td>
+<td>限制同時開啟的派工執行緒數量（不含主 session）；舊版可用 <code>agents.max_threads</code> 這個別名</td>
+</tr>
+<tr>
+<td><code>agents.default_subagent_model</code></td>
+<td>string</td>
+<td>派工預設模型</td>
+</tr>
+<tr>
+<td><code>agents.default_subagent_reasoning_effort</code></td>
+<td>string</td>
+<td>派工預設推理強度</td>
+</tr>
+<tr>
+<td><code>agents.interrupt_message</code></td>
+<td>boolean</td>
+<td>agent 的回合被中斷時，要不要在它的 context 留一則模型看得到的中斷訊息，預設 <code>true</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>model</code>／<code>model_reasoning_effort</code> 這兩項如果自訂 agent 檔案自己設定了，優先於派工當下傳入的值、<code>[agents]</code> 的預設值、跟父層 session 的值。Codex 的解析順序反過來是「檔案優先」，跟 Claude Code「派工參數優先於定義檔」剛好相反，這點在比較兩邊設計時容易搞混，這裡特別點出來[7]。</p>
+<h2 id="_1">常見誤用</h2>
+<ul>
+<li><strong>以為 <code>background: true</code> 只是換個執行位置，不影響工具</strong>：第 5 節的第二層過濾器是實打實砍工具，同一份定義檔前景跑得動的工具，背景不一定跑得動；派工前若依賴某個內建工具（例如 <code>TodoWrite</code> 以外的規劃類工具），先查一遍它是否在背景保留清單裡。</li>
+<li><strong>把「多代理 15 倍」跟「agent team 7 倍」當同一件事引用</strong>：第 9 節已經講過，比較基準跟系統都不同，官方沒有講過兩者可以互換。</li>
+<li><strong>拿 subagent 處理需要頻繁來回微調的任務</strong>：<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>已經提過，subagent 預設從零 context 開始，來回討論的成本比留在主線更高。</li>
+<li><strong>以為 <code>isolation: worktree</code> 只是「換個目錄」</strong>：第 6 節列的雙重檢查（工作目錄＋指令內容）是真的會擋下指令並回錯誤，不是可有可無的建議性隔離。</li>
+<li><strong>忘記 workflow 是另一條路，不是 subagent 的加強版</strong>：workflow 把計畫搬進腳本，跟 Claude 逐輪決定是不同的協調方式，規模到「一次對話輪協調不完」才值得換路，不是任務稍微複雜就該換。</li>
+</ul>
+<h2 id="_2">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>來源</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1]</td>
+<td>Create custom subagents</td>
+<td><a href="https://code.claude.com/docs/en/sub-agents">https://code.claude.com/docs/en/sub-agents</a></td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>Run agents in parallel</td>
+<td><a href="https://code.claude.com/docs/en/agents">https://code.claude.com/docs/en/agents</a></td>
+</tr>
+<tr>
+<td>[3]</td>
+<td>Orchestrate subagents at scale with dynamic workflows</td>
+<td><a href="https://code.claude.com/docs/en/workflows">https://code.claude.com/docs/en/workflows</a></td>
+</tr>
+<tr>
+<td>[4]</td>
+<td>Costs（Reduce token usage、Agent team token costs）</td>
+<td><a href="https://code.claude.com/docs/en/costs">https://code.claude.com/docs/en/costs</a></td>
+</tr>
+<tr>
+<td>[5]</td>
+<td>How we built our multi-agent research system</td>
+<td><a href="https://www.anthropic.com/engineering/multi-agent-research-system">https://www.anthropic.com/engineering/multi-agent-research-system</a></td>
+</tr>
+<tr>
+<td>[6]</td>
+<td>Tools reference（<code>SendMessage</code>／<code>ListAgents</code>）</td>
+<td><a href="https://code.claude.com/docs/en/tools-reference">https://code.claude.com/docs/en/tools-reference</a></td>
+</tr>
+<tr>
+<td>[7]</td>
+<td>Subagents（Codex）</td>
+<td><a href="https://learn.chatgpt.com/docs/agent-configuration/subagents">https://learn.chatgpt.com/docs/agent-configuration/subagents</a></td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>｜<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>｜<a href="harness.html">把 AI 代理的工作環境設計得可靠</a>｜<a href="agent-basics.html">AI Agent 怎麼運作</a></p>
+</article>
+<nav class="pager"><a class="prev" href="extensions.html">← SKILL、Plugin、MCP 與 Subagent</a><a class="next" href="mcp.html">MCP 入門與實戰 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#1-subagent">1. Subagent 是什麼、什麼時候該用</a></li>
+<li><a href="#2-agent">2. 內建 agent</a></li>
+<li><a href="#3-agentfrontmatter">3. 自訂 agent：frontmatter 全欄位</a></li>
+<li><a href="#4-fable">4. 模型怎麼選：fable 是什麼、解析順序</a></li>
+<li><a href="#5">5. 工具怎麼被過濾</a></li>
+<li><a href="#6-background-isolation-worktree">6. background 與 isolation: worktree 的實際行為</a><ul>
+<li><a href="#backgroundsubagent">background：subagent 到底在前景還是背景跑</a></li>
+<li><a href="#isolation-worktree">isolation: worktree：怎麼真的擋住越界的指令</a></li>
+</ul>
+</li>
+<li><a href="#7-sendmessage">7. SendMessage 續問</a></li>
+<li><a href="#8-agent-viewagent-teams-dynamic-workflows">8. 其他多代理機制：agent view、agent teams 與 dynamic workflows</a><ul>
+<li><a href="#workflow-dynamic-workflows">Workflow 工具與 dynamic workflows</a></li>
+</ul>
+</li>
+<li><a href="#9">9. 成本：三層倍數，不能互換引用</a></li>
+<li><a href="#10-codex">10. Codex 的對應設定</a></li>
+<li><a href="#_1">常見誤用</a></li>
+<li><a href="#_2">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

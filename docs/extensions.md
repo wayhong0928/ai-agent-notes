@@ -116,6 +116,8 @@ the problem, show the current code, and provide an improved version.
 
 **常見誤用**：拿 subagent 處理需要頻繁來回微調的任務。官方明講，subagent 預設從零上下文開始，來回討論的成本反而更高；這種情境該留在主線對話，或者用 SKILL 讓主線自己套用同一套程序[9]。
 
+想知道 frontmatter 完整 18 個欄位、`background` 怎麼過濾工具、`isolation: worktree` 怎麼真的擋下越界指令、`SendMessage` 怎麼續問一個已完成的 subagent、多代理成本三層倍數怎麼算，見專篇[Subagent 入門與實戰](subagent.md)。
+
 ### Plugin：打包分享
 
 `plugin.json` 只有 `name` 是必填：

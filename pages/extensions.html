@@ -23,9 +23,10 @@
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789618549">AI Agent 怎麼運作</a></li>
-<li class="active"><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789791080">SKILL、Plugin、MCP 與 Subagent</a></li>
-<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1789793551">MCP 入門與實戰</a></li>
-<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1789793539">好用工具清單</a></li>
+<li class="active"><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789793561">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1789832687">Subagent 入門與實戰</a></li>
+<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1789793561">MCP 入門與實戰</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1789793561">好用工具清單</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
@@ -45,13 +46,13 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789791080">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789793561">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
 <main id="main">
 <p class="crumb"><a href="../index.html">首頁</a> ／ AI Agent 原理</p>
-<article class="doc" data-updated="1789791080">
+<article class="doc" data-updated="1789793561">
 <h1>SKILL、Plugin、MCP 與 Subagent</h1>
 <p class='lede'>四種擴充機制各自解決什麼問題</p>
 <blockquote>
@@ -182,6 +183,7 @@ the problem, show the current code, and provide an improved version.
 </code></pre>
 <p>官方建議適合用 subagent 的情境：任務會產生大量你不需要留在主線的雜訊（搜尋結果、檔案內容）；想針對特定任務限制工具權限；工作自成一體，可以只回傳摘要[9]。</p>
 <p><strong>常見誤用</strong>：拿 subagent 處理需要頻繁來回微調的任務。官方明講，subagent 預設從零上下文開始，來回討論的成本反而更高；這種情境該留在主線對話，或者用 SKILL 讓主線自己套用同一套程序[9]。</p>
+<p>想知道 frontmatter 完整 18 個欄位、<code>background</code> 怎麼過濾工具、<code>isolation: worktree</code> 怎麼真的擋下越界指令、<code>SendMessage</code> 怎麼續問一個已完成的 subagent、多代理成本三層倍數怎麼算，見專篇<a href="subagent.html">Subagent 入門與實戰</a>。</p>
 <h3 id="plugin">Plugin：打包分享</h3>
 <p><code>plugin.json</code> 只有 <code>name</code> 是必填：</p>
 <pre><code class="language-json">{
@@ -358,7 +360,7 @@ the problem, show the current code, and provide an improved version.
 </table>
 <p>延伸：<a href="agent-basics.html">AI Agent 怎麼運作</a>｜<a href="harness.html">把 AI 代理的工作環境設計得可靠</a></p>
 </article>
-<nav class="pager"><a class="prev" href="agent-basics.html">← AI Agent 怎麼運作</a><a class="next" href="mcp.html">MCP 入門與實戰 →</a></nav>
+<nav class="pager"><a class="prev" href="agent-basics.html">← AI Agent 怎麼運作</a><a class="next" href="subagent.html">Subagent 入門與實戰 →</a></nav>
 <footer class="foot">
 <p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
 <p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
