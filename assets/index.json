@@ -36,6 +36,18 @@
   "section": "AI Agent 原理"
  },
  {
+  "slug": "mcp",
+  "title": "MCP 入門與實戰",
+  "desc": "五分鐘裝好第一個、scope／OAuth 怎麼選、Windows 踩坑實錄",
+  "section": "AI Agent 原理"
+ },
+ {
+  "slug": "tools-catalog",
+  "title": "好用工具清單",
+  "desc": "精選審查過的官方文章、skill、plugin、MCP 與學習資源",
+  "section": "AI Agent 原理"
+ },
+ {
   "slug": "harness",
   "title": "把 AI 代理的工作環境設計得可靠",
   "desc": "官方 harness 原則、驗證分級、多代理成本",

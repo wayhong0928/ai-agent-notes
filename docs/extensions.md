@@ -94,6 +94,8 @@ description: 掃描專案裡所有 Markdown 連結，找出指向不存在檔案
 
 **常見誤用**：以為裝了 MCP 就不會有幻覺答案。MCP 只解決「有沒有真的東西可以查」的問題，代理仍然可能查了卻答錯，或者選錯了要查的工具，接上文獻庫之後還是要核對它真的引用了查到的內容，不是引用了憑空生成的內容。
 
+想知道 `claude mcp add` 的完整用法、scope 怎麼選、OAuth 認證，以及 Windows 上常見的 `cmd /c` 誤區與 Git Bash 踩坑，見專篇[MCP 入門與實戰](mcp.md)。
+
 ### Subagent：獨立乾淨的視角
 
 `.claude/agents/` 底下的一個定義檔，只有 `name` 與 `description` 是必填：

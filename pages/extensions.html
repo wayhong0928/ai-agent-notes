@@ -23,11 +23,13 @@
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1789618549">AI Agent 怎麼運作</a></li>
-<li class="active"><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789789001">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li class="active"><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789791080">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1789793551">MCP 入門與實戰</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1789793539">好用工具清單</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
-<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789655763">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1789791080">Claude Code + Codex 協作</a></li>
 <li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1789618549">把教材做成 SKILL</a></li>
 <li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1789655763">Claude Code 接上 Obsidian</a></li>
 <li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655763">Claude Code + Cowork 並用</a></li>
@@ -38,18 +40,18 @@
 <li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789655763">AI 代理時代的 SDLC</a></li>
 </ul></div>
 <div class="navsec"><h2>官方建議設定</h2><ul>
-<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789618549">Claude Code 設定總覽</a></li>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789791080">Claude Code 設定總覽</a></li>
 <li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1789618549">Hooks 與 Subagent 設定</a></li>
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789789001">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789791080">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
 <main id="main">
 <p class="crumb"><a href="../index.html">首頁</a> ／ AI Agent 原理</p>
-<article class="doc" data-updated="1789789001">
+<article class="doc" data-updated="1789791080">
 <h1>SKILL、Plugin、MCP 與 Subagent</h1>
 <p class='lede'>四種擴充機制各自解決什麼問題</p>
 <blockquote>
@@ -165,6 +167,7 @@ description: 掃描專案裡所有 Markdown 連結，找出指向不存在檔案
 </code></pre>
 <p>這個檔案建議一起進版本控制，讓團隊每個人都接到同一組工具[6]。Codex 側用 <code>codex mcp</code> 指令管理連接的外部 MCP server[7]。</p>
 <p><strong>常見誤用</strong>：以為裝了 MCP 就不會有幻覺答案。MCP 只解決「有沒有真的東西可以查」的問題，代理仍然可能查了卻答錯，或者選錯了要查的工具，接上文獻庫之後還是要核對它真的引用了查到的內容，不是引用了憑空生成的內容。</p>
+<p>想知道 <code>claude mcp add</code> 的完整用法、scope 怎麼選、OAuth 認證，以及 Windows 上常見的 <code>cmd /c</code> 誤區與 Git Bash 踩坑，見專篇<a href="mcp.html">MCP 入門與實戰</a>。</p>
 <h3 id="subagent">Subagent：獨立乾淨的視角</h3>
 <p><code>.claude/agents/</code> 底下的一個定義檔，只有 <code>name</code> 與 <code>description</code> 是必填：</p>
 <pre><code class="language-markdown">---
@@ -355,7 +358,7 @@ the problem, show the current code, and provide an improved version.
 </table>
 <p>延伸：<a href="agent-basics.html">AI Agent 怎麼運作</a>｜<a href="harness.html">把 AI 代理的工作環境設計得可靠</a></p>
 </article>
-<nav class="pager"><a class="prev" href="agent-basics.html">← AI Agent 怎麼運作</a><a class="next" href="harness.html">把 AI 代理的工作環境設計得可靠 →</a></nav>
+<nav class="pager"><a class="prev" href="agent-basics.html">← AI Agent 怎麼運作</a><a class="next" href="mcp.html">MCP 入門與實戰 →</a></nav>
 <footer class="foot">
 <p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
 <p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
