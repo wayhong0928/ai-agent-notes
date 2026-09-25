@@ -16,7 +16,7 @@
 <a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
-<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789789001">AI 介面比較總表</a></li>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1789871219">AI 介面比較總表</a></li>
 <li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789789001">免付費區</a></li>
 <li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1789789001">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1789789001">Projects 功能</a></li>
@@ -26,7 +26,7 @@
 <li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789833331">SKILL、Plugin、MCP 與 Subagent</a></li>
 <li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1789833331">Subagent 入門與實戰</a></li>
 <li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1789793561">MCP 入門與實戰</a></li>
-<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1789793561">好用工具清單</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1790340239">好用工具清單</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
@@ -38,7 +38,7 @@
 <div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
 <li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789655763">SDLC 與流程模型</a></li>
 <li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789655763">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
-<li class="active"><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1789655763">AI 代理時代的 SDLC</a></li>
+<li class="active"><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1790340239">AI 代理時代的 SDLC</a></li>
 </ul></div>
 <div class="navsec"><h2>官方建議設定</h2><ul>
 <li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1789791080">Claude Code 設定總覽</a></li>
@@ -46,17 +46,17 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1789833331">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1790340239">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
 <main id="main">
 <p class="crumb"><a href="../index.html">首頁</a> ／ 軟體開發流程 SDLC</p>
-<article class="doc" data-updated="1789655763">
+<article class="doc" data-updated="1790340239">
 <h1>AI 代理時代的 SDLC</h1>
 <p class='lede'>規格、計畫、實作、驗證、交付各階段的 AI 分工</p>
 <blockquote>
-<p>查證日期：2026-09-16。本頁只寫查得到出處或官方文件明講的做法，個人的 Claude Code 規則檔、派工制度、設定檔內容不在本頁範圍內；整理者自己的觀察會明確標示，不包裝成官方結論或研究結果。</p>
+<p>查證日期：2026-09-16（2026-09-25 補充 OpenSpec）。本頁只寫查得到出處或官方文件明講的做法，個人的 Claude Code 規則檔、派工制度、設定檔內容不在本頁範圍內；整理者自己的觀察會明確標示，不包裝成官方結論或研究結果。</p>
 </blockquote>
 <p><a href="sdlc-traditional.html">上一頁</a>介紹的六個 SDLC 階段跟<a href="dev-practices.html">開發實踐</a>介紹的 TDD、BDD、DDD 都沒有因為 AI 代理出現而消失：需求還是要分析，設計還是要做，程式碼還是要測試才能上線。改變的是每個階段花的力氣分布，以及風險出現的位置。</p>
 <div class="admonition note">
@@ -115,6 +115,7 @@
 <h2 id="spec-driven-developmentsdd">二、規格驅動開發（Spec-Driven Development，SDD）</h2>
 <h3 id="_2">是什麼</h3>
 <p>規格驅動開發是把「要做什麼、為什麼要做」寫成一份明確規格，再依規格產出技術計畫與可執行的任務清單，最後用一個收斂（convergence）步驟驗證實作是不是真的符合規格，不符合就回頭再對齊。這個定義來自 GitHub 官方的 <code>spec-kit</code> 專案，原文把核心精神講成「先決定 what 跟 why，再決定 how」（原文：Define what and why before deciding how to build it）[4]。<code>spec-kit</code> 把整個流程拆成幾個階段：Constitution（每個專案一次，訂出這個專案不變的原則）→ Specify（寫規格）→ Plan（技術計畫）→ Tasks（任務清單）→ Implement（實作）→ Converge（收斂，反覆進行直到實作與規格一致）[4]。</p>
+<p>除了 <code>spec-kit</code>，<a href="https://github.com/Fission-AI/OpenSpec">OpenSpec</a> 是另一個常見的 SDD 工具[11]；兩者都要在每個專案各自初始化，不是裝一次就對所有專案生效。</p>
 <h3 id="_3">規格的定位：可執行的產出物，不是靜態文件</h3>
 <p><code>spec-kit</code> 的方法論文件把它自己的指令定位成「把規格當成可執行的產出物，而不是靜態文件」（原文：The commands embody SDD principles by treating specifications as executable artifacts rather than static documents），同一份文件也把「規格與程式碼保持同步，因為程式碼是規格產生的」列為「Living Documentation」[5]。落在流程上的具體差別是：規格、計畫、任務清單在整個開發過程裡持續被拿出來對照，<code>spec-kit</code> 特別設計了收斂階段，把「檢查實作有沒有符合規格」變成流程裡的固定步驟，而不是交付前才臨時檢查一次[4]。</p>
 <p><strong>整理者觀察</strong>：這個差別，整理者認為本質上跟 TDD「先寫測試再寫程式碼」是同一種思路的不同層次——TDD 讓程式碼有一個自動可驗證的目標，SDD 讓整個開發過程有一個持續可對照的目標。這個類比是整理者自己下的，<code>spec-kit</code> 官方文件沒有這樣寫。</p>
@@ -289,6 +290,11 @@
 <td>[10]</td>
 <td>分工模式詳見</td>
 <td><a href="claude-codex.html">Claude Code + Codex 協作</a></td>
+</tr>
+<tr>
+<td>[11]</td>
+<td>OpenSpec：另一個 SDD 工具，每個專案各自執行 <code>openspec init</code></td>
+<td><a href="https://github.com/Fission-AI/OpenSpec">Fission-AI/OpenSpec</a></td>
 </tr>
 <tr>
 <td>—</td>
