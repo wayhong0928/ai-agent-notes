@@ -1,6 +1,6 @@
 # 好用工具清單
 
-> 查證日期：2026-09-19。stars／最後更新日期／license 都是這天用 GitHub API 即時查證的快照，之後會變動，請自己重查一次再決定要不要裝。
+> 查證日期：2026-09-19（2026-09-25 補入 4 項，這幾列另外標註查證日期）。stars／最後更新日期／license 都是查證當天的快照，之後會變動，請自己重查一次再決定要不要裝。
 
 這頁收的是本站作者自己讀過、審查過的 Claude Code／Codex 官方文章、skill、plugin、MCP 與學習資源。目標是「精選」不是「收全」：能找到的相關 repo 遠不只這些，這裡只留下讀過原始碼、判斷過風險之後還願意留著的項目。想看完整清單，第 6 節的幾個 awesome-list 本身就是更大的入口。
 
@@ -37,6 +37,7 @@
 | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | 官方 plugin marketplace 原始碼 | 36,480★，最後 push 2026-09-18，Apache-2.0 | 來路最清楚的安裝來源，裝這裡的 plugin 風險最低 |
 | [openai/codex-plugin-cc](https://github.com/openai/codex-plugin-cc) | Codex 官方的 Claude Code plugin，讓 Claude Code 直接呼叫 Codex 做 review 或委派任務 | 33,317★，最後 push 2026-07-08，Apache-2.0 | 本站作者實際在用 |
 | [anthropics/claude-cookbooks](https://github.com/anthropics/claude-cookbooks) | 官方 API 用法 cookbook，非 Claude Code 專用，但工具呼叫模式可參考 | 52,810★，最後 push 2026-09-18，MIT | 適合想直接用 API 而非 Claude Code 的讀者 |
+| `claude-api` skill 的 `prompt-audit` 子指令（用法 `/claude-api prompt-audit`） | 檢查專案裡的 skill、CLAUDE.md、系統提示詞與工具描述，找出為舊模型寫、對新模型已經多餘或有害的寫法（例如當年為了觸發不足而加的強調語氣、一步一步照做的腳本），產出報告（附 `檔案:行號`、理由與信心等級）和一份建議 diff | Claude Code 內建，不用另外安裝（2026-09-25 在 Claude Code 2.1.282 查證） | 預設只提建議、不直接改檔，要在指令裡明講要套用才會動檔案；低信心的項目只列在報告裡，不放進 diff。官方介紹見 Anthropic 部落格[2]；完整規則在 skill 內附的 `shared/prompt-audit.md` |
 
 ## 4. MCP：只列推薦項目
 
@@ -59,6 +60,8 @@ MCP 的協定原理、安裝步驟、scope 與 OAuth 設定，還有 Windows 上
 | [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) | 減少 LLM 寫程式時的過度工程化，強調外科手術式小改動與可驗證的完成標準 | 約 21.4 萬★，license 欄位為空（使用前自行確認），最後更新 2026-04-20 | 本站作者實際在用 |
 | [wshobson/agents](https://github.com/wshobson/agents) | 跨 Claude Code／Codex／Cursor／OpenCode／Copilot 的多用途 plugin marketplace，agent／skill／command 種類齊全 | 39,789★，最後 push 2026-09-19，MIT | 規模大，建議先挑單一 agent／skill 讀過再裝，不要整包信任 |
 | [github/spec-kit](https://github.com/github/spec-kit) | GitHub 官方的 Spec-Driven Development 工具包，把「先出規格再執行」流程化 | 137,848★，最後 push 2026-09-18，MIT | 跟「先出規格、再交給執行者」這種分工方式同構，即使不整套裝，讀它怎麼把規格寫成可驗證的格式也有參考價值 |
+| [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) | 另一個規格驅動開發（SDD）工具：寫程式前先跟 AI 對齊提案、規格、設計與任務清單，每項變更各自一個資料夾 | 70,307★，最後 push 2026-09-23，MIT（2026-09-25 查證） | npm 套件 `@fission-ai/openspec`，全域安裝一次；每個專案各自執行 `openspec init`，會建立 `openspec/` 資料夾，並在 `.claude/` 加上 skill 與 slash command（例如 `/opsx:propose`）。跟上一列 spec-kit 定位相近，挑一個用就好；官方 README 的安裝指令用 `@latest`，照第 1 節第 4 步改成鎖定版本 |
+| [stablyai/orca](https://github.com/stablyai/orca)（官網 [onorca.dev](https://onorca.dev)） | 本機桌面 app（macOS／Windows／Linux），讓 Claude Code、Codex、OpenCode 等 CLI agent 各在自己的 git worktree 平行跑，集中在一個畫面監看；另有手機 app，可以看進度、收完成通知、補一句追問 | 77,922★，最後 push 2026-09-25，MIT（2026-09-25 查證） | 它不是模型，跑的是你自己已經登入的 CLI（官方文件原文：bring your own Claude, Codex, or OpenCode subscription），用量照算在你自己的訂閱，不會替你省額度。「不同 session 之間直接傳遞 context」在官方討論區 [#681](https://github.com/stablyai/orca/discussions/681) 是以提案（Ideas 分類）出現，README 沒有宣稱已經做到；維護者 2026-05-05 在同一串回覆已加入實驗性的 Agent Orchestration，官方文件寫明要先到 Settings → Experimental 開啟，做法是在 agent 之間傳任務規格和訊息，不是把整段對話 context 搬過去。打包版預設會送匿名使用統計，可以關掉（見官方 telemetry 文件）。repo 2026-03 才建立，半年累積近 7.8 萬★，照第 1 節的原則，星數不能當成審查過 |
 
 ### 畫圖類 skill 審查筆記
 
@@ -86,6 +89,7 @@ MCP 的協定原理、安裝步驟、scope 與 OAuth 設定，還有 Windows 上
 | [WenyuChiou/awesome-agentic-ai-zh](https://github.com/WenyuChiou/awesome-agentic-ai-zh) | 繁中／英／簡中三語的 agentic AI 學習地圖，240＋ 精選資源 | 7,084★，最後 push 2026-09-19，MIT | 對台灣讀者最友善的延伸閱讀入口 |
 | [clayzhang-TW/claude-academic-workflow-zh](https://github.com/clayzhang-TW/claude-academic-workflow-zh) | 中文學術寫作＋Claude 工作流整理 | 74★，最後 push 2026-09-03，license NOASSERTION | 跟本站「用 Claude 做學術工作流」的定位最接近，適合交叉參考寫法；規模小、license 未標註，不建議未經自己審視就直接套用其規則 |
 | [1weiho/open-slide](https://github.com/1weiho/open-slide) | 代理導向的網頁互動簡報框架 | 7,613★，最後 push 2026-09-17，MIT | 走互動網頁路線而非靜態投影片，跟本站另外整理的 Marp 簡報方法論剛好是對照組，觀察用途非急需 |
+| [the911fund/skill-of-skills](https://github.com/the911fund/skill-of-skills)（網站 [skills.911fund.io](https://skills.911fund.io)） | 自動更新的 AI coding 工具排行榜，收錄 skill、plugin、MCP server 等，依結構品質、星數成長、近期活躍度等訊號加權排名；README 由 GitHub Actions workflow 定時抓資料改寫，也可以接成 MCP server 查詢 | 62★，最後 push 2026-09-25，MIT（2026-09-25 查證） | 想掃一輪「最近有哪些工具」時的查詢起點。它是目錄，不是可以安裝的 skill；排名是自動算出的分數，不是人工審查結論（例如它的「Best of the Best」目前就收了本頁第 7 節不推薦的 `affaan-m/ECC`），從這裡找到的項目，裝之前仍要照第 1 節逐一審查。星數不多 |
 
 ## 7. 看起來很熱門，但我們不推薦的
 
@@ -97,7 +101,8 @@ MCP 的協定原理、安裝步驟、scope 與 OAuth 設定，還有 Windows 上
 | 標記 | 來源 | URL |
 |---|---|---|
 | [1] | Six Million (Suspected) Fake Stars on GitHub（arXiv 2412.13459，ICSE '26） | <https://arxiv.org/abs/2412.13459> |
+| [2] | Reducing cost and improving performance with Claude Platform（Anthropic 部落格，2026-09-08，介紹 `/claude-api prompt-audit`） | <https://claude.com/blog/reducing-cost-and-improving-performance-with-claude-platform> |
 
-stars／最後 push 日期均為 2026-09-19 用 GitHub API（`gh api repos/<owner>/<repo>`）即時查證的快照。
+stars／最後 push 日期除另有標註外，均為 2026-09-19 用 GitHub API（`gh api repos/<owner>/<repo>`）即時查證的快照。2026-09-25 補入的 OpenSpec、Orca、skill-of-skills 三列，stars 與最後 push 用 [ungh.cc](https://ungh.cc) 的公開 GitHub 查詢 API（`/repos/<owner>/<repo>`）查，並跟 shields.io 的星數徽章交叉比對；license 對照 repo 裡的 LICENSE 檔。
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[MCP 入門與實戰](mcp.md)｜[把教材做成 SKILL](skill-build.md)
