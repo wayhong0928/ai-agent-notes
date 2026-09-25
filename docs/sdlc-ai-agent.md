@@ -1,6 +1,6 @@
 # AI 代理時代的 SDLC
 
-> 查證日期：2026-09-16。本頁只寫查得到出處或官方文件明講的做法，個人的 Claude Code 規則檔、派工制度、設定檔內容不在本頁範圍內；整理者自己的觀察會明確標示，不包裝成官方結論或研究結果。
+> 查證日期：2026-09-16（2026-09-25 補充 OpenSpec）。本頁只寫查得到出處或官方文件明講的做法，個人的 Claude Code 規則檔、派工制度、設定檔內容不在本頁範圍內；整理者自己的觀察會明確標示，不包裝成官方結論或研究結果。
 
 [上一頁](sdlc-traditional.md)介紹的六個 SDLC 階段跟[開發實踐](dev-practices.md)介紹的 TDD、BDD、DDD 都沒有因為 AI 代理出現而消失：需求還是要分析，設計還是要做，程式碼還是要測試才能上線。改變的是每個階段花的力氣分布，以及風險出現的位置。
 
@@ -23,6 +23,8 @@
 ### 是什麼
 
 規格驅動開發是把「要做什麼、為什麼要做」寫成一份明確規格，再依規格產出技術計畫與可執行的任務清單，最後用一個收斂（convergence）步驟驗證實作是不是真的符合規格，不符合就回頭再對齊。這個定義來自 GitHub 官方的 `spec-kit` 專案，原文把核心精神講成「先決定 what 跟 why，再決定 how」（原文：Define what and why before deciding how to build it）[4]。`spec-kit` 把整個流程拆成幾個階段：Constitution（每個專案一次，訂出這個專案不變的原則）→ Specify（寫規格）→ Plan（技術計畫）→ Tasks（任務清單）→ Implement（實作）→ Converge（收斂，反覆進行直到實作與規格一致）[4]。
+
+除了 `spec-kit`，[OpenSpec](https://github.com/Fission-AI/OpenSpec) 是另一個常見的 SDD 工具[11]；兩者都要在每個專案各自初始化，不是裝一次就對所有專案生效。
 
 ### 規格的定位：可執行的產出物，不是靜態文件
 
@@ -162,6 +164,7 @@ BDD 的 Given-When-Then 情境本身就是一份可以交給 AI 代理的規格�
 | [7] | `codex exec` 預設唯讀沙箱、CI 使用情境、Codex job 與開 PR job 的權限分工 | [Codex Non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode) |
 | [8] | Codex GitHub Action 的 `sandbox`／`safety-strategy` 選項與 `chmod` 排解權限錯誤 | [Codex GitHub Action](https://learn.chatgpt.com/docs/github-action) |
 | [10] | 分工模式詳見 | [Claude Code + Codex 協作](claude-codex.md) |
+| [11] | OpenSpec：另一個 SDD 工具，每個專案各自執行 `openspec init` | [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) |
 | — | SDD 與 TDD 的類比、DDD 在 CLAUDE.md 的應用、敏捷式瓶頸轉移的推論 | 整理者觀察，正文已標示，查無官方出處 |
 
 延伸：[SDLC 與流程模型](sdlc-traditional.md)｜[開發實踐：TDD、BDD、DDD 與 SDD](dev-practices.md)｜[Claude Code + Codex 協作](claude-codex.md)｜[把 AI 代理的工作環境設計得可靠](harness.md)

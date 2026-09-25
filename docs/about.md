@@ -8,3 +8,4 @@
 |---|---|
 | 2026-09-16 | 建立網站骨架 |
 | 2026-09-19 | **新頁**：[Projects 功能](projects.md)、[Claude Code + Cowork 並用](claude-code-cowork.md)、[Claude Code 接上 Obsidian](claude-code-obsidian.md)。**擴充**：[AI 介面比較總表](tools-compare.md)新增「ChatGPT 一般對話 vs Codex」一節；[Claude Code × Codex](claude-codex.md)補上 workspace 信任判斷；[Harness](harness.md)補三組範例。**更正**：Claude Free 其實可以用 Projects（上限 5 個），先前寫成沒有，[免付費區](free-tier.md)、[付費區](paid-tier.md)已修正；Cowork 併入一般對話屬於分階段推出，相關頁面都加上說明。**排版**：[AI 介面比較總表](tools-compare.md)與[擴充機制比較](extensions.md)的大表拆成精簡總表加逐項說明；SDLC 三頁的引用格式統一。**新增**：[Claude Code 設定總覽](official-config.md)補上 v2.1.277 起讀取 AGENTS.md 的規則說明。新頁：[MCP 入門與實戰](mcp.md)。新頁：[好用工具清單](tools-catalog.md)。新頁：[Subagent 入門與實戰](subagent.md)。 |
+| 2026-09-25 | **擴充**：[好用工具清單](tools-catalog.md)補入 4 項：官方 Skill 區加上 `claude-api` skill 內建的 `/claude-api prompt-audit`；社群 Skill 區加上 OpenSpec 與 Orca；學習資源區加上 skill-of-skills 工具目錄，各列附 2026-09-25 查證數字與來源。[AI 代理時代的 SDLC](sdlc-ai-agent.md)的規格驅動開發一節補上 OpenSpec。 |
