@@ -90,6 +90,7 @@ MCP 的協定原理、安裝步驟、scope 與 OAuth 設定，還有 Windows 上
 | [clayzhang-TW/claude-academic-workflow-zh](https://github.com/clayzhang-TW/claude-academic-workflow-zh) | 中文學術寫作＋Claude 工作流整理 | 74★，最後 push 2026-09-03，license NOASSERTION | 跟本站「用 Claude 做學術工作流」的定位最接近，適合交叉參考寫法；規模小、license 未標註，不建議未經自己審視就直接套用其規則 |
 | [1weiho/open-slide](https://github.com/1weiho/open-slide) | 代理導向的網頁互動簡報框架 | 7,613★，最後 push 2026-09-17，MIT | 走互動網頁路線而非靜態投影片，跟本站另外整理的 Marp 簡報方法論剛好是對照組，觀察用途非急需 |
 | [the911fund/skill-of-skills](https://github.com/the911fund/skill-of-skills)（網站 [skills.911fund.io](https://skills.911fund.io)） | 自動更新的 AI coding 工具排行榜，收錄 skill、plugin、MCP server 等，依結構品質、星數成長、近期活躍度等訊號加權排名；README 由 GitHub Actions workflow 定時抓資料改寫，也可以接成 MCP server 查詢 | 62★，最後 push 2026-09-25，MIT（2026-09-25 查證） | 想掃一輪「最近有哪些工具」時的查詢起點。它是目錄，不是可以安裝的 skill；排名是自動算出的分數，不是人工審查結論（例如它的「Best of the Best」目前就收了本頁第 7 節不推薦的 `affaan-m/ECC`），從這裡找到的項目，裝之前仍要照第 1 節逐一審查。星數不多 |
+| [keyuchen21/agentic-engineering-handbook](https://github.com/keyuchen21/agentic-engineering-handbook) | 英文的 agent 工程學習路線，分 Phase 0–6（agent loop、MCP、context 與 skill、harness、coding agent、evals 與安全），每個階段列「先讀」「再讀」與一個實作練習，收錄約 180 篇 OpenAI、Anthropic、Google 官方文章與社群資源 | 348★，最後 push 2026-09-22，MIT（2026-09-25 查證） | 想有系統補官方文章時當閱讀清單用。本體是連結整理，Phase 0 的教學改寫自 `shareAI-lab/mini-claude-code`（README 有註明）。README 標的最後更新日是 2026-07-25，後來出的文章要自己補 |
 
 ## 7. 看起來很熱門，但我們不推薦的
 
