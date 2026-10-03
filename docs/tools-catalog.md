@@ -1,6 +1,6 @@
 # 好用工具清單
 
-> 查證日期：2026-09-19（2026-09-25 補入 4 項，這幾列另外標註查證日期）。stars／最後更新日期／license 都是查證當天的快照，之後會變動，請自己重查一次再決定要不要裝。
+> 查證日期：2026-09-19（2026-09-25 補入 4 項，2026-10-03 補入 1 項，這幾列另外標註查證日期）。stars／最後更新日期／license 都是查證當天的快照，之後會變動，請自己重查一次再決定要不要裝。
 
 這頁收的是本站作者自己讀過、審查過的 Claude Code／Codex 官方文章、skill、plugin、MCP 與學習資源。目標是「精選」不是「收全」：能找到的相關 repo 遠不只這些，這裡只留下讀過原始碼、判斷過風險之後還願意留著的項目。想看完整清單，第 6 節的幾個 awesome-list 本身就是更大的入口。
 
@@ -91,6 +91,7 @@ MCP 的協定原理、安裝步驟、scope 與 OAuth 設定，還有 Windows 上
 | [1weiho/open-slide](https://github.com/1weiho/open-slide) | 代理導向的網頁互動簡報框架 | 7,613★，最後 push 2026-09-17，MIT | 走互動網頁路線而非靜態投影片，跟本站另外整理的 Marp 簡報方法論剛好是對照組，觀察用途非急需 |
 | [the911fund/skill-of-skills](https://github.com/the911fund/skill-of-skills)（網站 [skills.911fund.io](https://skills.911fund.io)） | 自動更新的 AI coding 工具排行榜，收錄 skill、plugin、MCP server 等，依結構品質、星數成長、近期活躍度等訊號加權排名；README 由 GitHub Actions workflow 定時抓資料改寫，也可以接成 MCP server 查詢 | 62★，最後 push 2026-09-25，MIT（2026-09-25 查證） | 想掃一輪「最近有哪些工具」時的查詢起點。它是目錄，不是可以安裝的 skill；排名是自動算出的分數，不是人工審查結論（例如它的「Best of the Best」目前就收了本頁第 7 節不推薦的 `affaan-m/ECC`），從這裡找到的項目，裝之前仍要照第 1 節逐一審查。星數不多 |
 | [keyuchen21/agentic-engineering-handbook](https://github.com/keyuchen21/agentic-engineering-handbook) | 英文的 agent 工程學習路線，分 Phase 0–6（agent loop、MCP、context 與 skill、harness、coding agent、evals 與安全），每個階段列「先讀」「再讀」與一個實作練習，收錄約 180 篇 OpenAI、Anthropic、Google 官方文章與社群資源 | 348★，最後 push 2026-09-22，MIT（2026-09-25 查證） | 想有系統補官方文章時當閱讀清單用。本體是連結整理，Phase 0 的教學改寫自 `shareAI-lab/mini-claude-code`（README 有註明）。README 標的最後更新日是 2026-07-25，後來出的文章要自己補 |
+| [amitshekhariitbhu/ai-system-design](https://github.com/amitshekhariitbhu/ai-system-design) | 英文的 LLM、RAG 與 AI agent 系統設計長篇教學，涵蓋推論伺服器、快取、路由、向量資料庫與 context 管理；〈Caching in AI〉分別解釋 KV Cache、Prompt Cache、Semantic Cache、Embedding Cache，提醒固定內容放在 prompt 開頭以便重用前綴 | 623★，最後 push 2026-10-03，Apache-2.0（2026-10-03 查證） | 想懂 prompt cache 為什麼沒命中、或準備 AI 系統設計面試的人，可當閱讀資料。repo 2026-09-25 才建立；作者是 Outcome School 創辦人，README 宣傳自家課程，延伸閱讀連結多導向自家部落格 |
 
 ## 7. 看起來很熱門，但我們不推薦的
 
@@ -104,6 +105,6 @@ MCP 的協定原理、安裝步驟、scope 與 OAuth 設定，還有 Windows 上
 | [1] | Six Million (Suspected) Fake Stars on GitHub（arXiv 2412.13459，ICSE '26） | <https://arxiv.org/abs/2412.13459> |
 | [2] | Reducing cost and improving performance with Claude Platform（Anthropic 部落格，2026-09-08，介紹 `/claude-api prompt-audit`） | <https://claude.com/blog/reducing-cost-and-improving-performance-with-claude-platform> |
 
-stars／最後 push 日期除另有標註外，均為 2026-09-19 用 GitHub API（`gh api repos/<owner>/<repo>`）即時查證的快照。2026-09-25 補入的 OpenSpec、Orca、skill-of-skills 三列，stars 與最後 push 用 [ungh.cc](https://ungh.cc) 的公開 GitHub 查詢 API（`/repos/<owner>/<repo>`）查，並跟 shields.io 的星數徽章交叉比對；license 對照 repo 裡的 LICENSE 檔。
+stars／最後 push 日期除另有標註外，均為 2026-09-19 用 GitHub API（`gh api repos/<owner>/<repo>`）即時查證的快照。2026-09-25 補入的 OpenSpec、Orca、skill-of-skills 三列，stars 與最後 push 用 [ungh.cc](https://ungh.cc) 的公開 GitHub 查詢 API（`/repos/<owner>/<repo>`）查，並跟 shields.io 的星數徽章交叉比對；license 對照 repo 裡的 LICENSE 檔。2026-10-03 補入的 ai-system-design 1 項，stars、最後 push 與建立日期用 [GitHub 公開 API](https://api.github.com/repos/amitshekhariitbhu/ai-system-design) 即時查證；license 對照 repo 裡的 LICENSE 檔，內容與限制對照 README 原文及其中的連結。
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[MCP 入門與實戰](mcp.md)｜[把教材做成 SKILL](skill-build.md)

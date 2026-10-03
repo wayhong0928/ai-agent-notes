@@ -26,7 +26,7 @@
 <li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789833331">SKILL、Plugin、MCP 與 Subagent</a></li>
 <li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1789833331">Subagent 入門與實戰</a></li>
 <li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1789793561">MCP 入門與實戰</a></li>
-<li class="active"><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1790340239">好用工具清單</a></li>
+<li class="active"><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1790345797">好用工具清單</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
@@ -46,17 +46,17 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1790340239">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1790345797">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
 <main id="main">
 <p class="crumb"><a href="../index.html">首頁</a> ／ AI Agent 原理</p>
-<article class="doc" data-updated="1790340239">
+<article class="doc" data-updated="1790345797">
 <h1>好用工具清單</h1>
 <p class='lede'>精選審查過的官方文章、skill、plugin、MCP 與學習資源</p>
 <blockquote>
-<p>查證日期：2026-09-19（2026-09-25 補入 4 項，這幾列另外標註查證日期）。stars／最後更新日期／license 都是查證當天的快照，之後會變動，請自己重查一次再決定要不要裝。</p>
+<p>查證日期：2026-09-19（2026-09-25 補入 4 項，2026-10-03 補入 1 項，這幾列另外標註查證日期）。stars／最後更新日期／license 都是查證當天的快照，之後會變動，請自己重查一次再決定要不要裝。</p>
 </blockquote>
 <p>這頁收的是本站作者自己讀過、審查過的 Claude Code／Codex 官方文章、skill、plugin、MCP 與學習資源。目標是「精選」不是「收全」：能找到的相關 repo 遠不只這些，這裡只留下讀過原始碼、判斷過風險之後還願意留著的項目。想看完整清單，第 6 節的幾個 awesome-list 本身就是更大的入口。</p>
 <h2 id="1">1. 怎麼用這份清單</h2>
@@ -337,6 +337,12 @@
 <td>348★，最後 push 2026-09-22，MIT（2026-09-25 查證）</td>
 <td>想有系統補官方文章時當閱讀清單用。本體是連結整理，Phase 0 的教學改寫自 <code>shareAI-lab/mini-claude-code</code>（README 有註明）。README 標的最後更新日是 2026-07-25，後來出的文章要自己補</td>
 </tr>
+<tr>
+<td><a href="https://github.com/amitshekhariitbhu/ai-system-design">amitshekhariitbhu/ai-system-design</a></td>
+<td>英文的 LLM、RAG 與 AI agent 系統設計長篇教學，涵蓋推論伺服器、快取、路由、向量資料庫與 context 管理；〈Caching in AI〉分別解釋 KV Cache、Prompt Cache、Semantic Cache、Embedding Cache，提醒固定內容放在 prompt 開頭以便重用前綴</td>
+<td>623★，最後 push 2026-10-03，Apache-2.0（2026-10-03 查證）</td>
+<td>想懂 prompt cache 為什麼沒命中、或準備 AI 系統設計面試的人，可當閱讀資料。repo 2026-09-25 才建立；作者是 Outcome School 創辦人，README 宣傳自家課程，延伸閱讀連結多導向自家部落格</td>
+</tr>
 </tbody>
 </table>
 <h2 id="7">7. 看起來很熱門，但我們不推薦的</h2>
@@ -366,7 +372,7 @@
 </tr>
 </tbody>
 </table>
-<p>stars／最後 push 日期除另有標註外，均為 2026-09-19 用 GitHub API（<code>gh api repos/&lt;owner&gt;/&lt;repo&gt;</code>）即時查證的快照。2026-09-25 補入的 OpenSpec、Orca、skill-of-skills 三列，stars 與最後 push 用 <a href="https://ungh.cc">ungh.cc</a> 的公開 GitHub 查詢 API（<code>/repos/&lt;owner&gt;/&lt;repo&gt;</code>）查，並跟 shields.io 的星數徽章交叉比對；license 對照 repo 裡的 LICENSE 檔。</p>
+<p>stars／最後 push 日期除另有標註外，均為 2026-09-19 用 GitHub API（<code>gh api repos/&lt;owner&gt;/&lt;repo&gt;</code>）即時查證的快照。2026-09-25 補入的 OpenSpec、Orca、skill-of-skills 三列，stars 與最後 push 用 <a href="https://ungh.cc">ungh.cc</a> 的公開 GitHub 查詢 API（<code>/repos/&lt;owner&gt;/&lt;repo&gt;</code>）查，並跟 shields.io 的星數徽章交叉比對；license 對照 repo 裡的 LICENSE 檔。2026-10-03 補入的 ai-system-design 1 項，stars、最後 push 與建立日期用 <a href="https://api.github.com/repos/amitshekhariitbhu/ai-system-design">GitHub 公開 API</a> 即時查證；license 對照 repo 裡的 LICENSE 檔，內容與限制對照 README 原文及其中的連結。</p>
 <p>延伸：<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>｜<a href="mcp.html">MCP 入門與實戰</a>｜<a href="skill-build.html">把教材做成 SKILL</a></p>
 </article>
 <nav class="pager"><a class="prev" href="mcp.html">← MCP 入門與實戰</a><a class="next" href="harness.html">把 AI 代理的工作環境設計得可靠 →</a></nav>
