@@ -188,3 +188,19 @@
 - **方案總覽文章已下架**：support.claude.com/en/articles/11049762（Choose a Claude plan）回 404，free-tier 與 paid-tier 頁尾來源表仍列著（內文沒有引用）。
 - **ChatGPT 消費者方案額度**（free-tier 頁 10 條）：help.openai.com 與 chatgpt.com/pricing 從查核環境一律 403，需要有人在一般瀏覽器重查。
 - **其他小差異**：Obsidian 頁的 llms-full.txt 大小現在約 8.8 MB（頁面寫約 9.3 MB）；Obsidian CLI 官方頁有 25 個指令分類標題（頁面寫 30 多組）；subagent.md:179 的 Codex 範例模型已依官方範例改成 `gpt-6-luna`，官方範例的 `model_reasoning_effort` 也改成 `high`，但這是頁面自己的設定選擇，沒有動。
+
+## 五、驗收後修正（2026-10-05，本機）
+
+本機驗收逐列核對了 55 列原文與改寫，以下幾處改寫說過頭或漏改，已修正：
+
+- 第 34 列（paid-tier.md:24）：`llms.txt` 那行索引描述撐不起「各方案皆含」。改依 Pricing 頁：網頁版列 Plus、Pro、Business、Enterprise；Free、Go 卡片只寫桌面 App、subject to rollout。註腳改指 <https://learn.chatgpt.com/docs/pricing>。
+- 第 33 列（paid-tier.md:23）：「Routines 為 research preview」補上出處 <https://code.claude.com/docs/en/routines>（原文：Routines are in research preview.）。
+- official-config.md:114：permission mode 表的 `auto` 列仍是舊說法，與第 2 列已改的 agent-basics.md:53 矛盾，照同一出處修正。
+- 第 17 列（claude-codex.md:96）：官方句寫在互動式 `codex` 的說明裡，補註放在 `exec` 前面時的行為官方沒有另外寫；第四節提到的 :111 PowerShell 範例改成 `codex --search exec`，與上方 Bash 範例一致。
+- 第 43 列（skill-build.md:195）：改寫官方三個選項的實際名稱。
+- 第 45 列註腳：出處是 thesis-toolkit 的 CHANGELOG，不是官方文件，註腳文字改掉。
+- tools-catalog.md:3：頁首查證日期還原成 2026-09-19，註明 10-05 只更新 agentic-engineering-handbook 一列的內容描述；該列加註。
+- paid-tier.md、tools-compare.md 來源表 S22 的備註，改成「發布時的 research preview 公告」，跟內文的 beta 不再矛盾。
+- subagent.md:11：第五個好處改成條列。
+
+沒改：extensions.md:186 仍用 `plugins-reference`。這個網址目前回 200，內容與 `plugins/manifest-reference` 相同，看不到轉址，所以「網址搬家」沒有證據，兩個都能用。

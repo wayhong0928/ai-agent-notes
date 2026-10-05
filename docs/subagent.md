@@ -8,12 +8,13 @@
 
 官方原文把使用時機講得很直接：「Use one when a side task would flood your main conversation with search results, logs, or file contents you won't reference again: the subagent does that work in its own context and returns only the summary. Define a custom subagent when you keep spawning the same kind of worker with the same instructions.」[1] 白話說：一個側支任務如果會把主對話塞滿你不會再看第二次的搜尋結果、log、檔案內容，就該交給 subagent，讓它在自己的 context 裡做完，只把摘要帶回來；如果你發現自己一直在重複派同一種工人、給同一套指示，就該把它定義成一個可重複使用的自訂 subagent。
 
-官方列出五個具體好處，除了下面四個，還有把任務交給 Haiku 這類更快、更便宜的模型來控制成本[1]：[^fresh1]
+官方列出五個具體好處[1][^fresh1]：
 
 - **保留 context**：把探索與實作留在自己的視窗，不進主對話
 - **強制邊界**：限制某個 subagent 能用哪些工具
 - **重複使用**：使用者層 subagent 可以跨專案共用
 - **專門化行為**：針對特定領域寫聚焦的 system prompt
+- **控制成本**：把任務交給 Haiku 這類更快、更便宜的模型
 
 反過來，什麼時候不該用 subagent，[Hooks 與 Subagent 設定](hooks-subagents.md)第三節已經整理過官方的說法（需要頻繁來回微調、多階段共用大量 context 的任務不適合），這裡不重複。
 

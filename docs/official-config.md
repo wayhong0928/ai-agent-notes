@@ -111,7 +111,7 @@ paths:
 | `default`（UI 標示 Manual） | 只有讀取類動作（讀檔、Grep 等）不用問；其餘工具每次都會問，不是「第一次問完就自動放行」——除非你自己在提示框選過「Yes, and don't ask again」，那條規則才會存下來（存法依工具類型而異：Bash 指令與 WebFetch 網域是永久存進該 repo 的規則，檔案編輯只到這個 session 結束為止）[3] | 是（循環起點） |
 | `acceptEdits` | 自動接受檔案編輯與常見檔案系統指令（`mkdir`、`mv` 等） | 是 |
 | `plan` | 只讀檔、跑唯讀指令做研究，不編輯原始檔 | 是 |
-| `auto` | 自動核准工具呼叫，背後由分類器模型做安全檢查 | 只有這個功能對你的方案可用時才加入 |
+| `auto` | 自動核准工具呼叫，背後由分類器模型做安全檢查 | auto mode 對目前 session 可用時才加入（官方列的方案條件已是所有方案）[^fresh6] |
 | `dontAsk` | 原本會詢問的呼叫全部自動拒絕 | 不會，需另外設定 |
 | `bypassPermissions` | 跳過權限詢問（含對 `.git`、`.claude` 等受保護路徑的寫入） | 預設不在循環裡，須先用旗標或設定啟用，啟用後插在 `plan` 之後 |
 
@@ -164,3 +164,4 @@ paths:
 [^fresh3]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/memory>
 [^fresh4]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/memory>
 [^fresh5]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/permission-modes>
+[^fresh6]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/permission-modes>

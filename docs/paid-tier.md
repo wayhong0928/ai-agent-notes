@@ -20,8 +20,8 @@
 | Subagent（Agent tool，舊名 Task tool）[^fresh3] | 跟著 Claude Code 存取權走，Pro 起 | Subagent 需要獨立的系統提示詞與工具限制，只存在於 Claude Code 這套 agent 架構裡，這是**subagent**這個原因 [S17] |
 | Hooks | 跟著 Claude Code 存取權走，Pro 起 | Hooks 是在 Claude Code 特定事件（例如寫檔前、對話結束）自動觸發的機制，聊天介面沒有這種生命週期事件可以掛，這是**hooks**這個原因 [S18] |
 | Plugins（含 Skill 打包發佈） | 跟著 Claude Code 存取權走，Pro 起；Codex Plugins 全方案不分級 | Claude Code 的 Plugin 可以把 skill 設成依任務描述自動觸發，不必每次手動貼指示，這是**skill 自動觸發**這個原因；Codex 側的 Plugin／Skill 機制則不分方案 [S19][O29] |
-| Routines／Dispatch（排程、手機發任務給 Desktop） | Pro（Routines 為 research preview；Dispatch 已不開放新使用者[^fresh4]） | 排程需要背景執行環境，手機端 Dispatch 需要桌面版保持連線代為執行，這兩者都超出純聊天介面的能力範圍 [S7] |
-| ChatGPT Work | Free、Go、Plus、Pro、Business、Edu、Enterprise 各方案皆含[^fresh5] | 跨 App、跨檔案的多步驟自動化，需要能連續執行數小時的 agent 環境 [O11] |
+| Routines／Dispatch（排程、手機發任務給 Desktop） | Pro（Routines 為 research preview[^fresh4r]；Dispatch 已不開放新使用者[^fresh4]） | 排程需要背景執行環境，手機端 Dispatch 需要桌面版保持連線代為執行，這兩者都超出純聊天介面的能力範圍 [S7] |
+| ChatGPT Work | 網頁版：Plus、Pro、Business、Enterprise；Free、Go 只列桌面 App，依推出進度開放[^fresh5] | 跨 App、跨檔案的多步驟自動化，需要能連續執行數小時的 agent 環境 [O11] |
 | Codex 更高額度、更快模型 | Pro（$100 起） | Free／Go 的 Codex 只到「輕量程式任務」等級，複雜任務需要更高額度與更快模型 [O1] |
 
 ## Claude Code 也能用 API 按量付費，不一定要訂閱
@@ -47,7 +47,7 @@ Claude Code 和 Codex 可以互相搭配：OpenAI 官方 GitHub 組織發布了�
 | S19 | code.claude.com/docs/en/plugins | Claude Code plugins 官方文件 |
 | S21 | support.claude.com/en/articles/13345190-get-started-with-claude-cowork | Cowork 方案可用性 |
 | S26 | support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude | Cowork／Chat 合併現況：各方案推出時程 |
-| S22 | anthropic.com/news/claude-design-anthropic-labs | Claude Design 方案可用性、research preview 狀態 |
+| S22 | anthropic.com/news/claude-design-anthropic-labs | Claude Design 方案可用性（發布時的 research preview 公告，現況見內文註腳） |
 | S23 | support.claude.com/en/articles/12304248-manage-api-key-environment-variables-in-claude-code | 純 API key 跑 Claude Code 的計費機制 |
 | S23b | support.claude.com/en/articles/9876003-i-have-a-paid-claude-subscription-pro-max-team-or-enterprise-plans-why-do-i-have-to-pay-separately-to-use-the-claude-api-and-console | 訂閱與 API/Console 各自獨立計費 |
 | S24 | support.claude.com/en/articles/9517075-what-are-projects | 2026-09-19 補查：Projects 方案可用性更正（Free 上限 5 個），RAG 模式僅付費方案 |
@@ -61,4 +61,5 @@ Claude Code 和 Codex 可以互相搭配：OpenAI 官方 GitHub 組織發布了�
 [^fresh2]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/14604416-get-started-with-claude-design>
 [^fresh3]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/sub-agents>
 [^fresh4]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/13947068-assign-tasks-from-anywhere-in-claude-cowork>
-[^fresh5]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/llms.txt>
+[^fresh4r]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/routines>
+[^fresh5]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/docs/pricing>

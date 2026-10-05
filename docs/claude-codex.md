@@ -93,7 +93,7 @@ codex login
 | `-o` / `--output-last-message <file>` | 把最後一則訊息寫進指定檔案 |
 | 從 stdin 讀 prompt（用 `-` 代表） | 把 prompt 內容用管線或重新導向餵進去，不用整段貼在指令列裡 |
 | `--add-dir <dir>` | 額外授權 Codex 讀寫工作目錄以外的另一個目錄 |
-| `codex --search`（全域旗標，要放在 `exec` 之前） | 改用即時（live）網路搜尋（不加時預設是 cached 快取結果）[^fresh1] |
+| `codex --search`（全域旗標，要放在 `exec` 之前） | 改用即時（live）網路搜尋（不加時預設是 cached 快取結果）[^fresh1]；官方這句寫在互動式 `codex` 的說明裡，放在 `exec` 前面時的行為官方沒有另外寫 |
 
 來源：[Codex CLI reference](https://developers.openai.com/codex/cli/reference)（會轉址到 `learn.chatgpt.com/docs/developer-commands`）；`--add-dir` 與三段式 sandbox 另可見官方 [Codex sandboxing](https://learn.chatgpt.com/docs/sandboxing)。
 
@@ -108,7 +108,7 @@ codex --search exec -s read-only -o report.md - < prompt.md
 Windows PowerShell 沒有 `<` 這種重新導向語法，改用管線把檔案內容餵給 stdin：
 
 ```powershell
-Get-Content prompt.md -Raw | codex exec --search -s read-only -o report.md -
+Get-Content prompt.md -Raw | codex --search exec -s read-only -o report.md -
 ```
 
 在 Claude Code 對話框裡執行以上任一行，要在指令前加驚嘆號讓它當成 shell 指令直接跑（`!codex --search exec ...`），或者不加驚嘆號、直接用一般對話請 Claude 幫你執行，讓它自己呼叫 Bash 工具。

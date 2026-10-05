@@ -141,7 +141,7 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 | S19 | code.claude.com/docs/en/plugins | Claude Code plugins 官方文件 |
 | S20 | code.claude.com/docs/en/mcp | Claude Code 連接 MCP 官方文件 |
 | S21 | support.claude.com/en/articles/13345190-get-started-with-claude-cowork | Cowork 方案可用性、本機檔案存取 |
-| S22 | anthropic.com/news/claude-design-anthropic-labs | Claude Design 方案可用性、research preview 狀態 |
+| S22 | anthropic.com/news/claude-design-anthropic-labs | Claude Design 方案可用性（發布時的 research preview 公告，現況見內文註腳） |
 | S23 | support.claude.com/en/articles/12304248-manage-api-key-environment-variables-in-claude-code | 純 API key 跑 Claude Code 的計費機制 |
 | S24 | support.claude.com/en/articles/13837440-use-plugins-in-claude | Claude.ai／Cowork 使用 plugin 的方案與介面 |
 | S25 | claude.com/blog/cowork-is-now-claude | Cowork 與 Chat 合併公告（2026-09-16） |

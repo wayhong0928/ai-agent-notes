@@ -192,7 +192,7 @@ skills/research-question-audit/
 
 1. 切到 **Marketplaces** 分頁，把這個 repo（`wayhong0928/mis-thesis-skills`）加進去
 2. 加完後切到 **Discover** 或 **Installed** 分頁，找到 `thesis-toolkit` 這個 plugin
-3. 選擇安裝範圍，三個選項分別對應 user、project、local 三種範圍，個人自己用選 user 範圍（只裝給你自己）那一項就好[^fresh2]，之後不管開哪個資料夾的對話都能用到
+3. 選擇安裝範圍，會看到 **Install for you (user scope)**、**Install for all collaborators on this repository (project scope)**、**Install for you, in this repo only (local scope)** 三個選項，個人自己用選第一個（user scope）就好[^fresh2]，之後不管開哪個資料夾的對話都能用到
 
 **方法三：直接請 Claude Code 幫你裝**
 
@@ -353,7 +353,7 @@ SKILL.md 正文本身幾乎都要整份貼，流程邏輯、檢查點定義、�
 [^fresh1]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/docs/developer-commands?surface=cli>
 [^fresh2]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/plugins/install>
 [^fresh3]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/13837440-use-plugins-in-claude>
-[^fresh4]: 2026-10-05 依官方原文更新，出處：<https://github.com/wayhong0928/mis-thesis-skills/blob/main/plugins/thesis-toolkit/CHANGELOG.md>
+[^fresh4]: 2026-10-05 依 thesis-toolkit 的 CHANGELOG 更新，出處：<https://github.com/wayhong0928/mis-thesis-skills/blob/main/plugins/thesis-toolkit/CHANGELOG.md>
 [^fresh5]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/skills>
 [^fresh6]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/plugins/manifest-reference>
 [^fresh7]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/plugins/create-marketplace>
