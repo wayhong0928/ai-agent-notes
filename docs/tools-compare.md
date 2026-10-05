@@ -24,7 +24,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 
 ## 逐介面細節
 
-#### Claude Chat（網頁／手機）
+### Claude Chat（網頁／手機）
 - 跑在哪裡：Anthropic 雲端伺服器 [S7]
 - 讀寫本機檔案：❌ 不能 [S7]
 - 執行指令／程式碼：⚠️ 只有雲端的 code execution 沙盒工具，不是本機終端 [S7]
@@ -32,7 +32,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 最低方案：Free 即可 [S3][S15]
 - 適合做什麼：問答、腦力激盪、潤飾文字
 
-#### Claude Desktop（Chat 分頁）
+### Claude Desktop（Chat 分頁）
 - 跑在哪裡：本機安裝的殼，Chat 分頁內容仍跑在雲端 [S7]
 - 讀寫本機檔案：❌ Chat 分頁本身不行 [S7]
 - 執行指令／程式碼：⚠️ 同 Chat，雲端沙盒 [S7]
@@ -40,7 +40,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 最低方案：Free 可用 Chat 分頁；Cowork／Code 分頁要付費方案 [S3][S7]
 - 適合做什麼：一個 App 內同時裝 Chat／Cowork／Code
 
-#### Cowork（Desktop 第三分頁／web／mobile beta）
+### Cowork（Desktop 第三分頁／web／mobile beta）
 - 跑在哪裡：預設是雲端 VM，既有 Desktop 部署也可能用本機專用 Linux VM [X4]
 - 讀寫本機檔案：✅ 本機或雲端 VM 內讀寫，需 Claude Desktop 保持開啟連線 [S21][X4]
 - 執行指令／程式碼：✅ 隔離 VM 內可跑 shell／程式碼，但不等於主機終端，不能叫它直接跑主機上的 `codex exec` [X4]
@@ -48,7 +48,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 最低方案：Pro 起，免付費帳號完全不可用 [S21]
 - 適合做什麼：整理檔案、做報表、寄信、跨應用文書工作
 
-#### Claude Code（CLI／Desktop Code 分頁／網頁／IDE）
+### Claude Code（CLI／Desktop Code 分頁／網頁／IDE）
 - 跑在哪裡：CLI／IDE 擴充／Desktop 本機；claude.ai/code 是 Anthropic 管理的雲端 VM [S7][S8]
 - 讀寫本機檔案：✅ CLI／IDE／Desktop 可讀寫本機；網頁版是雲端 VM 內的 repo，不是使用者本機磁碟 [S7][S8]
 - 執行指令／程式碼：✅ 本機終端指令（CLI／IDE／Desktop）[S1]
@@ -56,7 +56,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 最低方案：Free 沒有；Pro 起，也能純用 API key 按量付費、不吃訂閱額度 [S1][S23]
 - 適合做什麼：跨檔批次處理、程式開發、可重跑流程
 
-#### Claude Design（canvas 設計工具）
+### Claude Design（canvas 設計工具）
 - 跑在哪裡：？查無：官方說明沒提到跑在本機還是雲端 [S22]
 - 讀寫本機檔案：？查無 [S22]
 - 執行指令／程式碼：？查無 [S22]
@@ -64,7 +64,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 最低方案：Free 未提及；Pro 起（research preview）；Enterprise 預設關閉，需管理員手動開啟 [S22]
 - 適合做什麼：對著畫面拖拉調整產出設計稿、原型、投影片、one-pager，而不是純寫 prompt [S22]
 
-#### ChatGPT（網頁／手機）
+### ChatGPT（網頁／手機）
 - 跑在哪裡：OpenAI 雲端伺服器 [O10]
 - 讀寫本機檔案：❌ 不能 [O10]
 - 執行指令／程式碼：？查無：本次查證沒有涵蓋 ChatGPT 網頁版程式碼執行工具的細節
@@ -72,7 +72,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 最低方案：Free 即可 [A2 §1]
 - 適合做什麼：問答、寫作、Deep Research
 
-#### ChatGPT Desktop（統一版，含 Chat／Work／Codex 分頁）
+### ChatGPT Desktop（統一版，含 Chat／Work／Codex 分頁）
 - 跑在哪裡：本機殼；Chat／Work 跑在雲端，Codex 分頁依 sandbox 設定可在本機執行 [O7]
 - 讀寫本機檔案：⚠️ Codex 分頁依 sandbox mode 可讀寫本機；Chat／Work 分頁不行 [O25]
 - 執行指令／程式碼：⚠️ Codex 分頁依 sandbox mode（read-only／workspace-write／danger-full-access）[O25]
@@ -80,7 +80,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 最低方案：Free 即可，官方明說方案層級含 Free [O3][O7]；但功能是分批推出，不保證每個帳號當下都已經看得到 [A2b 題2]
 - 適合做什麼：一個 App 打通聊天、知識工作 agent、程式碼 agent
 
-#### Codex（CLI／IDE／cloud）
+### Codex（CLI／IDE／cloud）
 - 跑在哪裡：CLI／IDE 擴充在本機；cloud（chatgpt.com/codex）是 OpenAI 雲端 sandbox 內的 repo checkout [O25][O26]
 - 讀寫本機檔案：CLI／IDE 可讀寫本機；cloud 是雲端 checkout，不是使用者本機磁碟 [O25]
 - 執行指令／程式碼：✅ 依 sandbox mode 決定要不要先問過你 [O25]
