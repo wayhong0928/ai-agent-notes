@@ -68,7 +68,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 跑在哪裡：OpenAI 雲端伺服器 [O10]
 - 讀寫本機檔案：❌ 不能 [O10]
 - 執行指令／程式碼：？查無：本次查證沒有涵蓋 ChatGPT 網頁版程式碼執行工具的細節
-- Skill／Plugin／MCP：Connectors／Apps✅（Free 僅內建 App，Plus 起可加自訂 MCP）[O22]
+- Skill／Plugin／MCP：Connectors／Apps✅（Free 可用互動式 App，但不能接內部工具、沒有 Developer Mode；定價頁列 Plus 起才有）[O22]
 - 最低方案：Free 即可 [A2 §1]
 - 適合做什麼：問答、寫作、Deep Research
 
@@ -151,7 +151,7 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 | O7 | learn.chatgpt.com/docs/app | 統一版 Desktop app 的分頁切換方式 |
 | O10 | 業界慣例類推（未找到 OpenAI 專門說明此點的頁面） | API key 不含網頁 Chat 存取（信心中偏低） |
 | O15 | learn.chatgpt.com/docs/ide | Codex IDE 擴充與 CLI 的關係 |
-| O22 | help.openai.com/en/articles/11487775-connectors-in-chatgpt；12003714 | Connectors/Apps/MCP 各方案差異 |
+| O22 | help.openai.com/en/articles/11487775-connectors-in-chatgpt；chatgpt.com/pricing（2026-10-05 重查 Developer Mode） | Connectors/Apps/MCP 各方案差異 |
 | O25 | learn.chatgpt.com/docs/sandboxing | Codex sandbox 三模式定義 |
 | O26 | learn.chatgpt.com/docs/cloud | Codex cloud 運作方式 |
 | O28 | learn.chatgpt.com/docs/agent-configuration/agents-md | AGENTS.md 讀取順序與上限 |

@@ -63,7 +63,7 @@
 <h2 id="_1">官方有沒有專門支援？查證結果：沒有</h2>
 <p>先把這題結清，才不會有人繼續找不存在的官方文件。</p>
 <ul>
-<li>抓 <code>code.claude.com/docs/llms-full.txt</code>（Claude Code 官方文件全文，約 9.3 MB）做全文比對，<strong>「Obsidian」出現 0 次</strong>；同一份文件裡「Notion」出現 8 次（作為 MCP server 範例）[A2]。也就是說官方確實會點名特定第三方工具，只是沒點到 Obsidian。</li>
+<li>抓 <code>code.claude.com/docs/llms-full.txt</code>（Claude Code 官方文件全文，約 9 MB）做全文比對，<strong>「Obsidian」出現 0 次</strong>；同一份文件裡「Notion」出現 8 次（作為 MCP server 範例）[A2]。也就是說官方確實會點名特定第三方工具，只是沒點到 Obsidian。</li>
 <li><em>（整理者的查證紀錄）</em> 另外以 <code>site:code.claude.com Obsidian</code> 做站內搜尋，回傳的全是不相關的一般文件頁，沒有任何 Obsidian 相關頁面。</li>
 </ul>
 <blockquote>
@@ -119,7 +119,7 @@ claude
 </ul>
 <h2 id="b-obsidian-cliobsidian">路徑 B：補上 Obsidian 官方 CLI（處理「Obsidian 才知道的事」）</h2>
 <p><em>整理者觀察</em>：路徑 A 的盲點是，Claude Code 看到的是檔案，不是 Obsidian——改名不會更新別篇筆記裡的反向連結、抓不到「今天的日記該建在哪」、不知道你裝了哪些外掛。</p>
-<p>Obsidian 官方從 <strong>1.12 版安裝檔（1.12.7 以上）</strong> 起內建 command line interface，官方說法是「Anything you can do in Obsidian you can do from the command line」，涵蓋日記、檔案操作、搜尋、任務、標籤、properties、外掛、主題、workspace、同步、發佈等 30 多組指令；使用時 Obsidian 必須是開著的 [B4]。</p>
+<p>Obsidian 官方從 <strong>1.12 版安裝檔（1.12.7 以上）</strong> 起內建 command line interface，官方說法是「Anything you can do in Obsidian you can do from the command line」，涵蓋日記、檔案操作、搜尋、任務、標籤、properties、外掛、主題、workspace、同步、發佈等 25 類指令；使用時 Obsidian 必須是開著的 [B4]。</p>
 <p><strong>啟用步驟</strong>（官方）[B4]：</p>
 <ol>
 <li>Settings → General</li>

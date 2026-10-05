@@ -56,7 +56,7 @@
 <h1>免付費區</h1>
 <p class='lede'>不付錢也做得到的 AI 輔助工作流程</p>
 <blockquote>
-<p>查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。</p>
+<p>查證日期：2026-09-16；ChatGPT Free 一節 2026-10-05 重查。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p>免費帳號能做的事，比多數人想的多一些，但也有幾個明確做不到的邊界。這頁只講「不花錢能做到哪裡」；需要付費才能解鎖的部分，見<a href="paid-tier.html">付費區</a>；不確定該用哪個介面，先看<a href="tools-compare.html">AI 介面比較總表</a>。</p>
 <h2 id="claude-free">Claude Free 能用什麼</h2>
@@ -144,37 +144,37 @@
 <tr>
 <td>Projects</td>
 <td>✅ 5 檔／專案</td>
-<td>檔案數上限比付費方案低（Plus 25 檔、Pro 40 檔）[O17]</td>
+<td>檔案數上限比付費方案低（Go、Plus 25 檔，Pro 40 檔）[O17]</td>
 </tr>
 <tr>
 <td>Canvas</td>
-<td>✅</td>
-<td>功能與付費方案一致 [O18]</td>
+<td>⚠️ GPT-5.5 起不再提供</td>
+<td>官方 2026-05-28 公告 GPT-5.5 Instant 與 Thinking 不再提供 Canvas，寫作與程式改在對話裡的寫作區塊、程式碼區塊處理；付費方案可以透過舊模型暫時使用。Free 目前的預設模型有沒有 Canvas，官方沒寫 [O18]</td>
 </tr>
 <tr>
 <td>網路搜尋</td>
 <td>✅</td>
-<td>未公開確切次數上限 [O20]</td>
+<td>官方只說受方案用量限制，沒公開次數 [O20]</td>
 </tr>
 <tr>
 <td>Deep Research</td>
-<td>✅ 輕量版</td>
-<td>額度比 Plus／Pro 少 [O21]</td>
+<td>✅ 額度有限</td>
+<td>定價頁標示 Free 為 Limited、Plus 為 Expanded、Pro 為 Maximum [O21]</td>
 </tr>
 <tr>
 <td>Connectors／Apps</td>
-<td>⚠️ 僅內建 App，不能加自訂 connector 或 MCP</td>
-<td>Plus 起才有 Developer Mode 可加自訂 MCP [O22]</td>
+<td>⚠️ 可用互動式 App，不能接內部工具，沒有 Developer Mode</td>
+<td>定價頁列 Plus、Pro 有 Developer Mode；說明文件另寫 Pro 只能用讀取權限連 MCP，完整 MCP 限 Business／Enterprise／Edu [O22]</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>✅ 預設開啟</td>
-<td>[O24]</td>
+<td>✅ 額度有限</td>
+<td>定價頁標示 Limited；官方頁面沒寫 Free 是否預設開啟 [O24]</td>
 </tr>
 <tr>
 <td>檔案上傳</td>
-<td>⚠️ 512MB／檔，但頻率約 3 次／天</td>
-<td>Plus 約 80 次／3 小時，Pro 幾乎無限 [O19]</td>
+<td>⚠️ 512MB／檔，每天 3 次</td>
+<td>官方另寫使用者每 3 小時最多上傳 80 個檔案，沒有區分 Plus、Pro；尖峰時段可能再調低 [O19]</td>
 </tr>
 <tr>
 <td>Codex</td>
@@ -213,7 +213,7 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">ChatGPT Free 的 Projects 只有 5 個檔案額度</p>
-<p>比 Plus（25 檔）少很多，一個真實的研究專案很容易超過 5 個檔案。超過額度不是報錯就是要你砍舊檔案，開工前先盤點要放幾份檔案 [O17]。</p>
+<p>比 Go、Plus（25 檔）少很多，一個真實的研究專案很容易超過 5 個檔案，開工前先盤點要放幾份檔案 [O17]。</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Claude Code、Cowork 完全不能用免費帳號</p>
@@ -221,7 +221,7 @@
 </div>
 <div class="admonition tip">
 <p class="admonition-title">檔案上傳有頻率上限，不是只看檔案大小</p>
-<p>ChatGPT Free 的單檔大小上限雖然跟付費方案一樣是 512MB，但每天大概只能上傳 3 次；Claude Free 的檔案上傳沒有另外標注頻率限制，但受單次對話最多 20 檔、圖片與 PDF 頁數等其他上限影響 [O19][S16]。</p>
+<p>ChatGPT Free 的單檔大小上限雖然跟付費方案一樣是 512MB，但每天只能上傳 3 次，尖峰時段官方還可能調低；Claude Free 的檔案上傳沒有另外標注頻率限制，但受單次對話最多 20 檔、圖片與 PDF 頁數等其他上限影響 [O19][S16]。</p>
 </div>
 <h2 id="2026-09-16">資料來源（2026-09-16 查證）</h2>
 <table>
@@ -242,11 +242,6 @@
 <td>S3</td>
 <td>claude.com/pricing</td>
 <td>各方案功能總覽</td>
-</tr>
-<tr>
-<td>S4</td>
-<td>support.claude.com/en/articles/11049762-choose-a-claude-plan</td>
-<td>方案選擇指南</td>
 </tr>
 <tr>
 <td>S9</td>
@@ -315,38 +310,38 @@
 </tr>
 <tr>
 <td>O17</td>
-<td>help.openai.com「Using Projects in ChatGPT」等（WebSearch 摘要）</td>
-<td>Projects 各方案檔案數上限</td>
+<td>help.openai.com/en/articles/10169521-projects-in-chatgpt</td>
+<td>2026-10-05 重查：Projects 各方案檔案數上限</td>
 </tr>
 <tr>
 <td>O18</td>
-<td>help.openai.com「What is the canvas feature」等（WebSearch 摘要）</td>
-<td>Canvas 各方案可用性</td>
+<td>help.openai.com/en/articles/6825453-chatgpt-release-notes（2026-05-28 GPT-5.5 Instant Update）</td>
+<td>2026-10-05 重查：Canvas 停止提供</td>
 </tr>
 <tr>
 <td>O19</td>
-<td>help.openai.com 檔案上傳相關文章（WebSearch 摘要，未能精確定位單一文號）</td>
-<td>檔案大小/頻率上限</td>
+<td>help.openai.com/en/articles/8555545-file-uploads-faq</td>
+<td>2026-10-05 重查：檔案大小／頻率上限</td>
 </tr>
 <tr>
 <td>O20</td>
-<td>help.openai.com Free tier FAQ（WebSearch 摘要）</td>
-<td>Free 網路搜尋無公開次數上限</td>
+<td>help.openai.com/en/articles/9237897-searching-the-web-with-chatgpt</td>
+<td>2026-10-05 重查：網路搜尋各方案可用、受用量限制</td>
 </tr>
 <tr>
 <td>O21</td>
-<td>help.openai.com Deep Research 相關文章（WebSearch 摘要）</td>
-<td>Deep Research 各方案額度差異</td>
+<td>chatgpt.com/pricing；help.openai.com/en/articles/10500283-deep-research-in-chatgpt</td>
+<td>2026-10-05 重查：Deep Research 各方案額度</td>
 </tr>
 <tr>
 <td>O22</td>
-<td>help.openai.com/en/articles/11487775-connectors-in-chatgpt；12003714</td>
-<td>Connectors 各方案差異</td>
+<td>chatgpt.com/pricing；help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt</td>
+<td>2026-10-05 重查：Apps、Developer Mode 各方案差異</td>
 </tr>
 <tr>
 <td>O24</td>
-<td>help.openai.com「Memory FAQ」（WebSearch 摘要）</td>
-<td>Memory 各方案預設開關</td>
+<td>chatgpt.com/pricing；help.openai.com/en/articles/8590148-memory-in-chatgpt</td>
+<td>2026-10-05 重查：Memory 各方案額度</td>
 </tr>
 <tr>
 <td>O25</td>

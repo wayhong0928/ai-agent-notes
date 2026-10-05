@@ -1,6 +1,6 @@
 # 免付費區
 
-> 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-09-16；ChatGPT Free 一節 2026-10-05 重查。方案與功能變動快，請以官方最新說明為準。
 
 免費帳號能做的事，比多數人想的多一些，但也有幾個明確做不到的邊界。這頁只講「不花錢能做到哪裡」；需要付費才能解鎖的部分，見[付費區](paid-tier.md)；不確定該用哪個介面，先看[AI 介面比較總表](tools-compare.md)。
 
@@ -25,13 +25,13 @@
 |---|---|---|
 | ChatGPT 網頁版／手機 App | ✅ | [A2 §1] |
 | Desktop App（Chat／Work／Codex 三種模式） | ✅ | 官方明說桌面 App 對所有方案（含 Free）開放 Chat、Work、Codex [O3][O7] |
-| Projects | ✅ 5 檔／專案 | 檔案數上限比付費方案低（Plus 25 檔、Pro 40 檔）[O17] |
-| Canvas | ✅ | 功能與付費方案一致 [O18] |
-| 網路搜尋 | ✅ | 未公開確切次數上限 [O20] |
-| Deep Research | ✅ 輕量版 | 額度比 Plus／Pro 少 [O21] |
-| Connectors／Apps | ⚠️ 僅內建 App，不能加自訂 connector 或 MCP | Plus 起才有 Developer Mode 可加自訂 MCP [O22] |
-| Memory | ✅ 預設開啟 | [O24] |
-| 檔案上傳 | ⚠️ 512MB／檔，但頻率約 3 次／天 | Plus 約 80 次／3 小時，Pro 幾乎無限 [O19] |
+| Projects | ✅ 5 檔／專案 | 檔案數上限比付費方案低（Go、Plus 25 檔，Pro 40 檔）[O17] |
+| Canvas | ⚠️ GPT-5.5 起不再提供 | 官方 2026-05-28 公告 GPT-5.5 Instant 與 Thinking 不再提供 Canvas，寫作與程式改在對話裡的寫作區塊、程式碼區塊處理；付費方案可以透過舊模型暫時使用。Free 目前的預設模型有沒有 Canvas，官方沒寫 [O18] |
+| 網路搜尋 | ✅ | 官方只說受方案用量限制，沒公開次數 [O20] |
+| Deep Research | ✅ 額度有限 | 定價頁標示 Free 為 Limited、Plus 為 Expanded、Pro 為 Maximum [O21] |
+| Connectors／Apps | ⚠️ 可用互動式 App，不能接內部工具，沒有 Developer Mode | 定價頁列 Plus、Pro 有 Developer Mode；說明文件另寫 Pro 只能用讀取權限連 MCP，完整 MCP 限 Business／Enterprise／Edu [O22] |
+| Memory | ✅ 額度有限 | 定價頁標示 Limited；官方頁面沒寫 Free 是否預設開啟 [O24] |
+| 檔案上傳 | ⚠️ 512MB／檔，每天 3 次 | 官方另寫使用者每 3 小時最多上傳 80 個檔案，沒有區分 Plus、Pro；尖峰時段可能再調低 [O19] |
 | Codex | ✅ 可用，但各介面深淺不同 | 見下方專節 |
 
 ### Free／Go 帳號用 Codex 要注意的地方
@@ -65,13 +65,13 @@ Claude Free 能建立最多 5 個 Project，把常用的文獻或寫作規範固
     Claude Free 的自訂 connector（remote MCP）上限是 1 個，不是「先接看看，之後再加」。如果你的工作流程需要同時接文獻管理器、雲端硬碟、資料庫，免費帳號會卡在這裡，得先想清楚優先接哪一個 [S12]。
 
 !!! warning "ChatGPT Free 的 Projects 只有 5 個檔案額度"
-    比 Plus（25 檔）少很多，一個真實的研究專案很容易超過 5 個檔案。超過額度不是報錯就是要你砍舊檔案，開工前先盤點要放幾份檔案 [O17]。
+    比 Go、Plus（25 檔）少很多，一個真實的研究專案很容易超過 5 個檔案，開工前先盤點要放幾份檔案 [O17]。
 
 !!! warning "Claude Code、Cowork 完全不能用免費帳號"
     這兩個經常被搞混的功能都需要付費方案（Pro 起）。免費帳號想找「本機讀寫檔案」「跨檔批次處理」的功能，會發現無論怎麼設定都用不到，因為不是設定錯了，是方案本身沒開放 [S1][S21]。（2026-09-16 官方公告 Cowork 正併入一般 Chat，但 Free 方案官方說法是「即將推出」，查證當下尚未開始，這條限制暫時還成立 [S26]）
 
 !!! tip "檔案上傳有頻率上限，不是只看檔案大小"
-    ChatGPT Free 的單檔大小上限雖然跟付費方案一樣是 512MB，但每天大概只能上傳 3 次；Claude Free 的檔案上傳沒有另外標注頻率限制，但受單次對話最多 20 檔、圖片與 PDF 頁數等其他上限影響 [O19][S16]。
+    ChatGPT Free 的單檔大小上限雖然跟付費方案一樣是 512MB，但每天只能上傳 3 次，尖峰時段官方還可能調低；Claude Free 的檔案上傳沒有另外標注頻率限制，但受單次對話最多 20 檔、圖片與 PDF 頁數等其他上限影響 [O19][S16]。
 
 ## 資料來源（2026-09-16 查證）
 
@@ -79,7 +79,6 @@ Claude Free 能建立最多 5 個 Project，把常用的文獻或寫作規範固
 |---|---|---|
 | S1 | support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan | Claude Code 方案門檻 |
 | S3 | claude.com/pricing | 各方案功能總覽 |
-| S4 | support.claude.com/en/articles/11049762-choose-a-claude-plan | 方案選擇指南 |
 | S9 | support.claude.com/en/articles/12512180-use-skills-in-claude | Skills 使用方式 |
 | S9b | support.claude.com/en/articles/12512176-what-are-skills | Skills 方案可用性 |
 | S10 | support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context | Memory 各方案預設開關 |
@@ -93,13 +92,13 @@ Claude Free 能建立最多 5 個 Project，把常用的文獻或寫作規範固
 | O1 | learn.chatgpt.com/docs/pricing | Free/Go 的 Codex 定位文案 |
 | O3 | OpenAI 官方 X 貼文（經二次來源引述） | Desktop app 全方案含 Free 可用 Codex |
 | O7 | learn.chatgpt.com/docs/app | 統一版 Desktop app 分頁切換 |
-| O17 | help.openai.com「Using Projects in ChatGPT」等（WebSearch 摘要） | Projects 各方案檔案數上限 |
-| O18 | help.openai.com「What is the canvas feature」等（WebSearch 摘要） | Canvas 各方案可用性 |
-| O19 | help.openai.com 檔案上傳相關文章（WebSearch 摘要，未能精確定位單一文號） | 檔案大小/頻率上限 |
-| O20 | help.openai.com Free tier FAQ（WebSearch 摘要） | Free 網路搜尋無公開次數上限 |
-| O21 | help.openai.com Deep Research 相關文章（WebSearch 摘要） | Deep Research 各方案額度差異 |
-| O22 | help.openai.com/en/articles/11487775-connectors-in-chatgpt；12003714 | Connectors 各方案差異 |
-| O24 | help.openai.com「Memory FAQ」（WebSearch 摘要） | Memory 各方案預設開關 |
+| O17 | help.openai.com/en/articles/10169521-projects-in-chatgpt | 2026-10-05 重查：Projects 各方案檔案數上限 |
+| O18 | help.openai.com/en/articles/6825453-chatgpt-release-notes（2026-05-28 GPT-5.5 Instant Update） | 2026-10-05 重查：Canvas 停止提供 |
+| O19 | help.openai.com/en/articles/8555545-file-uploads-faq | 2026-10-05 重查：檔案大小／頻率上限 |
+| O20 | help.openai.com/en/articles/9237897-searching-the-web-with-chatgpt | 2026-10-05 重查：網路搜尋各方案可用、受用量限制 |
+| O21 | chatgpt.com/pricing；help.openai.com/en/articles/10500283-deep-research-in-chatgpt | 2026-10-05 重查：Deep Research 各方案額度 |
+| O22 | chatgpt.com/pricing；help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt | 2026-10-05 重查：Apps、Developer Mode 各方案差異 |
+| O24 | chatgpt.com/pricing；help.openai.com/en/articles/8590148-memory-in-chatgpt | 2026-10-05 重查：Memory 各方案額度 |
 | O25 | learn.chatgpt.com/docs/sandboxing | Codex sandbox 三模式 |
 
 延伸：[AI 介面比較總表](tools-compare.md)｜[付費區](paid-tier.md)｜[Projects 功能](projects.md)

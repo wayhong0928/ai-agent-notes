@@ -39,7 +39,6 @@ Claude Code 和 Codex 可以互相搭配：OpenAI 官方 GitHub 組織發布了�
 | S1 | support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan | Claude Code 於 Pro/Max 的可用性、額度共用說明 |
 | S2 | support.claude.com/en/articles/11845131-use-claude-code-with-your-team-or-enterprise-plan | Claude Code 於 Team/Enterprise 的可用性 |
 | S3 | claude.com/pricing | 各方案功能總覽 |
-| S4 | support.claude.com/en/articles/11049762-choose-a-claude-plan | 方案選擇指南 |
 | S7 | code.claude.com/docs/en/overview | Claude Code 五種 surface 官方總覽、Dispatch/Routines 提及處 |
 | S14 | support.claude.com/en/articles/11088861-use-research-on-claude | Research 僅付費方案 |
 | S17 | code.claude.com/docs/en/sub-agents | Claude Code subagent 官方文件 |

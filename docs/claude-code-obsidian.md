@@ -10,7 +10,7 @@ Obsidian 的 vault 本質上就是「你電腦上的一個資料夾」，裡面�
 
 先把這題結清，才不會有人繼續找不存在的官方文件。
 
-- 抓 `code.claude.com/docs/llms-full.txt`（Claude Code 官方文件全文，約 9.3 MB）做全文比對，**「Obsidian」出現 0 次**；同一份文件裡「Notion」出現 8 次（作為 MCP server 範例）[A2]。也就是說官方確實會點名特定第三方工具，只是沒點到 Obsidian。
+- 抓 `code.claude.com/docs/llms-full.txt`（Claude Code 官方文件全文，約 9 MB）做全文比對，**「Obsidian」出現 0 次**；同一份文件裡「Notion」出現 8 次（作為 MCP server 範例）[A2]。也就是說官方確實會點名特定第三方工具，只是沒點到 Obsidian。
 - *（整理者的查證紀錄）* 另外以 `site:code.claude.com Obsidian` 做站內搜尋，回傳的全是不相關的一般文件頁，沒有任何 Obsidian 相關頁面。
 
 > **整理者觀察**：綜合上面兩項查證，**Anthropic 官方沒有任何 Obsidian 專屬整合、專屬文件或官方 plugin**。這是從「文件裡查不到」推出的結論，不是官方發過的聲明。
@@ -91,7 +91,7 @@ Windows 使用者另一個官方注意事項：`--add-dir`、`/add-dir` 與 `add
 
 *整理者觀察*：路徑 A 的盲點是，Claude Code 看到的是檔案，不是 Obsidian——改名不會更新別篇筆記裡的反向連結、抓不到「今天的日記該建在哪」、不知道你裝了哪些外掛。
 
-Obsidian 官方從 **1.12 版安裝檔（1.12.7 以上）** 起內建 command line interface，官方說法是「Anything you can do in Obsidian you can do from the command line」，涵蓋日記、檔案操作、搜尋、任務、標籤、properties、外掛、主題、workspace、同步、發佈等 30 多組指令；使用時 Obsidian 必須是開著的 [B4]。
+Obsidian 官方從 **1.12 版安裝檔（1.12.7 以上）** 起內建 command line interface，官方說法是「Anything you can do in Obsidian you can do from the command line」，涵蓋日記、檔案操作、搜尋、任務、標籤、properties、外掛、主題、workspace、同步、發佈等 25 類指令；使用時 Obsidian 必須是開著的 [B4]。
 
 **啟用步驟**（官方）[B4]：
 
