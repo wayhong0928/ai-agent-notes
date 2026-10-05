@@ -1,6 +1,6 @@
 # SKILL、Plugin、MCP 與 Subagent
 
-> 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 看懂[代理迴圈](agent-basics.md)之後，下一個常見的卡點是：SKILL、Plugin、MCP、Subagent、Hooks，這幾個詞經常混著用，但它們解決的問題完全不同。這頁先用一張精簡的支援矩陣對照六種擴充機制，再逐一給解決什麼問題、最小範例跟常見誤用，最後給一份「該用哪一種」的決策清單。
 
@@ -14,7 +14,7 @@
 | SKILL | ✅ | ✅ | ✅需開code exec |
 | MCP | ✅本機＋遠端 | ✅ | ⚠️僅遠端 |
 | Subagent | ✅ | ✅ | ⚠️僅Cowork |
-| Plugin | ✅ | ✅ | ⚠️說法不一 |
+| Plugin | ✅ | ✅ | ⚠️部分元件僅Cowork[^fresh1] |
 | Hooks | ✅ | ✅ | ⚠️僅Cowork執行 |
 
 ## 一之二、每種機制解決什麼問題、什麼時候載入、放在哪裡
@@ -23,7 +23,7 @@
 - **SKILL**：解決「把一套會重複用到的程序、檢查清單變成隨需載入的知識，不佔用平時的上下文」；只有 Claude 判斷相關、或使用者手動叫用時才載入完整內容；放在 `.claude/skills/<name>/SKILL.md`（專案或個人層）。Claude Code 支援[3]；Codex 遵循「open agent skills standard」[4]；Claude.ai 需另外開啟 code execution[5]。
 - **MCP**：解決「讓代理連上外部工具與資料（文獻庫、資料庫、雲端硬碟），不必自己捏造答案」；設定好之後，工具定義預設延後載入，代理實際要用某個工具時才載入細節[1]；放在 `.mcp.json`（專案層）／`~/.claude.json`（使用者層，Claude Code），`codex mcp` 管理（Codex）。Claude Code 支援本機＋遠端[6]；Codex「continues to support external MCP servers」[7]；Claude.ai 僅遠端 connector，Free 帳號限 1 個自訂連接[8]。
 - **Subagent**：解決「需要一個獨立、乾淨的視角處理某件事，不污染主線對話的上下文」；主線判斷該任務適合委派時，另開一個獨立上下文執行；放在 `.claude/agents/<name>.md`（Claude Code），`~/.codex/agents/` 或 `.codex/agents/` 的 TOML 檔（Codex）。Claude Code 支援[9]；Codex 支援[10]；Claude.ai 分開看：Cowork 官方公開有 sub-agent coordination，會把複雜工作拆成小任務、平行協調多個工作流；一般 Chat／Projects 查無使用者可自訂的通用 subagent 介面（Research 功能內部用 lead agent 加 subagents，但那是內部架構，不是使用者自己能設定的機制）[16][17][22]。
-- **Plugin**：解決「把 SKILL、Subagent、Hooks、MCP 設定打包成一個可安裝、可分享、可版控的單位」；安裝後在啟動時載入其中的元件；需要 `.claude-plugin/plugin.json`，其餘元件目錄放在 plugin 根目錄（Claude Code），Codex／ChatGPT 共用「Plugins 目錄」發佈機制[11]。Claude Code 支援[11]；Codex 側的 skill 可打包成 plugin 發佈[4]；Claude.ai 官方文件目前說法不一致：較新的 Help Center 文章說付費方案（Pro／Max／Team／Enterprise）可以在 Web Chat、Claude Desktop 的 Chat 分頁、Cowork 安裝並使用 plugin；但另一份官方 Cowork 開發文件仍寫「不在 Chat 使用」。即使 Chat 能裝 plugin，裡面包的 subagent 跟 hooks 也只在 Cowork 執行，Chat 裡會顯示成灰階[17][18][19][20]。
+- **Plugin**：解決「把 SKILL、Subagent、Hooks、MCP 設定打包成一個可安裝、可分享、可版控的單位」；安裝後在啟動時載入其中的元件；`.claude-plugin/plugin.json` 可省略（官方寫 manifest 是選用的），其餘元件目錄放在 plugin 根目錄（Claude Code）[^fresh2]，Codex／ChatGPT 共用「Plugins 目錄」發佈機制[11]。Claude Code 支援[11]；Codex 側的 skill 可打包成 plugin 發佈[4]；Claude.ai 官方文件目前說法已一致：[^fresh3]較新的 Help Center 文章說付費方案（Pro／Max／Team／Enterprise）可以在 Web Chat、Claude Desktop 的 Chat 分頁、Cowork 安裝並使用 plugin；官方 Cowork 開發文件現在也寫，安裝的 plugin 存在帳號裡，其中的 skills 與 connectors 在 Chat 也能用。[^fresh4]不過 plugin 裡包的 subagent 跟 hooks 只在 Cowork 執行，Chat 裡會顯示成灰階[17][18][19][20]。
 - **Hooks**：解決「把『一定要做到』的檢查變成機制強制執行，而不是寫在說明檔裡靠模型自己記得」；對應事件觸發時（例如編輯檔案前、session 結束時）自動執行；放在 `settings.json` 的 `hooks` 欄位（Claude Code），`hooks.json` 或 `config.toml` 的 `[hooks]`（Codex）。Claude Code 支援[12]；Codex「Hooks are an extensibility framework for Codex」[13]；Claude.ai 分開看：Cowork 可以執行 plugin 裡包的 hooks；一般 Chat 不執行，畫面上會顯示成灰階。Enterprise 另有一套「inference hooks」，是組織端把推論內容送去自己的端點做核准／拒絕政策判斷的合規機制，跟這裡講的生命週期 hooks 不是同一件事，一句話帶過即可[17][21]。
 
 !!! warning "2026-09-16 起：Chat／Cowork 的界線正在消失（Pro／Max 分階段推出中）"
@@ -71,7 +71,7 @@ description: 掃描專案裡所有 Markdown 連結，找出指向不存在檔案
 3. 輸出表格：檔名、行號、連結文字、目標路徑、是否存在
 ```
 
-呼叫方式來自資料夾名稱，不是 frontmatter 裡的 `name` 欄位：存在 `.claude/skills/check-broken-links/SKILL.md`，就用 `/check-broken-links` 叫用，或讓 Claude 依 `description` 自己判斷要不要用[3]。
+呼叫方式預設來自資料夾名稱；frontmatter 有設 `name` 時，`/` 選單顯示與輸入的指令改用 `name`，資料夾名稱也一樣能叫用：[^fresh5]存在 `.claude/skills/check-broken-links/SKILL.md`，就用 `/check-broken-links` 叫用，或讓 Claude 依 `description` 自己判斷要不要用[3]。
 
 **常見誤用**：把 `description` 寫得太籠統（例如只寫「檢查文件」），代理判斷不出什麼時候該用；或者把整份參考資料塞進 `SKILL.md` 本體，官方建議本體控制在 500 行以內，細節另外放進 `reference.md` 用連結引用，需要時才載入[3]。
 
@@ -192,7 +192,7 @@ the problem, show the current code, and provide an improved version.
 | [17] | Use plugins in Claude（Chat／Cowork 的 plugin、subagent、hooks 可用範圍） | <https://support.claude.com/en/articles/13837440-use-plugins-in-claude> |
 | [18] | Manage plugins for your organization（plugin 出現在 Chat 與 Cowork 的官方原文） | <https://support.claude.com/en/articles/13837433-manage-plugins-for-your-organization> |
 | [19] | Use Claude Cowork on web, desktop, and mobile（Cowork 不限桌面版） | <https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile> |
-| [20] | Install plugins（Cowork 開發文件，仍寫「不在 Chat 使用」，跟 [17][18] 說法不一致） | <https://claude.com/docs/cowork/guide/plugins> |
+| [20] | Install plugins（Cowork 開發文件，現在也寫 plugin 的 skills 與 connectors 在 Chat 可用，跟 [17][18] 一致[^fresh6]） | <https://claude.com/docs/cowork/guide/plugins> |
 | [21] | Inference hooks overview（Enterprise 合規機制，跟生命週期 hooks 不同性質） | <https://support.claude.com/en/articles/16059458-inference-hooks-overview> |
 | [22] | How we built our multi-agent research system（Research 功能內部的 lead agent／subagents 架構） | <https://www.anthropic.com/engineering/multi-agent-research-system> |
 | [23] | Cowork is now Claude（Cowork 與 Chat 合併公告，2026-09-16） | <https://claude.com/blog/cowork-is-now-claude> |
@@ -200,3 +200,10 @@ the problem, show the current code, and provide an improved version.
 | [25] | Claude Code changelog（v2.1.277，2026-09-18，AGENTS.md support） | <https://code.claude.com/docs/en/changelog> |
 
 延伸：[AI Agent 怎麼運作](agent-basics.md)｜[把 AI 代理的工作環境設計得可靠](harness.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://claude.com/docs/cowork/guide/plugins>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/plugins/manifest-reference>
+[^fresh3]: 2026-10-05 依官方原文更新，出處：<https://claude.com/docs/cowork/guide/plugins>
+[^fresh4]: 2026-10-05 依官方原文更新，出處：<https://claude.com/docs/cowork/guide/plugins>
+[^fresh5]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/skills>
+[^fresh6]: 2026-10-05 依官方原文更新，出處：<https://claude.com/docs/cowork/guide/plugins>

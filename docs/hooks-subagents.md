@@ -1,6 +1,6 @@
 # Hooks 與 Subagent 設定
 
-> 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 [SKILL、Plugin、MCP 與 Subagent](extensions.md)那頁把 Hooks 跟 Subagent 放進一張總表，講了它們各自解決什麼問題。這頁把兩者的實際設定方式攤開來講：事件有哪些、設定寫在哪個檔案、frontmatter 每個欄位實際的語意，以及一個可以直接照抄的最小範例。
 
@@ -44,7 +44,7 @@ Hooks 設定寫在 `settings.json`（使用者層 `~/.claude/settings.json` 或�
 }
 ```
 
-這個範例可以直接照抄：把它貼進 `.claude/settings.json`，前提是專案已經裝了 `prettier` 且 `jq` 在 PATH 裡。想擋掉某個動作而不是事後處理，改用 `PreToolUse` 並讓腳本以 `exit 2` 結束——**`exit 2` 是唯一保證阻擋該動作的訊號**，官方原文：exit 0 依 JSON 輸出決定，exit 1 或 3 以上多數事件視為非阻擋性錯誤、動作照常進行，只有 exit 2 是「阻擋性錯誤，無論 JSON 輸出寫什麼都會阻擋」[1]。腳本用 `"${CLAUDE_PROJECT_DIR}/.claude/hooks/xxx.sh"` 這種寫法引用，`CLAUDE_PROJECT_DIR` 是官方保證會設定好的環境變數，指向 session 啟動時的專案根目錄，不受目前工作目錄影響[1]。
+這個範例可以直接照抄：把它貼進 `.claude/settings.json`，前提是專案已經裝了 `prettier` 且 `jq` 在 PATH 裡。想擋掉某個動作而不是事後處理，改用 `PreToolUse` 並讓腳本以 `exit 2` 結束——**`exit 2` 是唯一保證阻擋該動作的訊號**，官方原文：exit 0 依 JSON 輸出決定，exit 1 或 3 以上時，stdout 若沒有有效 JSON，多數事件視為非阻擋性錯誤、動作照常進行（若有通過驗證的 JSON，則忽略 exit code、由 JSON 決定結果）[^fresh1]，只有 exit 2 是「阻擋性錯誤，無論 JSON 輸出寫什麼都會阻擋」[1]。腳本用 `"${CLAUDE_PROJECT_DIR}/.claude/hooks/xxx.sh"` 這種寫法引用，`CLAUDE_PROJECT_DIR` 是官方保證會設定好的環境變數，指向 session 啟動時的專案根目錄，不受目前工作目錄影響[1]。
 
 ### 安全注意事項
 
@@ -143,3 +143,5 @@ the problem, show the current code, and provide an improved version.
 | [3] | Best practices for Claude Code（hooks 是 deterministic、CLAUDE.md 是 advisory） | <https://code.claude.com/docs/en/best-practices> |
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[Claude Code 設定總覽](official-config.md)｜[把 AI 代理的工作環境設計得可靠](harness.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/hooks>

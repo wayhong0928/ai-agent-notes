@@ -1,6 +1,6 @@
 # Subagent 入門與實戰
 
-> 查證日期：2026-09-19。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 [SKILL、Plugin、MCP 與 Subagent](extensions.md)那頁已經把 Subagent 放進六種擴充機制的總表比較過；[Hooks 與 Subagent 設定](hooks-subagents.md)整理過 frontmatter 每個欄位的語意與內建 agent 清單。這頁只挖 Subagent 這一項，把上面兩頁沒空間深入的部分補齊：官方文件實際定義的 18 個欄位（含前兩頁沒收錄的 `fable`／`background`／`omitClaudeMd`／`effort`／`initialPrompt`／`experimental` 六項）、`background` 欄位怎麼偷偷換掉工具清單、`isolation: worktree` 實際怎麼擋住越界的指令、`SendMessage` 怎麼續問一個已經跑完的 subagent，以及多代理協作真正的成本是多少倍。
 
@@ -8,7 +8,7 @@
 
 官方原文把使用時機講得很直接：「Use one when a side task would flood your main conversation with search results, logs, or file contents you won't reference again: the subagent does that work in its own context and returns only the summary. Define a custom subagent when you keep spawning the same kind of worker with the same instructions.」[1] 白話說：一個側支任務如果會把主對話塞滿你不會再看第二次的搜尋結果、log、檔案內容，就該交給 subagent，讓它在自己的 context 裡做完，只把摘要帶回來；如果你發現自己一直在重複派同一種工人、給同一套指示，就該把它定義成一個可重複使用的自訂 subagent。
 
-官方列出四個具體好處[1]：
+官方列出五個具體好處，除了下面四個，還有把任務交給 Haiku 這類更快、更便宜的模型來控制成本[1]：[^fresh1]
 
 - **保留 context**：把探索與實作留在自己的視窗，不進主對話
 - **強制邊界**：限制某個 subagent 能用哪些工具
@@ -27,8 +27,8 @@ Claude Code 內建幾種不用自己寫定義檔的 agent[1]：
 | 內建 agent | 模型 | 定位 |
 |---|---|---|
 | `Explore` | 繼承主對話的模型，在 Claude API 上最高只到 Opus | 唯讀，跳過 CLAUDE.md 與 git status 以維持輕量，用於檔案發現與程式碼搜尋 |
-| `Plan` | 依[模型解析順序](#4-fable) | 唯讀，用於 plan mode 下的程式庫研究 |
-| `general-purpose` | 同上 | 所有 subagent 可用工具都開，用於需要探索＋修改、複雜推理、多步驟依賴的任務 |
+| `Plan` | 繼承主對話的模型（除非設了 `CLAUDE_CODE_SUBAGENT_MODEL` 並強制套用到每個 subagent）[^fresh2] | 唯讀，用於 plan mode 下的程式庫研究 |
+| `general-purpose` | 依[模型解析順序](#4-fable) | 所有 subagent 可用工具都開，用於需要探索＋修改、複雜推理、多步驟依賴的任務 |
 | `claude` | 同上 | 無法歸類到專門 agent 時的萬用選項，所有 subagent 可用工具都開；也是[背景 session](#8-agent-viewagent-teams-dynamic-workflows) 被派工時的預設 agent |
 | `statusline-setup` | Sonnet | 設定 status line |
 | `claude-code-guide` | Haiku | 回答 Claude Code 功能問題 |
@@ -90,9 +90,9 @@ Claude 呼叫 subagent 時，實際套用的模型依這個順序解析（由高
 
 Subagent 繼承主線對話可用的內建工具與 MCP 工具，但會經過兩層過濾[1]：
 
-**第一層，不管 `tools` 欄位寫了什麼都會被拿掉的工具**：`Agent`（在委派深度已到上限時；fork 裡這個工具會保留在清單但實際呼叫會回錯誤）、`AskUserQuestion`、`EndConversation`、`EnterPlanMode`、`ExitPlanMode`（除非該 subagent 的 `permissionMode` 是 `plan`）、`ScheduleWakeup`、`TaskOutput`、`WaitForMcpServers`、`Workflow`。
+**第一層，不管 `tools` 欄位寫了什麼都會被拿掉的工具**：`Agent`（在委派深度已到上限時；fork 裡這個工具會保留在清單但實際呼叫會回錯誤）、`AskUserQuestion`、`EndConversation`、`EnterPlanMode`、`ExitPlanMode`（除非該 subagent 的 `permissionMode` 是 `plan`）、`ScheduleWakeup`、`WaitForMcpServers`[^fresh3]、`Workflow`。
 
-**第二層只套用在背景執行的 subagent 身上**（背景是[預設值](#6-background-isolation-worktree)）。除了跟著第一層規則走的 `Agent` 與 `ExitPlanMode`，背景 subagent 只保留這些內建工具：`Read`、`Grep`、`Glob`、`Bash`、`PowerShell`、`Edit`、`Write`、`NotebookEdit`、`WebFetch`、`WebSearch`、`TodoWrite`、`Skill`、`ToolSearch`、`EnterWorktree`、`ExitWorktree`、`Monitor`、`TaskStop`、`SendMessage`、`Artifact`，加上要回報用的 `SubagentHandback`；MCP 工具則全部保留。其餘內建工具，就算寫在 `tools` 欄位裡也一樣被拿掉，同一份定義檔在前景跟背景會解析出不同的工具集，這個移除動作不會報錯，除非移除後 `tools` 清單完全解析不出任何工具[1]。
+**第二層只套用在背景執行的 subagent 身上**（背景是[預設值](#6-background-isolation-worktree)）。除了跟著第一層規則走的 `Agent` 與 `ExitPlanMode`，背景 subagent 只保留這些內建工具：`Read`、`Grep`、`Glob`、`LSP`、`Bash`、`PowerShell`[^fresh4]、`Edit`、`Write`、`NotebookEdit`、`WebFetch`、`WebSearch`、`TodoWrite`、`Skill`、`ToolSearch`、`EnterWorktree`、`ExitWorktree`、`Monitor`、`TaskStop`、`SendMessage`、`Artifact`，加上要回報用的 `SubagentHandback`；MCP 工具則全部保留。其餘內建工具，就算寫在 `tools` 欄位裡也一樣被拿掉，同一份定義檔在前景跟背景會解析出不同的工具集，這個移除動作不會報錯，除非移除後 `tools` 清單完全解析不出任何工具[1]。
 
 fork 會跳過這兩層過濾，直接拿到主線對話一模一樣的工具池[1]。
 
@@ -171,12 +171,12 @@ Dynamic workflow 是一支由 Claude 寫出來、在背景由 runtime 執行的 
 
 ## 10. Codex 的對應設定
 
-Codex 的 subagent 定義放在 TOML 檔：`~/.codex/agents/`（個人層）或 `.codex/agents/`（專案層），每個檔案定義一個自訂 agent。必填三個欄位：`name`、`description`、`developer_instructions`；也可以在同一個檔案裡帶其他 `config.toml` 支援的鍵，例如 `model`、`model_reasoning_effort`、`sandbox_mode`、`mcp_servers`、`skills.config`，省略的設定會從父層繼承[7]。
+Codex 的 subagent 定義放在 TOML 檔：`~/.codex/agents/`（個人層）或 `.codex/agents/`（專案層），每個檔案定義一個自訂 agent。必填三個欄位：`name`、`description`、`developer_instructions`；也可以在同一個檔案裡帶其他 `config.toml` 支援的鍵，例如 `model`、`model_reasoning_effort`、`sandbox_mode`、`mcp_servers`、`skills.config`，省略的設定會從父層繼承[7]。[^fresh5]
 
 ```toml
 name = "pr_explorer"
 description = "Read-only codebase explorer for gathering evidence before changes are proposed."
-model = "gpt-5.6-luna"
+model = "gpt-6-luna"
 model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 developer_instructions = """
@@ -221,3 +221,9 @@ Codex 內建三種現成 agent：`default`（萬用備援）、`worker`（專注
 | [7] | Subagents（Codex） | <https://learn.chatgpt.com/docs/agent-configuration/subagents> |
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[Hooks 與 Subagent 設定](hooks-subagents.md)｜[把 AI 代理的工作環境設計得可靠](harness.md)｜[AI Agent 怎麼運作](agent-basics.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/sub-agents>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/sub-agents>
+[^fresh3]: 2026-10-05 依官方原文更新，出處：<https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md>
+[^fresh4]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/sub-agents>
+[^fresh5]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/docs/agent-configuration/subagents>

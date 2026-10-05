@@ -1,6 +1,6 @@
 # Claude Code 設定總覽
 
-> 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 前面幾頁講的是[AI Agent 怎麼運作](agent-basics.md)、[各種擴充機制解決什麼問題](extensions.md)、[怎麼把工作環境設計得可靠](harness.md)——都是原理層。這頁換一個角度，只回答一個問題：**Claude Code 官方文件建議怎麼設定**。內容照官方文件的說法整理，不包含任何個人或特定專案的客製規則；你自己專案要怎麼寫，是另一回事，這頁只負責把官方定義的介面講清楚。
 
@@ -34,7 +34,7 @@ CLAUDE.md 依檔案位置分四層，載入順序由廣到窄；子目錄的 CLA
 **只要工作目錄或其任何上層目錄有 `CLAUDE.md`（含 `.claude/CLAUDE.md`、`CLAUDE.local.md`），Claude Code 的行為就跟以前完全一樣：只讀 CLAUDE.md，不會去讀 AGENTS.md。** 這是 v2.1.277（2026-09-18 發布）之前唯一的行為，也是 v2.1.277 之後、有 CLAUDE.md 時的預設行為：若專案已經有 `AGENTS.md`（例如同時給 Codex 用）但還沒有 `CLAUDE.md`，官方原本建議建一個 `CLAUDE.md` 用 `@AGENTS.md` 匯入它，下面再加 Claude 專屬指示，這個做法現在仍然可用[1]。
 
 !!! note "v2.1.277 起（2026-09-18）：專案完全沒有 CLAUDE.md 時，Claude Code 才會直接讀 AGENTS.md"
-    官方 changelog 原文：「Added AGENTS.md support: in a project with no CLAUDE.md, Claude Code reads AGENTS.md instead; change it under "Project instructions" in `/config` (not yet on Bedrock, Vertex or Foundry)」[9]。
+    官方 changelog 原文：「Added AGENTS.md support: in a project with no CLAUDE.md, Claude Code reads AGENTS.md instead; change it under "Project instructions" in `/config`」[^fresh1][9]。
 
     判定範圍是工作目錄本身加上它的所有上層目錄，官方原文：「Claude reads AGENTS.md only when you have no CLAUDE.md in your working directory or above it.」其中任何一層有 `CLAUDE.md`、`.claude/CLAUDE.md` 或 `CLAUDE.local.md`，就不會觸發讀取 `AGENTS.md`[1]。
 
@@ -42,9 +42,9 @@ CLAUDE.md 依檔案位置分四層，載入順序由廣到窄；子目錄的 CLA
 
     使用者層 `~/.claude/CLAUDE.md`、組織的 managed CLAUDE.md、`.claude/rules/` 都不算進判定範圍，會跟 `AGENTS.md` 一起載入。子目錄裡的 `AGENTS.md`，只在 Claude 用 Read 工具讀到該子目錄底下的檔案、且那個子目錄自己沒有上述三種 `CLAUDE.md` 檔時才會載入。以前官方建議的 `@AGENTS.md` 匯入語法仍然可用，官方明講「Keeping the import never makes Claude read AGENTS.md twice」，不會被重複讀取[1]。
 
-    不支援這個新行為的情況：v2.1.277 之前的版本；不會向 Anthropic 抓 feature flag 的環境（例如用 Amazon Bedrock、Vertex、Foundry 等第三方供應商，或停用了 telemetry）；升級後的第一個 session（下一個 session 才生效）；設了 `disableAllHooks` 或 `allowManagedHooksOnly`，或在 `/plugin` 停用了內建的 `agents-md` plugin。這些情況下 `/config` 裡也不會出現「Project instructions」這個設定項[1]。
+    不支援這個新行為的情況：v2.1.277 之前的版本；v2.1.281 之前版本上的部分 session（例如用 Amazon Bedrock，或停用了 telemetry）[^fresh2]；升級後的第一個 session（下一個 session 才生效）；設了 `disableAllHooks` 或 `allowManagedHooksOnly`，或在 `/plugin` 停用了內建的 `agents-md` plugin。這些情況下 `/config` 裡也不會出現「Project instructions」這個設定項[1]。
 
-    **最小檢查步驟**：想確認自己目前讀的是哪個檔案，跑 `/config` 看「Project instructions」目前設什麼值；或看 session 開頭有沒有出現類似「no CLAUDE.md found; AGENTS.md loaded: ...」的提示行。直接讀取的 `AGENTS.md` 不會出現在 `/memory` 或 `/context` 的 Memory files 清單裡（除非是被 `CLAUDE.md` 用 `@AGENTS.md` 匯入進去的），這時官方建議改問 Claude「你的 project instructions 寫什麼」來確認[1]。
+    **最小檢查步驟**：想確認自己目前讀的是哪個檔案，跑 `/config` 看「Project instructions」目前設什麼值；或看 session 開頭有沒有出現類似「no CLAUDE.md found; AGENTS.md loaded: ...」的提示行。直接讀取的 `AGENTS.md` 從 v2.1.280 起會列在 `/memory` 清單裡，跑 `/memory` 找它的路徑即可；v2.1.280 之前的版本 `/memory` 與 `/context` 都不會列出它，這時官方建議改問 Claude「你的 project instructions 寫什麼」來確認[^fresh3][1]。
 
 ## 二、`.claude/rules/`：把 CLAUDE.md 拆成主題檔
 
@@ -64,7 +64,7 @@ paths:
 - Use the standard error response format
 ```
 
-只有 Claude 讀到符合 `paths` 模式的檔案時才會觸發載入這份規則，不是每次工具呼叫都觸發[1]。使用者層 `~/.claude/rules/` 對每個專案都生效，且會在專案層 rule 之前先載入[1]。
+只有 Claude 用 Read、Write 或 Edit 工具處理符合 `paths` 模式的檔案時才會觸發載入這份規則[^fresh4]，不是每次工具呼叫都觸發[1]。使用者層 `~/.claude/rules/` 對每個專案都生效，且會在專案層 rule 之前先載入[1]。
 
 !!! warning "已知限制：`paths` 在部分版本可能不生效"
     GitHub 上有多筆社群回報的 issue，指出 `paths` frontmatter 在特定版本、特定情境（例如使用者層 rule、或由 Write 觸發而非 Read 觸發時）不生效或行為跟文件描述不符。這些是社群回報的 bug 追蹤，不是官方文件本體的承諾內容；本站查證時（2026-09-16）未能確認這些 issue 目前的修復狀態對應到哪個確切版本號。如果你設定了 `paths` 卻發現規則沒被載入，先確認自己的版本號，再去查目前官方 issue tracker 的最新狀態，不要預設是自己語法寫錯了。
@@ -104,7 +104,7 @@ paths:
 
 ### permission mode：六種，`Shift+Tab` 只切三種
 
-官方目前列出**六種** permission mode，不是坊間常聽到的四種；`Shift+Tab` 的預設循環只切換其中三種，其他模式要另外用旗標或設定啟用[4]。**Pro／Max／Team 方案的內建起始模式是 `auto`**，其他方案的內建起始模式才是 `default`（Manual）[4]：
+官方目前列出**六種** permission mode，不是坊間常聽到的四種；`Shift+Tab` 的預設循環只切換其中三種，其他模式要另外用旗標或設定啟用[4]。**Claude Code v2.1.283 起，終端機與 VS Code 互動 session 的內建起始模式是 `auto`**；更早的版本只有 Pro／Max／Team 方案是 `auto`，其他方案才是 `default`（Manual）[^fresh5][4]：
 
 | 模式 | 說明 | 在 `Shift+Tab` 循環裡嗎 |
 |---|---|---|
@@ -158,3 +158,9 @@ paths:
 | [9] | Claude Code changelog（v2.1.277，2026-09-18，AGENTS.md support） | <https://code.claude.com/docs/en/changelog> |
 
 延伸：[AI Agent 怎麼運作](agent-basics.md)｜[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[Hooks 與 Subagent 設定](hooks-subagents.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/memory>
+[^fresh3]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/memory>
+[^fresh4]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/memory>
+[^fresh5]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/permission-modes>

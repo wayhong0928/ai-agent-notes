@@ -1,6 +1,6 @@
 # Projects 功能
 
-> 查證日期：2026-09-19。這頁在寫的當下經過兩位查證者交叉核對，發現[免付費區](free-tier.md)與[付費區](paid-tier.md)先前寫的「Free 沒有 Projects」是錯的，已經回頭更正，見第 4 節。方案與功能變動很快，請以官方最新說明為準。
+> 查證日期：2026-10-05。這頁在寫的當下經過兩位查證者交叉核對，發現[免付費區](free-tier.md)與[付費區](paid-tier.md)先前寫的「Free 沒有 Projects」是錯的，已經回頭更正，見第 4 節。方案與功能變動很快，請以官方最新說明為準。
 
 「Projects」這個詞，2026-09 這幾週在 Claude 生態裡同時指兩層東西：一個是 claude.ai 用了很久的知識庫型 Projects，另一個是 2026-09 剛在 Claude Code 上線的新版 beta。官方文件把兩者定位成同一條功能線的新舊版本，這點第 1 節先講清楚，免得跟[AI 介面比較總表](tools-compare.md)或[Claude Code + Cowork](claude-code-cowork.md)的分類方式搞混。
 
@@ -59,7 +59,7 @@ Claude Code 側講的「專案」，不是 claude.ai 那種產品功能，是靠
 
 ## 6. 新版 Projects beta：先從 Claude Code 推出
 
-新版是一個「協調型」對話：丟任務進去，Claude 會拆出多個 thread，每個 thread 是一個獨立的雲端 session（cloud session），在自己的 branch 上跑，關掉筆電也能繼續執行。官方原文：「A project is one ongoing conversation where Claude coordinates a stream of related work for you.」[C1]
+新版是一個「協調型」對話：丟任務進去，Claude 會拆出多個 thread，每個 thread 通常是一個獨立的雲端 session（cloud session）[^fresh1]，在自己的 branch 上跑，關掉筆電也能繼續執行。官方原文：「A project is one ongoing conversation where Claude coordinates a stream of related work for you.」[C1]
 
 **每個新 thread 會自動載入什麼、不會載入什麼**：
 
@@ -67,20 +67,20 @@ Claude Code 側講的「專案」，不是 claude.ai 那種產品功能，是靠
 |---|---|---|
 | `CLAUDE.md` | 啟動時載入 | 每個 repository 的都載入 |
 | Skills、agents、commands（`.claude/` 底下） | 載入 | 每個 repository 的都載入 |
-| Plugins（`.claude/settings.json` 啟用的） | 載入 | 每個 repository 的都載入，衝突時以 Project settings 的設定為準 |
+| Plugins（`.claude/settings.json` 啟用的） | 不載入，改在 Project settings > Plugins 加 | 不載入，改在 Project settings > Plugins 加[^fresh2] |
 | Permission 規則、hooks、`env`（`.claude/settings.json`） | 套用到該 thread | **不套用**（改由多個 repository 上層目錄的設定決定，沒有單一 repository 的檔案可讀）[C1] |
 
-原文明確切這條線：「Threads don't pick up anything from the Claude Code setup on your own machine.」[C1] 這句話只吃 repo 裡版控的 `CLAUDE.md`／skills／plugins，不吃你本機的 `~/.claude/CLAUDE.md` 或本機 auto memory。但**不是只認 `CLAUDE.md`**：在 claude.ai 帳號層啟用的 skills，同樣會載入每個新 thread，跟 repo 裡的 skills 是兩條獨立的來源 [C1]。
+原文明確切這條線：「Cloud threads don't pick up anything from the Claude Code setup on your own machine.」[^fresh3][C1] 這句話只吃 repo 裡版控的 `CLAUDE.md`／skills（repo 在 `.claude/settings.json` 啟用的 plugins 不會載入，要改在 Project settings > Plugins 加）[^fresh4]，不吃你本機的 `~/.claude/CLAUDE.md` 或本機 auto memory。但**不是只認 `CLAUDE.md`**：在 claude.ai 帳號層啟用的 skills，同樣會載入每個新 thread，跟 repo 裡的 skills 是兩條獨立的來源 [C1]。
 
 **方案限制與推出順序**：目前只開放 Pro／Max，且是分階段推送，官方原文：「Projects are in public beta on Pro and Max plans and rolling out gradually, **starting with accounts that have used cloud sessions and don't have existing projects in claude.ai chat or Cowork**. They aren't available on Team or Enterprise plans yet.」[C1] 這句話交代了三件事：新版目前只給還沒有舊版 Projects 的帳號、之後會擴大到 Team／Enterprise、也會擴大到 chat 與 Cowork，不會永遠只綁在 Claude Code。
 
 **Project instructions 與 Project memory**：Project instructions 上限 16,000 字元，每個新 thread 與協調對話都會收到 [C1]；Project memory 是 Claude 自己寫的筆記（需求、決策、雷點），每個 thread 啟動時讀索引檔 `MEMORY.md`，跟 Claude Code 本機的 auto memory 是分開機制，只是都用 `MEMORY.md` 這個命名概念 [C1][C2]。
 
-**不能碰什麼**：thread 只能動 GitHub repository，以及使用者上傳到 project 的檔案／資料夾／Google Drive 資料夾，官方原文：「not on files or tools that exist only on your machine」[C1]。本機資料庫、VPN 後面的服務都碰不到。
+**不能碰什麼**：雲端 thread 只能動 GitHub repository，以及使用者上傳到 project 的檔案／資料夾／Google Drive 資料夾，本機資料庫、VPN 後面的服務都碰不到；需要這些時，官方的做法是：「When a task needs something only your computer has, such as a local database, a device emulator, or an API behind your VPN, ask Claude to run the thread for that task on your computer instead of in the cloud.」[C1][^fresh5]
 
-## 7. 跟 ChatGPT Projects、NotebookLM 比一比
+## 7. 跟 ChatGPT Projects、Gemini Notebook（原 NotebookLM）比一比[^fresh6]
 
-| | claude.ai Projects（舊版） | ChatGPT Projects | NotebookLM |
+| | claude.ai Projects（舊版） | ChatGPT Projects | Gemini Notebook（原 NotebookLM）[^fresh7] |
 |---|---|---|---|
 | 能放什麼 | 檔案＋project instructions [S1][S2] | 檔案＋instructions，指示只在該 project 生效並蓋過全域自訂指示（信心中，WebSearch 摘要）[O1] | 「來源」：文件、網頁、影音等 |
 | 免費方案能不能用 | ✅ 上限 5 個 [P1][S1] | 部分開放，但檔案數上限比付費方案低（信心中，數字未能對到官方逐字稿，不建議照抄）[O1] | Standard 層 50 個來源／notebook（信心高）[G1] |
@@ -119,3 +119,11 @@ rollout 狀態：Pro／Max 分階段推送，「More plans will follow soon, and
 | G2 | support.google.com/notebooklm/answer/16215270 | 單一來源上限、只依來源回答的官方敘述 |
 
 延伸：[免付費區](free-tier.md)｜[付費區](paid-tier.md)｜[AI 介面比較總表](tools-compare.md)｜[Claude Code + Cowork 並用](claude-code-cowork.md)｜[Claude Code 設定總覽](official-config.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/claude-projects>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/claude-projects>
+[^fresh3]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/claude-projects>
+[^fresh4]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/claude-projects>
+[^fresh5]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/claude-projects>
+[^fresh6]: 2026-10-05 依官方原文更新，出處：<https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/>
+[^fresh7]: 2026-10-05 依官方原文更新，出處：<https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/>

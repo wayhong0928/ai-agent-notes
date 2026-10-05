@@ -1,6 +1,6 @@
 # Claude Code 接上 Obsidian vault
 
-> 查證日期：2026-09-17。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 Obsidian 的 vault 本質上就是「你電腦上的一個資料夾」，裡面是一堆 Markdown 檔案，加上一個 `.obsidian` 設定目錄 [B1]。而 Claude Code 本來就是在本機終端機跑、會直接讀寫檔案的工具 [A1]。所以這件事的答案比多數人想的簡單：**大部分情況你不需要任何外掛，把 vault 資料夾交給 Claude Code 就成了**。MCP server 與 Obsidian 社群 plugin 是用來補「純檔案系統做不到的那幾件事」，不是入場券。
 
@@ -117,7 +117,7 @@ obsidian help
 
 | 專案 | 型態 | 最後更新 | 狀態與注意事項 |
 |---|---|---|---|
-| `coddingtonbear/obsidian-local-rest-api` | Obsidian 社群 plugin，**內建 MCP server** | 2026-08-31 [G2] | 目前最推薦。官方 README 直接寫「Claude Code 有原生 HTTP MCP 支援」並給出指令 [G3]。約 2.9k stars、3 個開放 issue [G2] |
+| `coddingtonbear/obsidian-local-rest-api` | Obsidian 社群 plugin，**內建 MCP server** | 2026-10-04 [G2][^fresh1] | 目前最推薦。官方 README 直接寫「Claude Code 有原生 HTTP MCP 支援」並給出指令 [G3]。約 2.9k stars、3 個開放 issue [G2] |
 | `MarkusPfundstein/mcp-obsidian` | 獨立 Python MCP server，需搭配上面那個 plugin | 2026-08-31 [G4] | 仍在維護、約 4.4k stars，但**開放 issue 有 101 個** [G4]，且 README 自述只支援 `mcp >=1.1.0,<2.0.0`、與 mcp 2.0+ 不相容 [G5] |
 | `iansinnott/obsidian-claude-code-mcp` | Obsidian plugin，內建 WebSocket MCP server | **2025-06-27** [G6] | **已逾一年未更新**，19 個開放 issue。*整理者觀察*：它的功能定位（`/ide` 自動探索）與路徑 D 的 Claude Code IDE 高度重疊，而後者維護較新，因此不建議新裝 |
 
@@ -150,7 +150,7 @@ claude mcp add --transport http obsidian https://127.0.0.1:27124/mcp/ \
 }
 ```
 
-4. **處理 TLS 憑證**（*整理者觀察*：多數人會卡在這一步）。這個 plugin 啟動時自簽一張憑證，官方 README 給兩條路：到 `https://127.0.0.1:27124/obsidian-local-rest-api.crt` 下載並信任該憑證，或把 client 設成對 `127.0.0.1` 跳過 TLS 驗證。README 另外給了一條它自己標明為 insecure 的替代方案——在 Settings → Local REST API 開啟 HTTP server，改連 `http://127.0.0.1:27123/mcp/` [G3]。
+4. **處理 TLS 憑證**（*整理者觀察*：多數人會卡在這一步）。這個 plugin 首次啟動時會自己產生一個憑證授權（CA），再用它簽發伺服器憑證，官方 README 給兩條路：到 `https://127.0.0.1:27124/obsidian-local-rest-api.crt` 下載並信任這個 CA 憑證[^fresh2]，或把 client 設成對 `127.0.0.1` 跳過 TLS 驗證。README 另外給了一條它自己標明為 insecure 的替代方案——在 Settings → Local REST API 開啟 HTTP server，改連 `http://127.0.0.1:27123/mcp/` [G3]。
 
 **最小測試**：`/mcp` 看 `obsidian` 這台有沒有連上，再叫 Claude 用 MCP 工具列出 vault 根目錄的檔案。連不上通常就是第 4 步的憑證問題。
 
@@ -162,9 +162,9 @@ claude mcp add --transport http obsidian https://127.0.0.1:27124/mcp/ \
 
 | Plugin | 作者 | 做什麼 | 現況 |
 |---|---|---|---|
-| **Claudian** | Yishen Tu | 把 Claude Code、Codex、Grok、Opencode 等 agent CLI 嵌進 vault，vault 直接成為 agent 的工作目錄，支援 inline 編輯與 diff 預覽、slash command、檔案／資料夾 mention、MCP | 目前生態系裡最成熟的一個：官方目錄顯示 210 萬次下載、v2.2.7、5 天前更新；GitHub 約 15.4k stars、2026-09-17 仍有 push [G7][G8]。需桌面版、Obsidian v1.13.0+、且本機至少裝好一套 agent CLI [G7] |
-| **Claude Code IDE** | petersolopov | 在 Obsidian 裡跑一個 WebSocket MCP server，Claude Code 的 `/ide` 選單會自動出現 Obsidian；連上後 Claude Code 看得到你開著的檔案與選取範圍 | 官方目錄顯示 1.6 萬次下載、v0.2.5、4 個月前更新；GitHub 2026-06-04 最後 push、0 開放 issue [G9][G1]。**刻意做成唯讀**：只分享選取內容與開啟中的檔名，不寫檔也不執行程式；綁 `127.0.0.1`、每 session 隨機 token [G1] |
-| **Claude Code Skills** | p3nguln5 | 在筆記裡選字、右鍵挑一個 skill，回應串流到側邊欄 | 官方目錄顯示 2000 次下載、v1.0.5、4 個月前更新 [G10]。*整理者觀察*：以下載數與更新頻率看，規模明顯小於上面兩個。需本機已安裝並登入 Claude Code CLI（`claude` 要在 PATH 上）、僅桌面版、Obsidian 1.7.2+ [G10] |
+| **Claudian** | Yishen Tu | 把 Claude Code、Codex、Grok、Opencode 等 agent CLI 嵌進 vault，vault 直接成為 agent 的工作目錄，支援 inline 編輯與 diff 預覽、slash command、檔案／資料夾 mention、MCP | 目前生態系裡最成熟的一個：官方目錄顯示 230 萬次下載、v2.3.13、2026-10-05 更新[^fresh3]；GitHub 約 15.4k stars、2026-09-17 仍有 push [G7][G8]。需桌面版、Obsidian v1.13.0+、且本機至少裝好一套 agent CLI [G7] |
+| **Claude Code IDE** | petersolopov | 在 Obsidian 裡跑一個 WebSocket MCP server，Claude Code 的 `/ide` 選單會自動出現 Obsidian；連上後 Claude Code 看得到你開著的檔案與選取範圍 | 官方目錄顯示 1.8 萬次下載、v0.2.5、2026-06-04 更新[^fresh4]；GitHub 2026-06-04 最後 push、0 開放 issue [G9][G1]。**刻意做成唯讀**：只分享選取內容與開啟中的檔名，不寫檔也不執行程式；綁 `127.0.0.1`、每 session 隨機 token [G1] |
+| **Claude Code Skills** | p3nguln5 | 在筆記裡選字、右鍵挑一個 skill，回應串流到側邊欄 | 官方目錄顯示 3000 次下載、v1.0.5、2026-05-15 更新 [G10][^fresh5]。*整理者觀察*：以下載數與更新頻率看，規模明顯小於上面兩個。需本機已安裝並登入 Claude Code CLI（`claude` 要在 PATH 上）、僅桌面版、Obsidian 1.7.2+ [G10] |
 
 Claude Code IDE 的作者自己把定位講得很清楚：**Claude Code 本來就能直接讀寫 vault 裡的檔案，這個 plugin 補的是反方向的「編輯器上下文」**——你現在開著哪篇、選了哪一段 [G1]。也就是說它跟路徑 A 是疊加關係，不是取代關係。
 
@@ -221,3 +221,9 @@ Claude Code IDE 的作者自己把定位講得很清楚：**Claude Code 本來�
 註：A 系列為 Anthropic 官方文件，B 系列為 Obsidian 官方說明，G 系列為 GitHub 專案與 Obsidian 社群 plugin 目錄（社群作品，Anthropic 與 Obsidian 官方均不背書）。
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[Claude Code 設定總覽](official-config.md)｜[付費區](paid-tier.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://github.com/coddingtonbear/obsidian-local-rest-api/commit/44e16c401747337bda7e09a4e9bc35f8624872bd>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://github.com/coddingtonbear/obsidian-local-rest-api>
+[^fresh3]: 2026-10-05 依官方原文更新，出處：<https://community.obsidian.md/plugins/realclaudian>
+[^fresh4]: 2026-10-05 依官方原文更新，出處：<https://community.obsidian.md/plugins/claude-code-ide>
+[^fresh5]: 2026-10-05 依官方原文更新，出處：<https://community.obsidian.md/plugins/claude-code-skills>

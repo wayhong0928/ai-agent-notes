@@ -1,6 +1,6 @@
 # 付費區
 
-> 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 這頁列出需要 Pro 以上、或者非得用 Claude Code／Codex 才做得到的功能。每項都標最低方案，並說明「為什麼免費帳號或純聊天介面做不到」。多數答案落在六個原因裡：能不能碰**本機檔案**、能不能**執行指令**、能不能讓 **skill 自動觸發**、能不能派出**subagent**、能不能掛 **hooks**、以及要不要 **Claude Code + Codex 協作**。免費帳號能做到的部分，見[免付費區](free-tier.md)；不確定該用哪個介面，先看[AI 介面比較總表](tools-compare.md)。
 
@@ -16,12 +16,12 @@
 | Projects（Claude） | Free 上限 5 個；Pro 起無限量＋RAG 擴充 | **2026-09-19 更正**：先前這裡寫「Free 沒有 Projects」是錯的，Free 其實能用、但上限 5 個且沒有 RAG 擴充；Pro 起無限量，且知識庫接近上限時會自動切換 RAG 模式擴充容量最多 10 倍，完整說明見[Projects 功能](projects.md) [S3][S24] |
 | Research（Claude） | Pro | 官方明寫「Research is available for users with paid Claude plans」[S14] |
 | Cowork | Pro | 需要本機或雲端 VM 執行環境，免費帳號完全不能用；2026-09-16 起官方正把 Cowork 併入一般 Chat，Pro／Max 帳號分階段收到新體驗，收到之後不必再特地切到 Cowork 模式 [S21][S26] |
-| Claude Design | Pro（research preview，Enterprise 需管理員手動開啟） | 需要獨立的畫布編輯環境，目前仍是研究預覽階段功能 [S22] |
-| Subagent（Task tool） | 跟著 Claude Code 存取權走，Pro 起 | Subagent 需要獨立的系統提示詞與工具限制，只存在於 Claude Code 這套 agent 架構裡，這是**subagent**這個原因 [S17] |
+| Claude Design | Pro（beta，Enterprise 需管理員手動開啟）[^fresh1] | 需要獨立的畫布編輯環境，目前仍是 beta 階段功能[^fresh2] [S22] |
+| Subagent（Agent tool，舊名 Task tool）[^fresh3] | 跟著 Claude Code 存取權走，Pro 起 | Subagent 需要獨立的系統提示詞與工具限制，只存在於 Claude Code 這套 agent 架構裡，這是**subagent**這個原因 [S17] |
 | Hooks | 跟著 Claude Code 存取權走，Pro 起 | Hooks 是在 Claude Code 特定事件（例如寫檔前、對話結束）自動觸發的機制，聊天介面沒有這種生命週期事件可以掛，這是**hooks**這個原因 [S18] |
 | Plugins（含 Skill 打包發佈） | 跟著 Claude Code 存取權走，Pro 起；Codex Plugins 全方案不分級 | Claude Code 的 Plugin 可以把 skill 設成依任務描述自動觸發，不必每次手動貼指示，這是**skill 自動觸發**這個原因；Codex 側的 Plugin／Skill 機制則不分方案 [S19][O29] |
-| Routines／Dispatch（排程、手機發任務給 Desktop） | Pro（research preview） | 排程需要背景執行環境，手機端 Dispatch 需要桌面版保持連線代為執行，這兩者都超出純聊天介面的能力範圍 [S7] |
-| ChatGPT Work | 首波 Pro／Enterprise／Edu，Plus／Business 隨後滾動上線 | 跨 App、跨檔案的多步驟自動化，需要能連續執行數小時的 agent 環境 [O11] |
+| Routines／Dispatch（排程、手機發任務給 Desktop） | Pro（Routines 為 research preview；Dispatch 已不開放新使用者[^fresh4]） | 排程需要背景執行環境，手機端 Dispatch 需要桌面版保持連線代為執行，這兩者都超出純聊天介面的能力範圍 [S7] |
+| ChatGPT Work | Free、Go、Plus、Pro、Business、Edu、Enterprise 各方案皆含[^fresh5] | 跨 App、跨檔案的多步驟自動化，需要能連續執行數小時的 agent 環境 [O11] |
 | Codex 更高額度、更快模型 | Pro（$100 起） | Free／Go 的 Codex 只到「輕量程式任務」等級，複雜任務需要更高額度與更快模型 [O1] |
 
 ## Claude Code 也能用 API 按量付費，不一定要訂閱
@@ -56,3 +56,9 @@ Claude Code 和 Codex 可以互相搭配：OpenAI 官方 GitHub 組織發布了�
 | O29 | learn.chatgpt.com/docs/build-skills | Codex/ChatGPT Skills、Plugins 關係 |
 
 延伸：[免付費區](free-tier.md)｜[AI 介面比較總表](tools-compare.md)｜[Claude Code + Codex 協作](claude-codex.md)｜[Projects 功能](projects.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/14604416-get-started-with-claude-design>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/14604416-get-started-with-claude-design>
+[^fresh3]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/sub-agents>
+[^fresh4]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/13947068-assign-tasks-from-anywhere-in-claude-cowork>
+[^fresh5]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/llms.txt>

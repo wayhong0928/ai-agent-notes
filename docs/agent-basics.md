@@ -1,6 +1,6 @@
 # AI Agent 怎麼運作
 
-> 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 你跟 ChatGPT 或 Claude 網頁版聊天時，發生的事情很單純：你打字、模型回一段文字、結束。這頁要講的是另一種東西，叫「agent」（代理），中文教材常譯「AI 代理」。它跟聊天機器人的差別在於多了工具，跟一個會反覆執行的迴圈。搞懂這個差異，才看得懂後面 SKILL、MCP、Subagent 這些機制到底在解決什麼問題。
 
@@ -39,7 +39,7 @@ Agent 多了兩個東西：**工具**跟**迴圈**。Claude Code 的官方文件
 
 ## 三、工具權限與沙箱：為什麼要先問過你
 
-Agent 能真的去改你的檔案、跑你的指令，這正是它最有價值也最危險的地方。兩家主要的代理型工具都用「先問過你」當預設防線，只是問的方式跟切法不太一樣。
+Agent 能真的去改你的檔案、跑你的指令，這正是它最有價值也最危險的地方。兩家主要的代理型工具都在動手前設了預設防線，只是切法不太一樣；其中 Claude Code 從 v2.1.283 起，終端機與 VS Code 互動 session 的內建起始模式是 auto（由背景分類器先審過動作），不再是每次先問你的 Manual。[^fresh1]
 
 ### Claude Code 的 permission modes
 
@@ -50,7 +50,7 @@ Agent 能真的去改你的檔案、跑你的指令，這正是它最有價值�
 | **default**（介面顯示 Manual） | 每次要編輯檔案或跑指令都先問你 | 是，循環起點 |
 | **acceptEdits** | 編輯檔案跟常見的檔案系統指令（`mkdir`、`mv` 之類）自動放行，其他指令仍會問 | 是 |
 | **plan** | 只讀檔、只探索，不動你的原始檔案 | 是 |
-| **auto** | 背景有一個分類器幫你先審過大部分動作，只擋下真正危險的 | 只有這個功能對你的方案可用時才會加進循環 |
+| **auto** | 背景有一個分類器幫你先審過大部分動作，只擋下真正危險的 | auto mode 對目前 session 可用時就會加進循環（官方列的方案條件已是所有方案）[^fresh2] |
 | **dontAsk** | 原本要問你的動作直接拒絕，只執行已經核准的工具 | 不會，永遠要另外設定 |
 | **bypassPermissions** | 完全跳過詢問；官方警告只該在容器或虛擬機這類隔離環境使用，因為連 `.git`、`.claude` 這類受保護路徑也會一起放行 | 預設不在循環裡，要先用 `--permission-mode bypassPermissions` 之類的旗標或設定啟用，啟用後才會插進 `plan` 之後 |
 
@@ -106,3 +106,6 @@ Anthropic 也提醒，agent 要能自主運作，關鍵是每一步都要能從�
 | [8] | Choose a permission mode（六種模式清單、`Shift+Tab` 循環規則） | <https://code.claude.com/docs/en/permission-modes> |
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[把 AI 代理的工作環境設計得可靠](harness.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/permission-modes>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/permission-modes>
