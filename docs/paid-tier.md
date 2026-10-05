@@ -20,8 +20,8 @@
 | Subagent（Agent tool，舊名 Task tool）[^fresh3] | 跟著 Claude Code 存取權走，Pro 起 | Subagent 需要獨立的系統提示詞與工具限制，只存在於 Claude Code 這套 agent 架構裡，這是**subagent**這個原因 [S17] |
 | Hooks | 跟著 Claude Code 存取權走，Pro 起 | Hooks 是在 Claude Code 特定事件（例如寫檔前、對話結束）自動觸發的機制，聊天介面沒有這種生命週期事件可以掛，這是**hooks**這個原因 [S18] |
 | Plugins（含 Skill 打包發佈） | 跟著 Claude Code 存取權走，Pro 起；Codex Plugins 全方案不分級 | Claude Code 的 Plugin 可以把 skill 設成依任務描述自動觸發，不必每次手動貼指示，這是**skill 自動觸發**這個原因；Codex 側的 Plugin／Skill 機制則不分方案 [S19][O29] |
-| Routines／Dispatch（排程、手機發任務給 Desktop） | Pro（Routines 為 research preview[^fresh4r]；Dispatch 已不開放新使用者[^fresh4]） | 排程需要背景執行環境，手機端 Dispatch 需要桌面版保持連線代為執行，這兩者都超出純聊天介面的能力範圍 [S7] |
-| ChatGPT Work | 網頁版：Plus、Pro、Business、Enterprise；Free、Go 只列桌面 App，依推出進度開放[^fresh5] | 跨 App、跨檔案的多步驟自動化，需要能連續執行數小時的 agent 環境 [O11] |
+| Routines／Dispatch（排程、手機發任務給 Desktop） | Pro（Dispatch 已不開放新使用者[^fresh4]；Routines 為 research preview[^fresh4r]） | 排程需要背景執行環境，手機端 Dispatch 需要桌面版保持連線代為執行，這兩者都超出純聊天介面的能力範圍 [S7] |
+| ChatGPT Work | 網頁版：Plus、Pro、Business、Enterprise／Edu；Free、Go 只列桌面 App，依推出進度開放[^fresh5] | 跨 App、跨檔案的多步驟自動化，需要能連續執行數小時的 agent 環境 [O11] |
 | Codex 更高額度、更快模型 | Pro（$100 起） | Free／Go 的 Codex 只到「輕量程式任務」等級，複雜任務需要更高額度與更快模型 [O1] |
 
 ## Claude Code 也能用 API 按量付費，不一定要訂閱

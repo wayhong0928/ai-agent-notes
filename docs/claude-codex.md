@@ -93,7 +93,7 @@ codex login
 | `-o` / `--output-last-message <file>` | 把最後一則訊息寫進指定檔案 |
 | 從 stdin 讀 prompt（用 `-` 代表） | 把 prompt 內容用管線或重新導向餵進去，不用整段貼在指令列裡 |
 | `--add-dir <dir>` | 額外授權 Codex 讀寫工作目錄以外的另一個目錄 |
-| `codex --search`（全域旗標，要放在 `exec` 之前） | 改用即時（live）網路搜尋（不加時預設是 cached 快取結果）[^fresh1]；官方這句寫在互動式 `codex` 的說明裡，放在 `exec` 前面時的行為官方沒有另外寫 |
+| `codex --search`（全域旗標，要放在 `exec` 之前） | 改用即時（live）網路搜尋（不加時預設是 cached 快取結果）[^fresh1]；官方這句寫在互動式 `codex` 的說明裡。本機 codex-cli 0.160.0 實測 `codex exec --search` 會報錯，要寫成 `codex --search exec`；搜尋在 `exec` 裡是否生效，官方沒有另外寫 |
 
 來源：[Codex CLI reference](https://developers.openai.com/codex/cli/reference)（會轉址到 `learn.chatgpt.com/docs/developer-commands`）；`--add-dir` 與三段式 sandbox 另可見官方 [Codex sandboxing](https://learn.chatgpt.com/docs/sandboxing)。
 
