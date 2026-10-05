@@ -26,7 +26,7 @@
 <li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1789833331">SKILL、Plugin、MCP 與 Subagent</a></li>
 <li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1789833331">Subagent 入門與實戰</a></li>
 <li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1789793561">MCP 入門與實戰</a></li>
-<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1790345797">好用工具清單</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791036155">好用工具清單</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1789655763">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
@@ -46,7 +46,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1790345797">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791036155">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -126,7 +126,7 @@
 <p>Claude 官方公告 Cowork 與一般 Chat 正在合併成同一個體驗，<strong>是分階段推出，不是已經全面生效</strong>：Pro／Max 帳號正在逐步收到（即使同方案，不同帳號收到的時間點也不一樣），Team／Free 官方說「即將推出」但目前尚未開始，Enterprise 在變動前會提前至少 30 天通知、目前維持現狀不變。合併後的體驗裡沒有獨立的「Cowork 模式」可切換，原本只有 Cowork 才有的檔案操作、任務、connector、skill 能力，在任何一段對話裡都能自動用到，由 Claude 自己判斷要不要動用。上面表格裡「Cowork」這一列，對還沒收到新體驗的帳號仍然照原樣運作；已經收到新體驗的帳號，請把這一列的能力直接理解成「一般對話多了這些能力」，不是找不到 Cowork 分頁就是設定錯了 [S25][S26][S27]。</p>
 </div>
 <h2 id="_2">逐介面細節</h2>
-<h4 id="claude-chat">Claude Chat（網頁／手機）</h4>
+<h3 id="claude-chat">Claude Chat（網頁／手機）</h3>
 <ul>
 <li>跑在哪裡：Anthropic 雲端伺服器 [S7]</li>
 <li>讀寫本機檔案：❌ 不能 [S7]</li>
@@ -135,7 +135,7 @@
 <li>最低方案：Free 即可 [S3][S15]</li>
 <li>適合做什麼：問答、腦力激盪、潤飾文字</li>
 </ul>
-<h4 id="claude-desktopchat">Claude Desktop（Chat 分頁）</h4>
+<h3 id="claude-desktopchat">Claude Desktop（Chat 分頁）</h3>
 <ul>
 <li>跑在哪裡：本機安裝的殼，Chat 分頁內容仍跑在雲端 [S7]</li>
 <li>讀寫本機檔案：❌ Chat 分頁本身不行 [S7]</li>
@@ -144,7 +144,7 @@
 <li>最低方案：Free 可用 Chat 分頁；Cowork／Code 分頁要付費方案 [S3][S7]</li>
 <li>適合做什麼：一個 App 內同時裝 Chat／Cowork／Code</li>
 </ul>
-<h4 id="coworkdesktop-webmobile-beta">Cowork（Desktop 第三分頁／web／mobile beta）</h4>
+<h3 id="coworkdesktop-webmobile-beta">Cowork（Desktop 第三分頁／web／mobile beta）</h3>
 <ul>
 <li>跑在哪裡：預設是雲端 VM，既有 Desktop 部署也可能用本機專用 Linux VM [X4]</li>
 <li>讀寫本機檔案：✅ 本機或雲端 VM 內讀寫，需 Claude Desktop 保持開啟連線 [S21][X4]</li>
@@ -153,7 +153,7 @@
 <li>最低方案：Pro 起，免付費帳號完全不可用 [S21]</li>
 <li>適合做什麼：整理檔案、做報表、寄信、跨應用文書工作</li>
 </ul>
-<h4 id="claude-codeclidesktop-code-ide">Claude Code（CLI／Desktop Code 分頁／網頁／IDE）</h4>
+<h3 id="claude-codeclidesktop-code-ide">Claude Code（CLI／Desktop Code 分頁／網頁／IDE）</h3>
 <ul>
 <li>跑在哪裡：CLI／IDE 擴充／Desktop 本機；claude.ai/code 是 Anthropic 管理的雲端 VM [S7][S8]</li>
 <li>讀寫本機檔案：✅ CLI／IDE／Desktop 可讀寫本機；網頁版是雲端 VM 內的 repo，不是使用者本機磁碟 [S7][S8]</li>
@@ -162,7 +162,7 @@
 <li>最低方案：Free 沒有；Pro 起，也能純用 API key 按量付費、不吃訂閱額度 [S1][S23]</li>
 <li>適合做什麼：跨檔批次處理、程式開發、可重跑流程</li>
 </ul>
-<h4 id="claude-designcanvas">Claude Design（canvas 設計工具）</h4>
+<h3 id="claude-designcanvas">Claude Design（canvas 設計工具）</h3>
 <ul>
 <li>跑在哪裡：？查無：官方說明沒提到跑在本機還是雲端 [S22]</li>
 <li>讀寫本機檔案：？查無 [S22]</li>
@@ -171,7 +171,7 @@
 <li>最低方案：Free 未提及；Pro 起（research preview）；Enterprise 預設關閉，需管理員手動開啟 [S22]</li>
 <li>適合做什麼：對著畫面拖拉調整產出設計稿、原型、投影片、one-pager，而不是純寫 prompt [S22]</li>
 </ul>
-<h4 id="chatgpt">ChatGPT（網頁／手機）</h4>
+<h3 id="chatgpt">ChatGPT（網頁／手機）</h3>
 <ul>
 <li>跑在哪裡：OpenAI 雲端伺服器 [O10]</li>
 <li>讀寫本機檔案：❌ 不能 [O10]</li>
@@ -180,7 +180,7 @@
 <li>最低方案：Free 即可 [A2 §1]</li>
 <li>適合做什麼：問答、寫作、Deep Research</li>
 </ul>
-<h4 id="chatgpt-desktop-chatworkcodex">ChatGPT Desktop（統一版，含 Chat／Work／Codex 分頁）</h4>
+<h3 id="chatgpt-desktop-chatworkcodex">ChatGPT Desktop（統一版，含 Chat／Work／Codex 分頁）</h3>
 <ul>
 <li>跑在哪裡：本機殼；Chat／Work 跑在雲端，Codex 分頁依 sandbox 設定可在本機執行 [O7]</li>
 <li>讀寫本機檔案：⚠️ Codex 分頁依 sandbox mode 可讀寫本機；Chat／Work 分頁不行 [O25]</li>
@@ -189,7 +189,7 @@
 <li>最低方案：Free 即可，官方明說方案層級含 Free [O3][O7]；但功能是分批推出，不保證每個帳號當下都已經看得到 [A2b 題2]</li>
 <li>適合做什麼：一個 App 打通聊天、知識工作 agent、程式碼 agent</li>
 </ul>
-<h4 id="codexcliidecloud">Codex（CLI／IDE／cloud）</h4>
+<h3 id="codexcliidecloud">Codex（CLI／IDE／cloud）</h3>
 <ul>
 <li>跑在哪裡：CLI／IDE 擴充在本機；cloud（chatgpt.com/codex）是 OpenAI 雲端 sandbox 內的 repo checkout [O25][O26]</li>
 <li>讀寫本機檔案：CLI／IDE 可讀寫本機；cloud 是雲端 checkout，不是使用者本機磁碟 [O25]</li>
@@ -426,7 +426,17 @@
 <aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
 <ul>
 <li><a href="#_1">主表：介面 × 方案</a></li>
-<li><a href="#_2">逐介面細節</a></li>
+<li><a href="#_2">逐介面細節</a><ul>
+<li><a href="#claude-chat">Claude Chat（網頁／手機）</a></li>
+<li><a href="#claude-desktopchat">Claude Desktop（Chat 分頁）</a></li>
+<li><a href="#coworkdesktop-webmobile-beta">Cowork（Desktop 第三分頁／web／mobile beta）</a></li>
+<li><a href="#claude-codeclidesktop-code-ide">Claude Code（CLI／Desktop Code 分頁／網頁／IDE）</a></li>
+<li><a href="#claude-designcanvas">Claude Design（canvas 設計工具）</a></li>
+<li><a href="#chatgpt">ChatGPT（網頁／手機）</a></li>
+<li><a href="#chatgpt-desktop-chatworkcodex">ChatGPT Desktop（統一版，含 Chat／Work／Codex 分頁）</a></li>
+<li><a href="#codexcliidecloud">Codex（CLI／IDE／cloud）</a></li>
+</ul>
+</li>
 <li><a href="#_3">最容易搞混的六組</a><ul>
 <li><a href="#1-claude-desktop-chat-vs-coworkcode">1. Claude Desktop 的 Chat 分頁 vs Cowork／Code 分頁</a></li>
 <li><a href="#2-cowork-vs-claude-code">2. Cowork vs Claude Code</a></li>

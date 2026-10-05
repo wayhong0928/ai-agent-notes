@@ -6,7 +6,7 @@
   --panel: #ffffff;
   --ink: #23211d;
   --ink-soft: #57534a;
-  --ink-faint: #8b857a;
+  --ink-faint: #706b62;
   --rule: #e0dbd0;
   --rule-soft: #ece8df;
   --accent: #7a4a2b;
@@ -15,8 +15,10 @@
   --mark: #f6e7a8;
   --warn-bg: #fdf3e7;
   --warn-rule: #d9a45b;
+  --warn-ink: #916222;
   --ok-bg: #eef5ec;
   --ok-rule: #7fa06f;
+  --ok-ink: #58734c;
   --code-bg: #f2efe8;
   --nav-w: 268px;
   --toc-w: 220px;
@@ -32,28 +34,30 @@
     --panel: #1c1b18;
     --ink: #e8e4dc;
     --ink-soft: #b3ada1;
-    --ink-faint: #857f74;
+    --ink-faint: #8f8a7f;
     --rule: #34322d;
     --rule-soft: #2a2926;
     --accent: #d9a173;
     --accent-soft: #2e2620;
     --accent-ink: #e8bd94;
-    --mark: #5a4c1e;
+    --mark: #4b3f19;
     --warn-bg: #2c231a;
     --warn-rule: #a8763a;
+    --warn-ink: #b98240;
     --ok-bg: #1e2a1e;
     --ok-rule: #5f7a52;
+    --ok-ink: #779866;
     --code-bg: #232220;
   }
 }
 
 :root[data-theme="dark"] {
   --bg: #161513; --bg-soft: #1e1d1a; --panel: #1c1b18;
-  --ink: #e8e4dc; --ink-soft: #b3ada1; --ink-faint: #857f74;
+  --ink: #e8e4dc; --ink-soft: #b3ada1; --ink-faint: #8f8a7f;
   --rule: #34322d; --rule-soft: #2a2926;
   --accent: #d9a173; --accent-soft: #2e2620; --accent-ink: #e8bd94;
-  --mark: #5a4c1e; --warn-bg: #2c231a; --warn-rule: #a8763a;
-  --ok-bg: #1e2a1e; --ok-rule: #5f7a52; --code-bg: #232220;
+  --mark: #4b3f19; --warn-bg: #2c231a; --warn-rule: #a8763a; --warn-ink: #b98240;
+  --ok-bg: #1e2a1e; --ok-rule: #5f7a52; --ok-ink: #779866; --code-bg: #232220;
 }
 
 * { box-sizing: border-box; }
@@ -75,7 +79,7 @@ a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid va
 a:hover { border-bottom-color: var(--accent); }
 
 .skip {
-  position: absolute; left: -9999px; top: 0; background: var(--accent); color: #fff;
+  position: absolute; left: -9999px; top: 0; background: var(--accent); color: var(--panel);
   padding: .5rem 1rem; z-index: 200; border: 0;
 }
 .skip:focus { left: 0; }
@@ -146,6 +150,8 @@ main { min-width: 0; }
 .crumb a { color: var(--ink-faint); }
 
 /* ---------- 內文排版 ---------- */
+/* 長網址、長的行內程式碼在窄螢幕上沒有斷點時，允許在字中換行，避免撐出水平捲軸 */
+.doc { overflow-wrap: break-word; }
 .doc h1 {
   font-family: var(--serif); font-size: 1.95rem; line-height: 1.4; margin: 0 0 .5rem;
   letter-spacing: .01em;
@@ -213,9 +219,9 @@ pre code { background: none; padding: 0; font-size: .85rem; }
 .admonition > :last-child { margin-bottom: 0; }
 .admonition-title { font-weight: 700; margin: 0 0 .45rem; font-size: .9rem; letter-spacing: .03em; }
 .admonition.warning, .admonition.danger { background: var(--warn-bg); border-color: var(--warn-rule); }
-.admonition.warning .admonition-title, .admonition.danger .admonition-title { color: var(--warn-rule); }
+.admonition.warning .admonition-title, .admonition.danger .admonition-title { color: var(--warn-ink); }
 .admonition.tip, .admonition.note { background: var(--ok-bg); border-color: var(--ok-rule); }
-.admonition.tip .admonition-title, .admonition.note .admonition-title { color: var(--ok-rule); }
+.admonition.tip .admonition-title, .admonition.note .admonition-title { color: var(--ok-ink); }
 
 /* ---------- 檢查清單 ---------- */
 li.chk { list-style: none; margin-left: -1.3rem; }

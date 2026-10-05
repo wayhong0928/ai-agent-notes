@@ -252,7 +252,7 @@ fi
 | [3] | Create custom subagents | <https://code.claude.com/docs/en/sub-agents> |
 | [4] | Best practices for Claude Code（驗證、失敗模式） | <https://code.claude.com/docs/en/best-practices> |
 | [5] | Hooks reference | <https://code.claude.com/docs/en/hooks> |
-| [6] | A Harness for Every Task | <https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code> |
+| [6] | A Harness for Every Task | <https://claude.dev/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code/> |
 | [7] | How we built our multi-agent research system（4 倍／15 倍 token 用量對照） | <https://www.anthropic.com/engineering/multi-agent-research-system> |
 | [8] | How Claude remembers your project（CLAUDE.md、MEMORY.md 篇幅上限） | <https://code.claude.com/docs/en/memory> |
 | [9] | Best practices for Claude Code（Add an adversarial review step：驗收子代理派工範例、Writer／Reviewer 分工） | <https://code.claude.com/docs/en/best-practices> |
