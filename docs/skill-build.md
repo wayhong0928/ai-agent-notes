@@ -1,6 +1,6 @@
 # 把教材做成 SKILL：安裝版與手動版
 
-> 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 這一頁記錄一次真實發生的改造：把一批教材，從「使用者自己複製貼上的提示詞」，變成能用 `/plugin install` 裝進 Claude Code 的 SKILL。前半段是故事，包含一次規則被實務經驗糾正的真實教訓，都沒有美化；後半段是一套任何人都能照抄的步驟。
 
@@ -159,7 +159,7 @@ skills/research-question-audit/
 | **Claude Code** | 先加入 marketplace，再安裝裡面的 plugin，詳細步驟見下方 |
 | **Claude Cowork** | Customize → Plugins → Add marketplace，在欄位填入 `wayhong0928/mis-thesis-skills`，走 GUI 流程；跟 Claude Code 是同一套 marketplace 格式，只是介面換成圖形化 |
 | **Claude.ai 網頁版** | 付費方案（Pro、Max、Team、Enterprise）可在 Customize → Plugins 直接安裝 plugin，也可以用 Add marketplace 加入 GitHub repository 或 git URL；步驟見下方。只想裝單一 SKILL、不想動用 marketplace 時，仍可在 Customize → Skills 上傳單一資料夾包的 zip。要注意 Claude.ai 的 `description` 欄位上限只有 200 字元，比 Claude Code 短，同一份 SKILL 搬過去可能要把 description 重寫得更精簡 |
-| **OpenAI Codex** | 官方也支援 SKILL 這個開放格式（`name`＋`description` 是雙方相容的核心欄位），但走的是不同路徑：Codex 依序掃描目前工作目錄、上層目錄、repo 根目錄底下的 `.agents/skills`，再加上個人層的 `$HOME/.agents/skills` 與系統層的 `/etc/codex/skills`。這不是 Claude Code／Cowork 用的 plugin marketplace 機制，marketplace 是 Claude 生態系專屬的打包與發布方式，不等於 SKILL 格式本身。官方文件沒有寫死「從指定 repo 安裝」這個動作要用哪個旗標，`$skill-installer` 官方說明是可以要求它從其他 repository 下載，所以實際做法是用自然語言告訴它路徑，例如在 Codex 裡輸入「請用 `$skill-installer` 從 `https://github.com/wayhong0928/mis-thesis-skills` 這個 repo 的 `plugins/thesis-toolkit/skills/research-question-audit` 路徑安裝這個 SKILL」；也可以不假手安裝指令，直接把該路徑底下的資料夾複製或用 symlink 放進上面任一掃描路徑，兩邊共用同一份檔案。裝新 SKILL 後 Codex 通常會自動偵測到，偵測不到就重開 Codex。Claude Code 專屬的進階欄位（例如工具權限白名單）Codex 不支援，但不會因此壞掉，只是少了那部分免詢問權限的體驗 |
+| **OpenAI Codex** | 官方也支援 SKILL 這個開放格式（`name`＋`description` 是雙方相容的核心欄位），但走的是不同路徑：Codex 依序掃描目前工作目錄、上層目錄、repo 根目錄底下的 `.agents/skills`，再加上個人層的 `$HOME/.agents/skills` 與系統層的 `/etc/codex/skills`。這不是 Claude Code／Cowork 用的 plugin marketplace 機制（Codex 另有自己的 `codex plugin marketplace` 指令），marketplace 是打包與發布方式，不等於 SKILL 格式本身。[^fresh1]官方文件沒有寫死「從指定 repo 安裝」這個動作要用哪個旗標，`$skill-installer` 官方說明是可以要求它從其他 repository 下載，所以實際做法是用自然語言告訴它路徑，例如在 Codex 裡輸入「請用 `$skill-installer` 從 `https://github.com/wayhong0928/mis-thesis-skills` 這個 repo 的 `plugins/thesis-toolkit/skills/research-question-audit` 路徑安裝這個 SKILL」；也可以不假手安裝指令，直接把該路徑底下的資料夾複製或用 symlink 放進上面任一掃描路徑，兩邊共用同一份檔案。裝新 SKILL 後 Codex 通常會自動偵測到，偵測不到就重開 Codex。Claude Code 專屬的進階欄位（例如工具權限白名單）Codex 不支援，但不會因此壞掉，只是少了那部分免詢問權限的體驗 |
 
 !!! note "為什麼要特別列這張表"
     同一份 SKILL 在不同介面能不能裝、怎麼裝，取決於各家支援哪一層格式：SKILL.md 本身是開放標準，Claude 生態系用的 plugin marketplace 是另一層打包與發布方式，兩者不能混為一談。動手打包之前先查清楚目標讀者實際用的是哪個介面、走哪一層，免得包好了才發現裝不上去。
@@ -192,7 +192,7 @@ skills/research-question-audit/
 
 1. 切到 **Marketplaces** 分頁，把這個 repo（`wayhong0928/mis-thesis-skills`）加進去
 2. 加完後切到 **Discover** 或 **Installed** 分頁，找到 `thesis-toolkit` 這個 plugin
-3. 選擇安裝範圍，會看到 **User**、**Project**、**Local** 三個選項，個人自己用選 **User** 就好，之後不管開哪個資料夾的對話都能用到
+3. 選擇安裝範圍，會看到 **Install for you (user scope)**、**Install for all collaborators on this repository (project scope)**、**Install for you, in this repo only (local scope)** 三個選項，個人自己用選第一個（user scope）就好[^fresh2]，之後不管開哪個資料夾的對話都能用到
 
 **方法三：直接請 Claude Code 幫你裝**
 
@@ -214,7 +214,7 @@ Claude Code 收到後，實際上做的事跟方法一是同一件事，它會�
 付費方案（Pro、Max、Team、Enterprise）也能直接裝，不需要 Claude Code：
 
 1. 開左側選單的 **Customize**，切到 **Plugins** 分頁。
-2. 找 **Personal plugins** 區塊，點 **+** 再選 **Add marketplace**。
+2. 在 Plugins 頁面點 **Add**，再選 **Add marketplace**。[^fresh3]
 3. 選 **Add from a repository**，欄位填入 `wayhong0928/mis-thesis-skills`（GitHub repository 或 git URL 都接受）。
 4. 加入後回到 Plugins 分頁點 **Browse plugins**，找到 `thesis-toolkit` 裝上去。
 
@@ -238,7 +238,7 @@ Claude Code 收到後，實際上做的事跟方法一是同一件事，它會�
 |---|---|---|
 | 研究方向收斂 | `convergence-funnel.md`（五層漏斗每層的引導問題與判準） | `venues.md`、`progress-note-template.md`、`handoff-to-literature.md` |
 | 研究問題稽核 | `gap-and-innovation.md`、`question-forms.md`、`audit-checklist.md`（三份分別對應檢查點 A、E、C+D+G），建議整組一起貼 | 無，三份都是必要展開 |
-| 學術寫作品質稽核 | `sentence-and-causal.md`、`taiwan-usage-apa.md`、`ai-flavor-and-argument.md`（分別對應因果動詞、用語格式、去 AI 感三大判準） | `chapter-structure.md`（只在稽核緒論或方法章草稿時才用得到）、`grep-checks.sh`（本機批次檢查用，貼給對話式 AI 沒有意義） |
+| 學術寫作品質稽核 | `sentence-and-causal.md`、`taiwan-usage-apa.md`、`ai-flavor-and-common-errors.md`[^fresh4]（分別對應因果動詞、用語格式、去 AI 感三大判準） | `chapter-structure.md`（只在稽核緒論或方法章草稿時才用得到）、`grep-checks.sh`（本機批次檢查用，貼給對話式 AI 沒有意義） |
 
 SKILL.md 正文本身幾乎都要整份貼，流程邏輯、檢查點定義、輸出格式都直接寫在正文裡，不在 references 裡，這點跟上面的判斷不衝突。
 
@@ -340,12 +340,20 @@ SKILL.md 正文本身幾乎都要整份貼，流程邏輯、檢查點定義、�
 
 | 標記 | 來源 | URL |
 |---|---|---|
-| [1] | Extend agents with skills（SKILL.md 結構、放置位置） | <https://code.claude.com/docs/en/skills> |
-| [2] | Plugins reference（plugin.json、目錄結構限制） | <https://code.claude.com/docs/en/plugins-reference> |
+| [1] | Extend Claude with skills（SKILL.md 結構、放置位置）[^fresh5] | <https://code.claude.com/docs/en/skills> |
+| [2] | Plugin manifest reference（plugin.json、目錄結構限制） | <https://code.claude.com/docs/en/plugins/manifest-reference>[^fresh6] |
 | [3] | Build skills（Codex/ChatGPT Skills 掃描路徑、`$skill-installer`、與 Plugins 關係） | <https://learn.chatgpt.com/docs/build-skills> |
 | [4] | Use plugins in Claude（Claude.ai 網頁版／Cowork 安裝 plugin、Add marketplace 的步驟） | <https://support.claude.com/en/articles/13837440-use-plugins-in-claude> |
 | [5] | wayhong0928/mis-thesis-skills（本頁案例的實際 repo） | <https://github.com/wayhong0928/mis-thesis-skills> |
 | [6] | How to create custom skills（Claude.ai 的 `description` 200 字元上限） | <https://support.claude.com/en/articles/12512198-how-to-create-custom-skills> |
-| [7] | Claude Code plugin marketplaces（marketplace 可與 plugin 同一個 repo，相對路徑 `source`） | <https://code.claude.com/docs/en/plugin-marketplaces> |
+| [7] | Create a marketplace（marketplace 可與 plugin 同一個 repo，相對路徑 `source`） | <https://code.claude.com/docs/en/plugins/create-marketplace>[^fresh7] |
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[Claude Code + Codex 協作](claude-codex.md)｜[AI 代理工具懶人包（原站）](https://wayhong0928.github.io/mis-thesis-guide/pages/ai-agents.html)｜[AI 提示詞範本（原站）](https://wayhong0928.github.io/mis-thesis-guide/pages/prompts.html)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/docs/developer-commands?surface=cli>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/plugins/install>
+[^fresh3]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/13837440-use-plugins-in-claude>
+[^fresh4]: 2026-10-05 依 thesis-toolkit 的 CHANGELOG 更新，出處：<https://github.com/wayhong0928/mis-thesis-skills/blob/main/plugins/thesis-toolkit/CHANGELOG.md>
+[^fresh5]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/skills>
+[^fresh6]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/plugins/manifest-reference>
+[^fresh7]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/plugins/create-marketplace>

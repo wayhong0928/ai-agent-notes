@@ -1,6 +1,6 @@
 # MCP 入門與實戰
 
-> 查證日期：2026-09-19。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 [SKILL、Plugin、MCP 與 Subagent](extensions.md)那頁已經把四種擴充機制放進同一張表比較過。這頁只挖 MCP 這一項：它到底是什麼、怎麼在五分鐘內裝好第一個、scope 跟認證怎麼設，以及裝完之後怎麼確認它真的在運作，而不是「設定寫對了、但其實沒連上」。
 
@@ -93,11 +93,11 @@ claude mcp login <name>
 
 `code.claude.com/docs/en/mcp` 頁面在「Find and build MCP servers」段落有明文警告：「Verify you trust each server before connecting it. Servers that fetch external content can expose you to prompt injection risk.」[6]
 
-`code.claude.com/docs/en/security` 的 MCP 安全專節講得更直白：「Claude Code allows users to configure Model Context Protocol (MCP) servers... We encourage either writing your own MCP servers or using MCP servers from providers that you trust... Anthropic reviews connectors against its listing criteria before adding them to the Anthropic Directory, **but does not security-audit or manage any MCP server**.」重點是最後一句：收錄進 Anthropic Directory 只代表通過上架審核標準，**不是安全掛保證** [15]。
+`code.claude.com/docs/en/security` 的 MCP 安全專節講得更直白：「You can connect Claude Code to Model Context Protocol (MCP) servers... We encourage either writing your own MCP servers or using MCP servers from providers that you trust... Anthropic reviews connectors against its listing criteria before adding them to the Anthropic Directory, **but does not security-audit or manage any MCP server**.」[^fresh1]重點是最後一句：收錄進 Anthropic Directory 只代表通過上架審核標準，**不是安全掛保證** [15]。
 
 同一頁針對 prompt injection 給了五點「跟不信任內容互動」的建議：核准前先看指令、不要把不信任內容直接 pipe 給 Claude、關鍵檔案的改動要人工核對、跟外部 web 服務互動時考慮用虛擬機隔離、發現可疑行為用 `/feedback` 回報 [15]。這些建議不是專門寫給 MCP，但「會爬外部內容的 server 就是常見的注入來源」這句直接點名了愛爬網頁、讀外部文件的工具型 MCP server。
 
-權限規則的寫法是 `mcp__<servername>__<toolname>`；來自 plugin 打包的 MCP server 語法更長，是 `mcp__plugin_<plugin-name>_<server-name>__<tool-name>`（非英數字元一律換成底線）。這個語法同時適用於 `settings.json` 的權限規則、Skill 的 `allowed-tools` 清單、Subagent 定義檔的 `tools` 欄位、Hook 的 matcher [6]。
+權限規則的寫法是 `mcp__<servername>__<toolname>`；來自 plugin 打包的 MCP server 語法更長，是 `mcp__plugin_<plugin-name>_<server-name>__<tool-name>`（英數字、`_`、`-` 以外的字元一律換成底線）[^fresh2]。這個語法同時適用於 `settings.json` 的權限規則、Skill 的 `allowed-tools` 清單、Subagent 定義檔的 `tools` 欄位、Hook 的 matcher [6]。
 
 !!! note "怎麼審查一個 MCP server：整理者歸納，不是官方 checklist"
     官方沒有給一份「MCP server 安全審查」專頁，以下是綜合官方分散片段拼出來的判準，信心中等，不是單一頁面的逐字引用：(1) 是不是自己寫的、或來自你信任的來源；(2) 會不會爬外部內容（高風險的 prompt injection 來源）；(3) 用 `mcp__<server>__<tool>` 規則做最小權限，不要整台伺服器全部工具都放行；(4) 進版控前先用 `modelcontextprotocol/inspector` 這類官方除錯工具看它實際會呼叫哪些方法。
@@ -176,3 +176,6 @@ codex mcp add <name> --env VAR=VALUE -- <stdio 啟動指令>
 | [20] | `gh api repos/modelcontextprotocol/servers`（即時查證） | GitHub API |
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[AI 介面比較總表](tools-compare.md)｜[Claude Code 接上 Obsidian vault](claude-code-obsidian.md)｜[免付費區](free-tier.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/security>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/mcp>

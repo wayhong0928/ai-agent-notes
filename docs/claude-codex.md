@@ -1,6 +1,6 @@
 # Claude Code + Codex 協作
 
-> 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。本頁只寫查得到出處或實際驗證過的做法，不誇大可行性；個人的 Claude Code 規則檔、派工制度、設定檔內容不在本頁範圍內。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。本頁只寫查得到出處或實際驗證過的做法，不誇大可行性；個人的 Claude Code 規則檔、派工制度、設定檔內容不在本頁範圍內。
 
 網路上常見的教學把 Cowork 跟 Claude Code 混為一談，也常照抄已經失效的 `codex mcp-server` 設定。這頁把「哪些組合現在真的可行」講清楚，再給兩種確定可行的做法，最後列出已知的坑。
 
@@ -93,7 +93,7 @@ codex login
 | `-o` / `--output-last-message <file>` | 把最後一則訊息寫進指定檔案 |
 | 從 stdin 讀 prompt（用 `-` 代表） | 把 prompt 內容用管線或重新導向餵進去，不用整段貼在指令列裡 |
 | `--add-dir <dir>` | 額外授權 Codex 讀寫工作目錄以外的另一個目錄 |
-| `codex --search`（全域旗標，要放在 `exec` 之前） | 開啟網路搜尋 |
+| `codex --search`（全域旗標，要放在 `exec` 之前） | 改用即時（live）網路搜尋（不加時預設是 cached 快取結果）[^fresh1]；官方這句寫在互動式 `codex` 的說明裡。本機 codex-cli 0.160.0 實測 `codex exec --search` 會報錯，要寫成 `codex --search exec`；搜尋在 `exec` 裡是否生效，官方沒有另外寫 |
 
 來源：[Codex CLI reference](https://developers.openai.com/codex/cli/reference)（會轉址到 `learn.chatgpt.com/docs/developer-commands`）；`--add-dir` 與三段式 sandbox 另可見官方 [Codex sandboxing](https://learn.chatgpt.com/docs/sandboxing)。
 
@@ -108,7 +108,7 @@ codex --search exec -s read-only -o report.md - < prompt.md
 Windows PowerShell 沒有 `<` 這種重新導向語法，改用管線把檔案內容餵給 stdin：
 
 ```powershell
-Get-Content prompt.md -Raw | codex exec --search -s read-only -o report.md -
+Get-Content prompt.md -Raw | codex --search exec -s read-only -o report.md -
 ```
 
 在 Claude Code 對話框裡執行以上任一行，要在指令前加驚嘆號讓它當成 shell 指令直接跑（`!codex --search exec ...`），或者不加驚嘆號、直接用一般對話請 Claude 幫你執行，讓它自己呼叫 Bash 工具。
@@ -136,7 +136,7 @@ codex exec -s workspace-write -C ~/projects/demo "依 spec.md 裡的規格實作
 
 這個方向差別會直接影響排查。讀者實際撞到的症狀通常是「在未受版控的目錄、或用 `codex exec` 的時候，因為預設唯讀所以寫不了檔、跑不了指令」，成因剛好跟「預設可以寫、只是要設定」相反。如果照後者的方向去排查，會一直在找「我是不是漏設了什麼權限」，而不是先去確認「我這次是不是根本落在唯讀預設上」——後者只要補一個 `-s workspace-write` 就解決了。
 
-（本站沒有查證 IDE 擴充套件的預設值，也不寫信任提示彈窗的逐字介面文案或任何宣稱可以設定信任層級的 TOML 欄位；這幾項在官方文件裡查無，只在第三方教學看過，不要照抄。）
+（本站沒有查證 IDE 擴充套件的預設值，也不寫信任提示彈窗的逐字介面文案；這幾項在官方文件裡查無，只在第三方教學看過，不要照抄。信任層級則可用官方 Configuration Reference 列出的 `projects.<path>.trust_level`（`"trusted"`／`"untrusted"`）設定，標記為 untrusted 的專案會略過專案範圍的 `.codex/` 層。[^fresh2]）
 
 ### 自己測一次：能不能寫檔
 
@@ -275,3 +275,6 @@ Claude Code 讀的是 `CLAUDE.md`；Codex 預設讀的是 `AGENTS.md`，依 `~/.
 | openai/codex-plugin-cc Issues #639、#704 | <https://github.com/openai/codex-plugin-cc/issues> |
 
 延伸：[AI 介面比較總表](tools-compare.md)｜[付費區](paid-tier.md)｜[把 AI 代理的工作環境設計得可靠](harness.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/docs/developer-commands?surface=cli>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/docs/config-file/config-reference>

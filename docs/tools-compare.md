@@ -1,6 +1,6 @@
 # AI 介面比較總表
 
-> 查證日期：2026-09-16。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常互相借用（Cowork、Work、Codex 分頁、Codex App……），第一次接觸很容易搞錯。這頁先用一張精簡表對照八種常見介面，細節放進表格下方的逐介面說明，再挑出最容易搞混的六組單獨說明。每一格背後都有來源，標記沿用查證文件的原始編號（`S`＝Claude 官方來源、`O`＝ChatGPT／Codex 官方來源、`X`＝補充查證來源），對照表列在頁尾；查無明確資料的格子直接寫「查無」，不用推測填補。
 
@@ -61,7 +61,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 讀寫本機檔案：？查無 [S22]
 - 執行指令／程式碼：？查無 [S22]
 - Skill／Plugin／MCP：？查無：官方說明沒列出 Skill／Plugin／MCP 支援 [S22]
-- 最低方案：Free 未提及；Pro 起（research preview）；Enterprise 預設關閉，需管理員手動開啟 [S22]
+- 最低方案：Free 未提及；Pro 起（beta）[^fresh1]；Enterprise 預設關閉，需管理員手動開啟 [S22]
 - 適合做什麼：對著畫面拖拉調整產出設計稿、原型、投影片、one-pager，而不是純寫 prompt [S22]
 
 ### ChatGPT（網頁／手機）
@@ -121,7 +121,7 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 - 想做一般辦公自動化（整理檔案、寄信、跨工具彙整），不想碰終端機 → Claude（Pro／Max 已收到合併體驗的帳號直接在一般對話做；尚未收到的帳號切到 Cowork 分頁 [S26]）或 ChatGPT Desktop 裡的 Work 分頁。
 - 需要讀寫本機檔案、跨檔案批次處理、要版本控制 → Claude Code 或 Codex CLI／IDE 擴充。
 - 想丟一個長跑任務、不想守在螢幕前，或要處理你本機沒有的 repo → claude.ai/code（Claude Code on the web）或 Codex cloud。
-- 想做視覺化設計、原型、投影片 → Claude Design（仍是 research preview，Pro 起）。
+- 想做視覺化設計、原型、投影片 → Claude Design（仍是 beta，Pro 起[^fresh2]）。
 - 只有免費帳號、想先試試程式碼代理 → ChatGPT Free／Go 裡的 Codex（尤其桌面 App 內最明確可用）；Claude Code 免費帳號完全用不到，見[免付費區](free-tier.md)。
 
 ## 資料來源（2026-09-16 查證）
@@ -141,7 +141,7 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 | S19 | code.claude.com/docs/en/plugins | Claude Code plugins 官方文件 |
 | S20 | code.claude.com/docs/en/mcp | Claude Code 連接 MCP 官方文件 |
 | S21 | support.claude.com/en/articles/13345190-get-started-with-claude-cowork | Cowork 方案可用性、本機檔案存取 |
-| S22 | anthropic.com/news/claude-design-anthropic-labs | Claude Design 方案可用性、research preview 狀態 |
+| S22 | anthropic.com/news/claude-design-anthropic-labs | Claude Design 方案可用性（發布時的 research preview 公告，現況見內文註腳） |
 | S23 | support.claude.com/en/articles/12304248-manage-api-key-environment-variables-in-claude-code | 純 API key 跑 Claude Code 的計費機制 |
 | S24 | support.claude.com/en/articles/13837440-use-plugins-in-claude | Claude.ai／Cowork 使用 plugin 的方案與介面 |
 | S25 | claude.com/blog/cowork-is-now-claude | Cowork 與 Chat 合併公告（2026-09-16） |
@@ -166,3 +166,6 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 | X6 | github.com/openai/codex/blob/main/codex-rs/app-server/README.md | Codex App Server 定位說明 |
 
 延伸：[免付費區](free-tier.md)｜[付費區](paid-tier.md)｜[Claude Code + Codex 協作](claude-codex.md)
+
+[^fresh1]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/14604416-get-started-with-claude-design>
+[^fresh2]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/14604416-get-started-with-claude-design>
