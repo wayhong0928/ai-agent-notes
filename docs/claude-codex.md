@@ -238,7 +238,7 @@ Claude Code 讀的是 `CLAUDE.md`；Codex 預設讀的是 `AGENTS.md`，依 `~/.
 
 截至查證日，查無 OpenAI 或 Anthropic 任何一方明確宣告支援 Cowork + Codex 的整合；這不代表技術上已經證明完全不可行，只代表目前沒有官方認證、可以照抄的做法。理由分三層：
 
-1. Cowork 的 shell 跑在 Anthropic 管理的雲端 VM，或既有 Desktop 部署下的本機專用 Linux VM，兩者都不等於使用者主機的終端機，不會繼承主機上的 `codex` 執行檔、PATH 或登入狀態。來源：[Cowork architecture overview](https://support.claude.com/en/articles/14479288-claude-cowork-architecture-overview)。
+1. Cowork 的 shell 跑在 Anthropic 管理的雲端沙箱，或本機專用 Linux VM，兩者都不等於使用者主機的終端機，不會繼承主機上的 `codex` 執行檔、PATH 或登入狀態。Pro／Max 自 2026-10-06 起，新任務只在雲端沙箱執行；本機 VM 只剩 10/6 以前在本機開始的任務，以及 Team／Enterprise 的本機 session[^fresh3]。來源：[Cowork architecture overview](https://support.claude.com/en/articles/14479288-claude-cowork-architecture-overview)。
 2. Cowork 的自訂 connector 是 remote MCP，只能填入一個 Anthropic 雲端能連進去的 URL，而 OpenAI 目前沒有提供可以填進這個欄位的官方 Codex remote MCP endpoint；已移除的 `codex mcp-server` 也不是這裡能用的東西。來源：[Codex MCP server removal](https://learn.chatgpt.com/docs/mcp-server)。
 3. Cowork 確實已經支援 plugin，部分本機 Cowork 情境下也能執行 plugin 內含的本機 MCP server，但查無 OpenAI 官方發布過一個給 Cowork 用的 Codex plugin。`openai/codex-plugin-cc` 的 README 明確把自己定位成給 Claude Code 用的 plugin，沒有保證能在 Cowork 正常運作。來源：[Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude)。
 
@@ -278,3 +278,4 @@ Claude Code 讀的是 `CLAUDE.md`；Codex 預設讀的是 `AGENTS.md`，依 `~/.
 
 [^fresh1]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/docs/developer-commands?surface=cli>
 [^fresh2]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/docs/config-file/config-reference>
+[^fresh3]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>

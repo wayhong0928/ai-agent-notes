@@ -16,9 +16,9 @@
 <a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
-<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791213128">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789789001">免付費區</a></li>
-<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791213128">付費區</a></li>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791214442">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791214442">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791214442">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791211821">Projects 功能</a></li>
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
@@ -32,7 +32,7 @@
 <div class="navsec"><h2>實戰協作</h2><ul>
 <li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1791213128">Claude Code + Codex 協作</a></li>
 <li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1791213128">把教材做成 SKILL</a></li>
-<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791211821">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791214442">Claude Code 接上 Obsidian</a></li>
 <li class="active"><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655763">Claude Code + Cowork 並用</a></li>
 </ul></div>
 <div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
@@ -56,7 +56,7 @@
 <h1>Claude Code + Cowork 並用</h1>
 <p class='lede'>帳號現況判斷、檔案交接工作流程、Dispatch 現況</p>
 <blockquote>
-<p>查證日期：2026-09-17。Cowork 正在被併進一般 Chat，不同方案看到的介面不一樣，請以你自己帳號畫面與官方最新說明為準。</p>
+<p>查證日期：2026-10-06（補入 10/6 生效的變動）。Cowork 正在被併進一般 Chat，不同方案看到的介面不一樣，請以你自己帳號畫面與官方最新說明為準。</p>
 </blockquote>
 <p>Claude Code 與 Cowork 都是 Anthropic 自己的產品，底層甚至是同一套東西：官方明講「Cowork uses the same agentic architecture that powers Claude Code」[S1]，桌面版的 Cowork session 實際上就是由 Claude Code 執行的 [A5]。但「底層相同」不等於「工作內容互通」——<strong>兩邊沒有檔案自動同步這回事</strong>：雲端 session 跑在隔離沙箱裡，本機檔案只限於你在桌面版連接的資料夾 [S5][S4]。任務交接官方只有一條路，而且已經不開放新使用者 [S6]。共用的是帳號層的設定（connector、skill、plugin、額度），不是你手上這份工作；完整對照見下面的互通表。</p>
 <p>所以這頁要回答兩件事：<strong>你現在到底有沒有 Cowork 可以用</strong>，以及在沒有自動互通的前提下，「同時使用」實務上長什麼樣子。想找 Cowork 搭 OpenAI Codex 的做法，那是另一個題目，見 <a href="claude-codex.html">Claude Code + Codex 協作</a>。</p>
@@ -85,9 +85,15 @@
 <td>已經合併，<strong>沒有獨立 Cowork 模式可切換</strong>，原本限定 Cowork 才有的能力（本機檔案、瀏覽器、長時間代理工作）在任何對話都會自動用到 [S2]</td>
 <td>下面提到「切到 Cowork」的地方，改成「直接在一般對話裡講」</td>
 </tr>
+<tr>
+<td>方案是 Pro 或 Max，2026-10-06 起</td>
+<td>不論上面哪一種，新的 Cowork 任務一律在雲端執行，設定裡「Only on your computer」選項移除；10/6 以前在本機開始的任務留在本機<sup id="fnref:fresh1"><a class="footnote-ref" href="#fn:fresh1">1</a></sup></td>
+<td>讀寫本機資料夾的條件不變：要桌面版開著（見後面路徑一）</td>
+</tr>
 </tbody>
 </table>
-<p>各方案的時程，官方目前的說法是：Pro 與 Max 先開始、在數週內推給既有與新使用者，<strong>Team 與 Free 方案「隨後跟上」但尚未開始</strong>，Enterprise 則是「管理員會在任何變動前至少 30 天收到通知」[S7][S2]。合併之後不能切回舊的分開模式，既有的 Cowork 任務、專案、connector、skill、artifact 與檔案會沿用，原本的 Cowork 任務也照舊打得開、可以繼續 [S2]。</p>
+<p>各方案的時程，官方目前的說法是：Pro 與 Max 先開始、在數週內推給既有與新使用者，<strong>Free 方案「隨後跟上」但尚未開始</strong>。部落格原本也把 Team 列在「隨後跟上」，但 2026-10-05 更新的 Team／Enterprise 說明頁寫，這兩種方案的組織目前維持 chat 與 Cowork 分開，這裡以較新的說明頁為準<sup id="fnref:fresh2"><a class="footnote-ref" href="#fn:fresh2">2</a></sup>，Enterprise 則是「管理員會在任何變動前至少 30 天收到通知」[S7][S2]。合併之後不能切回舊的分開模式，既有的 Cowork 任務、專案、connector、skill、artifact 與檔案會沿用，原本的 Cowork 任務也照舊打得開、可以繼續 [S2]。</p>
+<p>2026-10-06 起，Pro 與 Max 的新任務只在雲端執行。官方的說法是：如果工作必須留在自己的電腦上，用桌面版的 Claude Code，它在你的電腦上執行，資料夾與歷史也留在本機。過去的 Cowork 逐字稿可以匯出再到 Claude Code 開啟（單一任務從任務頂端的提示下載，整份 Cowork 歷史從 App 內的通知下載），但 project 與排程任務帶不過去<sup id="fnref:fresh3"><a class="footnote-ref" href="#fn:fresh3">3</a></sup>。這項「新任務一律在雲端」官方只寫給 Pro 與 Max；Team／Enterprise 的 session 可在雲端或本機執行，雲端 session 由組織管理員開關<sup id="fnref:fresh4"><a class="footnote-ref" href="#fn:fresh4">4</a></sup>。</p>
 <p><strong>兩種現況有一件事是一樣的：Claude Code 不受影響。</strong> 官方在合併公告裡特別寫了「The model picker and the "Code" tab are where they were」[S2]；桌面版 App 的三個分頁（Chat 對話、Cowork 長時間代理工作、Code 軟體開發）當中，這次動到的是前兩個 [A1]。</p>
 <blockquote>
 <p><strong>整理者說明</strong>：也就是說，這頁後面所有牽涉 Claude Code 的步驟，不論你的帳號合併了沒有都一樣。會變的只有「Cowork 那一端要怎麼開」。Cowork 本身的方案門檻另見<a href="paid-tier.html">付費區</a>。</p>
@@ -228,7 +234,7 @@ claude
 <li><strong>沒有桌面版可用</strong>（例如只有網頁版）→ 這條路走不通，改用手動下載（路徑二）。</li>
 </ul>
 <h3 id="cowork">沒有 Cowork 的人怎麼辦</h3>
-<p>Cowork 有方案門檻（見<a href="paid-tier.html">付費區</a>），Team 與 Free 方案的合併也還沒開始 [S7]。如果你手上只有一般 Chat 與 Claude Code，這個工作流程的骨架照樣成立，只是第 2～3 步換成「在 Chat 裡整理、把結果貼進或下載到交換資料夾」。差別是要多幾次複製貼上，交接點沒有變。</p>
+<p>Cowork 有方案門檻（見<a href="paid-tier.html">付費區</a>），Free 方案的合併還沒開始，Team 方案目前維持 chat 與 Cowork 分開 [S7]<sup id="fnref2:fresh2"><a class="footnote-ref" href="#fn:fresh2">2</a></sup>。如果你手上只有一般 Chat 與 Claude Code，這個工作流程的骨架照樣成立，只是第 2～3 步換成「在 Chat 裡整理、把結果貼進或下載到交換資料夾」。差別是要多幾次複製貼上，交接點沒有變。</p>
 <h2 id="_8">不要期待的事（整理者觀察）</h2>
 <p>以下都是本次查證<strong>沒有找到</strong>官方支援的做法，寫出來是為了讓你不要浪費時間找：</p>
 <ul>
@@ -272,7 +278,7 @@ claude
 </tr>
 </tbody>
 </table>
-<h2 id="2026-09-17">資料來源（2026-09-17 查證）</h2>
+<h2 id="2026-09-17-2026-10-06">資料來源（2026-09-17 查證；2026-10-06 補查）</h2>
 <table>
 <thead>
 <tr>
@@ -371,6 +377,23 @@ claude
 </table>
 <p>註：A 系列為 Claude Code 官方文件（code.claude.com），S 系列為 Anthropic 產品文件、官方說明中心與官方部落格。</p>
 <p>延伸：<a href="claude-codex.html">Claude Code + Codex 協作</a>｜<a href="claude-code-obsidian.html">Claude Code 接上 Obsidian</a>｜<a href="paid-tier.html">付費區</a>｜<a href="tools-compare.html">AI 介面比較總表</a></p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:fresh1">
+<p>2026-10-06 依官方原文更新，出處：<a href="https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile">https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile</a>&#160;<a class="footnote-backref" href="#fnref:fresh1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:fresh2">
+<p>2026-10-06 依官方原文更新，出處：<a href="https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans">https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans</a>&#160;<a class="footnote-backref" href="#fnref:fresh2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:fresh2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:fresh3">
+<p>2026-10-06 依官方原文更新，出處：<a href="https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile">https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile</a>&#160;<a class="footnote-backref" href="#fnref:fresh3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:fresh4">
+<p>2026-10-06 依官方原文更新，出處：<a href="https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans">https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans</a>&#160;<a class="footnote-backref" href="#fnref:fresh4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
 </article>
 <nav class="pager"><a class="prev" href="claude-code-obsidian.html">← Claude Code 接上 Obsidian</a><a class="next" href="sdlc-traditional.html">SDLC 與流程模型 →</a></nav>
 <footer class="foot">
@@ -393,7 +416,7 @@ claude
 </li>
 <li><a href="#_8">不要期待的事（整理者觀察）</a></li>
 <li><a href="#_9">怎麼選（整理者觀察）</a></li>
-<li><a href="#2026-09-17">資料來源（2026-09-17 查證）</a></li>
+<li><a href="#2026-09-17-2026-10-06">資料來源（2026-09-17 查證；2026-10-06 補查）</a></li>
 </ul>
 </div>
 </aside>

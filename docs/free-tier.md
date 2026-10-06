@@ -1,6 +1,6 @@
 # 免付費區
 
-> 查證日期：2026-09-16；ChatGPT Free 一節 2026-10-05 重查。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-09-16；ChatGPT Free 一節 2026-10-05 重查；Cowork 一列 2026-10-06 重查。方案與功能變動快，請以官方最新說明為準。
 
 免費帳號能做的事，比多數人想的多一些，但也有幾個明確做不到的邊界。這頁只講「不花錢能做到哪裡」；需要付費才能解鎖的部分，見[付費區](paid-tier.md)；不確定該用哪個介面，先看[AI 介面比較總表](tools-compare.md)。
 
@@ -16,7 +16,7 @@
 | Connectors（remote MCP） | ⚠️ 限 1 個自訂 connector | Pro 起數量更多但官方未列確切上限 [S12] |
 | Projects | ✅ 上限 5 個 | **2026-09-19 更正**：先前這裡寫「Free 沒有這個功能」是錯的，Free 能用 Projects，最多 5 個，但沒有付費方案才有的 RAG 知識庫擴充；完整說明見[Projects 功能](projects.md) [S3][S28] |
 | Research | ❌ | 官方明寫僅付費方案（Pro/Max/Team/Enterprise）[S14] |
-| Cowork | ❌ | 免費帳號完全不能用；官方已公告 Cowork 併入一般 Chat 的新體驗會擴及 Free 方案，但目前只是「即將推出」，尚未開始 [S21][S26] |
+| Cowork | ❌ | 免費帳號完全不能用；官方已公告 Cowork 併入一般 Chat 的新體驗會擴及 Free 方案，但目前只是「即將推出」，尚未開始；2026-10-06 重查，官方沒有給 Free 的日期[^fresh1] [S21][S26] |
 | Claude Code | ❌ | Free 沒有，Pro 起才有，見[付費區](paid-tier.md) [S1] |
 
 ## ChatGPT Free 能用什麼
@@ -102,3 +102,4 @@ Claude Free 能建立最多 5 個 Project，把常用的文獻或寫作規範固
 | O25 | learn.chatgpt.com/docs/sandboxing | Codex sandbox 三模式 |
 
 延伸：[AI 介面比較總表](tools-compare.md)｜[付費區](paid-tier.md)｜[Projects 功能](projects.md)
+[^fresh1]: 2026-10-06 依官方原文更新，出處：<https://claude.com/blog/cowork-is-now-claude>

@@ -1,6 +1,6 @@
 # 付費區
 
-> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05；Cowork 一列 2026-10-06 重查。方案與功能變動快，請以官方最新說明為準。
 
 這頁列出需要 Pro 以上、或者非得用 Claude Code／Codex 才做得到的功能。每項都標最低方案，並說明「為什麼免費帳號或純聊天介面做不到」。多數答案落在六個原因裡：能不能碰**本機檔案**、能不能**執行指令**、能不能讓 **skill 自動觸發**、能不能派出**subagent**、能不能掛 **hooks**、以及要不要 **Claude Code + Codex 協作**。免費帳號能做到的部分，見[免付費區](free-tier.md)；不確定該用哪個介面，先看[AI 介面比較總表](tools-compare.md)。
 
@@ -15,7 +15,7 @@
 | 讀寫本機檔案、執行終端指令 | Claude Code：Pro 起（或純 API key 按量付費）；Codex：CLI/IDE 全方案，含 Free／Go，但官方文件對 CLI 端的說法目前不完全一致，細節見[免付費區的說明](free-tier.md#freego-codex) | Chat／ChatGPT 網頁版的「執行程式碼」是雲端沙盒工具，不會碰到你電腦上的檔案；只有 Claude Code 與 Codex CLI／IDE 是真的在本機終端跑，這是**本機檔案**與**執行指令**這兩個原因 [S7] |
 | Projects（Claude） | Free 上限 5 個；Pro 起無限量＋RAG 擴充 | **2026-09-19 更正**：先前這裡寫「Free 沒有 Projects」是錯的，Free 其實能用、但上限 5 個且沒有 RAG 擴充；Pro 起無限量，且知識庫接近上限時會自動切換 RAG 模式擴充容量最多 10 倍，完整說明見[Projects 功能](projects.md) [S3][S24] |
 | Research（Claude） | Pro | 官方明寫「Research is available for users with paid Claude plans」[S14] |
-| Cowork | Pro | 需要本機或雲端 VM 執行環境，免費帳號完全不能用；2026-09-16 起官方正把 Cowork 併入一般 Chat，Pro／Max 帳號分階段收到新體驗，收到之後不必再特地切到 Cowork 模式 [S21][S26] |
+| Cowork | Pro | 需要本機或雲端 VM 執行環境，免費帳號完全不能用；2026-09-16 起官方正把 Cowork 併入一般 Chat，Pro／Max 帳號分階段收到新體驗，收到之後不必再特地切到 Cowork 模式；2026-10-06 起 Pro／Max 的新任務只在雲端執行，讀寫本機資料夾要桌面版開著[^fresh6]；這項變動官方只寫給 Pro／Max，Team／Enterprise 的雲端 session 由組織管理員開關[^fresh7] [S21][S26] |
 | Claude Design | Pro（beta，Enterprise 需管理員手動開啟）[^fresh1] | 需要獨立的畫布編輯環境，目前仍是 beta 階段功能[^fresh2] [S22] |
 | Subagent（Agent tool，舊名 Task tool）[^fresh3] | 跟著 Claude Code 存取權走，Pro 起 | Subagent 需要獨立的系統提示詞與工具限制，只存在於 Claude Code 這套 agent 架構裡，這是**subagent**這個原因 [S17] |
 | Hooks | 跟著 Claude Code 存取權走，Pro 起 | Hooks 是在 Claude Code 特定事件（例如寫檔前、對話結束）自動觸發的機制，聊天介面沒有這種生命週期事件可以掛，這是**hooks**這個原因 [S18] |
@@ -62,3 +62,5 @@ Claude Code 和 Codex 可以互相搭配：OpenAI 官方 GitHub 組織發布了�
 [^fresh4]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/13947068-assign-tasks-from-anywhere-in-claude-cowork>
 [^fresh4r]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/routines>
 [^fresh5]: 2026-10-05 依官方原文更新，出處：<https://learn.chatgpt.com/docs/pricing>
+[^fresh6]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh7]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans>

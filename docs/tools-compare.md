@@ -1,6 +1,6 @@
 # AI 介面比較總表
 
-> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05；Cowork 相關內容（2026-10-06 的變動）2026-10-06 重查。方案與功能變動快，請以官方最新說明為準。
 
 Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常互相借用（Cowork、Work、Codex 分頁、Codex App……），第一次接觸很容易搞錯。這頁先用一張精簡表對照八種常見介面，細節放進表格下方的逐介面說明，再挑出最容易搞混的六組單獨說明。每一格背後都有來源，標記沿用查證文件的原始編號（`S`＝Claude 官方來源、`O`＝ChatGPT／Codex 官方來源、`X`＝補充查證來源），對照表列在頁尾；查無明確資料的格子直接寫「查無」，不用推測填補。
 
@@ -12,7 +12,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 |---|:---:|:---:|---|
 | Claude Chat | ❌ | ⚠️沙盒 | Free |
 | Claude Desktop（Chat 分頁） | ❌ | ⚠️同上 | 依分頁 |
-| Cowork | ✅ | ✅隔離VM | Pro 起 |
+| Cowork | ⚠️Pro／Max 新任務要桌面版開著才讀得到[^fresh3] | ✅隔離環境 | Pro 起 |
 | Claude Code | ✅ | ✅ | Pro／API |
 | Claude Design | ？ | ？ | Pro 起 |
 | ChatGPT | ❌ | ？ | Free |
@@ -20,7 +20,9 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 | Codex | ⚠️視環境 | ✅視模式 | Free／Go |
 
 !!! warning "2026-09-16 起：Cowork 正在併入一般 Chat（分階段推出，尚未全面生效）"
-    Claude 官方公告 Cowork 與一般 Chat 正在合併成同一個體驗，**是分階段推出，不是已經全面生效**：Pro／Max 帳號正在逐步收到（即使同方案，不同帳號收到的時間點也不一樣），Team／Free 官方說「即將推出」但目前尚未開始，Enterprise 在變動前會提前至少 30 天通知、目前維持現狀不變。合併後的體驗裡沒有獨立的「Cowork 模式」可切換，原本只有 Cowork 才有的檔案操作、任務、connector、skill 能力，在任何一段對話裡都能自動用到，由 Claude 自己判斷要不要動用。上面表格裡「Cowork」這一列，對還沒收到新體驗的帳號仍然照原樣運作；已經收到新體驗的帳號，請把這一列的能力直接理解成「一般對話多了這些能力」，不是找不到 Cowork 分頁就是設定錯了 [S25][S26][S27]。
+    Claude 官方公告 Cowork 與一般 Chat 正在合併成同一個體驗，**是分階段推出，不是已經全面生效**：Pro／Max 帳號正在逐步收到（即使同方案，不同帳號收到的時間點也不一樣），Free 官方說「即將推出」但目前尚未開始。Team 的部分，2026-09-16 的官方部落格寫「隨後跟上」，但 2026-10-05 更新的 Team／Enterprise 說明頁寫兩者目前維持 chat 與 Cowork 分開的現狀，這裡以較新的說明頁為準[^fresh4]。Enterprise 在變動前會提前至少 30 天通知。合併後的體驗裡沒有獨立的「Cowork 模式」可切換，原本只有 Cowork 才有的檔案操作、任務、connector、skill 能力，在任何一段對話裡都能自動用到，由 Claude 自己判斷要不要動用。上面表格裡「Cowork」這一列，對還沒收到新體驗的帳號仍然照原樣運作；已經收到新體驗的帳號，請把這一列的能力直接理解成「一般對話多了這些能力」，不是找不到 Cowork 分頁就是設定錯了 [S25][S26][S27]。
+
+    2026-10-06 起，Pro／Max 的新 Cowork 任務一律在雲端執行，設定裡「Only on your computer」的選項移除；10/6 以前已在本機開始的任務留在本機。想讓工作留在自己的電腦上，官方的說法是改用桌面版的 Claude Code。官方只把這項變動寫給 Pro／Max；Team／Enterprise 的雲端 session 由組織管理員開關，本機 session 仍然存在[^fresh5] [S28][S27]。
 
 ## 逐介面細節
 
@@ -41,9 +43,9 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 適合做什麼：一個 App 內同時裝 Chat／Cowork／Code
 
 ### Cowork（Desktop 第三分頁／web／mobile beta）
-- 跑在哪裡：預設是雲端 VM，既有 Desktop 部署也可能用本機專用 Linux VM [X4]
-- 讀寫本機檔案：✅ 本機或雲端 VM 內讀寫，需 Claude Desktop 保持開啟連線 [S21][X4]
-- 執行指令／程式碼：✅ 隔離 VM 內可跑 shell／程式碼，但不等於主機終端，不能叫它直接跑主機上的 `codex exec` [X4]
+- 跑在哪裡：Pro／Max 自 2026-10-06 起，新任務只在雲端執行，10/6 以前在本機開始的任務留在本機；Team／Enterprise 的 session 可在雲端或本機執行，雲端 session 由管理員開關[^fresh6] [S28][S27][X4]
+- 讀寫本機檔案：⚠️ 雲端 session 只在桌面版開著、而且 session 是從桌面版開始時，才讀寫得到你連接的資料夾；桌面版關掉後 session 繼續跑，但碰不到本機檔案[^fresh7] [S28][S21][X4]
+- 執行指令／程式碼：✅ 隔離環境（雲端沙箱或本機 VM）內可跑 shell／程式碼，但不等於主機終端，不能叫它直接跑主機上的 `codex exec` [X4]
 - Skill／Plugin／MCP：Skill✅／Plugin✅（可包含在主機執行的 local MCP server）／MCP（remote connector）✅ [S9b][X4]
 - 最低方案：Pro 起，免付費帳號完全不可用 [S21]
 - 適合做什麼：整理檔案、做報表、寄信、跨應用文書工作
@@ -147,6 +149,7 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 | S25 | claude.com/blog/cowork-is-now-claude | Cowork 與 Chat 合併公告（2026-09-16） |
 | S26 | support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude | 合併現況：各方案推出時程、分階段推出說明 |
 | S27 | support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans | Team／Enterprise 維持現狀不變 |
+| S28 | support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile | 2026-10-06 起 Pro／Max 新任務在雲端；本機資料夾需桌面版開著 |
 | O3 | OpenAI 官方 X 貼文（2026-07-09 ChatGPT Work 發布，經二次來源引述） | Desktop app 全方案含 Free 可用 Chat/Work/Codex |
 | O7 | learn.chatgpt.com/docs/app | 統一版 Desktop app 的分頁切換方式 |
 | O10 | 業界慣例類推（未找到 OpenAI 專門說明此點的頁面） | API key 不含網頁 Chat 存取（信心中偏低） |
@@ -169,3 +172,8 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 
 [^fresh1]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/14604416-get-started-with-claude-design>
 [^fresh2]: 2026-10-05 依官方原文更新，出處：<https://support.claude.com/en/articles/14604416-get-started-with-claude-design>
+[^fresh3]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh4]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans>
+[^fresh5]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh6]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh7]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>

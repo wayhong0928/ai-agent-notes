@@ -23,11 +23,11 @@
 - **SKILL**：解決「把一套會重複用到的程序、檢查清單變成隨需載入的知識，不佔用平時的上下文」；只有 Claude 判斷相關、或使用者手動叫用時才載入完整內容；放在 `.claude/skills/<name>/SKILL.md`（專案或個人層）。Claude Code 支援[3]；Codex 遵循「open agent skills standard」[4]；Claude.ai 需另外開啟 code execution[5]。
 - **MCP**：解決「讓代理連上外部工具與資料（文獻庫、資料庫、雲端硬碟），不必自己捏造答案」；設定好之後，工具定義預設延後載入，代理實際要用某個工具時才載入細節[1]；放在 `.mcp.json`（專案層）／`~/.claude.json`（使用者層，Claude Code），`codex mcp` 管理（Codex）。Claude Code 支援本機＋遠端[6]；Codex「continues to support external MCP servers」[7]；Claude.ai 僅遠端 connector，Free 帳號限 1 個自訂連接[8]。
 - **Subagent**：解決「需要一個獨立、乾淨的視角處理某件事，不污染主線對話的上下文」；主線判斷該任務適合委派時，另開一個獨立上下文執行；放在 `.claude/agents/<name>.md`（Claude Code），`~/.codex/agents/` 或 `.codex/agents/` 的 TOML 檔（Codex）。Claude Code 支援[9]；Codex 支援[10]；Claude.ai 分開看：Cowork 官方公開有 sub-agent coordination，會把複雜工作拆成小任務、平行協調多個工作流；一般 Chat／Projects 查無使用者可自訂的通用 subagent 介面（Research 功能內部用 lead agent 加 subagents，但那是內部架構，不是使用者自己能設定的機制）[16][17][22]。
-- **Plugin**：解決「把 SKILL、Subagent、Hooks、MCP 設定打包成一個可安裝、可分享、可版控的單位」；安裝後在啟動時載入其中的元件；`.claude-plugin/plugin.json` 可省略（官方寫 manifest 是選用的），其餘元件目錄放在 plugin 根目錄（Claude Code）[^fresh2]，Codex／ChatGPT 共用「Plugins 目錄」發佈機制[11]。Claude Code 支援[11]；Codex 側的 skill 可打包成 plugin 發佈[4]；Claude.ai 官方文件目前說法已一致：[^fresh3]較新的 Help Center 文章說付費方案（Pro／Max／Team／Enterprise）可以在 Web Chat、Claude Desktop 的 Chat 分頁、Cowork 安裝並使用 plugin；官方 Cowork 開發文件現在也寫，安裝的 plugin 存在帳號裡，其中的 skills 與 connectors 在 Chat 也能用。[^fresh4]不過 plugin 裡包的 subagent 跟 hooks 只在 Cowork 執行，Chat 裡會顯示成灰階[17][18][19][20]。
+- **Plugin**：解決「把 SKILL、Subagent、Hooks、MCP 設定打包成一個可安裝、可分享、可版控的單位」；安裝後在啟動時載入其中的元件；`.claude-plugin/plugin.json` 可省略（官方寫 manifest 是選用的），其餘元件目錄放在 plugin 根目錄（Claude Code）[^fresh2]，Codex／ChatGPT 共用「Plugins 目錄」發佈機制[11]。Claude Code 支援[11]；Codex 側的 skill 可打包成 plugin 發佈[4]；Claude.ai 官方文件目前說法已一致：[^fresh3]較新的 Help Center 文章說付費方案（Pro／Max／Team／Enterprise）可以在 Web Chat、Claude Desktop 的 Chat 分頁、Cowork 安裝並使用 plugin；官方 Cowork 開發文件現在也寫，安裝的 plugin 存在帳號裡，其中的 skills 與 connectors 在 Chat 也能用。[^fresh4]不過 plugin 裡包的 subagent 跟 hooks 只在 Cowork 執行，Chat 裡會顯示成灰階[17][18][19][20]。另外官方寫，含本機 MCP server 的 plugin 只能透過桌面版運作[^fresh7]。
 - **Hooks**：解決「把『一定要做到』的檢查變成機制強制執行，而不是寫在說明檔裡靠模型自己記得」；對應事件觸發時（例如編輯檔案前、session 結束時）自動執行；放在 `settings.json` 的 `hooks` 欄位（Claude Code），`hooks.json` 或 `config.toml` 的 `[hooks]`（Codex）。Claude Code 支援[12]；Codex「Hooks are an extensibility framework for Codex」[13]；Claude.ai 分開看：Cowork 可以執行 plugin 裡包的 hooks；一般 Chat 不執行，畫面上會顯示成灰階。Enterprise 另有一套「inference hooks」，是組織端把推論內容送去自己的端點做核准／拒絕政策判斷的合規機制，跟這裡講的生命週期 hooks 不是同一件事，一句話帶過即可[17][21]。
 
 !!! warning "2026-09-16 起：Chat／Cowork 的界線正在消失（Pro／Max 分階段推出中）"
-    上表把 Claude.ai 分成 Chat 與 Cowork 兩欄，是依官方文件目前的寫法整理的。但官方已公告兩者正在合併成同一個體驗：Pro／Max 帳號分階段收到（同方案帳號時間點也不同），收到之後不再有獨立 Cowork 模式可切換，上表裡「⚠️ 只在 Cowork 執行、Chat 裡顯示灰階」這類限制對這些帳號會失效，變成同一個對話視窗、能力視需要自動啟用。Team／Free 官方說「即將推出」但目前尚未開始，Enterprise 變動前會提前至少 30 天通知、目前維持現狀——這些帳號適用的仍是上表原本的區分。查證來源與時程細節見 [tools-compare.md](tools-compare.md) 開頭的說明 [23][24]。
+    上表把 Claude.ai 分成 Chat 與 Cowork 兩欄，是依官方文件目前的寫法整理的。但官方已公告兩者正在合併成同一個體驗：Pro／Max 帳號分階段收到（同方案帳號時間點也不同），收到之後不再有獨立 Cowork 模式可切換，上表裡「⚠️ 只在 Cowork 執行、Chat 裡顯示灰階」這類限制對這些帳號會失效，變成同一個對話視窗、能力視需要自動啟用。Free 官方說「即將推出」但目前尚未開始。Team 與 Enterprise 依 2026-10-05 更新的管理員說明頁，目前維持 chat 與 Cowork 分開[^fresh8]，Enterprise 變動前會提前至少 30 天通知。這些帳號適用的仍是上表原本的區分。查證來源與時程細節見 [tools-compare.md](tools-compare.md) 開頭的說明 [23][24]。
 
 ## 二、每種機制的最小範例與常見誤用
 
@@ -207,3 +207,5 @@ the problem, show the current code, and provide an improved version.
 [^fresh4]: 2026-10-05 依官方原文更新，出處：<https://claude.com/docs/cowork/guide/plugins>
 [^fresh5]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/skills>
 [^fresh6]: 2026-10-05 依官方原文更新，出處：<https://claude.com/docs/cowork/guide/plugins>
+[^fresh7]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh8]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans>

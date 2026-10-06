@@ -1,6 +1,6 @@
 # 同時使用 Claude Code 與 Claude Cowork
 
-> 查證日期：2026-09-17。Cowork 正在被併進一般 Chat，不同方案看到的介面不一樣，請以你自己帳號畫面與官方最新說明為準。
+> 查證日期：2026-10-06（補入 10/6 生效的變動）。Cowork 正在被併進一般 Chat，不同方案看到的介面不一樣，請以你自己帳號畫面與官方最新說明為準。
 
 Claude Code 與 Cowork 都是 Anthropic 自己的產品，底層甚至是同一套東西：官方明講「Cowork uses the same agentic architecture that powers Claude Code」[S1]，桌面版的 Cowork session 實際上就是由 Claude Code 執行的 [A5]。但「底層相同」不等於「工作內容互通」——**兩邊沒有檔案自動同步這回事**：雲端 session 跑在隔離沙箱裡，本機檔案只限於你在桌面版連接的資料夾 [S5][S4]。任務交接官方只有一條路，而且已經不開放新使用者 [S6]。共用的是帳號層的設定（connector、skill、plugin、額度），不是你手上這份工作；完整對照見下面的互通表。
 
@@ -18,8 +18,11 @@ Claude Code 與 Cowork 都是 Anthropic 自己的產品，底層甚至是同一�
 |---|---|---|
 | 訊息框還有 **Chat／Cowork** 兩個選項 | 尚未合併，Cowork 還是一個要手動切過去的獨立模式 | 下面提到「切到 Cowork」的步驟照做 |
 | 沒有這兩個選項了 | 已經合併，**沒有獨立 Cowork 模式可切換**，原本限定 Cowork 才有的能力（本機檔案、瀏覽器、長時間代理工作）在任何對話都會自動用到 [S2] | 下面提到「切到 Cowork」的地方，改成「直接在一般對話裡講」 |
+| 方案是 Pro 或 Max，2026-10-06 起 | 不論上面哪一種，新的 Cowork 任務一律在雲端執行，設定裡「Only on your computer」選項移除；10/6 以前在本機開始的任務留在本機[^fresh1] | 讀寫本機資料夾的條件不變：要桌面版開著（見後面路徑一） |
 
-各方案的時程，官方目前的說法是：Pro 與 Max 先開始、在數週內推給既有與新使用者，**Team 與 Free 方案「隨後跟上」但尚未開始**，Enterprise 則是「管理員會在任何變動前至少 30 天收到通知」[S7][S2]。合併之後不能切回舊的分開模式，既有的 Cowork 任務、專案、connector、skill、artifact 與檔案會沿用，原本的 Cowork 任務也照舊打得開、可以繼續 [S2]。
+各方案的時程，官方目前的說法是：Pro 與 Max 先開始、在數週內推給既有與新使用者，**Free 方案「隨後跟上」但尚未開始**。部落格原本也把 Team 列在「隨後跟上」，但 2026-10-05 更新的 Team／Enterprise 說明頁寫，這兩種方案的組織目前維持 chat 與 Cowork 分開，這裡以較新的說明頁為準[^fresh2]，Enterprise 則是「管理員會在任何變動前至少 30 天收到通知」[S7][S2]。合併之後不能切回舊的分開模式，既有的 Cowork 任務、專案、connector、skill、artifact 與檔案會沿用，原本的 Cowork 任務也照舊打得開、可以繼續 [S2]。
+
+2026-10-06 起，Pro 與 Max 的新任務只在雲端執行。官方的說法是：如果工作必須留在自己的電腦上，用桌面版的 Claude Code，它在你的電腦上執行，資料夾與歷史也留在本機。過去的 Cowork 逐字稿可以匯出再到 Claude Code 開啟（單一任務從任務頂端的提示下載，整份 Cowork 歷史從 App 內的通知下載），但 project 與排程任務帶不過去[^fresh3]。這項「新任務一律在雲端」官方只寫給 Pro 與 Max；Team／Enterprise 的 session 可在雲端或本機執行，雲端 session 由組織管理員開關[^fresh4]。
 
 **兩種現況有一件事是一樣的：Claude Code 不受影響。** 官方在合併公告裡特別寫了「The model picker and the "Code" tab are where they were」[S2]；桌面版 App 的三個分頁（Chat 對話、Cowork 長時間代理工作、Code 軟體開發）當中，這次動到的是前兩個 [A1]。
 
@@ -146,7 +149,7 @@ claude --add-dir D:\handoff\2026-q3-report
 
 ### 沒有 Cowork 的人怎麼辦
 
-Cowork 有方案門檻（見[付費區](paid-tier.md)），Team 與 Free 方案的合併也還沒開始 [S7]。如果你手上只有一般 Chat 與 Claude Code，這個工作流程的骨架照樣成立，只是第 2～3 步換成「在 Chat 裡整理、把結果貼進或下載到交換資料夾」。差別是要多幾次複製貼上，交接點沒有變。
+Cowork 有方案門檻（見[付費區](paid-tier.md)），Free 方案的合併還沒開始，Team 方案目前維持 chat 與 Cowork 分開 [S7][^fresh2]。如果你手上只有一般 Chat 與 Claude Code，這個工作流程的骨架照樣成立，只是第 2～3 步換成「在 Chat 裡整理、把結果貼進或下載到交換資料夾」。差別是要多幾次複製貼上，交接點沒有變。
 
 ## 不要期待的事（整理者觀察）
 
@@ -168,7 +171,7 @@ Cowork 有方案門檻（見[付費區](paid-tier.md)），Team 與 Free 方案�
 | 想讓系統自己決定任務丟哪邊 | Dispatch，但官方已明說不開放新使用者 [S6] |
 | 想在對話裡看到 Claude Code 的產出 | 讓 Claude Code 發佈成 artifact，再從 claude.ai 開 [A4] |
 
-## 資料來源（2026-09-17 查證）
+## 資料來源（2026-09-17 查證；2026-10-06 補查）
 
 | 標記 | URL | 用途 |
 |---|---|---|
@@ -193,3 +196,7 @@ Cowork 有方案門檻（見[付費區](paid-tier.md)），Team 與 Free 方案�
 註：A 系列為 Claude Code 官方文件（code.claude.com），S 系列為 Anthropic 產品文件、官方說明中心與官方部落格。
 
 延伸：[Claude Code + Codex 協作](claude-codex.md)｜[Claude Code 接上 Obsidian](claude-code-obsidian.md)｜[付費區](paid-tier.md)｜[AI 介面比較總表](tools-compare.md)
+[^fresh1]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh2]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans>
+[^fresh3]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh4]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans>

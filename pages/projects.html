@@ -16,9 +16,9 @@
 <a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
-<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791213128">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789789001">免付費區</a></li>
-<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791213128">付費區</a></li>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791214442">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791214442">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791214442">付費區</a></li>
 <li class="active"><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791211821">Projects 功能</a></li>
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
@@ -32,7 +32,7 @@
 <div class="navsec"><h2>實戰協作</h2><ul>
 <li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1791213128">Claude Code + Codex 協作</a></li>
 <li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1791213128">把教材做成 SKILL</a></li>
-<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791211821">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791214442">Claude Code 接上 Obsidian</a></li>
 <li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655763">Claude Code + Cowork 並用</a></li>
 </ul></div>
 <div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
@@ -56,7 +56,7 @@
 <h1>Projects 功能</h1>
 <p class='lede'>舊版知識庫、新版 beta、Claude Code 本機專案，三種「Projects」分清楚</p>
 <blockquote>
-<p>查證日期：2026-10-05。這頁在寫的當下經過兩位查證者交叉核對，發現<a href="free-tier.html">免付費區</a>與<a href="paid-tier.html">付費區</a>先前寫的「Free 沒有 Projects」是錯的，已經回頭更正，見第 4 節。方案與功能變動很快，請以官方最新說明為準。</p>
+<p>查證日期：2026-10-05；第 8 節 2026-10-06 重查。這頁在寫的當下經過兩位查證者交叉核對，發現<a href="free-tier.html">免付費區</a>與<a href="paid-tier.html">付費區</a>先前寫的「Free 沒有 Projects」是錯的，已經回頭更正，見第 4 節。方案與功能變動很快，請以官方最新說明為準。</p>
 </blockquote>
 <p>「Projects」這個詞，2026-09 這幾週在 Claude 生態裡同時指兩層東西：一個是 claude.ai 用了很久的知識庫型 Projects，另一個是 2026-09 剛在 Claude Code 上線的新版 beta。官方文件把兩者定位成同一條功能線的新舊版本，這點第 1 節先講清楚，免得跟<a href="tools-compare.html">AI 介面比較總表</a>或<a href="claude-code-cowork.html">Claude Code + Cowork</a>的分類方式搞混。</p>
 <h2 id="1-projects">1. 現在有幾種「Projects」</h2>
@@ -226,6 +226,12 @@
 <p>2026-09-16 Cowork 併入 Chat 的公告裡，Projects 被重新定義成「在每一段對話裡都能用」，官方原文（出自 support 文章，不是部落格）：「Projects: Keep files, instructions, and context together for related work. <strong>Projects work in every conversation.</strong>」[S4]</p>
 <p>實際差異：合併前，本機資料夾讀寫是 Cowork 分頁的專屬能力，要先切分頁才能用；合併後，「In Claude Desktop, give Claude access to a folder on your computer so it can read, organize, and create files there.」[S4] 一般對話本身就能碰本機資料夾，不必再切到獨立的 Cowork 模式。</p>
 <p><strong>這個轉變的關鍵是「誰決定要不要動用」</strong>：不是使用者手動切換分頁才觸發，而是 Claude 在一般對話裡自己判斷這次任務要不要用到本機檔案、connector 或其他原本限定 Cowork 才有的能力。已授權的資料夾範圍不變，但觸發方式從「使用者手動切模式」變成「Claude 自行判斷」，在意本機檔案安全的人要知道這個行為轉變，細節與逐步操作見<a href="claude-code-cowork.html">Claude Code + Cowork 並用</a>。</p>
+<p>另外有三點，依官方現行說明，Cowork 與 project 搭配時要知道：</p>
+<ol>
+<li>綁了本機資料夾的 project，只能在桌面版開 Cowork session<sup id="fnref:fresh8"><a class="footnote-ref" href="#fn:fresh8">8</a></sup>。</li>
+<li>Cowork 不會改 project 裡的內容，想留下的東西要自己加進 project<sup id="fnref:fresh9"><a class="footnote-ref" href="#fn:fresh9">9</a></sup>。</li>
+<li>記憶只有在雲端 session 才用得到，在你電腦本機跑的 session 不使用記憶<sup id="fnref:fresh10"><a class="footnote-ref" href="#fn:fresh10">10</a></sup>。</li>
+</ol>
 <p>rollout 狀態：Pro／Max 分階段推送，「More plans will follow soon, and Enterprise admins will hear from us at least 30 days before anything changes.」[B1]</p>
 <h2 id="2026-09-19">資料來源（2026-09-19 查證）</h2>
 <table>
@@ -333,6 +339,15 @@
 </li>
 <li id="fn:fresh7">
 <p>2026-10-05 依官方原文更新，出處：<a href="https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/">https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/</a>&#160;<a class="footnote-backref" href="#fnref:fresh7" title="Jump back to footnote 7 in the text">&#8617;</a></p>
+</li>
+<li id="fn:fresh8">
+<p>2026-10-06 依官方原文更新，出處：<a href="https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile">https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile</a>&#160;<a class="footnote-backref" href="#fnref:fresh8" title="Jump back to footnote 8 in the text">&#8617;</a></p>
+</li>
+<li id="fn:fresh9">
+<p>2026-10-06 依官方原文更新，出處：<a href="https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile">https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile</a>&#160;<a class="footnote-backref" href="#fnref:fresh9" title="Jump back to footnote 9 in the text">&#8617;</a></p>
+</li>
+<li id="fn:fresh10">
+<p>2026-10-06 依官方原文更新，出處：<a href="https://support.claude.com/en/articles/15811196-what-to-expect-with-claude-cowork-in-the-cloud">https://support.claude.com/en/articles/15811196-what-to-expect-with-claude-cowork-in-the-cloud</a>&#160;<a class="footnote-backref" href="#fnref:fresh10" title="Jump back to footnote 10 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>

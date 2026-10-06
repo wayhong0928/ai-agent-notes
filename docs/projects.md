@@ -1,6 +1,6 @@
 # Projects 功能
 
-> 查證日期：2026-10-05。這頁在寫的當下經過兩位查證者交叉核對，發現[免付費區](free-tier.md)與[付費區](paid-tier.md)先前寫的「Free 沒有 Projects」是錯的，已經回頭更正，見第 4 節。方案與功能變動很快，請以官方最新說明為準。
+> 查證日期：2026-10-05；第 8 節 2026-10-06 重查。這頁在寫的當下經過兩位查證者交叉核對，發現[免付費區](free-tier.md)與[付費區](paid-tier.md)先前寫的「Free 沒有 Projects」是錯的，已經回頭更正，見第 4 節。方案與功能變動很快，請以官方最新說明為準。
 
 「Projects」這個詞，2026-09 這幾週在 Claude 生態裡同時指兩層東西：一個是 claude.ai 用了很久的知識庫型 Projects，另一個是 2026-09 剛在 Claude Code 上線的新版 beta。官方文件把兩者定位成同一條功能線的新舊版本，這點第 1 節先講清楚，免得跟[AI 介面比較總表](tools-compare.md)或[Claude Code + Cowork](claude-code-cowork.md)的分類方式搞混。
 
@@ -97,6 +97,12 @@ ChatGPT 這欄的數字信心普遍偏低，官方頁面本次查證兩次都回
 
 **這個轉變的關鍵是「誰決定要不要動用」**：不是使用者手動切換分頁才觸發，而是 Claude 在一般對話裡自己判斷這次任務要不要用到本機檔案、connector 或其他原本限定 Cowork 才有的能力。已授權的資料夾範圍不變，但觸發方式從「使用者手動切模式」變成「Claude 自行判斷」，在意本機檔案安全的人要知道這個行為轉變，細節與逐步操作見[Claude Code + Cowork 並用](claude-code-cowork.md)。
 
+另外有三點，依官方現行說明，Cowork 與 project 搭配時要知道：
+
+1. 綁了本機資料夾的 project，只能在桌面版開 Cowork session[^fresh8]。
+2. Cowork 不會改 project 裡的內容，想留下的東西要自己加進 project[^fresh9]。
+3. 記憶只有在雲端 session 才用得到，在你電腦本機跑的 session 不使用記憶[^fresh10]。
+
 rollout 狀態：Pro／Max 分階段推送，「More plans will follow soon, and Enterprise admins will hear from us at least 30 days before anything changes.」[B1]
 
 ## 資料來源（2026-09-19 查證）
@@ -127,3 +133,6 @@ rollout 狀態：Pro／Max 分階段推送，「More plans will follow soon, and
 [^fresh5]: 2026-10-05 依官方原文更新，出處：<https://code.claude.com/docs/en/claude-projects>
 [^fresh6]: 2026-10-05 依官方原文更新，出處：<https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/>
 [^fresh7]: 2026-10-05 依官方原文更新，出處：<https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/>
+[^fresh8]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh9]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh10]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15811196-what-to-expect-with-claude-cowork-in-the-cloud>

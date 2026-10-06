@@ -16,9 +16,9 @@
 <a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
-<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791213128">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1789789001">免付費區</a></li>
-<li class="active"><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791213128">付費區</a></li>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791214442">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791214442">免付費區</a></li>
+<li class="active"><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791214442">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791211821">Projects 功能</a></li>
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
@@ -32,7 +32,7 @@
 <div class="navsec"><h2>實戰協作</h2><ul>
 <li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1791213128">Claude Code + Codex 協作</a></li>
 <li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1791213128">把教材做成 SKILL</a></li>
-<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791211821">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791214442">Claude Code 接上 Obsidian</a></li>
 <li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1789655763">Claude Code + Cowork 並用</a></li>
 </ul></div>
 <div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
@@ -52,11 +52,11 @@
 <div class="wrap">
 <main id="main">
 <p class="crumb"><a href="../index.html">首頁</a> ／ 先搞懂工具</p>
-<article class="doc" data-updated="1791213128">
+<article class="doc" data-updated="1791214442">
 <h1>付費區</h1>
 <p class='lede'>需要 Pro 以上或 Claude Code／Codex 才能做到的功能</p>
 <blockquote>
-<p>查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
+<p>查證日期：2026-10-05；Cowork 一列 2026-10-06 重查。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p>這頁列出需要 Pro 以上、或者非得用 Claude Code／Codex 才做得到的功能。每項都標最低方案，並說明「為什麼免費帳號或純聊天介面做不到」。多數答案落在六個原因裡：能不能碰<strong>本機檔案</strong>、能不能<strong>執行指令</strong>、能不能讓 <strong>skill 自動觸發</strong>、能不能派出<strong>subagent</strong>、能不能掛 <strong>hooks</strong>、以及要不要 <strong>Claude Code + Codex 協作</strong>。免費帳號能做到的部分，見<a href="free-tier.html">免付費區</a>；不確定該用哪個介面，先看<a href="tools-compare.html">AI 介面比較總表</a>。</p>
 <h2 id="_1">一個常見錯誤要先更正</h2>
@@ -89,7 +89,7 @@
 <tr>
 <td>Cowork</td>
 <td>Pro</td>
-<td>需要本機或雲端 VM 執行環境，免費帳號完全不能用；2026-09-16 起官方正把 Cowork 併入一般 Chat，Pro／Max 帳號分階段收到新體驗，收到之後不必再特地切到 Cowork 模式 [S21][S26]</td>
+<td>需要本機或雲端 VM 執行環境，免費帳號完全不能用；2026-09-16 起官方正把 Cowork 併入一般 Chat，Pro／Max 帳號分階段收到新體驗，收到之後不必再特地切到 Cowork 模式；2026-10-06 起 Pro／Max 的新任務只在雲端執行，讀寫本機資料夾要桌面版開著<sup id="fnref:fresh6"><a class="footnote-ref" href="#fn:fresh6">7</a></sup>；這項變動官方只寫給 Pro／Max，Team／Enterprise 的雲端 session 由組織管理員開關<sup id="fnref:fresh7"><a class="footnote-ref" href="#fn:fresh7">8</a></sup> [S21][S26]</td>
 </tr>
 <tr>
 <td>Claude Design</td>
@@ -250,6 +250,12 @@
 </li>
 <li id="fn:fresh5">
 <p>2026-10-05 依官方原文更新，出處：<a href="https://learn.chatgpt.com/docs/pricing">https://learn.chatgpt.com/docs/pricing</a>&#160;<a class="footnote-backref" href="#fnref:fresh5" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
+<li id="fn:fresh6">
+<p>2026-10-06 依官方原文更新，出處：<a href="https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile">https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile</a>&#160;<a class="footnote-backref" href="#fnref:fresh6" title="Jump back to footnote 7 in the text">&#8617;</a></p>
+</li>
+<li id="fn:fresh7">
+<p>2026-10-06 依官方原文更新，出處：<a href="https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans">https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans</a>&#160;<a class="footnote-backref" href="#fnref:fresh7" title="Jump back to footnote 8 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
