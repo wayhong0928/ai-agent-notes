@@ -16,7 +16,7 @@
 <a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
-<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791265294">AI 介面比較總表</a></li>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791352825">AI 介面比較總表</a></li>
 <li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791265294">免付費區</a></li>
 <li class="active"><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791265294">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
@@ -32,8 +32,8 @@
 <div class="navsec"><h2>實戰協作</h2><ul>
 <li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1791265294">Claude Code + Codex 協作</a></li>
 <li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1791213128">把教材做成 SKILL</a></li>
-<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791265294">Claude Code 接上 Obsidian</a></li>
-<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1791265294">Claude Code + Cowork 並用</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791352825">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1791352825">Claude Code + Cowork 並用</a></li>
 </ul></div>
 <div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
 <li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789655763">SDLC 與流程模型</a></li>
@@ -46,7 +46,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791265294">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791352825">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -56,7 +56,7 @@
 <h1>付費區</h1>
 <p class='lede'>需要 Pro 以上或 Claude Code／Codex 才能做到的功能</p>
 <blockquote>
-<p>查證日期：2026-10-05；Cowork 一列 2026-10-06 重查。方案與功能變動快，請以官方最新說明為準。</p>
+<p>查證日期：2026-10-05；Cowork 一列 2026-10-06 重查；Codex 方案 2026-10-07 重查。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p>這頁列出需要 Pro 以上、或者非得用 Claude Code／Codex 才做得到的功能。每項都標最低方案，並說明「為什麼免費帳號或純聊天介面做不到」。多數答案落在六個原因裡：能不能碰<strong>本機檔案</strong>、能不能<strong>執行指令</strong>、能不能讓 <strong>skill 自動觸發</strong>、能不能派出<strong>subagent</strong>、能不能掛 <strong>hooks</strong>、以及要不要 <strong>Claude Code + Codex 協作</strong>。免費帳號能做到的部分，見<a href="free-tier.html">免付費區</a>；不確定該用哪個介面，先看<a href="tools-compare.html">AI 介面比較總表</a>。</p>
 <h2 id="_1">一個常見錯誤要先更正</h2>
@@ -73,7 +73,7 @@
 <tbody>
 <tr>
 <td>讀寫本機檔案、執行終端指令</td>
-<td>Claude Code：Pro 起（或純 API key 按量付費）；Codex：CLI/IDE 全方案，含 Free／Go，但官方文件對 CLI 端的說法目前不完全一致，細節見<a href="free-tier.html#freego-codex">免付費區的說明</a></td>
+<td>Claude Code：Pro 起（或純 API key 按量付費）；Codex：CLI、IDE 擴充官方定價頁從 Plus 起列，Free／Go 只列桌面 App；也可用 API key 按用量計費，細節見<a href="free-tier.html#freego-codex">免付費區的說明</a> [O1]</td>
 <td>Chat／ChatGPT 網頁版的「執行程式碼」是雲端沙盒工具，不會碰到你電腦上的檔案；只有 Claude Code 與 Codex CLI／IDE 是真的在本機終端跑，這是<strong>本機檔案</strong>與<strong>執行指令</strong>這兩個原因 [S7]</td>
 </tr>
 <tr>

@@ -1,6 +1,6 @@
 # 免付費區
 
-> 查證日期：2026-09-16；ChatGPT Free 一節 2026-10-05 重查；Cowork 一列 2026-10-06 重查。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-09-16；ChatGPT Free 一節 2026-10-05 重查；Cowork 一列 2026-10-06 重查；Codex 一節 2026-10-07 重查。方案與功能變動快，請以官方最新說明為準。
 
 免費帳號能做的事，比多數人想的多一些，但也有幾個明確做不到的邊界。這頁只講「不花錢能做到哪裡」；需要付費才能解鎖的部分，見[付費區](paid-tier.md)；不確定該用哪個介面，先看[AI 介面比較總表](tools-compare.md)。
 
@@ -36,10 +36,10 @@
 
 ### Free／Go 帳號用 Codex 要注意的地方
 
-官方對 Free／Go 帳號能不能用 Codex，本身在不同文件上出現過落差：定價頁把 Free（$0）與 Go（$8）都列為 Codex 的方案，文案分別是「探索 Codex 在小型程式任務上的能力」「用 Codex 處理輕量程式任務」；但 Codex CLI 所在的 GitHub 專案 README，登入建議文字只列出 Plus、Pro、Business、Edu、Enterprise，沒有提到 Free／Go。查證後確認官方並沒有真的排除 Free／Go。GitHub README 那段文字是「建議」用語，沒有寫「僅限」，屬於列舉不完整，不是禁止規定；桌面 App 的官方頁面也明確把 Codex 分頁列為所有方案（含 Free）都能用的功能 [A2 §0][A2b 題5]。
+官方定價頁開頭寫 Codex 包含在 Free、Go、Plus 等各個方案裡，但各方案列出的介面不一樣。Free（$0，「Explore Codex capabilities on quick coding tasks.」）與 Go（$8，「Use Codex for lightweight coding tasks.」）的方案卡只寫桌面 App 裡可用的模型（依推出進度開放），沒有列 CLI 或 IDE 擴充；網頁版、CLI、IDE 擴充和 iOS 要到 Plus（$20）才列出來 [O1]。Codex CLI 的 GitHub README 也只建議用 Plus、Pro、Business、Edu、Enterprise 帳號登入 [O26]。官方沒有哪一句寫「Free 不能用 CLI」，但也找不到 Free／Go 可以用的明文，所以這裡照定價頁的寫法：Free／Go 用桌面 App，要用 CLI 或 IDE 擴充從 Plus 算起。不想訂閱的話，CLI 和 IDE 擴充也可以接 API key，按 API 用量計費 [O1]。
 
-!!! note "看到「Codex 只有付費方案能用」這種舊教學，先查一次現況"
-    這條資訊的性質是「官方文件彼此打過架，後來查證確認是舊文件沒跟上」，不是單純的功能限制。教學網站或部落格如果還在講 Free／Go 不能用 Codex，很可能是抄了那份沒更新的 GitHub README。
+!!! note "2026-10-07 更正"
+    這段原本寫 Free／Go 也能用 CLI 和 IDE 擴充，並把 GitHub README 只列 Plus 以上當成舊文件沒跟上。重新對照定價頁後發現，定價頁本身就只把網頁版、CLI、IDE 擴充列在 Plus 以上，原本的推論沒有根據，已改成定價頁的寫法。
 
 ## 兩個免費帳號可行的工作流程
 
@@ -89,7 +89,8 @@ Claude Free 能建立最多 5 個 Project，把常用的文獻或寫作規範固
 | S21 | support.claude.com/en/articles/13345190-get-started-with-claude-cowork | Cowork 免費帳號不可用 |
 | S28 | support.claude.com/en/articles/9517075-what-are-projects | 2026-09-19 補查：Projects 方案可用性更正（Free 上限 5 個），RAG 模式僅付費方案 |
 | S26 | support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude | Cowork／Chat 合併現況：各方案推出時程 |
-| O1 | learn.chatgpt.com/docs/pricing | Free/Go 的 Codex 定位文案 |
+| O1 | learn.chatgpt.com/docs/pricing | Free/Go 的 Codex 定位文案；2026-10-07 重查：各方案列出的 Codex 介面 |
+| O26 | github.com/openai/codex（README） | 2026-10-07 重查：登入建議只列 Plus 以上 |
 | O3 | OpenAI 官方 X 貼文（經二次來源引述） | Desktop app 全方案含 Free 可用 Codex |
 | O7 | learn.chatgpt.com/docs/app | 統一版 Desktop app 分頁切換 |
 | O17 | help.openai.com/en/articles/10169521-projects-in-chatgpt | 2026-10-05 重查：Projects 各方案檔案數上限 |

@@ -17,7 +17,7 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 | Claude Design | ？ | ？ | Pro 起 |
 | ChatGPT | ❌ | ？ | Free |
 | ChatGPT Desktop | ⚠️視分頁 | ⚠️視分頁 | Free 起 |
-| Codex | ⚠️視環境 | ✅視模式 | Free／Go |
+| Codex | ⚠️視環境 | ✅視模式 | 桌面 App Free 起；CLI／IDE Plus 起 |
 
 !!! warning "2026-09-16 起：Cowork 正在併入一般 Chat（分階段推出，尚未全面生效）"
     Claude 官方公告 Cowork 與一般 Chat 正在合併成同一個體驗，**是分階段推出，不是已經全面生效**：Pro／Max 帳號正在逐步收到（即使同方案，不同帳號收到的時間點也不一樣），Free 官方說「即將推出」但目前尚未開始。Team 的部分，2026-09-16 的官方部落格寫「隨後跟上」，但 2026-10-05 更新的 Team／Enterprise 說明頁寫兩者目前維持 chat 與 Cowork 分開的現狀，這裡以較新的說明頁為準[^fresh4]。Enterprise 在變動前會提前至少 30 天通知。合併後的體驗裡沒有獨立的「Cowork 模式」可切換，原本只有 Cowork 才有的檔案操作、任務、connector、skill 能力，在任何一段對話裡都能自動用到，由 Claude 自己判斷要不要動用。上面表格裡「Cowork」這一列，對還沒收到新體驗的帳號仍然照原樣運作；已經收到新體驗的帳號，請把這一列的能力直接理解成「一般對話多了這些能力」，不是找不到 Cowork 分頁就是設定錯了 [S25][S26][S27]。
