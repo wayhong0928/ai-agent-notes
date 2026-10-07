@@ -1,8 +1,8 @@
 # 同時使用 Claude Code 與 Claude Cowork
 
-> 查證日期：2026-10-06（補入 10/6 生效的變動）。Cowork 正在被併進一般 Chat，不同方案看到的介面不一樣，請以你自己帳號畫面與官方最新說明為準。
+> 查證日期：2026-10-07（補入 10/6 生效的變動，10/7 依官方說明頁重查）。Cowork 正在被併進一般 Chat，不同方案看到的介面不一樣，請以你自己帳號畫面與官方最新說明為準。
 
-Claude Code 與 Cowork 都是 Anthropic 自己的產品，底層甚至是同一套東西：官方明講「Cowork uses the same agentic architecture that powers Claude Code」[S1]，桌面版的 Cowork session 實際上就是由 Claude Code 執行的 [A5]。但「底層相同」不等於「工作內容互通」——**兩邊沒有檔案自動同步這回事**：雲端 session 跑在隔離沙箱裡，本機檔案只限於你在桌面版連接的資料夾 [S5][S4]。任務交接官方只有一條路，而且已經不開放新使用者 [S6]。共用的是帳號層的設定（connector、skill、plugin、額度），不是你手上這份工作；完整對照見下面的互通表。
+Claude Code 與 Cowork 都是 Anthropic 自己的產品，底層甚至是同一套東西：官方明講「Cowork uses the same agentic architecture that powers Claude Code」[S1]，桌面版的 Cowork session 實際上就是由 Claude Code 執行的 [A5]。但「底層相同」不等於「工作內容互通」——**兩邊沒有檔案自動同步這回事**：雲端 session 跑在隔離沙箱裡，本機檔案只限於你在桌面版連接的資料夾 [S5][S4]。任務交接官方有兩條路：Dispatch 會自動把開發任務分給 Claude Code，但已經不開放新使用者 [S6]；另一條要自己動手，把單一 Cowork 任務下載下來，在 Claude Code 用 `/port-task-data` 接手[^fresh5]。共用的是帳號層的設定（connector、skill、plugin、額度），不是你手上這份工作；完整對照見下面的互通表。
 
 所以這頁要回答兩件事：**你現在到底有沒有 Cowork 可以用**，以及在沒有自動互通的前提下，「同時使用」實務上長什麼樣子。想找 Cowork 搭 OpenAI Codex 的做法，那是另一個題目，見 [Claude Code + Codex 協作](claude-codex.md)。
 
@@ -22,7 +22,7 @@ Claude Code 與 Cowork 都是 Anthropic 自己的產品，底層甚至是同一�
 
 各方案的時程，官方目前的說法是：Pro 與 Max 先開始、在數週內推給既有與新使用者，**Free 方案「隨後跟上」但尚未開始**。部落格原本也把 Team 列在「隨後跟上」，但 2026-10-05 更新的 Team／Enterprise 說明頁寫，這兩種方案的組織目前維持 chat 與 Cowork 分開，這裡以較新的說明頁為準[^fresh2]，Enterprise 則是「管理員會在任何變動前至少 30 天收到通知」[S7][S2]。合併之後不能切回舊的分開模式，既有的 Cowork 任務、專案、connector、skill、artifact 與檔案會沿用，原本的 Cowork 任務也照舊打得開、可以繼續 [S2]。
 
-2026-10-06 起，Pro 與 Max 的新任務只在雲端執行。官方的說法是：如果工作必須留在自己的電腦上，用桌面版的 Claude Code，它在你的電腦上執行，資料夾與歷史也留在本機。過去的 Cowork 逐字稿可以匯出再到 Claude Code 開啟（單一任務從任務頂端的提示下載，整份 Cowork 歷史從 App 內的通知下載），但 project 與排程任務帶不過去[^fresh3]。這項「新任務一律在雲端」官方只寫給 Pro 與 Max；Team／Enterprise 的 session 可在雲端或本機執行，雲端 session 由組織管理員開關[^fresh4]。
+2026-10-06 起，Pro 與 Max 的新任務只在雲端執行。官方的說法是：如果工作必須留在自己的電腦上，用桌面版的 Claude Code，它在你的電腦上執行，資料夾與歷史也留在本機。要把一個 Cowork 任務帶到 Claude Code 接著做，官方給的步驟是：打開任務、選「Download task data」，解壓縮後在 Claude Code 開啟那個資料夾，再跑 `/port-task-data` 接上原本的脈絡；想留一份全部的備份，到桌面版首頁的卡片選「Export your Cowork data」[^fresh5]。這項「新任務一律在雲端」官方只寫給 Pro 與 Max；Team／Enterprise 的 session 可在雲端或本機執行，雲端 session 由組織管理員開關[^fresh4]。
 
 **兩種現況有一件事是一樣的：Claude Code 不受影響。** 官方在合併公告裡特別寫了「The model picker and the "Code" tab are where they were」[S2]；桌面版 App 的三個分頁（Chat 對話、Cowork 長時間代理工作、Code 軟體開發）當中，這次動到的是前兩個 [A1]。
 
@@ -45,12 +45,12 @@ Dispatch 的官方路由規則把分界講得最直白：「Development tasks ru
 | Connectors | **共用**。用 claude.ai 帳號登入 Claude Code 後，你在 claude.ai 加的 connector 會自動出現在 Claude Code，`/mcp` 裡會標示來自 claude.ai | [A3] |
 | Skills／Plugins | **部分共用**。在 claude.ai 帳號層啟用的會同步到兩邊；但只存在於本機 `~/.claude` 的不會給 Cowork | [A1][A2] |
 | Artifacts | Claude Code 可以把產出發佈成 claude.ai 上的 artifact，`/artifacts` 能列出你擁有與別人分享給你的 artifact，並附加到當前 session | [A4] |
-| 任務路由 | 有一條：Dispatch 會把開發任務丟給 Claude Code。但限制很重，見下一節 | [A1][S6] |
+| 任務路由 | 自動的只有 Dispatch，會把開發任務丟給 Claude Code，但限制很重，見下一節；另有手動的 `/port-task-data`，見「第一步」一節 | [A1][S6][^fresh5] |
 | 對話紀錄 | 在桌面版或 Cowork 開始／最近接續的 session，transcript 存在本機 `~/.claude` 裡，且預設不受一般保留期限清除 | [A7] |
 | 用量額度 | 共用。Team／Enterprise 的每席位額度由 Claude chat、Claude Code、Cowork 共吃 | [A8] |
 | **檔案** | **沒有自動互通機制。** 雲端 session 的執行環境是隔離沙箱，本機檔案只限於你在桌面版連接的資料夾 | [S5][S4] |
 | **claude.ai Projects** | 查無「終端機 Claude Code session 可以掛上一個 claude.ai Project」的官方說明 | 整理者觀察，見下 |
-| **記憶** | Cowork 與 chat 之間官方寫明共用記憶；Claude Code 這一端查無互通說明 | [S3] ＋ 整理者觀察 |
+| **記憶** | Cowork 的雲端 session 與 chat 之間官方寫明共用記憶；Claude Code 這一端查無互通說明 | [S3] ＋ 整理者觀察 |
 
 關於 Projects 與記憶這兩格，把查證過程寫清楚比較誠實：
 
@@ -59,11 +59,11 @@ Dispatch 的官方路由規則把分界講得最直白：「Development tasks ru
 
 > **整理者觀察**：所以要給讀者的白話結論是——**帳號層的「設定」會跟著你走，手上這份「工作」不會**。Cowork 剛做完的報告，Claude Code 不會自己知道；你在 `CLAUDE.md` 裡定的專案規矩，Cowork 也不會讀到。這是從「文件裡查不到」推出的結論，不是官方發過的聲明。
 
-## 唯一的官方任務路由：Dispatch（而且正在關門）
+## 唯一的自動任務路由：Dispatch（而且正在關門）
 
 Dispatch 是住在 Cowork 分頁裡的一個常駐對話，你丟任務給它，它決定怎麼處理。一個任務會變成 Code session 有兩種路徑：你直接說「開一個 Claude Code session 修登入的 bug」，或者 Dispatch 自己判斷這是開發工作而生出一個 [A1]。生出來的 session 會出現在 Code 分頁側邊欄並標上 **Dispatch** 標記，跑完或需要你批准時手機會收到推播 [A1]。
 
-這是本次查證找到的**唯一一個官方的、跨 Cowork 與 Claude Code 的任務交接機制**。但它的門檻要看清楚：
+這是本次查證找到的**唯一一個會自動把任務從 Cowork 分給 Claude Code 的官方機制**。另一條官方做法是前面「第一步」一節提到的 `/port-task-data`，要你自己下載任務資料再交給 Claude Code。Dispatch 的門檻要看清楚：
 
 - 官方寫「This capability is in limited beta for Pro and Max plans on Claude Cowork」，且需要桌面版與手機版 App 同時具備 [S6]。
 - 官方另外寫「**Dispatch isn't available to new users.** If you already use Dispatch, you can keep using it for now」[S6]。
@@ -73,10 +73,10 @@ Dispatch 是住在 Cowork 分頁裡的一個常駐對話，你丟任務給它，
 
 ## 檔案要怎麼從一邊交到另一邊
 
-既然沒有自動互通，剩下的就是三條手動路。條件差很多：
+既然沒有自動互通，交檔案就剩三條手動路（要把整個任務連同脈絡帶到 Claude Code，用「第一步」一節的 `/port-task-data`）。條件差很多：
 
 **路徑一：桌面版連接的本機資料夾（推薦，也是唯一真正順手的一條）**
-Cowork 在桌面上可以直接讀寫你的本機檔案，不需要手動上傳下載 [S3]。但條件很死：雲端 session 要碰到你連接的本機資料夾，**必須桌面 App 開著、而且該 session 是從桌面版啟動的**；App 一關，session 繼續跑但碰不到本機檔案 [S4]。本機檔案存取只限於你連接過的資料夾，每次本機工具呼叫都會比對你的權限 [S5]。合併後的新體驗也維持同樣條件：「Claude reaches your local files, the built-in browser, and computer use only while Claude Desktop is open」[S2]。
+Cowork 在桌面上可以直接讀寫你的本機檔案，不需要手動上傳下載 [S3]。但條件很死：雲端 session 要碰到你連接的本機資料夾，**必須桌面 App 開著，而且該 session 是從桌面版啟動的，或是排程任務**[^fresh5]；App 一關，session 繼續跑但碰不到本機檔案 [S4]。本機檔案存取只限於你連接過的資料夾，每次本機工具呼叫都會比對你的權限 [S5]。合併後的新體驗也維持同樣條件：「Claude reaches your local files, the built-in browser, and computer use only while Claude Desktop is open」[S2]。
 
 **路徑二：手動下載**
 雲端 session 跟著你的 Claude 帳號走，產出可以在 session 裡預覽與下載 [S3]。沒有桌面版、或不想連接資料夾的人只能走這條：下載檔案 → 放進某個資料夾 → 讓 Claude Code 去讀。
@@ -155,7 +155,7 @@ Cowork 有方案門檻（見[付費區](paid-tier.md)），Free 方案的合併�
 
 以下都是本次查證**沒有找到**官方支援的做法，寫出來是為了讓你不要浪費時間找：
 
-- **Claude Code 不能呼叫 Cowork。** 查無任何 CLI 指令、旗標或 API 可以從 Claude Code 這一端開一個 Cowork 任務。目前有官方路由的方向只有一個，而且是反過來的（Dispatch → Code session），還不開放新使用者 [S6]。
+- **Claude Code 不能呼叫 Cowork。** 查無任何 CLI 指令、旗標或 API 可以從 Claude Code 這一端開一個 Cowork 任務。官方有的兩條路都是反方向：Dispatch 把任務分給 Code session（不開放新使用者）[S6]，或是你手動下載 Cowork 任務、在 Claude Code 跑 `/port-task-data`[^fresh5]。
 - **`CLAUDE.md` 不會跟著到 Cowork。** Cowork 的 skill、plugin 與 connector 來自桌面版側邊欄的 **Customize**，透過 claude.ai 帳號同步，**官方明寫不讀 CLI 的 `~/.claude` 目錄** [A1][S1]。要讓 Cowork 遵守同一套專案規矩，得把規矩放進 Customize 或 Project 的指示，不能指望它讀你的 `CLAUDE.md`。
 - **只存在於 `~/.claude/skills/` 的 skill，Cowork 與雲端 session 都吃不到**；要在那些 session 用，得先在 claude.ai 帳號啟用它 [A2]。反過來，claude.ai 上啟用的 skill 會被下載到終端機 session 的 `~/.claude/skills/synced/`，但官方對這些同步來的 skill 有額外限制，例如在你的機器上不執行它們的 `!` 指令 [A2]。
 - **不要期待兩邊同時改同一個檔案。** 官方文件沒有針對這個情境的說明；*整理者建議*：交接時一次只讓一邊動檔案，或乾脆讓交換資料夾成為 git repo，改壞了隨時 `git diff` 看得出來、隨時還原。
@@ -198,5 +198,5 @@ Cowork 有方案門檻（見[付費區](paid-tier.md)），Free 方案的合併�
 延伸：[Claude Code + Codex 協作](claude-codex.md)｜[Claude Code 接上 Obsidian](claude-code-obsidian.md)｜[付費區](paid-tier.md)｜[AI 介面比較總表](tools-compare.md)
 [^fresh1]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
 [^fresh2]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans>
-[^fresh3]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
 [^fresh4]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans>
+[^fresh5]: 2026-10-07 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>

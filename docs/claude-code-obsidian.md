@@ -176,7 +176,7 @@ Claude Code IDE 的作者自己把定位講得很清楚：**Claude Code 本來�
 
 **第一層：Cowork 執行指令與程式碼的環境是隔離的，不是你的本機終端機。** 官方寫「Shell commands and code Claude writes run inside that environment. Isolation protects your computer」[A5]。所以「叫 Cowork 跑一段 script 掃描我的 vault」這種用法**不成立**。
 
-**第二層（這是會被漏掉的例外）：雲端 session 可以經由桌面版，讀寫你連接的本機資料夾。** 官方明寫「On desktop, Claude can read from and write to your local files without manual uploads or downloads」[A5]。2026-10-06 起 Pro／Max 的新任務都在雲端執行，條件講得更死：雲端 session 要碰到你連接的本機資料夾，必須**桌面 App 開著、而且該 session 是從桌面版開始的**；App 一關，session 繼續跑但碰不到本機檔案 [A6][^fresh6]。要注意的是，需要某個檔案時，Claude 會把那一個檔案的副本抓到雲端，刪除 session 時，抓取的副本也會一併刪除 [A6][^fresh7]。還看得到 Chat／Cowork 選項的帳號，要先在訊息框選 Cowork；已是新體驗的帳號沒有這個選項，直接在任何對話交辦 [A5]。還有 Chat／Cowork 選項的帳號，權限有 Manual／Auto／Skip 三種模式；新體驗帳號的訊息框只有 Auto 與 Manual（預設）兩種 [A5]。
+**第二層（這是會被漏掉的例外）：雲端 session 可以經由桌面版，讀寫你連接的本機資料夾。** 官方明寫「On desktop, Claude can read from and write to your local files without manual uploads or downloads」[A5]。2026-10-06 起 Pro／Max 的新任務都在雲端執行，條件講得更死：雲端 session 要碰到你連接的本機資料夾，必須**桌面 App 開著，而且該 session 是從桌面版開始的，或是排程任務**；App 一關，session 繼續跑但碰不到本機檔案 [A6][^fresh6]。要注意的是，需要某個檔案時，Claude 會把那一個檔案的副本抓到雲端，刪除 session 時，抓取的副本也會一併刪除 [A6][^fresh7]。還看得到 Chat／Cowork 選項的帳號，要先在訊息框選 Cowork；已是新體驗的帳號沒有這個選項，直接在任何對話交辦 [A5]。還有 Chat／Cowork 選項的帳號，權限有 Manual／Auto／Skip 三種模式；新體驗帳號的訊息框只有 Auto 與 Manual（預設）兩種 [A5]。
 
 **所以結論是**：Cowork 的確可以透過「連接本機資料夾」讀寫 vault 目錄下的 Markdown 檔，但**沒有任何 Obsidian 專屬支援**——`code.claude.com` 全文 0 次 Obsidian [A2]；*整理者查證紀錄*：本次讀過的兩篇 Cowork 官方說明頁 [A5][A6] 也完全沒提到 Obsidian 或任何筆記軟體。對 Cowork 而言 vault 就是一個普通資料夾。
 
@@ -227,5 +227,5 @@ Claude Code IDE 的作者自己把定位講得很清楚：**Claude Code 本來�
 [^fresh3]: 2026-10-05 依官方原文更新，出處：<https://community.obsidian.md/plugins/realclaudian>
 [^fresh4]: 2026-10-05 依官方原文更新，出處：<https://community.obsidian.md/plugins/claude-code-ide>
 [^fresh5]: 2026-10-05 依官方原文更新，出處：<https://community.obsidian.md/plugins/claude-code-skills>
-[^fresh6]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh6]: 2026-10-07 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
 [^fresh7]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>

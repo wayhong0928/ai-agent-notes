@@ -1,6 +1,6 @@
 # AI 介面比較總表
 
-> 查證日期：2026-10-05；Cowork 相關內容（2026-10-06 的變動）2026-10-06 重查。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-05；Cowork 相關內容（2026-10-06 的變動）2026-10-07 重查。方案與功能變動快，請以官方最新說明為準。
 
 Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常互相借用（Cowork、Work、Codex 分頁、Codex App……），第一次接觸很容易搞錯。這頁先用一張精簡表對照八種常見介面，細節放進表格下方的逐介面說明，再挑出最容易搞混的六組單獨說明。每一格背後都有來源，標記沿用查證文件的原始編號（`S`＝Claude 官方來源、`O`＝ChatGPT／Codex 官方來源、`X`＝補充查證來源），對照表列在頁尾；查無明確資料的格子直接寫「查無」，不用推測填補。
 
@@ -42,11 +42,12 @@ Claude 與 ChatGPT／Codex 加起來有五種以上的介面，名字又常常�
 - 最低方案：Free 可用 Chat 分頁；Cowork／Code 分頁要付費方案 [S3][S7]
 - 適合做什麼：一個 App 內同時裝 Chat／Cowork／Code
 
-### Cowork（Desktop 第三分頁／web／mobile beta）
+### Cowork（桌面版／web／手機／Chrome 側邊欄）
+- 入口：桌面版、web、手機都從同一個訊息框開始；Chrome 側邊欄一打開就是 Cowork session，Max 與 Team 可用，Pro 陸續推出；web 與手機版在 Team 方案仍是 beta[^fresh8] [S21][S28]
 - 跑在哪裡：Pro／Max 自 2026-10-06 起，新任務只在雲端執行，10/6 以前在本機開始的任務留在本機；Team／Enterprise 的 session 可在雲端或本機執行，雲端 session 由管理員開關[^fresh6] [S28][S27][X4]
-- 讀寫本機檔案：⚠️ 雲端 session 只在桌面版開著、而且 session 是從桌面版開始時，才讀寫得到你連接的資料夾；桌面版關掉後 session 繼續跑，但碰不到本機檔案[^fresh7] [S28][S21][X4]
+- 讀寫本機檔案：⚠️ 雲端 session 只在桌面版開著、而且 session 是從桌面版開始或是排程任務時，才讀寫得到你連接的資料夾；桌面版關掉後 session 繼續跑，但碰不到本機檔案[^fresh7] [S28][S21][X4]
 - 執行指令／程式碼：✅ 隔離環境（雲端沙箱或本機 VM）內可跑 shell／程式碼，但不等於主機終端，不能叫它直接跑主機上的 `codex exec` [X4]
-- Skill／Plugin／MCP：Skill✅／Plugin✅（可包含在主機執行的 local MCP server）／MCP（remote connector）✅ [S9b][X4]
+- Skill／Plugin／MCP：Skill✅／Plugin✅（可包含在主機執行的 local MCP server，這類 plugin 只能透過桌面版使用[^fresh8]）／MCP（remote connector）✅ [S9b][X4]
 - 最低方案：Pro 起，免付費帳號完全不可用 [S21]
 - 適合做什麼：整理檔案、做報表、寄信、跨應用文書工作
 
@@ -176,4 +177,5 @@ Codex 原本有獨立的桌面 App（macOS 2026 年 2 月上線、Windows 3 月 
 [^fresh4]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/13455879-use-claude-cowork-on-team-and-enterprise-plans>
 [^fresh5]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
 [^fresh6]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
-[^fresh7]: 2026-10-06 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh7]: 2026-10-07 依官方原文更新，出處：<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
+[^fresh8]: 2026-10-07 依官方原文更新，出處：<https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork>、<https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile>
