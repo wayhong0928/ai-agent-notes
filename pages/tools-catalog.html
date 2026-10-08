@@ -16,9 +16,9 @@
 <a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
-<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791352825">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791265294">免付費區</a></li>
-<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791265294">付費區</a></li>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791384637">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
@@ -46,7 +46,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791352825">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791384637">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -56,9 +56,9 @@
 <h1>好用工具清單</h1>
 <p class='lede'>精選審查過的官方文章、skill、plugin、MCP 與學習資源</p>
 <blockquote>
-<p>查證日期：2026-09-19（2026-09-25 補入 4 項，2026-10-03 補入 1 項，這幾列另外標註查證日期；2026-10-05 依來源更新 agentic-engineering-handbook 一列的內容描述）。stars／最後更新日期／license 都是各列查證當天的快照，之後會變動，請自己重查一次再決定要不要裝。</p>
+<p>查證日期：2026-09-19（2026-09-25 補入 4 項，2026-10-03 補入 1 項，2026-10-08 補入 31 項、新增第 7、8 節，並把 open-slide 移到第 7 節更新，這幾列另外標註查證日期；2026-10-05 依來源更新 agentic-engineering-handbook 一列的內容描述）。stars／最後更新日期／license 都是各列查證當天的快照，之後會變動，請自己重查一次再決定要不要裝。</p>
 </blockquote>
-<p>這頁收的是本站作者自己讀過、審查過的 Claude Code／Codex 官方文章、skill、plugin、MCP 與學習資源。目標是「精選」不是「收全」：能找到的相關 repo 遠不只這些，這裡只留下讀過原始碼、判斷過風險之後還願意留著的項目。想看完整清單，第 6 節的幾個 awesome-list 本身就是更大的入口。</p>
+<p>這頁收的是本站作者自己讀過、審查過的 Claude Code／Codex 官方文章、skill、plugin、MCP 與學習資源。目標是「精選」不是「收全」：能找到的相關 repo 遠不只這些，這裡只留下讀過原始碼、判斷過風險之後還願意留著的項目。2026-10-08 補入的項目，查的是 README、授權與關鍵的原始碼（網路行為、hook），沒有逐檔讀完全部程式碼。想看完整清單，第 6 節的幾個 awesome-list 本身就是更大的入口。</p>
 <h2 id="1">1. 怎麼用這份清單</h2>
 <p><strong>星數不是品質保證。</strong> CMU 一篇研究〈Six Million (Suspected) Fake Stars on GitHub〉（arXiv 2412.13459，收錄於 ICSE '26）估計 GitHub 上有約六百萬顆疑似造假的星星；影響最廣的 2024 年 7 月，熱門 repo 中有 16.66%（3,499 個）出現刷星活動 [1]（這是論文 2025-09 修訂版 v2 的數字；2024-12 的 v1 寫的是 50 星以上 repo 的 15.84%）。一個 repo 星數高，只能證明「有很多帳號按過星」，不能證明「內容被很多人讀過、用過、審過」。這份清單裡凡是星數成長曲線明顯異常的項目，會在備註裡老實寫出來，不會因為星數高就跳過審查。</p>
 <p><strong>安裝前的審查步驟（不分星數高低，每一項都要做）</strong>：</p>
@@ -148,10 +148,34 @@
 <td>Claude Code 內建，不用另外安裝（2026-09-25 在 Claude Code 2.1.282 查證）</td>
 <td>預設只提建議、不直接改檔，要在指令裡明講要套用才會動檔案；低信心的項目只列在報告裡，不放進 diff。官方介紹見 Anthropic 部落格[2]；完整規則在 skill 內附的 <code>shared/prompt-audit.md</code></td>
 </tr>
+<tr>
+<td><a href="https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev">feature-dev</a>（官方 marketplace）</td>
+<td>七階段功能開發：先了解需求、探索程式碼、問清細節、設計架構，再實作、審查、總結。過程中會平行派 2 到 3 個 code-explorer、2 到 3 個 code-architect、3 個 code-reviewer agent（三種都設 <code>model: sonnet</code>）</td>
+<td>隨官方 marketplace 更新（repo 37,534★，Apache-2.0，2026-10-08 查證）</td>
+<td>一次功能開發會派出七到九個 subagent，用量跟著增加；小改動不必走完七階段。已經習慣「先規劃、做完另外驗收」的人，流程大致重疊</td>
+</tr>
+<tr>
+<td><a href="https://github.com/anthropics/claude-plugins-official/tree/main/plugins/frontend-design">frontend-design</a>（官方 marketplace）</td>
+<td>做前端時的視覺設計指引。README 寫目標是 "avoid generic AI aesthetics"；SKILL.md 本身講的是美感方向、字型，以及 "making choices that don't read as templated defaults"</td>
+<td>同上（2026-10-08 查證）</td>
+<td>只有一個 skill，沒有 hook、agent 或指令，風險面小。跟第 5 節的 UI UX Pro Max、Impeccable 同類，三個挑一個裝；想先試的話從這個開始，官方出品、內容最少</td>
+</tr>
+<tr>
+<td><a href="https://code.claude.com/docs/en/plugins/mods/overview">Claude Code Mods</a>（官方文件）</td>
+<td>一種新的 plugin：內容是 JavaScript／TypeScript 函式，跑在 Claude Code 程序裡。能畫側邊面板與輸入框上方的提示帶、加一個不經過 Claude 回合就執行的 <code>/指令</code>、旁觀或改寫工具呼叫</td>
+<td>預設開啟：終端機 v2.1.287 起，Desktop app v2.1.286 起[3]（2026-10-08 查證）</td>
+<td>裝第三方 mod 前先讀官方的風險清單：mod 能讀寫你帳號碰得到的檔案、讀環境變數裡的 API key、在權限提示出現前替你核准工具呼叫、用你的方案呼叫模型，而且官方寫明 "Mods aren't sandboxed."。不用執行就能先看它會做什麼：把 repo 抓下來，對資料夾跑 <code>claude plugin validate</code>，看輸出的 <code>hooks:</code> 與 <code>calls:</code> 兩行。VS Code 擴充套件與 <code>claude -p</code> 也會跑 mod 的函式，只是看不到它畫的介面</td>
+</tr>
+<tr>
+<td><code>cc-plugin-you-should-know</code>（Claude Code 內建 mod，功能名稱 You should know）</td>
+<td>Claude 做較長的任務時，另外跑一個側邊 agent，發現你可能漏看的事，就在輸入框上方提示</td>
+<td>2.1.287 加入，預設關閉，用 <code>/plugin enable cc-plugin-you-should-know@builtin</code> 開啟；changelog 註明 "for first-party sessions with telemetry on"（2026-10-08 查證）</td>
+<td>官方文件沒寫這個側邊 agent 會用掉多少額度</td>
+</tr>
 </tbody>
 </table>
-<h2 id="4-mcp">4. MCP：只列推薦項目</h2>
-<p>MCP 的協定原理、安裝步驟、scope 與 OAuth 設定，還有 Windows 上的踩坑實錄，都寫在專篇<a href="mcp.html">MCP 入門與實戰</a>，這裡不重複，只列額外兩個值得知道、但那篇沒收的項目。</p>
+<h2 id="4-mcp">4. MCP</h2>
+<p>MCP 的協定原理、安裝步驟、scope 與 OAuth 設定，還有 Windows 上的踩坑實錄，都寫在專篇<a href="mcp.html">MCP 入門與實戰</a>，這裡不重複，只列那篇沒收的項目：下表兩個是推薦項目，另外三個要帳號的搜尋與爬取服務放在本節最後。</p>
 <table>
 <thead>
 <tr>
@@ -174,8 +198,40 @@
 </tbody>
 </table>
 <p><a href="mcp.html#9">MCP 入門與實戰第 9 節</a>已經收了 <code>upstash/context7</code>、<code>microsoft/playwright-mcp</code>、<code>github/github-mcp-server</code> 三個常用項目，這裡不重複列。另外 <code>MarkusPfundstein/mcp-obsidian</code>（透過 Obsidian Local REST API plugin 讀寫 vault）功能對 Obsidian 使用者很直接，但需要常駐 Obsidian 並在本機開一個 REST API port，屬於「功能對得上、但曝險面要自己權衡」的項目，不列入前兩項推薦。</p>
+<h3 id="_1">網頁搜尋與爬取</h3>
+<p>Claude Code 內建 WebSearch、WebFetch，一般查資料用不到下面這幾個；需要指定搜尋引擎、整站爬取，或抓社群、電商等平台資料時再考慮。三個的完整功能都要註冊帳號。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>用途</th>
+<th>維護狀態（2026-10-08 查證）</th>
+<th>費用與注意事項</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/brave/brave-search-mcp-server">brave/brave-search-mcp-server</a></td>
+<td>Brave 搜尋引擎的官方 MCP</td>
+<td>1,488★，最後 push 2026-10-05，MIT</td>
+<td>需要 Brave Search API key（<code>BRAVE_API_KEY</code>），到 brave.com/search/api 申請並選方案。README 沒寫價格，自己去官網看</td>
+</tr>
+<tr>
+<td><a href="https://github.com/firecrawl/firecrawl-mcp-server">firecrawl/firecrawl-mcp-server</a></td>
+<td>網頁抓取、搜尋、整站爬取</td>
+<td>7,569★，最後 push 2026-10-08，MIT</td>
+<td>用 npx 在本機跑要 <code>FIRECRAWL_API_KEY</code>；官方託管版的 scrape、search、parse 不用 key 但有速率限制，crawl、map、agent 仍要 key。按 credits 計費、有免費方案，價格會變，以官方定價頁為準</td>
+</tr>
+<tr>
+<td><a href="https://github.com/socialcrawl/mcp">socialcrawl/mcp</a></td>
+<td>社群、電商、求職等多種平台資料 API 的 MCP</td>
+<td>26★，最後 push 2026-10-08，MIT</td>
+<td>註冊送 100 點免費 credits，實際查資料才扣點（standard 1 點、advanced 5 點、premium 10 點），查文件類的工具不用 key。星數很少、repo 2026-04 才建立，成熟度要自己評估</td>
+</tr>
+</tbody>
+</table>
 <h2 id="5-skill-plugin">5. 社群 Skill 與 Plugin</h2>
-<h3 id="_1">一般用途</h3>
+<h3 id="_2">一般用途</h3>
 <table>
 <thead>
 <tr>
@@ -221,6 +277,153 @@
 <td>本機桌面 app（macOS／Windows／Linux），讓 Claude Code、Codex、OpenCode 等 CLI agent 各在自己的 git worktree 平行跑，集中在一個畫面監看；另有手機 app，可以看進度、收完成通知、補一句追問</td>
 <td>77,922★，最後 push 2026-09-25，MIT（2026-09-25 查證）</td>
 <td>它不是模型，跑的是你自己已經登入的 CLI（官方文件原文：bring your own Claude, Codex, or OpenCode subscription），用量照算在你自己的訂閱，不會替你省額度。「不同 session 之間直接傳遞 context」在官方討論區 <a href="https://github.com/stablyai/orca/discussions/681">#681</a> 是以提案（Ideas 分類）出現，README 沒有宣稱已經做到；維護者 2026-05-05 在同一串回覆已加入實驗性的 Agent Orchestration，官方文件寫明要先到 Settings → Experimental 開啟，做法是在 agent 之間傳任務規格和訊息，不是把整段對話 context 搬過去。打包版預設會送匿名使用統計，可以關掉（見官方 telemetry 文件）。repo 2026-03 才建立，半年累積近 7.8 萬★，照第 1 節的原則，星數不能當成審查過</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">整套開發工作流</h3>
+<p>這類 skill 集會接管「怎麼規劃、怎麼執行、怎麼驗收」的整個流程，兩套擇一，不要同時裝。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>用途</th>
+<th>維護狀態（2026-10-08 查證）</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/obra/superpowers">obra/superpowers</a></td>
+<td>brainstorming、writing-plans、executing-plans、test-driven-development、subagent-driven-development 等 15 個 skill 組成的開發流程</td>
+<td>296,615★，最後 push 2026-10-08，MIT</td>
+<td>已上架官方 plugin marketplace（<code>/plugin install superpowers@claude-plugins-official</code>），但內容是第三方寫的。裝了之後，開新對話、<code>/clear</code>、compact 之後，都會由 SessionStart hook 把 using-superpowers 這份 skill 全文注入對話；自己已經有開場注入的 hook 或一套規劃與驗收規則的話，兩邊的指示可能互相打架。brainstorming 的可選視覺功能預設從作者網站載入 logo，網址帶著 Superpowers 的版本號，設環境變數 <code>SUPERPOWERS_DISABLE_TELEMETRY</code> 可關</td>
+</tr>
+<tr>
+<td><a href="https://github.com/addyosmani/agent-skills">addyosmani/agent-skills</a></td>
+<td>工程實務 skill 集，README 原文 "Production-grade engineering skills for AI coding agents."，附 /spec、/plan、/build、/test、/review、/ship 等 9 個指令</td>
+<td>103,215★，最後 push 2026-10-03，MIT</td>
+<td>把資深工程師的工作流程與品質關卡寫成 skill，適合想看「一套完整流程長什麼樣」的人先讀再挑</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">前端設計</h3>
+<p>跟第 3 節官方的 frontend-design 同類，三個挑一個裝。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>用途</th>
+<th>維護狀態（2026-10-08 查證）</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill">nextlevelbuilder/ui-ux-pro-max-skill</a></td>
+<td>附一份本機可搜尋的設計資料庫：79 種 UI 風格（README 註明其中 50 種啟用）、192 組配色、74 組字型搭配、25 種圖表、22 種技術棧</td>
+<td>134,004★，最後 push 2026-10-08，MIT</td>
+<td>沒有 hook。核心搜尋在本機；附帶的取背景圖腳本會連 Pexels，生 logo 的腳本要 Gemini 等服務的 API key，用到那些功能才會跑</td>
+</tr>
+<tr>
+<td><a href="https://github.com/pbakaus/impeccable">pbakaus/impeccable</a></td>
+<td>設計語言加指令，README 原文 "1 skill, 24 commands, live browser iteration, and 59 deterministic detector rules for AI-generated frontend design."</td>
+<td>78,497★，最後 push 2026-10-07，Apache-2.0</td>
+<td>有 hook：<code>npx impeccable install</code> 會詢問要不要裝設計檢查 hook，預設是要。Claude Code 寫進 <code>.claude/settings.local.json</code>，之後每次編輯 UI 檔都跑偵測；第一次觸發時可能下載偵測引擎到 <code>~/.impeccable/bin/</code>。不想讓它改設定，安裝時選否</td>
+</tr>
+</tbody>
+</table>
+<h3 id="token">省 token</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>用途</th>
+<th>維護狀態（2026-10-08 查證）</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/DietrichGebert/ponytail">DietrichGebert/ponytail</a></td>
+<td>一份 SKILL.md，要 agent 只寫任務需要的程式碼。README 特別寫 "The rule was never "fewest tokens.""，驗證、錯誤處理、安全與無障礙都不能省</td>
+<td>158,184★，最後 push 2026-10-08，MIT</td>
+<td>README 的 -53% 程式碼、-45% token 等數字，是作者自己在 Claude Code 跑 39 個任務的 benchmark，屬作者自報。方向跟上面的 karpathy-skills 相近</td>
+</tr>
+<tr>
+<td><a href="https://github.com/JuliusBrussee/caveman">JuliusBrussee/caveman</a></td>
+<td>讓 agent 用「原始人式」短句回答，減少輸出 token；README 現在主打的是另一個 proxy 功能</td>
+<td>110,511★，最後 push 2026-10-08，Apache-2.0</td>
+<td>README 開頭的 "33.2% fewer input tokens" 是 proxy 省下的輸入 token，不是說話風格的效果。說話風格的部分，README 自己的十題測試：直接叫模型 "Answer concisely." 輸出 4,334 個 token，<code>/caveman</code> 4,119，<code>/ultracave</code> 2,693，README 也寫 <code>/caveman</code> 在中位數上只比單純叫它簡潔多省 3%。說話風格這部分只省輸出，用量大頭在讀檔與上下文的人，從這裡省得有限</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">程式碼庫知識圖譜</h3>
+<p>把整個專案轉成圖譜，讓 agent 查圖譜而不是一直 grep。手上沒有大型程式碼庫的話用不到，要接手陌生的大 repo 時再看。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>用途</th>
+<th>維護狀態（2026-10-08 查證）</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/Graphify-Labs/graphify">Graphify-Labs/graphify</a></td>
+<td>把專案裡的程式碼、文件、PDF、圖片、影片轉成可查詢的知識圖譜</td>
+<td>124,848★，最後 push 2026-10-07，Apache-2.0</td>
+<td>先裝 Python CLI（<code>uv tool install graphifyy</code>，套件名多一個 y），再用 <code>graphify install</code> 註冊成 skill。程式碼用 tree-sitter 在本機解析，不需 API key、不外傳；文件、PDF、圖片會送給你用的 AI 助手模型做語意抽取。README 開頭推的 graphify.com 是另一個商業雲端服務，用這個 repo 不需要它</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Egonex-AI/Understand-Anything">Egonex-AI/Understand-Anything</a></td>
+<td>Claude Code plugin，用多個 agent 分析整個專案，產生可互動的知識圖譜儀表板</td>
+<td>85,581★，最後 push 2026-10-06，MIT</td>
+<td>原本在 Lum1104 帳號下，已轉到 Egonex-AI 組織，舊網址會自動導向。第一次 <code>/understand</code> 會分析整個專案，README 提醒大專案很耗 token；依 README 推得，分析時程式碼內容會經過你用的 coding agent 的模型；也可以改接 Ollama 等本機模型。做好的圖譜只要有 Node.js 就能開，不需要 LLM 或 API key</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">學術研究工作流</h3>
+<p>這五個是用 Claude Code 做學術研究的整套設定。規則量大，建議挑個別做法參考，不要整包裝進自己的專案。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>用途</th>
+<th>維護狀態（2026-10-08 查證）</th>
+<th>值得借的做法與注意事項</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/ericluo04/claude-academic-workflow">ericluo04/claude-academic-workflow</a></td>
+<td>20 個 skill，涵蓋讀論文、文獻回顧、預先登記、投稿回覆，以及 did、iv、rdd、synthetic-control 等研究設計</td>
+<td>25★，最後 push 2026-10-07，MIT（LICENSE 文末多一段致謝聲明，GitHub 因此顯示 NOASSERTION）</td>
+<td><code>bibcheck</code> 逐筆比對 <code>.bib</code> 與正式書目資料，抓年份錯、作者錯與 AI 編造的條目；<code>referee-response</code> 寫審查回覆信時，每一處宣稱的修改都先在稿件裡找到原文再標位置。README 註明 <code>review-paper</code> 不能拿來審別人的投稿</td>
+</tr>
+<tr>
+<td><a href="https://github.com/flonat/flonat-research">flonat/flonat-research</a></td>
+<td>87 個 skill、15 個 agent、18 條規則、3 個 hook 的大型研究設定，Claude Code 與 Codex 都能用</td>
+<td>146★，最後 push 2026-09-29，MIT</td>
+<td><code>code-paper-auditor</code> agent 會把論文裡每個數字對回產生它的程式碼與輸出檔。舊名 <code>claude-research</code>，網路上可能還有舊連結</td>
+</tr>
+<tr>
+<td><a href="https://github.com/gallantlab/literature-review-toolkit">gallantlab/literature-review-toolkit</a></td>
+<td>讓 agent 照一份 <code>PLAYBOOK.md</code> 做文獻回顧的腳本組，需要 Python 3 與 xlsxwriter、python-docx</td>
+<td>18★，最後 push 2026-10-08，MIT</td>
+<td>可以裝成 Claude Code plugin；不裝的話，在請求裡點名那份 playbook 就好。README 寫明大部分程式碼與文件是 Claude 寫的</td>
+</tr>
+<tr>
+<td><a href="https://github.com/debug-zhuweijian/ai-research-toolkit">debug-zhuweijian/ai-research-toolkit</a></td>
+<td>分七階段（找文獻、處理、分析、寫作、知識管理、簡報、流程串接）的研究工具組，串 paper-search、zotero、arxiv-latex、MinerU 等 MCP</td>
+<td>15★，最後 push 2026-06-14，MIT</td>
+<td>四個月沒更新。部分 MCP 預設用智譜 BigModel；MinerU 那條可能走 OpenXLab 的雲端 API，PDF 會不會上傳要自己確認</td>
+</tr>
+<tr>
+<td><a href="https://github.com/foundry-works/foundry-research">foundry-works/foundry-research</a></td>
+<td>Claude Code plugin，用 10 個 subagent 跑 Acquire → Read → Synthesize → Verify → Revise 五階段，產出研究報告</td>
+<td>4★，最後 push 2026-05-05，MIT</td>
+<td>README 一處寫 9 個、另一處寫 10 個 subagent，agents 資料夾實際是 10 個。跑一份報告會讀 20 到 30 篇全文 PDF，token 用量大</td>
 </tr>
 </tbody>
 </table>
@@ -320,16 +523,16 @@
 <td>跟本站「用 Claude 做學術工作流」的定位最接近，適合交叉參考寫法；規模小、license 未標註，不建議未經自己審視就直接套用其規則</td>
 </tr>
 <tr>
-<td><a href="https://github.com/1weiho/open-slide">1weiho/open-slide</a></td>
-<td>代理導向的網頁互動簡報框架</td>
-<td>7,613★，最後 push 2026-09-17，MIT</td>
-<td>走互動網頁路線而非靜態投影片，跟本站另外整理的 Marp 簡報方法論剛好是對照組，觀察用途非急需</td>
+<td><a href="https://github.com/ComposioHQ/awesome-claude-skills">ComposioHQ/awesome-claude-skills</a></td>
+<td>Claude skill 清單，根目錄也直接收了約 30 個 skill 資料夾（artifacts-builder、mcp-builder、webapp-testing 等）</td>
+<td>76,699★，最後 push 2026-09-18（2026-10-08 查證）</td>
+<td>找 skill 時的另一個入口。README 宣稱 Apache-2.0，但 repo 沒有 LICENSE 檔，README 也說各 skill 授權不同，用之前逐個確認</td>
 </tr>
 <tr>
 <td><a href="https://github.com/the911fund/skill-of-skills">the911fund/skill-of-skills</a>（網站 <a href="https://skills.911fund.io">skills.911fund.io</a>）</td>
 <td>自動更新的 AI coding 工具排行榜，收錄 skill、plugin、MCP server 等，依結構品質、星數成長、近期活躍度等訊號加權排名；README 由 GitHub Actions workflow 定時抓資料改寫，也可以接成 MCP server 查詢</td>
 <td>62★，最後 push 2026-09-25，MIT（2026-09-25 查證）</td>
-<td>想掃一輪「最近有哪些工具」時的查詢起點。它是目錄，不是可以安裝的 skill；排名是自動算出的分數，不是人工審查結論（例如它的「Best of the Best」目前就收了本頁第 7 節不推薦的 <code>affaan-m/ECC</code>），從這裡找到的項目，裝之前仍要照第 1 節逐一審查。星數不多</td>
+<td>想掃一輪「最近有哪些工具」時的查詢起點。它是目錄，不是可以安裝的 skill；排名是自動算出的分數，不是人工審查結論（例如它的「Best of the Best」目前就收了本頁第 9 節不推薦的 <code>affaan-m/ECC</code>），從這裡找到的項目，裝之前仍要照第 1 節逐一審查。星數不多</td>
 </tr>
 <tr>
 <td><a href="https://github.com/keyuchen21/agentic-engineering-handbook">keyuchen21/agentic-engineering-handbook</a></td>
@@ -345,12 +548,120 @@
 </tr>
 </tbody>
 </table>
-<h2 id="7">7. 看起來很熱門，但我們不推薦的</h2>
+<h2 id="7">7. 簡報、影片與圖表</h2>
+<p>這幾個都是讓 coding agent 寫程式碼產出視覺成品：簡報是 React 元件，影片是逐幀渲染的網頁，圖是單檔 HTML。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>用途</th>
+<th>維護狀態（2026-10-08 查證）</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/open-slide/open-slide">open-slide/open-slide</a>（官網 <a href="https://open-slide.dev">open-slide.dev</a>）</td>
+<td>給 coding agent 用的網頁簡報框架：每頁是 1920×1080 的 React 元件，可匯出靜態 HTML、PDF 與可編輯的 PPTX。內建 Claude Code skill，可以在 dev server 點元素留言，再用 <code>/apply-comments</code> 讓 agent 照留言改</td>
+<td>9,083★，最後 push 2026-10-08，MIT；<code>@open-slide/core</code> 2.0.1（2026-09-27）</td>
+<td>原本在 <code>1weiho/open-slide</code>，已轉到 open-slide 組織。PPTX 是把頁面轉成原生文字方塊、形狀與圖片，版面不保證跟瀏覽器一模一樣。CLI 與 core 套件的原始碼沒有 postinstall，也查不到分析或遙測程式碼；會連 npm registry 檢查新版（沒找到關閉選項），svgl 與 Google Fonts 是 dev server 的代理路由，看路由設計應該是用到 logo、字型挑選時才連。dev server 沒加 <code>--host</code> 時，啟動畫面會提示 "use --host to expose"，預設只在本機（依 Vite 的預設行為推得）。SECURITY.md 還是 GitHub 範本，沒有漏洞通報管道。跟 Marp 這類 Markdown 投影片是兩條路線</td>
+</tr>
+<tr>
+<td><a href="https://github.com/remotion-dev/remotion">remotion-dev/remotion</a>（給 agent 的說明：<a href="https://www.remotion.dev/docs/ai/coding-agents">Prompting videos with coding agents</a>）</td>
+<td>用 React 寫影片，一幀一幀渲染。官方原文 "Remotion works well with coding agents such as Claude Code, Codex, Kimi Code and OpenCode."</td>
+<td>62,483★，最後 push 2026-10-08；自訂的 Remotion License，GitHub 顯示 NOASSERTION</td>
+<td>不是 OSI 開源授權。依 2026-10-08 的 LICENSE.md：個人、3 人以下的營利組織、非營利組織可以免費用（含商用），其他公司要買 Company License；LICENSE 也預告 5.0 版授權會小幅調整</td>
+</tr>
+<tr>
+<td><a href="https://github.com/heygen-com/hyperframes">heygen-com/hyperframes</a></td>
+<td>把 HTML、CSS、媒體與可逐幀定位的動畫渲染成結果固定的 MP4，README 原文 "Write HTML. Render video. Built for agents."</td>
+<td>58,931★，最後 push 2026-10-08，Apache-2.0</td>
+<td>需要 Node.js 22 以上與 FFmpeg。README 寫沒有按次渲染費，也沒有商用門檻。版本更新很快（2026-10-08 已是 v0.8.141）</td>
+</tr>
+<tr>
+<td><a href="https://github.com/tt-a1i/archify">tt-a1i/archify</a></td>
+<td>把想理解、規劃或分享的東西做成可互動的單檔 HTML 圖：架構圖、流程圖、時序圖、資料流等，可匯出 PNG</td>
+<td>79,661★，最後 push 2026-10-08，MIT</td>
+<td>以 skill 安裝（<code>npx skills add tt-a1i/archify -g</code>），這條指令不鎖版本，照第 1 節第 4 步自己處理。產出的 HTML 寄給別人，對方不用裝任何東西就能開。會定期抓一份固定的版本清單來提醒更新，README 寫伺服器收不到版本、專案資料與提示內容，設 <code>ARCHIFY_UPDATE_CHECK_DISABLED=1</code> 可關。觸發時機可能跟第 5 節的畫圖類 skill 重疊，挑一個裝</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8">8. 本機語音轉錄與本機模型</h2>
+<p>錄音、訪談這類資料不想送上雲端時，可以全程在自己電腦處理。README 寫「完全離線」不代表沒有遙測，下表的網路行為是讀原始碼確認的，第一次用建議先斷網試。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>用途</th>
+<th>維護狀態（2026-10-08 查證）</th>
+<th>網路行為與注意事項</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/kaixxx/noScribe">kaixxx/noScribe</a>（官網 <a href="https://noscribe.de">noscribe.de</a>）</td>
+<td>訪談逐字稿，README 原文 "It runs completely locally on your computer"</td>
+<td>2,190★，最後 push 2026-10-06，GPL-3.0</td>
+<td>程式碼裡看到的網路請求只有連 GitHub 查有沒有新版，把 <code>config.yml</code> 的 <code>check_for_update</code> 改成 false 就關掉了（README 沒寫，看程式碼得知）。第一次使用會不會另外下載模型沒查</td>
+</tr>
+<tr>
+<td><a href="https://github.com/chidiwilliams/buzz">chidiwilliams/buzz</a></td>
+<td>一般用途的語音轉文字桌面 App，支援 Vulkan，內顯也能加速</td>
+<td>21,882★，最後 push 2026-10-02，MIT</td>
+<td>預設送使用統計到 PostHog：每次啟動送出版本、語系、作業系統與 CPU 架構，附一組隨機安裝編號；程式碼裡只看到這一個事件，不含錄音內容。只能用環境變數 <code>BUZZ_DISABLE_TELEMETRY</code> 關（設任何值都會停用），設定畫面沒有開關，README 也沒提，寫在官方文件的 Preferences 頁。啟動時另外會查新版，1.4.5 起可用 <code>BUZZ_DISABLE_UPDATE_CHECK</code> 關。Windows 安裝檔沒有簽章</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Zackriya-Solutions/meetily">Zackriya-Solutions/meetily</a></td>
+<td>會議記錄：本機轉錄，再產生摘要</td>
+<td>31,534★，最後 push 2026-09-15，MIT</td>
+<td>使用統計預設關閉，要自己到設定開。摘要可以選 Ollama（本機），也可以接 Claude、Groq、OpenRouter、OpenAI 等雲端服務；README 寫 "No data ever leaves your computer"，但摘要選了雲端模型，逐字稿就會送到那家。另有付費 PRO 版</td>
+</tr>
+<tr>
+<td><a href="https://github.com/thewh1teagle/vibe">thewh1teagle/vibe</a></td>
+<td>離線轉錄桌面 App，也能接 Ollama 做摘要</td>
+<td>7,719★，最後 push 2026-10-06，MIT</td>
+<td>README 寫 "no data ever leaves your device"，但使用統計（Aptabase）預設開啟，官方發行版建置時有放入統計金鑰，所以下載的安裝檔預設會送（依原始碼與建置設定推得，沒有實裝驗證），設定的隱私頁可以關。送的內容有隨機安裝編號、App 與作業系統版本、檔案副檔名、音檔長度，失敗時含完整錯誤訊息</td>
+</tr>
+<tr>
+<td><a href="https://github.com/WEIFENG2333/VideoCaptioner">WEIFENG2333/VideoCaptioner</a></td>
+<td>影片字幕：語音辨識、翻譯、上字幕</td>
+<td>16,185★，最後 push 2026-09-12，GPL-3.0</td>
+<td>免設定就能用的免費辨識引擎 <code>bijian</code>、<code>jianying</code>，看原始碼是把音訊上傳到 Bilibili 必剪與字節跳動剪映的雲端服務，README 沒有這項提醒。私人錄音可以考慮 README 列的 <code>faster-whisper</code> 或 <code>whisper-cpp</code> 引擎，但這兩個是否全程在本機，沒有追程式碼確認，第一次用請先斷網試</td>
+</tr>
+</tbody>
+</table>
+<p>noScribe 與 VideoCaptioner 是 GPL-3.0：自己安裝使用沒有影響；要散布含它們程式碼的專案，就要依 GPL 釋出原始碼。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>用途</th>
+<th>維護狀態（2026-10-08 查證）</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/ollama/ollama">ollama/ollama</a></td>
+<td>本機跑開源模型的命令列工具與 API 服務</td>
+<td>182,567★，最後 push 2026-10-08，MIT；最新 v0.40.1（2026-10-07）</td>
+<td>預設在 <code>127.0.0.1:11434</code> 提供 API，方便讓腳本或其他程式串接。GGUF 模型主要由內建的 llama.cpp 引擎執行；Apple Silicon 上另有 MLX 引擎，跑 safetensors 格式的模型</td>
+</tr>
+<tr>
+<td><a href="https://lmstudio.ai">LM Studio</a>（閉源）</td>
+<td>有圖形介面的本機模型 App，可以直接搜尋、下載 Hugging Face 上的模型</td>
+<td>閉源，沒有 repo 數據；使用條款版本日期 2026-08-23</td>
+<td>在 Mac、Windows、Linux 上用 llama.cpp 執行，Apple Silicon 另支援 MLX。MoE 模型可以在進階載入設定把專家權重放到 CPU（2025-08 的 v0.3.23 加入，選項名 "Force Model Expert Weights onto CPU"），顯示卡記憶體不夠時有用。官方 2025-07 宣布個人與工作使用都免費；現行條款寫部分功能可能收費</td>
+</tr>
+</tbody>
+</table>
+<p>兩個可以並用：Ollama 給程式串接，LM Studio 拿來試新模型、調載入設定。</p>
+<h2 id="9">9. 看起來很熱門，但我們不推薦的</h2>
 <ul>
 <li><strong>一鍵裝進十幾個 AI 工具設定目錄的合集</strong>：這類 repo（例如 <code>affaan-m/ECC</code>、<code>msitarzewski/agency-agents</code>）的共通模式是安裝腳本會同時寫入 <code>.claude</code>／<code>.codex</code>／<code>.cursor</code>／<code>.gemini</code> 等一整排工具的設定目錄，還帶有會自動執行的 hooks，甚至要求裝一個「自動更新」的常駐程式。內容量大到不可能真的逐條審查完，等於直接違背第 1 節「先讀完再裝」的基本原則；「一次信任、持續自動更新、跨十幾個工具寫入」這種架構本身就是不必要的攻擊面，即使沒查到具體的惡意行為也一樣。這兩者的星數成長速度相對於功能範疇明顯偏快，值得對星數本身保持懷疑。</li>
 <li><strong>系統提示詞洩漏合集</strong>——網路上流傳的一批 repo，內容是透過技術手段從其他商業 AI 產品「萃取」出來的系統提示詞。這類內容通常不是原廠授權公開的，維護者自己的授權條款只涵蓋他們的彙編排版工作，不代表洩漏內容本身可以自由使用；多數被萃取的產品服務條款也明文禁止這種萃取與散布。公開推薦這類資源等於間接為「洩漏他人系統提示詞」背書，有著作權與服務條款的灰色地帶風險，所以這裡不列名稱、不附連結。</li>
 </ul>
-<h2 id="_2">資料來源</h2>
+<h2 id="_7">資料來源</h2>
 <table>
 <thead>
 <tr>
@@ -370,9 +681,14 @@
 <td>Reducing cost and improving performance with Claude Platform（Anthropic 部落格，2026-09-08，介紹 <code>/claude-api prompt-audit</code>）</td>
 <td><a href="https://claude.com/blog/reducing-cost-and-improving-performance-with-claude-platform">https://claude.com/blog/reducing-cost-and-improving-performance-with-claude-platform</a></td>
 </tr>
+<tr>
+<td>[3]</td>
+<td>Mods overview（Claude Code 官方文件，2026-10-08 查證，當時版本 v2.1.294）</td>
+<td><a href="https://code.claude.com/docs/en/plugins/mods/overview">https://code.claude.com/docs/en/plugins/mods/overview</a></td>
+</tr>
 </tbody>
 </table>
-<p>stars／最後 push 日期除另有標註外，均為 2026-09-19 用 GitHub API（<code>gh api repos/&lt;owner&gt;/&lt;repo&gt;</code>）即時查證的快照。2026-09-25 補入的 OpenSpec、Orca、skill-of-skills 三列，stars 與最後 push 用 <a href="https://ungh.cc">ungh.cc</a> 的公開 GitHub 查詢 API（<code>/repos/&lt;owner&gt;/&lt;repo&gt;</code>）查，並跟 shields.io 的星數徽章交叉比對；license 對照 repo 裡的 LICENSE 檔。2026-10-03 補入的 ai-system-design 1 項，stars、最後 push 與建立日期用 <a href="https://api.github.com/repos/amitshekhariitbhu/ai-system-design">GitHub 公開 API</a> 即時查證；license 對照 repo 裡的 LICENSE 檔，內容與限制對照 README 原文及其中的連結。</p>
+<p>stars／最後 push 日期除另有標註外，均為 2026-09-19 用 GitHub API（<code>gh api repos/&lt;owner&gt;/&lt;repo&gt;</code>）即時查證的快照。2026-09-25 補入的 OpenSpec、Orca、skill-of-skills 三列，stars 與最後 push 用 <a href="https://ungh.cc">ungh.cc</a> 的公開 GitHub 查詢 API（<code>/repos/&lt;owner&gt;/&lt;repo&gt;</code>）查，並跟 shields.io 的星數徽章交叉比對；license 對照 repo 裡的 LICENSE 檔。2026-10-03 補入的 ai-system-design 1 項，stars、最後 push 與建立日期用 <a href="https://api.github.com/repos/amitshekhariitbhu/ai-system-design">GitHub 公開 API</a> 即時查證；license 對照 repo 裡的 LICENSE 檔，內容與限制對照 README 原文及其中的連結。2026-10-08 補入的各列與第 7、8 節，stars、最後 push 與建立日期用 GitHub API（<code>gh api repos/&lt;owner&gt;/&lt;repo&gt;</code>）即時查證，license 對照 repo 裡的 LICENSE 檔；功能說明對照 README 原文；網路行為、hook 與遙測另外讀了 repo 裡的程式碼確認，README 沒寫、只從程式碼得知的地方會註明；Claude Code Mods 與 You should know 對照官方文件與 changelog；LM Studio 對照官方文件、部落格與使用條款頁。</p>
 <p>延伸：<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>｜<a href="mcp.html">MCP 入門與實戰</a>｜<a href="skill-build.html">把教材做成 SKILL</a></p>
 <div class="footnote">
 <hr />
@@ -400,15 +716,25 @@
 <li><a href="#1">1. 怎麼用這份清單</a></li>
 <li><a href="#2-harness">2. 官方文件與 harness 文章</a></li>
 <li><a href="#3-skill-plugin">3. 官方 Skill 與 Plugin</a></li>
-<li><a href="#4-mcp">4. MCP：只列推薦項目</a></li>
+<li><a href="#4-mcp">4. MCP</a><ul>
+<li><a href="#_1">網頁搜尋與爬取</a></li>
+</ul>
+</li>
 <li><a href="#5-skill-plugin">5. 社群 Skill 與 Plugin</a><ul>
-<li><a href="#_1">一般用途</a></li>
+<li><a href="#_2">一般用途</a></li>
+<li><a href="#_3">整套開發工作流</a></li>
+<li><a href="#_4">前端設計</a></li>
+<li><a href="#token">省 token</a></li>
+<li><a href="#_5">程式碼庫知識圖譜</a></li>
+<li><a href="#_6">學術研究工作流</a></li>
 <li><a href="#skill">畫圖類 skill 審查筆記</a></li>
 </ul>
 </li>
 <li><a href="#6">6. 學習資源</a></li>
-<li><a href="#7">7. 看起來很熱門，但我們不推薦的</a></li>
-<li><a href="#_2">資料來源</a></li>
+<li><a href="#7">7. 簡報、影片與圖表</a></li>
+<li><a href="#8">8. 本機語音轉錄與本機模型</a></li>
+<li><a href="#9">9. 看起來很熱門，但我們不推薦的</a></li>
+<li><a href="#_7">資料來源</a></li>
 </ul>
 </div>
 </aside>
