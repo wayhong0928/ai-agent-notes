@@ -1,6 +1,6 @@
 # 免付費區
 
-> 查證日期：2026-09-16；ChatGPT Free 一節 2026-10-05 重查；Cowork 一列 2026-10-06 重查；Codex 一節 2026-10-07 重查。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-09-16；ChatGPT Free 一節 2026-10-05 重查；Cowork 一列 2026-10-06 重查；Codex 一節 2026-10-07 重查；ChatGPT Canvas 一列 2026-10-10 重查。方案與功能變動快，請以官方最新說明為準。
 
 免費帳號能做的事，比多數人想的多一些，但也有幾個明確做不到的邊界。這頁只講「不花錢能做到哪裡」；需要付費才能解鎖的部分，見[付費區](paid-tier.md)；不確定該用哪個介面，先看[AI 介面比較總表](tools-compare.md)。
 
@@ -26,7 +26,7 @@
 | ChatGPT 網頁版／手機 App | ✅ | [A2 §1] |
 | Desktop App（Chat／Work／Codex 三種模式） | ✅ | 官方明說桌面 App 對所有方案（含 Free）開放 Chat、Work、Codex [O3][O7] |
 | Projects | ✅ 5 檔／專案 | 檔案數上限比付費方案低（Go、Plus 25 檔，Pro 40 檔）[O17] |
-| Canvas | ⚠️ GPT-5.5 起不再提供 | 官方 2026-05-28 公告 GPT-5.5 Instant 與 Thinking 不再提供 Canvas，寫作與程式改在對話裡的寫作區塊、程式碼區塊處理；付費方案可以透過舊模型暫時使用。Free 目前的預設模型有沒有 Canvas，官方沒寫 [O18] |
+| Canvas | ⚠️ 官方沒寫 Free 還能不能用 | 官方 2026-05-28 公告 GPT-5.5 Instant 與 Thinking 不再提供 Canvas，寫作與程式改在對話裡的寫作區塊、程式碼區塊處理；付費方案可以透過舊模型暫時使用 [O18]。之後 Free 的預設模型換成 GPT-5.6 Luna（2026-08 公告），再從 2026-10-08 起陸續換成 GPT-6 Luna [O18]。這兩個模型能不能用 Canvas，官方沒寫；定價頁的方案功能比較表也沒有 Canvas 這一項 [O27] |
 | 網路搜尋 | ✅ | 官方只說受方案用量限制，沒公開次數 [O20] |
 | Deep Research | ✅ 額度有限 | 定價頁標示 Free 為 Limited、Plus 為 Expanded、Pro 為 Maximum [O21] |
 | Connectors／Apps | ⚠️ 可用互動式 App，不能接內部工具，沒有 Developer Mode | 定價頁列 Plus、Pro 有 Developer Mode；說明文件另寫 Pro 只能用讀取權限連 MCP，完整 MCP 限 Business／Enterprise／Edu [O22] |
@@ -94,13 +94,14 @@ Claude Free 能建立最多 5 個 Project，把常用的文獻或寫作規範固
 | O3 | OpenAI 官方 X 貼文（經二次來源引述） | Desktop app 全方案含 Free 可用 Codex |
 | O7 | learn.chatgpt.com/docs/app | 統一版 Desktop app 分頁切換 |
 | O17 | help.openai.com/en/articles/10169521-projects-in-chatgpt | 2026-10-05 重查：Projects 各方案檔案數上限 |
-| O18 | help.openai.com/en/articles/6825453-chatgpt-release-notes（2026-05-28 GPT-5.5 Instant Update） | 2026-10-05 重查：Canvas 停止提供 |
+| O18 | help.openai.com/en/articles/6825453-chatgpt-release-notes（2026-05-28 GPT-5.5 Instant Update；2026-08-06 Updates to GPT‑5.6 in ChatGPT；2026-10-07 GPT-6 and Intelligent UI in ChatGPT） | 2026-10-10 重查：Canvas 停止提供、Free 預設模型的更替 |
 | O19 | help.openai.com/en/articles/8555545-file-uploads-faq | 2026-10-05 重查：檔案大小／頻率上限 |
 | O20 | help.openai.com/en/articles/9237897-searching-the-web-with-chatgpt | 2026-10-05 重查：網路搜尋各方案可用、受用量限制 |
 | O21 | chatgpt.com/pricing；help.openai.com/en/articles/10500283-deep-research-in-chatgpt | 2026-10-05 重查：Deep Research 各方案額度 |
 | O22 | chatgpt.com/pricing；help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt | 2026-10-05 重查：Apps、Developer Mode 各方案差異 |
 | O24 | chatgpt.com/pricing；help.openai.com/en/articles/8590148-memory-in-chatgpt | 2026-10-05 重查：Memory 各方案額度 |
 | O25 | learn.chatgpt.com/docs/sandboxing | Codex sandbox 三模式 |
+| O27 | chatgpt.com/pricing（方案功能比較表） | 2026-10-10 查：Free 卡寫 GPT-6 文字對話，功能比較表沒有 Canvas |
 
 延伸：[AI 介面比較總表](tools-compare.md)｜[付費區](paid-tier.md)｜[Projects 功能](projects.md)
 [^fresh1]: 2026-10-06 依官方原文更新，出處：<https://claude.com/blog/cowork-is-now-claude>
