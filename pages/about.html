@@ -18,15 +18,15 @@
 <div class="navsec"><h2>先搞懂工具</h2><ul>
 <li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
 <li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
-<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791622926">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1791211821">AI Agent 怎麼運作</a></li>
 <li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1791265294">SKILL、Plugin、MCP 與 Subagent</a></li>
-<li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1791213128">Subagent 入門與實戰</a></li>
-<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1791211821">MCP 入門與實戰</a></li>
-<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791468632">好用工具清單</a></li>
+<li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1791622926">Subagent 入門與實戰</a></li>
+<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1791622926">MCP 入門與實戰</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1791211821">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
@@ -44,6 +44,10 @@
 <li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1791213128">Claude Code 設定總覽</a></li>
 <li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1791211821">Hooks 與 Subagent 設定</a></li>
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>隔離與沙箱</h2><ul>
+<li><a href="../pages/wsl2-isolation.html" data-title="WSL2 當隔離環境" data-slug="wsl2-isolation" data-updated="1791631526">WSL2 當隔離環境</a></li>
+<li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1791632030">Coding agent 沙箱：Claude Code 與 Codex</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
 <li class="active"><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
@@ -95,12 +99,12 @@
 </tr>
 <tr>
 <td>2026-10-10</td>
-<td><strong>更新</strong>：<a href="free-tier.html">免付費區</a>的 ChatGPT Canvas 一列依官方 release notes 與定價頁重查：補上 Free 預設模型從 GPT-5.6 Luna 換成 GPT-6 Luna（2026-10-08 起陸續開放），新模型能不能用 Canvas 官方沒寫，方案功能比較表也沒有 Canvas。</td>
+<td><strong>更新</strong>：<a href="free-tier.html">免付費區</a>的 ChatGPT Canvas 一列依官方 release notes 與定價頁重查：補上 Free 預設模型從 GPT-5.6 Luna 換成 GPT-6 Luna（2026-10-08 起陸續開放），新模型能不能用 Canvas 官方沒寫，方案功能比較表也沒有 Canvas。<strong>新頁</strong>：新增「隔離與沙箱」區段，收<a href="wsl2-isolation.html">WSL2 當隔離環境</a>（WSL2 跟 Windows 之間預設開著的通道、用 <code>wsl.conf</code> 關掉的實驗 distro、匯出匯入備份）與<a href="agent-sandbox.html">Coding agent 沙箱：Claude Code 與 Codex</a>（<code>/sandbox</code> 與 Codex 沙箱在 WSL2 的安裝與驗證、兩層疊起來各擋什麼），附 wsl.conf 產生器、選擇器、情境測驗與勾選清單；事實依 Microsoft Learn、code.claude.com、learn.chatgpt.com 2026-10-10 查證，官方沒寫的地方標為推論。</td>
 </tr>
 </tbody>
 </table>
 </article>
-<nav class="pager"><a class="prev" href="session-handoff.html">← 跨 session 接力：session_log</a></nav>
+<nav class="pager"><a class="prev" href="agent-sandbox.html">← Coding agent 沙箱：Claude Code 與 Codex</a></nav>
 <footer class="foot">
 <p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
 <p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>

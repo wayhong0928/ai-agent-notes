@@ -120,6 +120,18 @@
   "section": "官方建議設定"
  },
  {
+  "slug": "wsl2-isolation",
+  "title": "WSL2 當隔離環境",
+  "desc": "WSL2 跟 Windows 的邊界、實驗用 distro、備份與還原",
+  "section": "隔離與沙箱"
+ },
+ {
+  "slug": "agent-sandbox",
+  "title": "Coding agent 沙箱：Claude Code 與 Codex",
+  "desc": "/sandbox 與 Codex 沙箱怎麼裝、各層擋什麼、裝完怎麼確認",
+  "section": "隔離與沙箱"
+ },
+ {
   "slug": "about",
   "title": "關於這個網站",
   "desc": "定位、查證原則與更新紀錄",

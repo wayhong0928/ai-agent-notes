@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WSL2 當隔離環境｜AI Agent 筆記</title>
+<meta name="description" content="WSL2 跟 Windows 的邊界、實驗用 distro、備份與還原">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/wsl2-isolation.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791622926">付費區</a></li>
+<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1791211821">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1791265294">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1791622926">Subagent 入門與實戰</a></li>
+<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1791622926">MCP 入門與實戰</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1791211821">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1791265294">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1791213128">把教材做成 SKILL</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791352825">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1791352825">Claude Code + Cowork 並用</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789655763">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789655763">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1790340239">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1791213128">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1791211821">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>隔離與沙箱</h2><ul>
+<li class="active"><a href="../pages/wsl2-isolation.html" data-title="WSL2 當隔離環境" data-slug="wsl2-isolation" data-updated="1791631526">WSL2 當隔離環境</a></li>
+<li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1791632030">Coding agent 沙箱：Claude Code 與 Codex</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 隔離與沙箱</p>
+<article class="doc" data-updated="1791631526">
+<h1>WSL2 當隔離環境</h1>
+<p class='lede'>WSL2 跟 Windows 的邊界、實驗用 distro、備份與還原</p>
+<blockquote>
+<p>查證日期：2026-10-10。WSL、Claude Code、Codex 的文件都改得很快，請以官方最新說明為準。本頁沒有實測任何隔離行為：寫「預期」的地方都出自官方文件，沒有官方句子撐的地方標「推論」。</p>
+</blockquote>
+<p>想讓 Claude Code 或 Codex 放手做事，又怕它動到主機，很多人的第一個念頭是「丟進 WSL2 就好」。這頁先說明 WSL2 預設並沒有把 Linux 和 Windows 隔開，再把一個獨立的實驗 distro 調成比較封閉的狀態，最後講備份與還原。agent 自己的沙箱（Claude Code 的 <code>/sandbox</code>、Codex 的 sandbox mode）放在下一頁<a href="agent-sandbox.html">Coding agent 沙箱</a>；還不確定自己需要哪幾層，可以先用那頁的<a href="agent-sandbox.html#一先選要疊幾層">選擇器</a>。</p>
+<h2 id="一wsl2-是什麼">一、WSL2 是什麼</h2>
+<p>WSL（Windows Subsystem for Linux）讓你在 Windows 上直接跑 Linux 發行版（distro，例如 Ubuntu）。WSL2 用一台由 Windows 代管的輕量虛擬機跑真正的 Linux 核心，Microsoft 的說法是「WSL2 runs Linux distributions as isolated containers inside the managed VM」[2]：每個 distro 是這台虛擬機裡的一個獨立容器，所有 distro 共用同一台虛擬機。</p>
+<p>家用版可以用。Microsoft FAQ 原文：「WSL 2 is available on all Desktop SKUs where WSL is available, including Windows 10 Home and Windows 11 Home.」WSL2 需要兩個 Windows 功能：「Virtual Machine Platform」（Hyper-V 的子集）和「Windows Subsystem for Linux」[3]。</p>
+<p>下一頁的兩個 agent 沙箱都只支援 WSL2，不支援 WSL1（出處見該頁），所以本頁一律以 WSL2 為準。</p>
+<h2 id="二wsl2-跟-windows-的邊界在哪">二、WSL2 跟 Windows 的邊界在哪</h2>
+<p>Microsoft 在 FAQ 列了 WSL 跟一般虛擬機不一樣的地方，其中幾條就是本頁要處理的邊界[3]：</p>
+<ul>
+<li>「WSL automatically gives file access to Windows files.」</li>
+<li>「Windows paths are appended to your path by default」</li>
+<li>「WSL can run Windows executables from Linux」</li>
+<li>「WSL users have full access to their Linux instances.」</li>
+</ul>
+<p>這些預設是為了讓兩邊好整合。下表逐條列出預設開著的通道：</p>
+<table>
+<thead>
+<tr>
+<th>通道</th>
+<th>預設</th>
+<th>實際上代表什麼</th>
+<th>怎麼關</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows 磁碟掛在 <code>/mnt/c</code></td>
+<td>開：<code>[automount] enabled=true</code>，C 槽掛在 <code>/mnt/c</code>[4]</td>
+<td>沒有啟用 metadata 時（預設沒有），Linux 端看到的檔案權限是「把 Windows 使用者的有效權限換算成 rwx」[6]</td>
+<td><code>/etc/wsl.conf</code> 設 <code>[automount] enabled=false</code>；官方提醒關掉後「you could still mount them manually or via <code>fstab</code>」[4]</td>
+</tr>
+<tr>
+<td>interop：從 Linux 啟動 Windows 程式</td>
+<td>開：<code>[interop] enabled=true</code>[4]</td>
+<td>這樣啟動的 Windows 程式「Run as the active Windows user」，會出現在工作管理員裡[5]</td>
+<td><code>[interop] enabled=false</code>。另有一行暫時關閉的指令，但只在這次 session 有效，下次開又會恢復[5]</td>
+</tr>
+<tr>
+<td>Windows 的 PATH 併進 Linux 的 <code>$PATH</code></td>
+<td>開：<code>appendWindowsPath=true</code>[4]</td>
+<td>在 Linux 裡直接打 <code>notepad.exe</code> 這類名稱就叫得到</td>
+<td><code>[interop] appendWindowsPath=false</code>[4]</td>
+</tr>
+<tr>
+<td>網路</td>
+<td>NAT[7]</td>
+<td>從 Linux 用主機 IP 可以連到 Windows 上跑的服務；mirrored 模式下甚至可以用 <code>127.0.0.1</code> 連[7]</td>
+<td><code>.wslconfig</code> 的 <code>networkingMode</code>，設成 <code>none</code> 會讓 WSL 網路斷線[4]。注意這是全域設定，見下表</td>
+</tr>
+<tr>
+<td>從 Windows 看 Linux 檔案</td>
+<td>開</td>
+<td>在檔案總管網址列輸入 <code>\\wsl$</code> 就看得到每個 distro 的根目錄[5]</td>
+<td>本頁不處理；這是 Windows 那一側的存取</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">推論：預設 WSL2 裡的 agent，碰得到的 Windows 檔案大致等於你自己的帳號</p>
+<p>上表前兩列合起來看（<code>/mnt/c</code> 權限照 Windows 使用者換算、Windows 程式以目前使用者身分執行），在沒改設定的 WSL2 裡讓 agent 不受限地跑指令，它能動到的 Windows 檔案範圍，大致就是你 Windows 帳號能動到的範圍。這是本站依 Microsoft 文件推出來的結論，Microsoft 沒有用這句話寫過。</p>
+</div>
+<h3 id="wslconfig-和-wslconf-差在哪"><code>.wslconfig</code> 和 <code>wsl.conf</code> 差在哪</h3>
+<p>兩個設定檔名字很像，管的範圍不同[4]：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>.wslconfig</code></th>
+<th><code>wsl.conf</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>位置</td>
+<td>Windows 端的 <code>%UserProfile%\.wslconfig</code></td>
+<td>每個 distro 裡的 <code>/etc/wsl.conf</code></td>
+</tr>
+<tr>
+<td>範圍</td>
+<td>所有 WSL2 distro 共用（官方：「General settings that apply to all of WSL」）</td>
+<td>只影響這一個 distro</td>
+</tr>
+<tr>
+<td>管什麼</td>
+<td>虛擬機的記憶體、CPU、網路模式等</td>
+<td>自動掛載、interop、預設使用者、systemd 等</td>
+</tr>
+</tbody>
+</table>
+<p>要把「某一個實驗 distro」關起來，用的是 <code>wsl.conf</code>。<code>.wslconfig</code> 的網路設定會一起影響你平常用的 distro；把 <code>networkingMode</code> 設成 <code>none</code> 也會讓 agent 連不到它自家的 API（推論：Claude Code、Codex 都要連網才能跟模型溝通）。Microsoft 也建議改 <code>.wslconfig</code> 時優先用開始功能表裡的「WSL Settings」，不要手改檔案[4]。</p>
+<p>改完設定要等 distro 完全停下來再啟動才會生效。官方說關掉所有該 distro 的視窗後通常要約 8 秒；想馬上生效可以用 <code>wsl --terminate &lt;distro 名稱&gt;</code> 立刻停掉那個 distro[4]。</p>
+<h2 id="三安裝與確認版本">三、安裝與確認版本</h2>
+<p>前提是 Windows 10 version 2004（Build 19041）以上，或 Windows 11[1]。用「以系統管理員身分執行」開 PowerShell：</p>
+<pre><code class="language-powershell">wsl --install
+</code></pre>
+<p>這行會開啟需要的 Windows 功能並安裝 Ubuntu，完成後要重新開機[1]。用 <code>wsl --install</code> 新裝的 distro 預設就是 WSL2[1]。重開機後確認版本：</p>
+<pre><code class="language-powershell">wsl -l -v
+</code></pre>
+<p>輸出會列出每個 distro 的名稱、狀態與 WSL 版本[8]。如果 VERSION 欄是 1，用 <code>wsl --set-version &lt;distro 名稱&gt; 2</code> 轉成 WSL2[1]；Microsoft 提醒轉換可能很花時間，也可能失敗，專案大的話先備份[8]。</p>
+<h2 id="四用一個獨立-distro-當實驗場">四、用一個獨立 distro 當實驗場</h2>
+<p>平常寫作業、放 SSH 金鑰的那個 distro，不要拿來給 agent 放手做。另外開一個專門的 distro，玩壞了直接刪掉重建，主要的工作環境不受影響。WSL 允許同時裝很多個 distro[1]，但它們跑在同一台虛擬機裡[2]，<code>.wslconfig</code> 的設定一起套用[4]，用 <code>wsl --mount</code> 掛上的實體磁碟也會出現在所有 WSL2 distro 裡[8]。所以這裡說的「獨立」，是檔案系統和 <code>wsl.conf</code> 各自一份，不是各自一台虛擬機。</p>
+<h3 id="步驟-1從乾淨的-distro-複製一份">步驟 1：從乾淨的 distro 複製一份</h3>
+<p><code>wsl --export</code> 匯出的是整個 distro 的快照[8]，<code>wsl --import</code> 再把它匯入成一個新名字的 distro[8]。以下假設你的 <code>Ubuntu</code> 是剛裝好的乾淨狀態，要匯入的新 distro 叫 <code>agent-lab</code>。Microsoft 的範例會先建好要存放 distro 的資料夾[9]：</p>
+<pre><code class="language-powershell">mkdir D:\wsl\base
+mkdir D:\wsl\agent-lab
+wsl --export Ubuntu D:\wsl\base\ubuntu-clean.tar
+wsl --import agent-lab D:\wsl\agent-lab D:\wsl\base\ubuntu-clean.tar
+wsl -d agent-lab
+</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">快照會整包帶走裡面的東西</p>
+<p>匯出的是整個 distro 的快照。如果來源 distro 已經放了 SSH 金鑰、雲端服務的登入資訊或私人專案，匯入的 <code>agent-lab</code> 裡也會有一份。這種情況改用 <code>wsl --list --online</code> 找一個還沒裝過的 distro 安裝成乾淨的底[8]，再拿它來匯出。</p>
+</div>
+<h3 id="步驟-2建一般使用者">步驟 2：建一般使用者</h3>
+<p>用 <code>--import</code> 匯入的 distro，預設以 root 登入[9]。先建一個一般使用者給 agent 用。Microsoft 的範例是 CentOS，下面是 Ubuntu 的寫法：</p>
+<pre><code class="language-bash">adduser xiaoming
+usermod -aG sudo xiaoming
+</code></pre>
+<p>建立時設好密碼。建議不要把這個使用者設成免密碼 sudo（推論：agent 能直接 sudo，就能把下一步的設定改回去）。</p>
+<h3 id="步驟-3用產生器寫-wslconf">步驟 3：用產生器寫 <code>wsl.conf</code></h3>
+<p>勾選你要關掉的通道，下方會即時產生 <code>/etc/wsl.conf</code> 的內容和對應的代價。目前還是 root 的話，用 <code>nano /etc/wsl.conf</code> 之類的編輯器打開。檔案裡原本就有內容的話（例如 <code>[boot]</code> 段），保留原有段落，只新增或修改產生器列出的這幾段；整份覆蓋可能把 systemd 之類的設定一起拿掉，下一頁的 <code>sudo systemctl reload apparmor</code> 就可能失敗（推論）。</p>
+<style>
+.wsx-panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 1rem 1.1rem; margin: 1.2rem 0 1.6rem; }
+.wsx-panel-title { font-weight: 700; margin: 0 0 .6rem; color: var(--accent-ink); }
+.wsx-opt { display: flex; gap: .55rem; align-items: flex-start; margin: .35rem 0; line-height: 1.6; cursor: pointer; }
+.wsx-opt input { margin-top: .35rem; accent-color: var(--accent); flex: none; }
+.wsx-user { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: .7rem 0 .2rem; }
+.wsx-user input { font: inherit; font-family: var(--mono); padding: .25rem .5rem; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg); color: var(--ink); width: 11rem; max-width: 100%; }
+.wsx-hint { font-size: .85rem; color: var(--ink-faint); margin: .2rem 0 0; }
+.wsx-hint.wsx-bad { color: var(--warn-ink); }
+.wsx-cost { margin: .6rem 0 0; padding-left: 1.2rem; font-size: .92rem; }
+.wsx-cost li { margin: .25rem 0; }
+.doc pre.wsx-pre { position: relative; padding-top: 2.1rem; }
+.wsx-copy { position: absolute; top: .4rem; right: .45rem; font: inherit; font-size: .75rem; line-height: 1.2; padding: .25rem .6rem; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); color: var(--ink-soft); cursor: pointer; }
+.wsx-copy:hover, .wsx-copy:focus-visible { border-color: var(--accent); color: var(--accent-ink); }
+</style>
+
+<div class="wsx-panel" id="wsx-gen">
+<p class="wsx-panel-title">wsl.conf 產生器</p>
+<label class="wsx-opt"><input type="checkbox" data-wsx="automount" checked><span>不自動掛載 Windows 磁碟（<code>[automount] enabled=false</code>）</span></label>
+<label class="wsx-opt"><input type="checkbox" data-wsx="fstab"><span>也不處理 <code>/etc/fstab</code>（<code>[automount] mountFsTab=false</code>）</span></label>
+<label class="wsx-opt"><input type="checkbox" data-wsx="interop" checked><span>不能從 Linux 啟動 Windows 程式（<code>[interop] enabled=false</code>）</span></label>
+<label class="wsx-opt"><input type="checkbox" data-wsx="winpath" checked><span>不把 Windows 的 PATH 併進來（<code>[interop] appendWindowsPath=false</code>）</span></label>
+<label class="wsx-opt"><input type="checkbox" data-wsx="user" checked><span>設定預設使用者（<code>[user] default=</code>）</span></label>
+<div class="wsx-user"><label for="wsx-username">使用者名稱</label><input type="text" id="wsx-username" value="xiaoming" autocomplete="off" spellcheck="false"></div>
+<p class="wsx-hint" id="wsx-userhint">要先用步驟 2 建好這個使用者。</p>
+<pre><code id="wsx-out"></code></pre>
+<p class="wsx-panel-title">這樣設的代價</p>
+<ul class="wsx-cost" id="wsx-cost"></ul>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById("wsx-gen");
+  if (!root) { return; }
+  var out = document.getElementById("wsx-out");
+  var cost = document.getElementById("wsx-cost");
+  var nameInput = document.getElementById("wsx-username");
+  var hint = document.getElementById("wsx-userhint");
+  var COST = {
+    automount: "Linux 裡看不到 C 槽。要把 Windows 的檔案放進來，從檔案總管開 \\\\wsl$\\agent-lab 再複製進去。官方提醒仍可手動掛載或透過 fstab 掛載[4]。",
+    fstab: "/etc/fstab 裡宣告的其他檔案系統（例如網路磁碟）也不會在啟動時掛上[4]。",
+    interop: "不能從 Linux 叫 Windows 程式。Claude Code 登入時可能開不了 Windows 的瀏覽器（推論），官方給的備案是按 c 複製登入網址，再把瀏覽器顯示的登入碼貼回終端機[12]。",
+    winpath: "Linux 的 $PATH 裡不會有 Windows 的路徑。Claude Code 的安裝疑難頁在 nvm 情境下建議不要關這個，因為會叫不到 Windows 執行檔[12]；在實驗 distro 裡，叫不到正是目的。",
+    user: "開啟這個 distro 時會用這個使用者登入，不再是 root。"
+  };
+  function checked(k) {
+    var el = root.querySelector('input[data-wsx="' + k + '"]');
+    return !!(el && el.checked);
+  }
+  function render() {
+    var name = (nameInput.value || "").trim();
+    var okName = /^[a-z_][a-z0-9_-]{0,31}$/.test(name);
+    nameInput.disabled = !checked("user");
+    hint.className = "wsx-hint" + (checked("user") && !okName ? " wsx-bad" : "");
+    hint.textContent = !checked("user") ? "不設定的話，匯入的 distro 會用 root 登入。" :
+      (okName ? "要先用步驟 2 建好這個使用者。" : "Linux 使用者名稱請用小寫英文、數字、底線或連字號，開頭不要用數字。");
+    var lines = [];
+    if (checked("user")) { lines.push("[user]", "default=" + (okName ? name : "xiaoming"), ""); }
+    if (checked("automount") || checked("fstab")) {
+      lines.push("[automount]");
+      if (checked("automount")) { lines.push("enabled=false"); }
+      if (checked("fstab")) { lines.push("mountFsTab=false"); }
+      lines.push("");
+    }
+    if (checked("interop") || checked("winpath")) {
+      lines.push("[interop]");
+      if (checked("interop")) { lines.push("enabled=false"); }
+      if (checked("winpath")) { lines.push("appendWindowsPath=false"); }
+      lines.push("");
+    }
+    while (lines.length && lines[lines.length - 1] === "") { lines.pop(); }
+    out.textContent = lines.length ? lines.join("\n") : "# 沒有勾選任何項目，wsl.conf 維持預設";
+    cost.innerHTML = "";
+    ["automount", "fstab", "interop", "winpath", "user"].forEach(function (k) {
+      if (checked(k)) {
+        var li = document.createElement("li");
+        li.textContent = COST[k];
+        cost.appendChild(li);
+      }
+    });
+    if (!cost.children.length) {
+      var li = document.createElement("li");
+      li.textContent = "全部維持預設：這個 distro 跟平常的 WSL2 一樣，看得到 Windows 檔案、叫得到 Windows 程式。";
+      cost.appendChild(li);
+    }
+  }
+  root.addEventListener("change", render);
+  nameInput.addEventListener("input", render);
+  render();
+})();
+</script>
+
+<h3 id="步驟-4重開這個-distro-讓設定生效">步驟 4：重開這個 distro 讓設定生效</h3>
+<p>回到 PowerShell：</p>
+<pre><code class="language-powershell">wsl --terminate agent-lab
+wsl -d agent-lab
+</code></pre>
+<h3 id="步驟-5確認有效">步驟 5：確認有效</h3>
+<p>在 <code>agent-lab</code> 裡逐行執行。右邊是依官方文件推得的預期，本站沒有實測：</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>預期</th>
+<th>依據</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>whoami</code></td>
+<td>顯示你設的使用者，不是 <code>root</code></td>
+<td><code>[user] default</code>[4]</td>
+</tr>
+<tr>
+<td><code>ls /mnt/c</code></td>
+<td>看不到 Windows 的檔案</td>
+<td><code>automount</code> 關掉後不會自動掛載[4]</td>
+</tr>
+<tr>
+<td><code>notepad.exe</code></td>
+<td>啟動不了 Windows 程式</td>
+<td>interop 關掉會擋下啟動 Windows 程式[4]</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition danger">
+<p class="admonition-title">這一層擋得住意外，擋不住有 root 權限的程式</p>
+<p><code>/etc/wsl.conf</code> 是 distro 裡的一個檔案，Microsoft 也寫明關掉自動掛載後仍可手動掛載[4]。能用 root 權限的程式就能把它改回去或自己掛載（推論）。所以這一層只能讓 agent 預設碰不到 Windows，還要配合下一頁的 agent 沙箱一起用。</p>
+</div>
+<h2 id="五備份與還原">五、備份與還原</h2>
+<p>Microsoft FAQ 說，備份或搬移 distro 最好的方法就是 <code>wsl --export</code> 和 <code>wsl --import</code>[3]。把實驗 distro 調好、還沒讓 agent 動之前，先匯出一份：</p>
+<pre><code class="language-powershell">mkdir D:\wsl\backup
+wsl --export agent-lab D:\wsl\backup\agent-lab-clean.tar
+</code></pre>
+<p>要還原時，建議先匯入成另一個名字，確認沒問題再處理舊的：</p>
+<pre><code class="language-powershell">wsl --import agent-lab-restore D:\wsl\agent-lab-restore D:\wsl\backup\agent-lab-clean.tar
+wsl -d agent-lab-restore
+</code></pre>
+<p>進去後先跑 <code>whoami</code>。匯入的 distro 預設以 root 登入[9]，如果顯示 root，檢查 <code>/etc/wsl.conf</code> 的 <code>[user]</code> 是否還在。確認新的那份可以用，再刪掉舊的：</p>
+<pre><code class="language-powershell">wsl --unregister agent-lab
+</code></pre>
+<div class="admonition danger">
+<p class="admonition-title"><code>--unregister</code> 刪了就回不來</p>
+<p>官方原文：「Once unregistered, all data, settings, and software associated with that distribution will be permanently lost.」[8] 執行前確認備份檔存在，而且你剛才已經從它還原成功過一次。</p>
+</div>
+<h2 id="六檔案放-linux-那邊還是放-mntc">六、檔案放 Linux 那邊，還是放 <code>/mnt/c</code></h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>放 Linux 檔案系統（例如 <code>~/code/proj</code>）</th>
+<th>放 Windows 磁碟（<code>/mnt/c/...</code>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>速度</td>
+<td>Microsoft 建議在 Linux 命令列工作時把檔案放這裡，速度最快[5]</td>
+<td>WSL2 跨作業系統存取檔案比 WSL1 慢[2]；Claude Code 在這種路徑搜尋可能回傳比較少的結果[10]；Codex 文件也說會比較慢[11]</td>
+</tr>
+<tr>
+<td>權限</td>
+<td>一般 Linux 權限</td>
+<td>預設沒有 metadata，權限照 Windows 使用者換算；這時 <code>chmod</code> 只有一個作用：拿掉所有寫入權限會讓 Windows 檔案變成「唯讀」[6]。Codex 文件也提到放 Linux 家目錄會少一些 symlink 與權限問題[11]</td>
+</tr>
+<tr>
+<td>隔離</td>
+<td>實驗 distro 關掉自動掛載後，在這裡工作的 agent 預設碰不到 Windows 檔案（依[4]）</td>
+<td>專案本身就在 Windows 磁碟上，agent 改專案就是直接改 Windows 檔案（推論）</td>
+</tr>
+<tr>
+<td>從 Windows 開</td>
+<td>檔案總管輸入 <code>\\wsl$</code>[5]</td>
+<td>原本的 Windows 路徑</td>
+</tr>
+</tbody>
+</table>
+<p>Microsoft、Anthropic、OpenAI 三方文件的方向一致：給 agent 用的專案放在 Linux 檔案系統裡，速度比較快，也配合得上前面關掉自動掛載的設定。</p>
+<h2 id="七從安裝到驗證勾選清單">七、從安裝到驗證：勾選清單</h2>
+<p>勾選狀態只存在這台裝置的這個瀏覽器。</p>
+<ul>
+<li class="chk"><input type="checkbox"> 用系統管理員 PowerShell 跑 <code>wsl --install</code>，重新開機</li>
+<li class="chk"><input type="checkbox"> <code>wsl -l -v</code> 確認 VERSION 是 2</li>
+<li class="chk"><input type="checkbox"> 確認來源 distro 是乾淨的，匯出成 tar</li>
+<li class="chk"><input type="checkbox"> <code>wsl --import</code> 建立 <code>agent-lab</code></li>
+<li class="chk"><input type="checkbox"> 在 <code>agent-lab</code> 裡建一般使用者（不設免密碼 sudo）</li>
+<li class="chk"><input type="checkbox"> 用產生器寫好 <code>/etc/wsl.conf</code></li>
+<li class="chk"><input type="checkbox"> <code>wsl --terminate agent-lab</code> 後重新進入</li>
+<li class="chk"><input type="checkbox"> <code>whoami</code>、<code>ls /mnt/c</code>、<code>notepad.exe</code> 三個檢查都符合預期</li>
+<li class="chk"><input type="checkbox"> 把調好的 <code>agent-lab</code> 匯出一份備份</li>
+<li class="chk"><input type="checkbox"> 專案放在 <code>agent-lab</code> 的家目錄底下，不放 <code>/mnt/c</code></li>
+<li class="chk"><input type="checkbox"> 接著到<a href="agent-sandbox.html">下一頁</a>裝 agent 的沙箱</li>
+</ul>
+<script>
+(function () {
+  function copyText(text, done) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+    } else { fallback(text, done); }
+  }
+  function fallback(text, done) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    done(ok);
+  }
+  document.querySelectorAll(".doc pre").forEach(function (pre) {
+    if (pre.querySelector(".wsx-copy")) { return; }
+    var code = pre.querySelector("code");
+    if (!code) { return; }
+    pre.classList.add("wsx-pre");
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "wsx-copy";
+    btn.textContent = "複製";
+    btn.setAttribute("aria-label", "複製這段指令");
+    btn.addEventListener("click", function () {
+      copyText(code.textContent, function (ok) {
+        btn.textContent = ok === false ? "請手動選取" : "已複製";
+        setTimeout(function () { btn.textContent = "複製"; }, 1600);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+
+<h2 id="本頁重點回顧">本頁重點回顧</h2>
+<ul>
+<li>WSL2 用一台代管的虛擬機跑 Linux，所有 distro 共用這台虛擬機；家用版也能用。</li>
+<li>預設的 WSL2 會把 C 槽掛在 <code>/mnt/c</code>、允許從 Linux 啟動 Windows 程式、把 Windows 的 PATH 併進來，這些通道都要自己關。</li>
+<li>關的方法是在實驗 distro 的 <code>/etc/wsl.conf</code> 設 <code>[automount] enabled=false</code> 與 <code>[interop] enabled=false</code>、<code>appendWindowsPath=false</code>；<code>.wslconfig</code> 是全域設定，會影響所有 distro。</li>
+<li>有 root 權限的程式改得回這些設定，所以這一層要跟 agent 的沙箱一起用。</li>
+<li>用 <code>wsl --export</code>／<code>wsl --import</code> 備份與還原；<code>wsl --unregister</code> 會永久刪除。</li>
+<li>給 agent 的專案放在 Linux 檔案系統，速度比較快，也配合得上關掉自動掛載的設定。</li>
+</ul>
+<h2 id="資料來源">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>來源</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1]</td>
+<td>Install WSL（安裝前提、<code>wsl --install</code>、預設 WSL2、<code>--set-version</code>）</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/wsl/install">https://learn.microsoft.com/en-us/windows/wsl/install</a></td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>Comparing WSL Versions（WSL2 架構、跨作業系統檔案效能）</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/wsl/compare-versions">https://learn.microsoft.com/en-us/windows/wsl/compare-versions</a></td>
+</tr>
+<tr>
+<td>[3]</td>
+<td>WSL FAQ（家用版支援、與一般 VM 的差異、備份建議）</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/wsl/faq">https://learn.microsoft.com/en-us/windows/wsl/faq</a></td>
+</tr>
+<tr>
+<td>[4]</td>
+<td>Advanced settings configuration in WSL（<code>wsl.conf</code>、<code>.wslconfig</code>、8 秒規則、<code>networkingMode</code>）</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/wsl/wsl-config">https://learn.microsoft.com/en-us/windows/wsl/wsl-config</a></td>
+</tr>
+<tr>
+<td>[5]</td>
+<td>Working across file systems（檔案放哪裡、<code>\\wsl$</code>、從 Linux 執行 Windows 工具、暫時關 interop）</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/wsl/filesystems">https://learn.microsoft.com/en-us/windows/wsl/filesystems</a></td>
+</tr>
+<tr>
+<td>[6]</td>
+<td>File Permissions for WSL（DrvFs 權限換算、<code>chmod</code> 行為）</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/wsl/file-permissions">https://learn.microsoft.com/en-us/windows/wsl/file-permissions</a></td>
+</tr>
+<tr>
+<td>[7]</td>
+<td>Accessing network applications with WSL（NAT、mirrored 模式）</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/wsl/networking">https://learn.microsoft.com/en-us/windows/wsl/networking</a></td>
+</tr>
+<tr>
+<td>[8]</td>
+<td>Basic commands for WSL（<code>-l -v</code>、<code>--export</code>、<code>--import</code>、<code>--unregister</code>、<code>--mount</code>）</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/wsl/basic-commands">https://learn.microsoft.com/en-us/windows/wsl/basic-commands</a></td>
+</tr>
+<tr>
+<td>[9]</td>
+<td>Import any Linux distribution to use with WSL（匯入預設 root、預先建資料夾）</td>
+<td><a href="https://learn.microsoft.com/en-us/windows/wsl/use-custom-distro">https://learn.microsoft.com/en-us/windows/wsl/use-custom-distro</a></td>
+</tr>
+<tr>
+<td>[10]</td>
+<td>Claude Code Troubleshooting（WSL 跨檔案系統搜尋結果變少）</td>
+<td><a href="https://code.claude.com/docs/en/troubleshooting">https://code.claude.com/docs/en/troubleshooting</a></td>
+</tr>
+<tr>
+<td>[11]</td>
+<td>Codex：WSL（<code>/mnt/c</code> 較慢、放 Linux 家目錄）</td>
+<td><a href="https://learn.chatgpt.com/docs/windows/wsl">https://learn.chatgpt.com/docs/windows/wsl</a></td>
+</tr>
+<tr>
+<td>[12]</td>
+<td>Claude Code Troubleshoot installation（WSL2 登入貼登入碼、<code>appendWindowsPath</code> 的提醒）</td>
+<td><a href="https://code.claude.com/docs/en/troubleshoot-install">https://code.claude.com/docs/en/troubleshoot-install</a></td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="agent-sandbox.html">Coding agent 沙箱：Claude Code 與 Codex</a>｜<a href="official-config.html">Claude Code 設定總覽</a>｜<a href="agent-basics.html">AI Agent 怎麼運作</a></p>
+</article>
+<nav class="pager"><a class="prev" href="session-handoff.html">← 跨 session 接力：session_log</a><a class="next" href="agent-sandbox.html">Coding agent 沙箱：Claude Code 與 Codex →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#一wsl2-是什麼">一、WSL2 是什麼</a></li>
+<li><a href="#二wsl2-跟-windows-的邊界在哪">二、WSL2 跟 Windows 的邊界在哪</a><ul>
+<li><a href="#wslconfig-和-wslconf-差在哪">.wslconfig 和 wsl.conf 差在哪</a></li>
+</ul>
+</li>
+<li><a href="#三安裝與確認版本">三、安裝與確認版本</a></li>
+<li><a href="#四用一個獨立-distro-當實驗場">四、用一個獨立 distro 當實驗場</a><ul>
+<li><a href="#步驟-1從乾淨的-distro-複製一份">步驟 1：從乾淨的 distro 複製一份</a></li>
+<li><a href="#步驟-2建一般使用者">步驟 2：建一般使用者</a></li>
+<li><a href="#步驟-3用產生器寫-wslconf">步驟 3：用產生器寫 wsl.conf</a></li>
+<li><a href="#步驟-4重開這個-distro-讓設定生效">步驟 4：重開這個 distro 讓設定生效</a></li>
+<li><a href="#步驟-5確認有效">步驟 5：確認有效</a></li>
+</ul>
+</li>
+<li><a href="#五備份與還原">五、備份與還原</a></li>
+<li><a href="#六檔案放-linux-那邊還是放-mntc">六、檔案放 Linux 那邊，還是放 /mnt/c</a></li>
+<li><a href="#七從安裝到驗證勾選清單">七、從安裝到驗證：勾選清單</a></li>
+<li><a href="#本頁重點回顧">本頁重點回顧</a></li>
+<li><a href="#資料來源">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

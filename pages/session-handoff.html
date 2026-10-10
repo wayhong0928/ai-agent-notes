@@ -18,15 +18,15 @@
 <div class="navsec"><h2>先搞懂工具</h2><ul>
 <li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
 <li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
-<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791622926">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1791211821">AI Agent 怎麼運作</a></li>
 <li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1791265294">SKILL、Plugin、MCP 與 Subagent</a></li>
-<li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1791213128">Subagent 入門與實戰</a></li>
-<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1791211821">MCP 入門與實戰</a></li>
-<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791468632">好用工具清單</a></li>
+<li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1791622926">Subagent 入門與實戰</a></li>
+<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1791622926">MCP 入門與實戰</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
 <li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1791211821">把 AI 代理的工作環境設計得可靠</a></li>
 </ul></div>
 <div class="navsec"><h2>實戰協作</h2><ul>
@@ -44,6 +44,10 @@
 <li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1791213128">Claude Code 設定總覽</a></li>
 <li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1791211821">Hooks 與 Subagent 設定</a></li>
 <li class="active"><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>隔離與沙箱</h2><ul>
+<li><a href="../pages/wsl2-isolation.html" data-title="WSL2 當隔離環境" data-slug="wsl2-isolation" data-updated="1791631526">WSL2 當隔離環境</a></li>
+<li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1791632030">Coding agent 沙箱：Claude Code 與 Codex</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
 <li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
@@ -162,7 +166,7 @@ awk '/^## /{c++} c&lt;=3' &quot;$CLAUDE_PROJECT_DIR/session_log.md&quot;
 </table>
 <p>延伸：<a href="agent-basics.html">AI Agent 怎麼運作</a>｜<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>｜<a href="harness.html">把 AI 代理的工作環境設計得可靠</a></p>
 </article>
-<nav class="pager"><a class="prev" href="hooks-subagents.html">← Hooks 與 Subagent 設定</a><a class="next" href="about.html">關於這個網站 →</a></nav>
+<nav class="pager"><a class="prev" href="hooks-subagents.html">← Hooks 與 Subagent 設定</a><a class="next" href="wsl2-isolation.html">WSL2 當隔離環境 →</a></nav>
 <footer class="foot">
 <p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
 <p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>

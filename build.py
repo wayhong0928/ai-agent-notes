@@ -51,6 +51,10 @@ NAV = [
         ("hooks-subagents", "Hooks 與 Subagent 設定", "自動化檢查與子代理定義"),
         ("session-handoff", "跨 session 接力：session_log", "讓下一個對話接得上進度"),
     ]),
+    ("隔離與沙箱", [
+        ("wsl2-isolation", "WSL2 當隔離環境", "WSL2 跟 Windows 的邊界、實驗用 distro、備份與還原"),
+        ("agent-sandbox", "Coding agent 沙箱：Claude Code 與 Codex", "/sandbox 與 Codex 沙箱怎麼裝、各層擋什麼、裝完怎麼確認"),
+    ]),
     ("關於", [
         ("about", "關於這個網站", "定位、查證原則與更新紀錄"),
     ]),
@@ -159,6 +163,7 @@ SEC_DESC = {
     "實戰協作": "多個 AI 工具怎麼分工",
     "軟體開發流程 SDLC": "傳統開發流程，以及 AI 代理加入後的變化",
     "官方建議設定": "只整理官方文件的建議寫法",
+    "隔離與沙箱": "讓 agent 放手做事之前，WSL2 與沙箱怎麼疊、怎麼驗",
     "關於": "網站定位與更新紀錄",
 }
 
