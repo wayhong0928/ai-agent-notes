@@ -17,7 +17,7 @@
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
 <li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791384637">免付費區</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
 <li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
@@ -46,7 +46,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791468632">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -59,7 +59,7 @@
 <p>查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。本頁只寫查得到出處或實際驗證過的做法，不誇大可行性；個人的 Claude Code 規則檔、派工制度、設定檔內容不在本頁範圍內。</p>
 </blockquote>
 <p>網路上常見的教學把 Cowork 跟 Claude Code 混為一談，也常照抄已經失效的 <code>codex mcp-server</code> 設定。這頁把「哪些組合現在真的可行」講清楚，再給兩種確定可行的做法，最後列出已知的坑。</p>
-<h2 id="agent">一、為什麼要讓兩個 agent 分工</h2>
+<h2 id="一為什麼要讓兩個-agent-分工">一、為什麼要讓兩個 agent 分工</h2>
 <p>同一個模型自己審查自己寫的東西，很容易帶著「我當初是這樣想的」去護航；就算換一次對話重跑，同一顆模型在相近提示詞下產生的意見也容易系統性地往同一個方向靠攏，稱不上真正獨立的第二意見。換一個不同公司、不同模型的 agent 來審查或交叉查證，才是比較站得住腳的獨立視角。分工還有另一個現實理由：把研究、審查、實作拆給不同工具做，省下自己一個個手動比對的時間，也能各自用各自比較便宜或比較快的模型跑該做的那一段。</p>
 <p>以下四種組合，可行程度差很多，動手前先看這張表：</p>
 <table>
@@ -94,16 +94,16 @@
 </tbody>
 </table>
 <p>後面的做法一、做法二只處理前兩種組合；第三種留在「已知的坑」一節簡單交代，第四種留在最後的 Cowork 段落說明為什麼接不上。</p>
-<h2 id="openaicodex-plugin-cc">二、做法一：安裝 openai/codex-plugin-cc</h2>
+<h2 id="二做法一安裝-openaicodex-plugin-cc">二、做法一：安裝 openai/codex-plugin-cc</h2>
 <p>這個 plugin 由 OpenAI 官方 GitHub 組織發布，透過本機的 Codex CLI 與 Codex App Server 執行，不是另一套獨立的引擎。</p>
-<h3 id="_1">前置條件</h3>
+<h3 id="前置條件">前置條件</h3>
 <ul>
 <li>Node.js 18.18 以上。</li>
 <li>本機能執行全域 <code>codex</code> CLI，且已完成登入（可用具 Codex 權益的 ChatGPT 帳號，或 OpenAI API key）。</li>
 <li>能使用 Claude Code 的 plugin marketplace。</li>
 </ul>
 <p>來源：<a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md#requirements">Plugin README（Requirements 一節）</a></p>
-<h3 id="_2">安裝步驟</h3>
+<h3 id="安裝步驟">安裝步驟</h3>
 <p>在 Claude Code 對話框依序輸入：</p>
 <pre><code class="language-text">/plugin marketplace add openai/codex-plugin-cc
 /plugin install codex@openai-codex
@@ -123,7 +123,7 @@ codex login
 /codex:result
 </code></pre>
 <p>來源：<a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md#install">Plugin README（Install 一節）</a></p>
-<h3 id="8">8 個指令</h3>
+<h3 id="8-個指令">8 個指令</h3>
 <table>
 <thead>
 <tr>
@@ -176,7 +176,7 @@ codex login
 </tbody>
 </table>
 <p>來源：<a href="https://github.com/openai/codex-plugin-cc/blob/main/README.md">Plugin README（Commands 一節）</a></p>
-<h2 id="plugin-codex-exec">三、做法二：不裝 plugin，直接呼叫 <code>codex exec</code></h2>
+<h2 id="三做法二不裝-plugin直接呼叫-codex-exec">三、做法二：不裝 plugin，直接呼叫 <code>codex exec</code></h2>
 <p>不想裝 plugin，或想更細緻控制每次呼叫，可以在 Claude Code 裡直接叫 shell 執行 <code>codex exec</code>。以下語法已在 codex-cli 0.154.0 的 <code>--help</code> 實際確認存在：</p>
 <table>
 <thead>
@@ -233,7 +233,7 @@ codex login
 <pre><code class="language-bash">codex exec -s workspace-write -C ~/projects/demo &quot;依 spec.md 裡的規格實作這個功能&quot;
 </code></pre>
 <p>上面這兩行 PowerShell 管線寫法官方文件沒有給範例，是本站按 PowerShell 一般語法推出的通用寫法，不是官方逐字教學，用之前建議自己先跑一次確認行為符合預期。</p>
-<h3 id="-s">不指定 <code>-s</code> 的時候，預設是什麼</h3>
+<h3 id="不指定-s-的時候預設是什麼">不指定 <code>-s</code> 的時候，預設是什麼</h3>
 <p>上面那張表講的是「你主動指定 <code>-s</code> 會怎樣」。實際更常踩到的是另一半：<strong>不指定的時候會怎樣</strong>。這件事互動式跟非互動式的答案不一樣。</p>
 <table>
 <thead>
@@ -257,7 +257,7 @@ codex login
 <p><strong>常見的誤解方向</strong>：不少人把這件事記成「每開一個新專案都要重新設定一次 workspace，否則沒辦法 CRUD」。照官方文件的描述，比較貼切的理解是：每個專案有一次性的信任判斷，不是每次手動重設。Codex 的 <code>config.toml</code> 分兩層——使用者層在 <code>~/.codex/config.toml</code>，專案層是 repo 裡的 <code>.codex/config.toml</code>——而專案層只有在你信任該專案時才會載入，官方原文是「For security, Codex loads project <code>.codex/</code> layers only when you trust the project.」；標記為不信任時，專案範圍的 <code>.codex/</code> 層（含專案本地 config、hooks、rules）會整組被略過。互動式的信任本身是明確的一個動作，官方舉的例子是啟動時的 onboarding 提示或 <code>/permissions</code>。</p>
 <p>這個方向差別會直接影響排查。讀者實際撞到的症狀通常是「在未受版控的目錄、或用 <code>codex exec</code> 的時候，因為預設唯讀所以寫不了檔、跑不了指令」，成因剛好跟「預設可以寫、只是要設定」相反。如果照後者的方向去排查，會一直在找「我是不是漏設了什麼權限」，而不是先去確認「我這次是不是根本落在唯讀預設上」——後者只要補一個 <code>-s workspace-write</code> 就解決了。</p>
 <p>（本站沒有查證 IDE 擴充套件的預設值，也不寫信任提示彈窗的逐字介面文案；這幾項在官方文件裡查無，只在第三方教學看過，不要照抄。信任層級則可用官方 Configuration Reference 列出的 <code>projects.&lt;path&gt;.trust_level</code>（<code>"trusted"</code>／<code>"untrusted"</code>）設定，標記為 untrusted 的專案會略過專案範圍的 <code>.codex/</code> 層。<sup id="fnref:fresh2"><a class="footnote-ref" href="#fn:fresh2">2</a></sup>）</p>
-<h3 id="_3">自己測一次：能不能寫檔</h3>
+<h3 id="自己測一次能不能寫檔">自己測一次：能不能寫檔</h3>
 <p>下面這組指令是用來確認「你這台機器上的 Codex，在明確指定 <code>-s workspace-write</code> 時真的寫得了檔」，以及「不指定的時候真的是唯讀」。建立一個一次性的測試目錄就好，不要拿正在做的專案試。</p>
 <p><strong>第一步：建一個受版控的測試目錄，並要求 Codex 寫一個檔。</strong> 預期結果是 <code>hello.txt</code> 出現、內容是 <code>ok</code>。</p>
 <p>Bash／macOS／Linux／Git Bash：</p>
@@ -285,11 +285,11 @@ Get-ChildItem &quot;$HOME\codex-trust-test&quot;
 <pre><code class="language-powershell">codex exec -s workspace-write --skip-git-repo-check -C &quot;$HOME\codex-trust-test&quot; &quot;在目前目錄建立 hello.txt，內容只寫 ok&quot;
 </code></pre>
 <p>這組指令本身是本站依官方旗標說明組出來的驗證流程，官方文件沒有逐字給這一串；旗標與預設行為有出處（見文末資料來源），但每一步的實際輸出文字會因版本而異，以你自己跑出來的結果為準。</p>
-<h2 id="_4">四、分工模式</h2>
+<h2 id="四分工模式">四、分工模式</h2>
 <p><strong>Claude 規劃、Codex 執行</strong>：先讓 Claude Code（或 <code>Plan</code>）把規格拆成可逐條驗證的條件，再把這份規格連同驗收條件交給 Codex 執行。適合規格已經明確、自包含、不需要理解特定專案脈絡規則的程式或腳本任務，例如「把這支腳本的輸出格式從 CSV 改成 JSON，欄位對照見附表」。</p>
 <p><strong>一方寫、另一方審</strong>：做的人不驗自己的活。Claude Code 寫完一段實作後，派 <code>/codex:review</code> 或 <code>/codex:adversarial-review</code> 讓 Codex 用乾淨的視角只看 diff 跟驗收條件審查，不要讓寫的那個 agent 自己審查自己。適合任何你要對外交付的變更，尤其是動到認證、資料寫入、金流這類高風險區塊。</p>
 <p><strong>交叉查證</strong>：同一個事實問題，讓 Claude 跟 Codex 各自查一次官方文件再比對答案。適合查證「某個 API 旗標存不存在」「某個功能哪個方案才能用」這類容易被訓練記憶誤導的問題。兩邊都查到同一個答案才比較有把握，分歧本身就是該進一步查證的訊號。</p>
-<h2 id="_5">五、已知的坑</h2>
+<h2 id="五已知的坑">五、已知的坑</h2>
 <p><strong>a. 背景模式的 job 狀態可能跟 Codex 實際進度脫鉤</strong></p>
 <p>用 <code>--background</code> 派出的任務，<code>/codex:status</code> 顯示的狀態有時跟 Codex 實際在做的事不同步。截至查證當下，<code>openai/codex-plugin-cc</code> 的 issue tracker 裡有多筆相關且仍開著的問題，例如 <a href="https://github.com/openai/codex-plugin-cc/issues/639">#639</a>（<code>result</code>／<code>cancel</code> 對存在的任務回報「找不到任務」，被中止的 worker 卻仍顯示執行中）與 <a href="https://github.com/openai/codex-plugin-cc/issues/704">#704</a>（worker 在寫入最終狀態前就掛掉，任務因此永遠顯示執行中）。</p>
 <p>避法：短任務直接用同步模式（不加 <code>--background</code>）；真的要背景跑的長任務，任務完成的判定不能只看 <code>/codex:status</code> 顯示 completed，要另外直接檢查預期的輸出檔案是否存在、內容是否正確、更新時間是否在合理範圍內。</p>
@@ -311,7 +311,7 @@ Get-ChildItem &quot;$HOME\codex-trust-test&quot;
 <p>這個版本開始，Claude Code 在<strong>完全沒有 CLAUDE.md</strong> 的專案裡也會直接讀 <code>AGENTS.md</code>，不用再靠下面講的 <code>@AGENTS.md</code> 匯入。但只要工作目錄或其上層有任何 <code>CLAUDE.md</code>，行為就跟上面寫的一樣：讀 <code>CLAUDE.md</code>，不會去讀 <code>AGENTS.md</code>。判定範圍、<code>/config</code> 的四個選項見<a href="official-config.html">Claude Code 設定總覽</a>第一節。來源：<a href="https://code.claude.com/docs/en/memory">How Claude remembers your project</a>。</p>
 </div>
 <p>這不代表兩邊只能各寫一份、內容永遠對不上，官方留了兩個共用做法：一是在 Codex 的 <code>~/.codex/config.toml</code> 設定 <code>project_doc_fallback_filenames</code>，把 <code>CLAUDE.md</code> 加進這個清單，讓 Codex 除了 <code>AGENTS.md</code> 之外也讀它；二是反過來在 Claude Code 的 <code>CLAUDE.md</code> 裡用 <code>@AGENTS.md</code> 這個匯入語法，把 <code>AGENTS.md</code> 的內容併進 Claude 讀到的 context。兩種做法都只解決「同一份內容要不要維護兩次」，不會改變預設行為本身；沒特別設定的情況下，用 <code>/codex:rescue</code> 或直接呼叫 <code>codex exec</code> 把任務交給 Codex 時，凡是 Codex 需要知道的專案脈絡（架構、紅線、命名慣例），還是要寫進當次的 prompt 裡，不能指望它自己去讀 CLAUDE.md。</p>
-<h2 id="cowork">六、Cowork 呢</h2>
+<h2 id="六cowork-呢">六、Cowork 呢</h2>
 <p>截至查證日，查無 OpenAI 或 Anthropic 任何一方明確宣告支援 Cowork + Codex 的整合；這不代表技術上已經證明完全不可行，只代表目前沒有官方認證、可以照抄的做法。理由分三層：</p>
 <ol>
 <li>Cowork 的 shell 跑在 Anthropic 管理的雲端沙箱，或本機專用 Linux VM，兩者都不等於使用者主機的終端機，不會繼承主機上的 <code>codex</code> 執行檔、PATH 或登入狀態。Pro／Max 自 2026-10-06 起，新任務只在雲端沙箱執行；本機 VM 只剩 10/6 以前在本機開始的任務，以及 Team／Enterprise 的本機 session<sup id="fnref:fresh3"><a class="footnote-ref" href="#fn:fresh3">3</a></sup>。來源：<a href="https://support.claude.com/en/articles/14479288-claude-cowork-architecture-overview">Cowork architecture overview</a>。</li>
@@ -319,7 +319,7 @@ Get-ChildItem &quot;$HOME\codex-trust-test&quot;
 <li>Cowork 確實已經支援 plugin，部分本機 Cowork 情境下也能執行 plugin 內含的本機 MCP server，但查無 OpenAI 官方發布過一個給 Cowork 用的 Codex plugin。<code>openai/codex-plugin-cc</code> 的 README 明確把自己定位成給 Claude Code 用的 plugin，沒有保證能在 Cowork 正常運作。來源：<a href="https://support.claude.com/en/articles/13837440-use-plugins-in-claude">Use plugins in Claude</a>。</li>
 </ol>
 <p>想找 Cowork 跟 Codex 官方整合的教學，目前應該視為查無出處，不要照抄任何寫「在 Cowork 裡輸入指令呼叫本機 <code>codex exec</code>」的舊文章；有人自己動手拼出一套本機 MCP wrapper 也不是不可能，但那是自製實驗，不是本頁能保證的做法。</p>
-<h2 id="_6">本頁重點回顧</h2>
+<h2 id="本頁重點回顧">本頁重點回顧</h2>
 <ul>
 <li>四種組合裡，只有「Claude Code + Codex plugin」跟「Claude Code 直接呼叫 <code>codex exec</code>」現在確定可行；「Codex 透過 MCP 呼叫 <code>claude mcp serve</code>」是實驗性、只開放工具層；「Cowork + Codex」目前查無官方整合。</li>
 <li>裝 plugin 走 <code>/plugin marketplace add</code> → <code>/plugin install</code> → <code>/reload-plugins</code> → <code>/codex:setup</code> 四步，8 個指令分工清楚：review／adversarial-review 唯讀審查，rescue 真的動手做，transfer 換到 Codex 環境接續。</li>
@@ -328,7 +328,7 @@ Get-ChildItem &quot;$HOME\codex-trust-test&quot;
 <li>三種分工模式各有適用情境：規格明確就規劃後交出去執行，高風險變更一定要讓另一個 agent 審查，容易被誤導的事實問題交叉查證。</li>
 <li>七個坑裡最容易踩的是背景任務狀態脫鉤跟前景逾時自動轉背景，兩者都要靠檢查輸出檔案而非信任狀態訊息；Windows 上讓 Codex 自己 <code>git init</code> 也是實測會出事的地方；CLAUDE.md／AGENTS.md 各讀各的也有官方留的共用做法（<code>project_doc_fallback_filenames</code>、<code>@AGENTS.md</code> 匯入），不是只能維護兩份重複內容——v2.1.277 起 Claude Code 在完全沒有 CLAUDE.md 時也會直接讀 AGENTS.md，但有 CLAUDE.md 的專案不受影響，細節見<a href="official-config.html">Claude Code 設定總覽</a>。</li>
 </ul>
-<h2 id="_7">資料來源</h2>
+<h2 id="資料來源">資料來源</h2>
 <table>
 <thead>
 <tr>
@@ -427,27 +427,28 @@ Get-ChildItem &quot;$HOME\codex-trust-test&quot;
 </main>
 <aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
 <ul>
-<li><a href="#agent">一、為什麼要讓兩個 agent 分工</a></li>
-<li><a href="#openaicodex-plugin-cc">二、做法一：安裝 openai/codex-plugin-cc</a><ul>
-<li><a href="#_1">前置條件</a></li>
-<li><a href="#_2">安裝步驟</a></li>
-<li><a href="#8">8 個指令</a></li>
+<li><a href="#一為什麼要讓兩個-agent-分工">一、為什麼要讓兩個 agent 分工</a></li>
+<li><a href="#二做法一安裝-openaicodex-plugin-cc">二、做法一：安裝 openai/codex-plugin-cc</a><ul>
+<li><a href="#前置條件">前置條件</a></li>
+<li><a href="#安裝步驟">安裝步驟</a></li>
+<li><a href="#8-個指令">8 個指令</a></li>
 </ul>
 </li>
-<li><a href="#plugin-codex-exec">三、做法二：不裝 plugin，直接呼叫 codex exec</a><ul>
-<li><a href="#-s">不指定 -s 的時候，預設是什麼</a></li>
-<li><a href="#_3">自己測一次：能不能寫檔</a></li>
+<li><a href="#三做法二不裝-plugin直接呼叫-codex-exec">三、做法二：不裝 plugin，直接呼叫 codex exec</a><ul>
+<li><a href="#不指定-s-的時候預設是什麼">不指定 -s 的時候，預設是什麼</a></li>
+<li><a href="#自己測一次能不能寫檔">自己測一次：能不能寫檔</a></li>
 </ul>
 </li>
-<li><a href="#_4">四、分工模式</a></li>
-<li><a href="#_5">五、已知的坑</a></li>
-<li><a href="#cowork">六、Cowork 呢</a></li>
-<li><a href="#_6">本頁重點回顧</a></li>
-<li><a href="#_7">資料來源</a></li>
+<li><a href="#四分工模式">四、分工模式</a></li>
+<li><a href="#五已知的坑">五、已知的坑</a></li>
+<li><a href="#六cowork-呢">六、Cowork 呢</a></li>
+<li><a href="#本頁重點回顧">本頁重點回顧</a></li>
+<li><a href="#資料來源">資料來源</a></li>
 </ul>
 </div>
 </aside>
 </div>
 <script src="../assets/site.js"></script>
+<script>(function(){var m={"agent":"一為什麼要讓兩個-agent-分工","openaicodex-plugin-cc":"二做法一安裝-openaicodex-plugin-cc","_1":"前置條件","_2":"安裝步驟","8":"8-個指令","plugin-codex-exec":"三做法二不裝-plugin直接呼叫-codex-exec","-s":"不指定-s-的時候預設是什麼","_3":"自己測一次能不能寫檔","_4":"四分工模式","_5":"五已知的坑","cowork":"六cowork-呢","_6":"本頁重點回顧","_7":"資料來源"};function f(){var h=decodeURIComponent(location.hash.slice(1));if(h&&m[h]&&!document.getElementById(h)){var n=m[h];history.replaceState(null,"","#"+encodeURIComponent(n));var g=function(){var e=document.getElementById(n);if(e)e.scrollIntoView();};document.readyState==="complete"?g():addEventListener("load",g);}}f();addEventListener("hashchange",f);})();</script>
 </body>
 </html>

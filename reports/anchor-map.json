@@ -1,0 +1,1469 @@
+{
+ "about": [
+  {
+   "old": "_1",
+   "new": "更新紀錄",
+   "heading": "更新紀錄"
+  }
+ ],
+ "agent-basics": [
+  {
+   "old": "agent",
+   "new": "一聊天機器人跟-agent差在哪裡",
+   "heading": "一、聊天機器人跟 agent，差在哪裡"
+  },
+  {
+   "old": "_1",
+   "new": "走一遍實際例子",
+   "heading": "走一遍實際例子"
+  },
+  {
+   "old": "_2",
+   "new": "二上下文視窗為什麼會滿滿了會怎樣",
+   "heading": "二、上下文視窗：為什麼會滿，滿了會怎樣"
+  },
+  {
+   "old": "_3",
+   "new": "三工具權限與沙箱為什麼要先問過你",
+   "heading": "三、工具權限與沙箱：為什麼要先問過你"
+  },
+  {
+   "old": "claude-code-permission-modes",
+   "new": "claude-code-的-permission-modes",
+   "heading": "Claude Code 的 permission modes"
+  },
+  {
+   "old": "codex-sandbox-modes",
+   "new": "codex-的-sandbox-modes",
+   "heading": "Codex 的 sandbox modes"
+  },
+  {
+   "old": "workflow-agent",
+   "new": "四workflow-跟-agent官方怎麼分",
+   "heading": "四、workflow 跟 agent，官方怎麼分"
+  },
+  {
+   "old": "_4",
+   "new": "五代理迴圈文字版流程",
+   "heading": "五、代理迴圈：文字版流程"
+  },
+  {
+   "old": "_5",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "claude-code-cowork": [
+  {
+   "old": "_1",
+   "new": "第一步先確認你的帳號是哪一種現況",
+   "heading": "第一步：先確認你的帳號是哪一種現況"
+  },
+  {
+   "old": "_2",
+   "new": "兩邊各自擅長什麼官方定位",
+   "heading": "兩邊各自擅長什麼（官方定位）"
+  },
+  {
+   "old": "_3",
+   "new": "官方到底提供了什麼互通查證結果",
+   "heading": "官方到底提供了什麼互通？查證結果"
+  },
+  {
+   "old": "dispatch",
+   "new": "唯一的自動任務路由dispatch而且正在關門",
+   "heading": "唯一的自動任務路由：Dispatch（而且正在關門）"
+  },
+  {
+   "old": "_4",
+   "new": "檔案要怎麼從一邊交到另一邊",
+   "heading": "檔案要怎麼從一邊交到另一邊"
+  },
+  {
+   "old": "_5",
+   "new": "實際工作流程用同一個交換資料夾把兩邊接起來",
+   "heading": "實際工作流程：用同一個交換資料夾把兩邊接起來"
+  },
+  {
+   "old": "_6",
+   "new": "步驟",
+   "heading": "步驟"
+  },
+  {
+   "old": "_7",
+   "new": "最小測試確認這條路真的通",
+   "heading": "最小測試：確認這條路真的通"
+  },
+  {
+   "old": "cowork",
+   "new": "沒有-cowork-的人怎麼辦",
+   "heading": "沒有 Cowork 的人怎麼辦"
+  },
+  {
+   "old": "_8",
+   "new": "不要期待的事整理者觀察",
+   "heading": "不要期待的事（整理者觀察）"
+  },
+  {
+   "old": "_9",
+   "new": "怎麼選整理者觀察",
+   "heading": "怎麼選（整理者觀察）"
+  },
+  {
+   "old": "2026-09-17-2026-10-06",
+   "new": "資料來源2026-09-17-查證2026-10-06-補查",
+   "heading": "資料來源（2026-09-17 查證；2026-10-06 補查）"
+  }
+ ],
+ "claude-code-obsidian": [
+  {
+   "old": "_1",
+   "new": "官方有沒有專門支援查證結果沒有",
+   "heading": "官方有沒有專門支援？查證結果：沒有"
+  },
+  {
+   "old": "a-vault",
+   "new": "路徑-a把-vault-當成工作目錄零安裝先做這個",
+   "heading": "路徑 A：把 vault 當成工作目錄（零安裝，先做這個）"
+  },
+  {
+   "old": "_2",
+   "new": "為什麼可行",
+   "heading": "為什麼可行"
+  },
+  {
+   "old": "_3",
+   "new": "步驟照抄即可",
+   "heading": "步驟（照抄即可）"
+  },
+  {
+   "old": "_4",
+   "new": "三種做法的差別官方明講容易踩",
+   "heading": "三種做法的差別（官方明講，容易踩）"
+  },
+  {
+   "old": "_5",
+   "new": "最小測試確認真的串上了",
+   "heading": "最小測試：確認真的串上了"
+  },
+  {
+   "old": "_6",
+   "new": "用這條路要注意的事",
+   "heading": "用這條路要注意的事"
+  },
+  {
+   "old": "b-obsidian-cliobsidian",
+   "new": "路徑-b補上-obsidian-官方-cli處理obsidian-才知道的事",
+   "heading": "路徑 B：補上 Obsidian 官方 CLI（處理「Obsidian 才知道的事」）"
+  },
+  {
+   "old": "cmcp-server-claude-obsidian-vault",
+   "new": "路徑-cmcp-server讓-claude-透過-obsidian-本身操作-vault",
+   "heading": "路徑 C：MCP server（讓 Claude 透過 Obsidian 本身操作 vault）"
+  },
+  {
+   "old": "_7",
+   "new": "目前找得到還在維護的選項",
+   "heading": "目前找得到、還在維護的選項"
+  },
+  {
+   "old": "obsidian-local-rest-api-mcp",
+   "new": "設定步驟obsidian-local-rest-api-內建-mcp照抄即可",
+   "heading": "設定步驟：obsidian-local-rest-api 內建 MCP（照抄即可）"
+  },
+  {
+   "old": "dobsidian-plugin-obsidian-claude-code",
+   "new": "路徑-dobsidian-社群-plugin在-obsidian-裡直接用-claude-code",
+   "heading": "路徑 D：Obsidian 社群 plugin（在 Obsidian 裡直接用 Claude Code）"
+  },
+  {
+   "old": "claude-cowork-vault",
+   "new": "claude-cowork-能不能直接讀寫本機-vault",
+   "heading": "Claude Cowork 能不能直接讀寫本機 vault？"
+  },
+  {
+   "old": "_8",
+   "new": "怎麼選整理者觀察",
+   "heading": "怎麼選（整理者觀察）"
+  },
+  {
+   "old": "2026-09-17",
+   "new": "資料來源2026-09-17-查證",
+   "heading": "資料來源（2026-09-17 查證）"
+  }
+ ],
+ "claude-codex": [
+  {
+   "old": "agent",
+   "new": "一為什麼要讓兩個-agent-分工",
+   "heading": "一、為什麼要讓兩個 agent 分工"
+  },
+  {
+   "old": "openaicodex-plugin-cc",
+   "new": "二做法一安裝-openaicodex-plugin-cc",
+   "heading": "二、做法一：安裝 openai/codex-plugin-cc"
+  },
+  {
+   "old": "_1",
+   "new": "前置條件",
+   "heading": "前置條件"
+  },
+  {
+   "old": "_2",
+   "new": "安裝步驟",
+   "heading": "安裝步驟"
+  },
+  {
+   "old": "8",
+   "new": "8-個指令",
+   "heading": "8 個指令"
+  },
+  {
+   "old": "plugin-codex-exec",
+   "new": "三做法二不裝-plugin直接呼叫-codex-exec",
+   "heading": "三、做法二：不裝 plugin，直接呼叫 codex exec"
+  },
+  {
+   "old": "-s",
+   "new": "不指定-s-的時候預設是什麼",
+   "heading": "不指定 -s 的時候，預設是什麼"
+  },
+  {
+   "old": "_3",
+   "new": "自己測一次能不能寫檔",
+   "heading": "自己測一次：能不能寫檔"
+  },
+  {
+   "old": "_4",
+   "new": "四分工模式",
+   "heading": "四、分工模式"
+  },
+  {
+   "old": "_5",
+   "new": "五已知的坑",
+   "heading": "五、已知的坑"
+  },
+  {
+   "old": "cowork",
+   "new": "六cowork-呢",
+   "heading": "六、Cowork 呢"
+  },
+  {
+   "old": "_6",
+   "new": "本頁重點回顧",
+   "heading": "本頁重點回顧"
+  },
+  {
+   "old": "_7",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "dev-practices": [
+  {
+   "old": "tdd",
+   "new": "一tdd測試驅動開發",
+   "heading": "一、TDD：測試驅動開發"
+  },
+  {
+   "old": "_1",
+   "new": "是什麼",
+   "heading": "是什麼"
+  },
+  {
+   "old": "_2",
+   "new": "核心做法",
+   "heading": "核心做法"
+  },
+  {
+   "old": "_3",
+   "new": "小例子",
+   "heading": "小例子"
+  },
+  {
+   "old": "_4",
+   "new": "適合與不適合",
+   "heading": "適合與不適合"
+  },
+  {
+   "old": "_5",
+   "new": "常見誤解",
+   "heading": "常見誤解"
+  },
+  {
+   "old": "atdd",
+   "new": "二atdd驗收測試驅動開發",
+   "heading": "二、ATDD：驗收測試驅動開發"
+  },
+  {
+   "old": "bdd",
+   "new": "三bdd行為驅動開發",
+   "heading": "三、BDD：行為驅動開發"
+  },
+  {
+   "old": "_6",
+   "new": "是什麼_1",
+   "heading": "是什麼"
+  },
+  {
+   "old": "given-when-then-gherkin",
+   "new": "核心做法given-when-then-與-gherkin",
+   "heading": "核心做法：Given-When-Then 與 Gherkin"
+  },
+  {
+   "old": "_7",
+   "new": "小例子_1",
+   "heading": "小例子"
+  },
+  {
+   "old": "_8",
+   "new": "適合與不適合_1",
+   "heading": "適合與不適合"
+  },
+  {
+   "old": "_9",
+   "new": "常見誤解_1",
+   "heading": "常見誤解"
+  },
+  {
+   "old": "ddd",
+   "new": "四ddd領域驅動設計",
+   "heading": "四、DDD：領域驅動設計"
+  },
+  {
+   "old": "_10",
+   "new": "是什麼_2",
+   "heading": "是什麼"
+  },
+  {
+   "old": "_11",
+   "new": "核心術語",
+   "heading": "核心術語"
+  },
+  {
+   "old": "_12",
+   "new": "小例子訂單領域的上下文切分",
+   "heading": "小例子：「訂單」領域的上下文切分"
+  },
+  {
+   "old": "_13",
+   "new": "適合與不適合_2",
+   "heading": "適合與不適合"
+  },
+  {
+   "old": "_14",
+   "new": "常見誤解_2",
+   "heading": "常見誤解"
+  },
+  {
+   "old": "_15",
+   "new": "五結對程式設計",
+   "heading": "五、結對程式設計"
+  },
+  {
+   "old": "code-review",
+   "new": "六code-review",
+   "heading": "六、Code Review"
+  },
+  {
+   "old": "_16",
+   "new": "七主幹開發",
+   "heading": "七、主幹開發"
+  },
+  {
+   "old": "sdd",
+   "new": "八規格驅動開發sdd摘要",
+   "heading": "八、規格驅動開發（SDD，摘要）"
+  },
+  {
+   "old": "_17",
+   "new": "九這幾種方法怎麼比較",
+   "heading": "九、這幾種方法怎麼比較"
+  },
+  {
+   "old": "_18",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "extensions": [
+  {
+   "old": "_1",
+   "new": "一六種機制支援矩陣",
+   "heading": "一、六種機制支援矩陣"
+  },
+  {
+   "old": "_2",
+   "new": "一之二每種機制解決什麼問題什麼時候載入放在哪裡",
+   "heading": "一之二、每種機制解決什麼問題、什麼時候載入、放在哪裡"
+  },
+  {
+   "old": "_3",
+   "new": "二每種機制的最小範例與常見誤用",
+   "heading": "二、每種機制的最小範例與常見誤用"
+  },
+  {
+   "old": "claudemdagentsmd",
+   "new": "claudemdagentsmd專案事實與紅線",
+   "heading": "CLAUDE.md／AGENTS.md：專案事實與紅線"
+  },
+  {
+   "old": "skill",
+   "new": "skill隨需載入的程序",
+   "heading": "SKILL：隨需載入的程序"
+  },
+  {
+   "old": "mcp",
+   "new": "mcp接上外部工具",
+   "heading": "MCP：接上外部工具"
+  },
+  {
+   "old": "subagent",
+   "new": "subagent獨立乾淨的視角",
+   "heading": "Subagent：獨立乾淨的視角"
+  },
+  {
+   "old": "plugin",
+   "new": "plugin打包分享",
+   "heading": "Plugin：打包分享"
+  },
+  {
+   "old": "hooks",
+   "new": "hooks機制強制不是文字提醒",
+   "heading": "Hooks：機制強制，不是文字提醒"
+  },
+  {
+   "old": "_4",
+   "new": "三該用哪一種決策清單",
+   "heading": "三、該用哪一種：決策清單"
+  },
+  {
+   "old": "_5",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "free-tier": [
+  {
+   "old": "claude-free",
+   "new": "claude-free-能用什麼",
+   "heading": "Claude Free 能用什麼"
+  },
+  {
+   "old": "chatgpt-free",
+   "new": "chatgpt-free-能用什麼",
+   "heading": "ChatGPT Free 能用什麼"
+  },
+  {
+   "old": "freego-codex",
+   "new": "freego-帳號用-codex-要注意的地方",
+   "heading": "Free／Go 帳號用 Codex 要注意的地方"
+  },
+  {
+   "old": "_1",
+   "new": "兩個免費帳號可行的工作流程",
+   "heading": "兩個免費帳號可行的工作流程"
+  },
+  {
+   "old": "claude-free-projects",
+   "new": "流程一claude-free-的-projects-額度有限時手動貼上文獻摘要",
+   "heading": "流程一：Claude Free 的 Projects 額度有限時，手動貼上文獻摘要"
+  },
+  {
+   "old": "chatgpt-free-app-codex",
+   "new": "流程二chatgpt-free-桌面-app-的-codex-分頁做小型程式任務",
+   "heading": "流程二：ChatGPT Free 桌面 App 的 Codex 分頁做小型程式任務"
+  },
+  {
+   "old": "_2",
+   "new": "免費版常見的坑",
+   "heading": "免費版常見的坑"
+  },
+  {
+   "old": "2026-09-16",
+   "new": "資料來源2026-09-16-查證",
+   "heading": "資料來源（2026-09-16 查證）"
+  }
+ ],
+ "harness": [
+  {
+   "old": "harness",
+   "new": "一什麼是-harness",
+   "heading": "一、什麼是 harness"
+  },
+  {
+   "old": "_1",
+   "new": "二七個讓工作環境可靠的原則",
+   "heading": "二、七個讓工作環境可靠的原則"
+  },
+  {
+   "old": "21",
+   "new": "21-做事的人不該驗收自己的活",
+   "heading": "2.1 做事的人不該驗收自己的活"
+  },
+  {
+   "old": "22",
+   "new": "22-驗收官只看結果不看你怎麼想的",
+   "heading": "2.2 驗收官只看結果，不看你怎麼想的"
+  },
+  {
+   "old": "23",
+   "new": "23-驗收找到的問題不必照單全收",
+   "heading": "2.3 驗收找到的問題不必照單全收"
+  },
+  {
+   "old": "24",
+   "new": "24-讓子代理去探索不要污染主線對話",
+   "heading": "2.4 讓子代理去探索，不要污染主線對話"
+  },
+  {
+   "old": "25",
+   "new": "25-說明檔案太長重要規則反而會被忽略",
+   "heading": "2.5 說明檔案太長，重要規則反而會被忽略"
+  },
+  {
+   "old": "26",
+   "new": "26-該強制的事交給機制不要只寫進說明檔",
+   "heading": "2.6 該強制的事交給機制，不要只寫進說明檔"
+  },
+  {
+   "old": "27",
+   "new": "27-拿出證據不要只說做完了",
+   "heading": "2.7 拿出證據，不要只說「做完了」"
+  },
+  {
+   "old": "_2",
+   "new": "三驗證的四種力度",
+   "heading": "三、驗證的四種力度"
+  },
+  {
+   "old": "_3",
+   "new": "三之一把原則變成可照做的範例",
+   "heading": "三之一、把原則變成可照做的範例"
+  },
+  {
+   "old": "2122-diff",
+   "new": "對應原則-2122派一個只看-diff-的驗收子代理",
+   "heading": "對應原則 2.1／2.2：派一個只看 diff 的驗收子代理"
+  },
+  {
+   "old": "27_1",
+   "new": "對應原則-27什麼樣的回報才算附了證據",
+   "heading": "對應原則 2.7：什麼樣的回報才算附了證據"
+  },
+  {
+   "old": "3-stop-hook",
+   "new": "對應第三節第-3-級用-stop-hook-擋住還沒驗證就說做完",
+   "heading": "對應第三節第 3 級：用 Stop hook 擋住「還沒驗證就說做完」"
+  },
+  {
+   "old": "harness_1",
+   "new": "四動態-harness-與靜態規則表一組取捨",
+   "heading": "四、動態 harness 與靜態規則表：一組取捨"
+  },
+  {
+   "old": "_4",
+   "new": "五多代理協作不是免費的",
+   "heading": "五、多代理協作不是免費的"
+  },
+  {
+   "old": "_5",
+   "new": "六說明檔案的篇幅上限",
+   "heading": "六、說明檔案的篇幅上限"
+  },
+  {
+   "old": "_6",
+   "new": "七給一般使用者的實際做法",
+   "heading": "七、給一般使用者的實際做法"
+  },
+  {
+   "old": "_7",
+   "new": "本頁重點回顧",
+   "heading": "本頁重點回顧"
+  },
+  {
+   "old": "_8",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "hooks-subagents": [
+  {
+   "old": "hooks",
+   "new": "一hooks把一定要發生的事變成機制",
+   "heading": "一、Hooks：把「一定要發生」的事變成機制"
+  },
+  {
+   "old": "_1",
+   "new": "事件清單",
+   "heading": "事件清單"
+  },
+  {
+   "old": "_2",
+   "new": "設定寫在哪裡長什麼樣",
+   "heading": "設定寫在哪裡、長什麼樣"
+  },
+  {
+   "old": "_3",
+   "new": "官方範例編輯完自動跑格式化",
+   "heading": "官方範例：編輯完自動跑格式化"
+  },
+  {
+   "old": "_4",
+   "new": "安全注意事項",
+   "heading": "安全注意事項"
+  },
+  {
+   "old": "subagent",
+   "new": "二subagent定義檔與欄位語意",
+   "heading": "二、Subagent：定義檔與欄位語意"
+  },
+  {
+   "old": "_5",
+   "new": "放在哪裡",
+   "heading": "放在哪裡"
+  },
+  {
+   "old": "frontmatter",
+   "new": "frontmatter-欄位",
+   "heading": "frontmatter 欄位"
+  },
+  {
+   "old": "agent-agent",
+   "new": "內建-agent-跟自訂-agent-的差別",
+   "heading": "內建 agent 跟自訂 agent 的差別"
+  },
+  {
+   "old": "_6",
+   "new": "三各自適合解決什麼問題",
+   "heading": "三、各自適合解決什麼問題"
+  },
+  {
+   "old": "_7",
+   "new": "本頁重點回顧",
+   "heading": "本頁重點回顧"
+  },
+  {
+   "old": "_8",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "mcp": [
+  {
+   "old": "1-mcp",
+   "new": "1-mcp-是什麼",
+   "heading": "1. MCP 是什麼"
+  },
+  {
+   "old": "2",
+   "new": "2-五分鐘裝好第一個",
+   "heading": "2. 五分鐘裝好第一個"
+  },
+  {
+   "old": "3-scope",
+   "new": "3-scope-怎麼選",
+   "heading": "3. scope 怎麼選"
+  },
+  {
+   "old": "4-oauth",
+   "new": "4-oauth-認證",
+   "heading": "4. OAuth 認證"
+  },
+  {
+   "old": "5-mcp",
+   "new": "5-mcp-的成本與限制",
+   "heading": "5. MCP 的成本與限制"
+  },
+  {
+   "old": "6-mcp-skill",
+   "new": "6-mcp-還是-skill什麼時候該用哪個",
+   "heading": "6. MCP 還是 Skill：什麼時候該用哪個"
+  },
+  {
+   "old": "7",
+   "new": "7-安全",
+   "heading": "7. 安全"
+  },
+  {
+   "old": "8-windows",
+   "new": "8-windows-踩坑實錄",
+   "heading": "8. Windows 踩坑實錄"
+  },
+  {
+   "old": "9",
+   "new": "9-推薦清單",
+   "heading": "9. 推薦清單"
+  },
+  {
+   "old": "codex-mcp",
+   "new": "codex-的-mcp-設定",
+   "heading": "Codex 的 MCP 設定"
+  },
+  {
+   "old": "_1",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "official-config": [
+  {
+   "old": "claudemd",
+   "new": "一claudemd放在哪寫什麼",
+   "heading": "一、CLAUDE.md：放在哪、寫什麼"
+  },
+  {
+   "old": "clauderules-claudemd",
+   "new": "二clauderules把-claudemd-拆成主題檔",
+   "heading": "二、.claude/rules/：把 CLAUDE.md 拆成主題檔"
+  },
+  {
+   "old": "settingsjson",
+   "new": "三settingsjson五層優先序",
+   "heading": "三、settings.json：五層優先序"
+  },
+  {
+   "old": "allowaskdeny-permission-mode",
+   "new": "四權限allowaskdeny-與-permission-mode",
+   "heading": "四、權限：allow／ask／deny 與 permission mode"
+  },
+  {
+   "old": "_1",
+   "new": "規則語法與評估順序",
+   "heading": "規則語法與評估順序"
+  },
+  {
+   "old": "permission-modeshifttab",
+   "new": "permission-mode六種shifttab-只切三種",
+   "heading": "permission mode：六種，Shift+Tab 只切三種"
+  },
+  {
+   "old": "sandbox-os",
+   "new": "sandbox另一層-os-層邊界",
+   "heading": "sandbox：另一層 OS 層邊界"
+  },
+  {
+   "old": "system-prompt",
+   "new": "五官方沒公開的東西system-prompt",
+   "heading": "五、官方沒公開的東西：system prompt"
+  },
+  {
+   "old": "_2",
+   "new": "本頁重點回顧",
+   "heading": "本頁重點回顧"
+  },
+  {
+   "old": "_3",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "paid-tier": [
+  {
+   "old": "_1",
+   "new": "一個常見錯誤要先更正",
+   "heading": "一個常見錯誤要先更正"
+  },
+  {
+   "old": "_2",
+   "new": "功能對照最低方案與為什麼",
+   "heading": "功能對照：最低方案與為什麼"
+  },
+  {
+   "old": "claude-code-api",
+   "new": "claude-code-也能用-api-按量付費不一定要訂閱",
+   "heading": "Claude Code 也能用 API 按量付費，不一定要訂閱"
+  },
+  {
+   "old": "claude-code-codex",
+   "new": "claude-code-codex-協作只需要一段先知道",
+   "heading": "Claude Code + Codex 協作，只需要一段先知道"
+  },
+  {
+   "old": "2026-09-16",
+   "new": "資料來源2026-09-16-查證",
+   "heading": "資料來源（2026-09-16 查證）"
+  }
+ ],
+ "projects": [
+  {
+   "old": "1-projects",
+   "new": "1-現在有幾種projects",
+   "heading": "1. 現在有幾種「Projects」"
+  },
+  {
+   "old": "2-claudeai-projects",
+   "new": "2-舊版-claudeai-projects-能放多少東西",
+   "heading": "2. 舊版 claude.ai Projects 能放多少東西"
+  },
+  {
+   "old": "3-project-instructions",
+   "new": "3-project-instructions-怎麼寫",
+   "heading": "3. Project instructions 怎麼寫"
+  },
+  {
+   "old": "4-free-5",
+   "new": "4-各方案差異free-可以用上限-5-個",
+   "heading": "4. 各方案差異：Free 可以用，上限 5 個"
+  },
+  {
+   "old": "5-claude-code",
+   "new": "5-claude-code-本機的專案是另一套邏輯",
+   "heading": "5. Claude Code 本機的「專案」是另一套邏輯"
+  },
+  {
+   "old": "6-projects-beta-claude-code",
+   "new": "6-新版-projects-beta先從-claude-code-推出",
+   "heading": "6. 新版 Projects beta：先從 Claude Code 推出"
+  },
+  {
+   "old": "7-chatgpt-projectsgemini-notebook-notebooklm",
+   "new": "7-跟-chatgpt-projectsgemini-notebook原-notebooklm比一比",
+   "heading": "7. 跟 ChatGPT Projects、Gemini Notebook（原 NotebookLM）比一比6"
+  },
+  {
+   "old": "8-cowork-chat-project",
+   "new": "8-cowork-併入-chat-之後project-多了什麼",
+   "heading": "8. Cowork 併入 Chat 之後，Project 多了什麼"
+  },
+  {
+   "old": "2026-09-19",
+   "new": "資料來源2026-09-19-查證",
+   "heading": "資料來源（2026-09-19 查證）"
+  }
+ ],
+ "sdlc-ai-agent": [
+  {
+   "old": "_1",
+   "new": "一各階段對照表",
+   "heading": "一、各階段對照表"
+  },
+  {
+   "old": "spec-driven-developmentsdd",
+   "new": "二規格驅動開發spec-driven-developmentsdd",
+   "heading": "二、規格驅動開發（Spec-Driven Development，SDD）"
+  },
+  {
+   "old": "_2",
+   "new": "是什麼",
+   "heading": "是什麼"
+  },
+  {
+   "old": "_3",
+   "new": "規格的定位可執行的產出物不是靜態文件",
+   "heading": "規格的定位：可執行的產出物，不是靜態文件"
+  },
+  {
+   "old": "tddbddddd-ai",
+   "new": "三tddbddddd-在-ai-代理流程裡的角色",
+   "heading": "三、TDD、BDD、DDD 在 AI 代理流程裡的角色"
+  },
+  {
+   "old": "tdd-ai",
+   "new": "tdd給-ai-一個能自動判斷對錯的目標",
+   "heading": "TDD：給 AI 一個能自動判斷對錯的目標"
+  },
+  {
+   "old": "bddgiven-when-then",
+   "new": "bddgiven-when-then-直接當成規格與驗收條件",
+   "heading": "BDD：Given-When-Then 直接當成規格與驗收條件"
+  },
+  {
+   "old": "ddd-claudemdagentsmd",
+   "new": "ddd在-claudemdagentsmd-裡寫清楚通用語言與上下文邊界",
+   "heading": "DDD：在 CLAUDE.md／AGENTS.md 裡寫清楚通用語言與上下文邊界"
+  },
+  {
+   "old": "sdd",
+   "new": "跟-sdd-的關係",
+   "heading": "跟 SDD 的關係"
+  },
+  {
+   "old": "cicd-ai",
+   "new": "四cicd-裡的-ai-代理",
+   "heading": "四、CI/CD 裡的 AI 代理"
+  },
+  {
+   "old": "_4",
+   "new": "五完整案例檢查網站失效連結的腳本",
+   "heading": "五、完整案例：檢查網站失效連結的腳本"
+  },
+  {
+   "old": "1",
+   "new": "1-需求",
+   "heading": "1. 需求"
+  },
+  {
+   "old": "2",
+   "new": "2-規格",
+   "heading": "2. 規格"
+  },
+  {
+   "old": "3",
+   "new": "3-計畫",
+   "heading": "3. 計畫"
+  },
+  {
+   "old": "4",
+   "new": "4-實作",
+   "heading": "4. 實作"
+  },
+  {
+   "old": "5",
+   "new": "5-驗證",
+   "heading": "5. 驗證"
+  },
+  {
+   "old": "6",
+   "new": "6-交付",
+   "heading": "6. 交付"
+  },
+  {
+   "old": "ai",
+   "new": "六敏捷式在-ai-代理時代的變化",
+   "heading": "六、敏捷式在 AI 代理時代的變化"
+  },
+  {
+   "old": "_5",
+   "new": "七風險清單",
+   "heading": "七、風險清單"
+  },
+  {
+   "old": "_6",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "sdlc-traditional": [
+  {
+   "old": "sdlc",
+   "new": "一sdlc-六個階段在做什麼",
+   "heading": "一、SDLC 六個階段在做什麼"
+  },
+  {
+   "old": "v",
+   "new": "二瀑布式v-模型螺旋模型迭代增量開發",
+   "heading": "二、瀑布式、V 模型、螺旋模型、迭代增量開發"
+  },
+  {
+   "old": "21-waterfall",
+   "new": "21-瀑布式waterfall",
+   "heading": "2.1 瀑布式（Waterfall）"
+  },
+  {
+   "old": "22-v",
+   "new": "22-v-模型",
+   "heading": "2.2 V 模型"
+  },
+  {
+   "old": "23-spiral-model",
+   "new": "23-螺旋模型spiral-model",
+   "heading": "2.3 螺旋模型（Spiral Model）"
+  },
+  {
+   "old": "24",
+   "new": "24-迭代與增量開發",
+   "heading": "2.4 迭代與增量開發"
+  },
+  {
+   "old": "scrum",
+   "new": "三敏捷式與-scrum",
+   "heading": "三、敏捷式與 Scrum"
+  },
+  {
+   "old": "31-agile-manifesto",
+   "new": "31-agile-manifesto-四大價值",
+   "heading": "3.1 Agile Manifesto 四大價值"
+  },
+  {
+   "old": "32-scrum",
+   "new": "32-scrum職責歸屬事件產出物",
+   "heading": "3.2 Scrum：職責歸屬、事件、產出物"
+  },
+  {
+   "old": "33-kanban",
+   "new": "33-kanban",
+   "heading": "3.3 Kanban"
+  },
+  {
+   "old": "34-xp",
+   "new": "34-xp-極限編程摘要",
+   "heading": "3.4 XP 極限編程（摘要）"
+  },
+  {
+   "old": "devops-cicd",
+   "new": "四devops-與-cicd",
+   "heading": "四、DevOps 與 CI/CD"
+  },
+  {
+   "old": "nist-ssdf",
+   "new": "五安全開發nist-ssdf",
+   "heading": "五、安全開發：NIST SSDF"
+  },
+  {
+   "old": "_1",
+   "new": "六流程模型比較與怎麼選",
+   "heading": "六、流程模型比較與怎麼選"
+  },
+  {
+   "old": "_2",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "session-handoff": [
+  {
+   "old": "_1",
+   "new": "一問題是什麼",
+   "heading": "一、問題是什麼"
+  },
+  {
+   "old": "sessionstart-hook",
+   "new": "二官方機制sessionstart-hook",
+   "heading": "二、官方機制：SessionStart hook"
+  },
+  {
+   "old": "session_logmd",
+   "new": "三整理者做法session_logmd-怎麼寫",
+   "heading": "三、整理者做法：session_log.md 怎麼寫"
+  },
+  {
+   "old": "_2",
+   "new": "檔案放哪長什麼樣",
+   "heading": "檔案放哪、長什麼樣"
+  },
+  {
+   "old": "_3",
+   "new": "三個動作串起整個循環",
+   "heading": "三個動作串起整個循環"
+  },
+  {
+   "old": "_4",
+   "new": "為什麼要放在頂部而不是尾端",
+   "heading": "為什麼要放在頂部、而不是尾端"
+  },
+  {
+   "old": "_5",
+   "new": "四這個機制解決了什麼沒解決什麼",
+   "heading": "四、這個機制解決了什麼、沒解決什麼"
+  },
+  {
+   "old": "_6",
+   "new": "本頁重點回顧",
+   "heading": "本頁重點回顧"
+  },
+  {
+   "old": "_7",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "skill-build": [
+  {
+   "old": "_1",
+   "new": "一起點為什麼要做這件事",
+   "heading": "一、起點：為什麼要做這件事"
+  },
+  {
+   "old": "skill-plugin",
+   "new": "二先搞懂兩個概念skill-與-plugin-到底是什麼",
+   "heading": "二、先搞懂兩個概念：SKILL 與 Plugin 到底是什麼"
+  },
+  {
+   "old": "21-skill",
+   "new": "21-skill一個資料夾裝的是程序不是事實",
+   "heading": "2.1 SKILL：一個資料夾，裝的是「程序」不是「事實」"
+  },
+  {
+   "old": "22-plugin-skill",
+   "new": "22-plugin把多個-skill-包起來變成可安裝可分享的單位",
+   "heading": "2.2 Plugin：把多個 SKILL 包起來，變成可安裝、可分享的單位"
+  },
+  {
+   "old": "_2",
+   "new": "三架構決策先做一個階段不做全流程",
+   "heading": "三、架構決策：先做一個階段，不做全流程"
+  },
+  {
+   "old": "skill",
+   "new": "四skill-一研究方向收斂怎麼做出來的",
+   "heading": "四、SKILL 一：研究方向收斂怎麼做出來的"
+  },
+  {
+   "old": "skill_1",
+   "new": "五skill-二研究問題稽核怎麼做出來的",
+   "heading": "五、SKILL 二：研究問題稽核怎麼做出來的"
+  },
+  {
+   "old": "skill_2",
+   "new": "六skill-三學術寫作品質稽核怎麼做出來的",
+   "heading": "六、SKILL 三：學術寫作品質稽核怎麼做出來的"
+  },
+  {
+   "old": "skill-creator",
+   "new": "七用-skill-creator-做評測誠實面對差異不大",
+   "heading": "七、用 skill-creator 做評測：誠實面對「差異不大」"
+  },
+  {
+   "old": "_3",
+   "new": "八給研究問題稽核加的逐項引導功能",
+   "heading": "八、給研究問題稽核加的逐項引導功能"
+  },
+  {
+   "old": "_4",
+   "new": "九最終產出怎麼安裝",
+   "heading": "九、最終產出：怎麼安裝"
+  },
+  {
+   "old": "claude-code",
+   "new": "claude-code-詳細安裝步驟三種方法任選一種",
+   "heading": "Claude Code 詳細安裝步驟：三種方法任選一種"
+  },
+  {
+   "old": "claudeai",
+   "new": "claudeai-網頁版安裝步驟",
+   "heading": "Claude.ai 網頁版安裝步驟"
+  },
+  {
+   "old": "claude-codecodex",
+   "new": "十沒有-claude-codecodex也沒有付費方案的讀者手動版怎麼用",
+   "heading": "十、沒有 Claude Code／Codex、也沒有付費方案的讀者：手動版怎麼用"
+  },
+  {
+   "old": "skillmd",
+   "new": "為什麼不能直接把-skillmd-整份貼過去就好",
+   "heading": "為什麼不能直接把 SKILL.md 整份貼過去就好"
+  },
+  {
+   "old": "references",
+   "new": "判斷哪些-references-非貼不可",
+   "heading": "判斷哪些 references 非貼不可"
+  },
+  {
+   "old": "_5",
+   "new": "具體做法",
+   "heading": "具體做法"
+  },
+  {
+   "old": "_6",
+   "new": "誠實的限制",
+   "heading": "誠實的限制"
+  },
+  {
+   "old": "skill_3",
+   "new": "十一如果你也想把教材變成-skill一套可以照抄的步驟",
+   "heading": "十一、如果你也想把教材變成 SKILL：一套可以照抄的步驟"
+  },
+  {
+   "old": "1",
+   "new": "1-盤點原料",
+   "heading": "1. 盤點原料"
+  },
+  {
+   "old": "2",
+   "new": "2-去重與分層",
+   "heading": "2. 去重與分層"
+  },
+  {
+   "old": "3",
+   "new": "3-授權與來源檢查",
+   "heading": "3. 授權與來源檢查"
+  },
+  {
+   "old": "4",
+   "new": "4-可檢查化",
+   "heading": "4. 可檢查化"
+  },
+  {
+   "old": "5",
+   "new": "5-正反例與紅線標注",
+   "heading": "5. 正反例與紅線標注"
+  },
+  {
+   "old": "6",
+   "new": "6-用真實評測驗證不要只憑直覺",
+   "heading": "6. 用真實評測驗證，不要只憑直覺"
+  },
+  {
+   "old": "7",
+   "new": "7-分層發布",
+   "heading": "7. 分層發布"
+  },
+  {
+   "old": "_7",
+   "new": "本頁重點回顧",
+   "heading": "本頁重點回顧"
+  },
+  {
+   "old": "_8",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "subagent": [
+  {
+   "old": "1-subagent",
+   "new": "1-subagent-是什麼什麼時候該用",
+   "heading": "1. Subagent 是什麼、什麼時候該用"
+  },
+  {
+   "old": "2-agent",
+   "new": "2-內建-agent",
+   "heading": "2. 內建 agent"
+  },
+  {
+   "old": "3-agentfrontmatter",
+   "new": "3-自訂-agentfrontmatter-全欄位",
+   "heading": "3. 自訂 agent：frontmatter 全欄位"
+  },
+  {
+   "old": "4-fable",
+   "new": "4-模型怎麼選fable-是什麼解析順序",
+   "heading": "4. 模型怎麼選：fable 是什麼、解析順序"
+  },
+  {
+   "old": "5",
+   "new": "5-工具怎麼被過濾",
+   "heading": "5. 工具怎麼被過濾"
+  },
+  {
+   "old": "6-background-isolation-worktree",
+   "new": "6-background-與-isolation-worktree-的實際行為",
+   "heading": "6. background 與 isolation: worktree 的實際行為"
+  },
+  {
+   "old": "backgroundsubagent",
+   "new": "backgroundsubagent-到底在前景還是背景跑",
+   "heading": "background：subagent 到底在前景還是背景跑"
+  },
+  {
+   "old": "isolation-worktree",
+   "new": "isolation-worktree怎麼真的擋住越界的指令",
+   "heading": "isolation: worktree：怎麼真的擋住越界的指令"
+  },
+  {
+   "old": "7-sendmessage",
+   "new": "7-sendmessage-續問",
+   "heading": "7. SendMessage 續問"
+  },
+  {
+   "old": "8-agent-viewagent-teams-dynamic-workflows",
+   "new": "8-其他多代理機制agent-viewagent-teams-與-dynamic-workflows",
+   "heading": "8. 其他多代理機制：agent view、agent teams 與 dynamic workflows"
+  },
+  {
+   "old": "workflow-dynamic-workflows",
+   "new": "workflow-工具與-dynamic-workflows",
+   "heading": "Workflow 工具與 dynamic workflows"
+  },
+  {
+   "old": "9",
+   "new": "9-成本三層倍數不能互換引用",
+   "heading": "9. 成本：三層倍數，不能互換引用"
+  },
+  {
+   "old": "10-codex",
+   "new": "10-codex-的對應設定",
+   "heading": "10. Codex 的對應設定"
+  },
+  {
+   "old": "_1",
+   "new": "常見誤用",
+   "heading": "常見誤用"
+  },
+  {
+   "old": "_2",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "tools-catalog": [
+  {
+   "old": "1",
+   "new": "1-怎麼用這份清單",
+   "heading": "1. 怎麼用這份清單"
+  },
+  {
+   "old": "2-harness",
+   "new": "2-官方文件與-harness-文章",
+   "heading": "2. 官方文件與 harness 文章"
+  },
+  {
+   "old": "3-skill-plugin",
+   "new": "3-官方-skill-與-plugin",
+   "heading": "3. 官方 Skill 與 Plugin"
+  },
+  {
+   "old": "4-mcp",
+   "new": "4-mcp",
+   "heading": "4. MCP"
+  },
+  {
+   "old": "_1",
+   "new": "網頁搜尋與爬取",
+   "heading": "網頁搜尋與爬取"
+  },
+  {
+   "old": "5-skill-plugin",
+   "new": "5-社群-skill-與-plugin",
+   "heading": "5. 社群 Skill 與 Plugin"
+  },
+  {
+   "old": "_2",
+   "new": "一般用途",
+   "heading": "一般用途"
+  },
+  {
+   "old": "_3",
+   "new": "整套開發工作流",
+   "heading": "整套開發工作流"
+  },
+  {
+   "old": "_4",
+   "new": "前端設計",
+   "heading": "前端設計"
+  },
+  {
+   "old": "token",
+   "new": "省-token",
+   "heading": "省 token"
+  },
+  {
+   "old": "_5",
+   "new": "程式碼庫知識圖譜",
+   "heading": "程式碼庫知識圖譜"
+  },
+  {
+   "old": "_6",
+   "new": "學術研究工作流",
+   "heading": "學術研究工作流"
+  },
+  {
+   "old": "skill",
+   "new": "畫圖類-skill-審查筆記",
+   "heading": "畫圖類 skill 審查筆記"
+  },
+  {
+   "old": "6",
+   "new": "6-學習資源",
+   "heading": "6. 學習資源"
+  },
+  {
+   "old": "7",
+   "new": "7-簡報影片與圖表",
+   "heading": "7. 簡報、影片與圖表"
+  },
+  {
+   "old": "8",
+   "new": "8-本機語音轉錄與本機模型",
+   "heading": "8. 本機語音轉錄與本機模型"
+  },
+  {
+   "old": "9",
+   "new": "9-看起來很熱門但我們不推薦的",
+   "heading": "9. 看起來很熱門，但我們不推薦的"
+  },
+  {
+   "old": "_7",
+   "new": "資料來源",
+   "heading": "資料來源"
+  }
+ ],
+ "tools-compare": [
+  {
+   "old": "_1",
+   "new": "主表介面-方案",
+   "heading": "主表：介面 × 方案"
+  },
+  {
+   "old": "_2",
+   "new": "逐介面細節",
+   "heading": "逐介面細節"
+  },
+  {
+   "old": "claude-chat",
+   "new": "claude-chat網頁手機",
+   "heading": "Claude Chat（網頁／手機）"
+  },
+  {
+   "old": "claude-desktopchat",
+   "new": "claude-desktopchat-分頁",
+   "heading": "Claude Desktop（Chat 分頁）"
+  },
+  {
+   "old": "coworkwebchrome",
+   "new": "cowork桌面版web手機chrome-側邊欄",
+   "heading": "Cowork（桌面版／web／手機／Chrome 側邊欄）"
+  },
+  {
+   "old": "claude-codeclidesktop-code-ide",
+   "new": "claude-codeclidesktop-code-分頁網頁ide",
+   "heading": "Claude Code（CLI／Desktop Code 分頁／網頁／IDE）"
+  },
+  {
+   "old": "claude-designcanvas",
+   "new": "claude-designcanvas-設計工具",
+   "heading": "Claude Design（canvas 設計工具）"
+  },
+  {
+   "old": "chatgpt",
+   "new": "chatgpt網頁手機",
+   "heading": "ChatGPT（網頁／手機）"
+  },
+  {
+   "old": "chatgpt-desktop-chatworkcodex",
+   "new": "chatgpt-desktop統一版含-chatworkcodex-分頁",
+   "heading": "ChatGPT Desktop（統一版，含 Chat／Work／Codex 分頁）"
+  },
+  {
+   "old": "codexcliidecloud",
+   "new": "codexcliidecloud",
+   "heading": "Codex（CLI／IDE／cloud）"
+  },
+  {
+   "old": "_3",
+   "new": "最容易搞混的六組",
+   "heading": "最容易搞混的六組"
+  },
+  {
+   "old": "1-claude-desktop-chat-vs-coworkcode",
+   "new": "1-claude-desktop-的-chat-分頁-vs-coworkcode-分頁",
+   "heading": "1. Claude Desktop 的 Chat 分頁 vs Cowork／Code 分頁"
+  },
+  {
+   "old": "2-cowork-vs-claude-code",
+   "new": "2-cowork-vs-claude-code",
+   "heading": "2. Cowork vs Claude Code"
+  },
+  {
+   "old": "3-chatgpt-desktop-codex-vs-codex-cli",
+   "new": "3-chatgpt-desktop-的-codex-分頁-vs-codex-cli",
+   "heading": "3. ChatGPT Desktop 的 Codex 分頁 vs Codex CLI"
+  },
+  {
+   "old": "4-chatgptvs-codex",
+   "new": "4-chatgpt一般對話vs-codex兩者不是同一種工具",
+   "heading": "4. ChatGPT（一般對話）vs Codex：兩者不是同一種工具"
+  },
+  {
+   "old": "5-codex-app-chatgpt-desktop2026-07-09",
+   "new": "5-codex-桌面-app-已經併入-chatgpt-desktop2026-07-09",
+   "heading": "5. Codex 桌面 App 已經併入 ChatGPT Desktop（2026-07-09）"
+  },
+  {
+   "old": "6-codex-mcp-server",
+   "new": "6-codex-mcp-server-教學已失效",
+   "heading": "6. codex mcp-server 教學已失效"
+  },
+  {
+   "old": "_4",
+   "new": "怎麼選",
+   "heading": "怎麼選"
+  },
+  {
+   "old": "2026-09-16",
+   "new": "資料來源2026-09-16-查證",
+   "heading": "資料來源（2026-09-16 查證）"
+  }
+ ]
+}

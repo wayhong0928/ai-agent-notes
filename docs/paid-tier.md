@@ -12,7 +12,7 @@
 
 | 功能 | 最低方案 | 為什麼要 Claude Code／Codex 或付費方案才做得到 |
 |---|---|---|
-| 讀寫本機檔案、執行終端指令 | Claude Code：Pro 起（或純 API key 按量付費）；Codex：CLI、IDE 擴充官方定價頁從 Plus 起列，Free／Go 只列桌面 App；也可用 API key 按用量計費，細節見[免付費區的說明](free-tier.md#freego-codex) [O1] | Chat／ChatGPT 網頁版的「執行程式碼」是雲端沙盒工具，不會碰到你電腦上的檔案；只有 Claude Code 與 Codex CLI／IDE 是真的在本機終端跑，這是**本機檔案**與**執行指令**這兩個原因 [S7] |
+| 讀寫本機檔案、執行終端指令 | Claude Code：Pro 起（或純 API key 按量付費）；Codex：CLI、IDE 擴充官方定價頁從 Plus 起列，Free／Go 只列桌面 App；也可用 API key 按用量計費，細節見[免付費區的說明](free-tier.md#freego-帳號用-codex-要注意的地方) [O1] | Chat／ChatGPT 網頁版的「執行程式碼」是雲端沙盒工具，不會碰到你電腦上的檔案；只有 Claude Code 與 Codex CLI／IDE 是真的在本機終端跑，這是**本機檔案**與**執行指令**這兩個原因 [S7] |
 | Projects（Claude） | Free 上限 5 個；Pro 起無限量＋RAG 擴充 | **2026-09-19 更正**：先前這裡寫「Free 沒有 Projects」是錯的，Free 其實能用、但上限 5 個且沒有 RAG 擴充；Pro 起無限量，且知識庫接近上限時會自動切換 RAG 模式擴充容量最多 10 倍，完整說明見[Projects 功能](projects.md) [S3][S24] |
 | Research（Claude） | Pro | 官方明寫「Research is available for users with paid Claude plans」[S14] |
 | Cowork | Pro | 需要本機或雲端 VM 執行環境，免費帳號完全不能用；2026-09-16 起官方正把 Cowork 併入一般 Chat，Pro／Max 帳號分階段收到新體驗，收到之後不必再特地切到 Cowork 模式；2026-10-06 起 Pro／Max 的新任務只在雲端執行，讀寫本機資料夾要桌面版開著[^fresh6]；這項變動官方只寫給 Pro／Max，Team／Enterprise 的雲端 session 由組織管理員開關[^fresh7] [S21][S26] |

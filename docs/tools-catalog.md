@@ -52,7 +52,7 @@ MCP 的協定原理、安裝步驟、scope 與 OAuth 設定，還有 Windows 上
 | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | 用 Chrome DevTools Protocol 讓代理檢查效能、console、網路請求，比純截圖驗收更深入 | 52,288★，最後 push 2026-09-18，Apache-2.0 |
 | [modelcontextprotocol/inspector](https://github.com/modelcontextprotocol/inspector) | 官方除錯／視覺化工具，裝任何 MCP server 之前先用這個看它實際會呼叫哪些方法，等於幫第 1 節「安裝前審查」的第 2 步省力 | 10,913★，最後 push 2026-09-19，license 未標註 |
 
-[MCP 入門與實戰第 9 節](mcp.md#9)已經收了 `upstash/context7`、`microsoft/playwright-mcp`、`github/github-mcp-server` 三個常用項目，這裡不重複列。另外 `MarkusPfundstein/mcp-obsidian`（透過 Obsidian Local REST API plugin 讀寫 vault）功能對 Obsidian 使用者很直接，但需要常駐 Obsidian 並在本機開一個 REST API port，屬於「功能對得上、但曝險面要自己權衡」的項目，不列入前兩項推薦。
+[MCP 入門與實戰第 9 節](mcp.md#9-推薦清單)已經收了 `upstash/context7`、`microsoft/playwright-mcp`、`github/github-mcp-server` 三個常用項目，這裡不重複列。另外 `MarkusPfundstein/mcp-obsidian`（透過 Obsidian Local REST API plugin 讀寫 vault）功能對 Obsidian 使用者很直接，但需要常駐 Obsidian 並在本機開一個 REST API port，屬於「功能對得上、但曝險面要自己權衡」的項目，不列入前兩項推薦。
 
 ### 網頁搜尋與爬取
 

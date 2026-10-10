@@ -17,7 +17,7 @@
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
 <li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791384637">免付費區</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
 <li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
@@ -46,7 +46,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791468632">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -59,7 +59,7 @@
 <p>查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p><a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>那頁已經把四種擴充機制放進同一張表比較過。這頁只挖 MCP 這一項：它到底是什麼、怎麼在五分鐘內裝好第一個、scope 跟認證怎麼設，以及裝完之後怎麼確認它真的在運作，而不是「設定寫對了、但其實沒連上」。</p>
-<h2 id="1-mcp">1. MCP 是什麼</h2>
+<h2 id="1-mcp-是什麼">1. MCP 是什麼</h2>
 <p>MCP（Model Context Protocol）官方的定義是「an open-source standard for connecting AI applications to external systems」，並且用了一個好記的比喻：它是 AI 應用程式的 USB-C 埠，一種標準化的外接方式，不屬於任何一家公司的專屬協定 [1]。</p>
 <p>一個 MCP server 對外提供三種原語：</p>
 <ul>
@@ -67,7 +67,7 @@
 <li><strong>resources</strong>：可以讀取的資料</li>
 <li><strong>prompts</strong>：預先設計好的提示樣板</li>
 </ul>
-<p>這三種原語的分工，<a href="extensions.html#mcp">extensions.md</a>已經整理過對應範例，這裡不重複。</p>
+<p>這三種原語的分工，<a href="extensions.html#mcp接上外部工具">extensions.md</a>已經整理過對應範例，這裡不重複。</p>
 <p><strong>連線方式（transport）目前有兩種現行標準</strong>[2]：</p>
 <table>
 <thead>
@@ -92,7 +92,7 @@
 <p class="admonition-title">host／client／server 三層術語，這裡沒有逐字查證官方定義</p>
 <p>MCP 官方 introduction 頁沒有逐字定義 host／client／server 這三層術語，只點出「AI applications like Claude or ChatGPT can connect to data sources... tools... and workflows」這種連接關係，也就是應用程式（host，內含 client）連到外部 server。精確的逐字定義在 <code>architecture</code> 頁，本次查證沒有逐字讀過那頁，這裡先用上面這個整理過的說法，不掛官方逐字引用的信心等級。</p>
 </div>
-<h2 id="2">2. 五分鐘裝好第一個</h2>
+<h2 id="2-五分鐘裝好第一個">2. 五分鐘裝好第一個</h2>
 <p>以 <a href="https://github.com/upstash/context7">context7</a>（遠端 HTTP，免安裝任何本機依賴）做示範，官方文件裡 Claude Code 的遠端連法是這一條 [16]：</p>
 <pre><code class="language-bash">claude mcp add --scope user --header &quot;Authorization: Bearer YOUR_API_KEY&quot; --transport http context7 https://mcp.context7.com/mcp
 </code></pre>
@@ -104,7 +104,7 @@
 </ol>
 <p>連不上的時候，先用 <code>claude mcp get &lt;name&gt;</code> 看詳細狀態；HTTP 伺服器可以額外用 <code>curl -I &lt;url&gt;</code> 手動戳一次（PowerShell 要用 <code>curl.exe</code>，不是被別名成 <code>Invoke-WebRequest</code> 的 <code>curl</code>），stdio 伺服器則直接在終端機手動跑一次同樣的指令，看是缺 Node.js、缺瀏覽器，還是漏了 <code>--</code> 分隔符導致指令被錯誤解析 [6]。不想留著的話 <code>claude mcp remove &lt;name&gt;</code> 即可移除 [5]。</p>
 <p>context7 的 API key 是<strong>選填</strong>。同一份官方文件在另一個客戶端（OpenClaw）的段落寫「This works without an API key at the anonymous rate limit」，Claude Code 的段落本身沒有提到匿名存取；不過兩者連的是同一個伺服器端點，整理者實測把上面指令裡的 <code>--header</code> 那段拿掉、只留 <code>claude mcp add --transport http context7 https://mcp.context7.com/mcp</code>，<code>claude mcp get context7</code> 一樣顯示 <code>✔ Connected</code>，只是走匿名速率限制；要拿到更高的速率限制、或存取私有 repository，才需要去 context7.com/dashboard 申請 key，照官方寫法用 <code>--header "Authorization: Bearer YOUR_API_KEY"</code> 帶進去 [16]。</p>
-<h2 id="3-scope">3. scope 怎麼選</h2>
+<h2 id="3-scope-怎麼選">3. scope 怎麼選</h2>
 <p><code>claude mcp add</code> 有三層 scope，差在存放位置跟誰看得到 [5]：</p>
 <table>
 <thead>
@@ -138,24 +138,24 @@
 </table>
 <p>官方建議把 <code>project</code> scope 的 <code>.mcp.json</code> 進版控：「Check <code>.mcp.json</code> into version control so everyone on your team gets the same MCP tools and services.」團隊成員第一次啟動時會被要求核准（畫面顯示 <code>⏸ Pending approval</code>），核准清單可以用 <code>claude mcp reset-project-choices</code> 重置 [5]。</p>
 <p>同名伺服器在多層都有設定時，官方原文講得很明確：「When the same server is defined in more than one place, Claude Code connects to it once, using the definition from the highest-precedence source. The entire server entry from that source is used; fields are not merged across scopes.」優先序由高到低是 local → project → user → plugin 提供的 server → claude.ai connector；組織用 <code>managedMcpServers</code> 推送的設定又高於以上所有層級（v2.1.259 起）[5]。</p>
-<h2 id="4-oauth">4. OAuth 認證</h2>
+<h2 id="4-oauth-認證">4. OAuth 認證</h2>
 <p>Claude Code 會在伺服器回應 <code>401</code>／<code>403</code> 時判定它需要認證，<code>claude mcp list</code> 的狀態欄會顯示 <code>! Needs authentication</code>。互動模式下用 <code>/mcp</code> 選那台伺服器、按「Authenticate」會開瀏覽器完成登入，憑證存進系統 keychain（macOS）或憑證檔（其他平台）[5]。</p>
 <p>命令列版本（v2.1.186 起）可以直接跑：</p>
 <pre><code class="language-bash">claude mcp login &lt;name&gt;
 </code></pre>
 <p>沒有瀏覽器的環境（SSH、WSL、headless 主機）加 <code>--no-browser</code>，指令會印出授權網址，手動貼到瀏覽器完成登入再貼回終端機。伺服器如果不支援 Dynamic Client Registration，也可以用 <code>--client-id</code>／<code>--client-secret</code>／<code>--callback-port</code> 帶進事先登記好的 OAuth 憑證 [5]。</p>
-<h2 id="5-mcp">5. MCP 的成本與限制</h2>
+<h2 id="5-mcp-的成本與限制">5. MCP 的成本與限制</h2>
 <p>裝 MCP 不是零成本，這裡列三件常被忽略的事。</p>
 <p><strong>多裝幾台伺服器，context 成本不大，但不是零</strong>：官方原文「Tool search keeps MCP context usage low by deferring tool definitions until Claude needs them. Only tool names and server instructions load at session start, so adding more MCP servers has minimal impact on your context window.」也就是說，每台伺服器完整的工具定義要等 Claude 真的需要時才載入，開場只佔工具名稱和伺服器說明。官方也說沒有「每台伺服器最多幾個工具」的固定上限，實際限制是你的 context 預算。Tool search 預設就是開啟的，例外是用自訂 <code>ANTHROPIC_BASE_URL</code>（非官方主機）、設了 <code>ENABLE_TOOL_SEARCH=false</code>、或少數雲端平台上的舊模型，這些情況會改成開場就載入全部工具定義，這時候裝太多伺服器才會明顯吃掉 context。用不到的伺服器還是建議移除，這是整理者的建議，不是官方原文 [5][6]。</p>
 <p><strong>單次工具輸出與逾時各有各的上限</strong>：<code>MAX_MCP_OUTPUT_TOKENS</code> 是單次 MCP 工具輸出的 token 上限，預設 25,000，超過 10,000 會先跳警告；超過上限又沒有圖片內容時，Claude Code 會把結果存成檔案，對話裡改顯示檔案路徑。<code>MCP_TOOL_TIMEOUT</code> 是單次工具呼叫的逾時設定，跟輸出上限是各自獨立的環境變數，沒設定時預設約 28 小時；也可以在 <code>.mcp.json</code> 裡替單一伺服器加 <code>timeout</code> 欄位（單位毫秒），只對那台伺服器生效 [5]。</p>
 <p><strong>Claude.ai Free 方案限 1 個自訂 connector</strong>：完整對照表見<a href="free-tier.html">免付費區</a>，這裡不重複；規劃工作流程前先確認帳號方案，免費帳號想同時接文獻庫、雲端硬碟、資料庫這類多 connector 需求會卡在這一條。</p>
-<h2 id="6-mcp-skill">6. MCP 還是 Skill：什麼時候該用哪個</h2>
+<h2 id="6-mcp-還是-skill什麼時候該用哪個">6. MCP 還是 Skill：什麼時候該用哪個</h2>
 <p>這題<a href="extensions.html">extensions.md</a>已經給過決策清單，這裡只抽最相關的一條判準：「需要接觸目前工具箱之外的東西嗎？（例如查公司內部資料庫、讀 Google Drive 裡的檔案）需要 → MCP」[14]。反過來說，如果 Claude 現有的 Read/Write/Bash/WebFetch 已經涵蓋得了，就不需要 MCP，寫成 Skill 或 CLAUDE.md 規則就夠了。</p>
 <div class="admonition tip">
 <p class="admonition-title">MCP 不解決幻覺</p>
 <p>裝了 MCP 不代表代理就不會答錯。extensions.md 提醒過這個常見誤用：「MCP 只解決『有沒有真的東西可以查』的問題，代理仍然可能查了卻答錯，或者選錯了要查的工具」。接上文獻庫之後，還是要核對它真的引用了查到的內容，不是引用了憑空生成的內容 [14]。</p>
 </div>
-<h2 id="7">7. 安全</h2>
+<h2 id="7-安全">7. 安全</h2>
 <p><code>code.claude.com/docs/en/mcp</code> 頁面在「Find and build MCP servers」段落有明文警告：「Verify you trust each server before connecting it. Servers that fetch external content can expose you to prompt injection risk.」[6]</p>
 <p><code>code.claude.com/docs/en/security</code> 的 MCP 安全專節講得更直白：「You can connect Claude Code to Model Context Protocol (MCP) servers... We encourage either writing your own MCP servers or using MCP servers from providers that you trust... Anthropic reviews connectors against its listing criteria before adding them to the Anthropic Directory, <strong>but does not security-audit or manage any MCP server</strong>.」<sup id="fnref:fresh1"><a class="footnote-ref" href="#fn:fresh1">1</a></sup>重點是最後一句：收錄進 Anthropic Directory 只代表通過上架審核標準，<strong>不是安全掛保證</strong> [15]。</p>
 <p>同一頁針對 prompt injection 給了五點「跟不信任內容互動」的建議：核准前先看指令、不要把不信任內容直接 pipe 給 Claude、關鍵檔案的改動要人工核對、跟外部 web 服務互動時考慮用虛擬機隔離、發現可疑行為用 <code>/feedback</code> 回報 [15]。這些建議不是專門寫給 MCP，但「會爬外部內容的 server 就是常見的注入來源」這句直接點名了愛爬網頁、讀外部文件的工具型 MCP server。</p>
@@ -164,7 +164,7 @@
 <p class="admonition-title">怎麼審查一個 MCP server：整理者歸納，不是官方 checklist</p>
 <p>官方沒有給一份「MCP server 安全審查」專頁，以下是綜合官方分散片段拼出來的判準，信心中等，不是單一頁面的逐字引用：(1) 是不是自己寫的、或來自你信任的來源；(2) 會不會爬外部內容（高風險的 prompt injection 來源）；(3) 用 <code>mcp__&lt;server&gt;__&lt;tool&gt;</code> 規則做最小權限，不要整台伺服器全部工具都放行；(4) 進版控前先用 <code>modelcontextprotocol/inspector</code> 這類官方除錯工具看它實際會呼叫哪些方法。</p>
 </div>
-<h2 id="8-windows">8. Windows 踩坑實錄</h2>
+<h2 id="8-windows-踩坑實錄">8. Windows 踩坑實錄</h2>
 <p>先把最容易誤傳的說法結清：<strong>官方現行教學不需要 <code>cmd /c</code> 包裝</strong>。逐字搜尋 <code>code.claude.com/docs/en/mcp</code> 與 <code>mcp-quickstart</code> 全文，都沒有出現「cmd /c」這個寫法；官方 quickstart 明講「<code>claude mcp add</code> works the same in every shell, including PowerShell and Command Prompt」，教學範例就是直接裸跑：</p>
 <pre><code class="language-bash">claude mcp add playwright -- npx -y @playwright/mcp@latest
 </code></pre>
@@ -185,7 +185,7 @@
 <p><code>microsoft/playwright-mcp</code> 的 Issue #1540 記錄了一個不同的失敗模式：即使手動修正好 <code>/c</code> 被轉換的問題，<code>cmd.exe /c npx</code> 這個組合在 stdio transport 下仍可能失敗，因為 <code>npx.cmd</code> 這個批次檔包裝會打斷 stdio 需要的 stdin/stdout pipe 繼承。這條只透過 WebSearch 摘要取得，沒有逐字讀過原 issue 全文核對細節，信心中等 [8]。</p>
 </div>
 <p><strong>檢查習慣</strong>：不管是裸跑 <code>npx</code> 還是手動包了 <code>cmd /c</code>，裝完都養成跑一次 <code>claude mcp get &lt;name&gt;</code> 看 <code>Args</code> 欄位的習慣。這是唯一能直接看到「Claude Code 實際上會執行的指令長什麼樣」的地方，比等連線逾時才回頭查快得多。</p>
-<h2 id="9">9. 推薦清單</h2>
+<h2 id="9-推薦清單">9. 推薦清單</h2>
 <p><strong>這頁範例本尊，2026-09-19 即時查證的 star 數與最後 push 日期</strong>[18]：</p>
 <table>
 <thead>
@@ -215,16 +215,16 @@
 </table>
 <p>另外兩個跟本站其他頁重疊、直接連過去就好，不重複整理：</p>
 <ul>
-<li><strong>Obsidian vault</strong>：<code>coddingtonbear/obsidian-local-rest-api</code> 這個 Obsidian 社群 plugin 內建 MCP server，完整設定步驟與 TLS 憑證處理見<a href="claude-code-obsidian.html#cmcp-server-claude-obsidian-vault">Claude Code 接上 Obsidian vault</a> [19]。</li>
+<li><strong>Obsidian vault</strong>：<code>coddingtonbear/obsidian-local-rest-api</code> 這個 Obsidian 社群 plugin 內建 MCP server，完整設定步驟與 TLS 憑證處理見<a href="claude-code-obsidian.html#路徑-cmcp-server讓-claude-透過-obsidian-本身操作-vault">Claude Code 接上 Obsidian vault</a> [19]。</li>
 <li><strong>官方 reference servers</strong>：<code>modelcontextprotocol/servers</code> monorepo（90,453★，最後 push 2026-09-03）收了 filesystem 等官方範例伺服器，多數功能已被上面更成熟的獨立 repo 取代 [20]。</li>
 </ul>
-<h3 id="codex-mcp">Codex 的 MCP 設定</h3>
+<h3 id="codex-的-mcp-設定">Codex 的 MCP 設定</h3>
 <p>Codex 也能當 MCP client，設定放在 <code>~/.codex/config.toml</code>（使用者層，套用到所有 repo），受信任的專案也可以用專案層 <code>.codex/config.toml</code>。指令跟 Claude Code 很像：</p>
 <pre><code class="language-bash">codex mcp add &lt;name&gt; --env VAR=VALUE -- &lt;stdio 啟動指令&gt;
 </code></pre>
 <p>遠端 Streamable HTTP 伺服器改用 <code>--url</code>。<code>config.toml</code> 裡 stdio 型用 <code>[mcp_servers.&lt;name&gt;]</code> 搭配 <code>command</code>／<code>args</code>／<code>env</code>／<code>cwd</code>；HTTP 型用 <code>url</code>／<code>auth</code>（<code>oauth</code> 或 <code>chatgpt</code>）／<code>bearer_token_env_var</code>／<code>http_headers</code>。狀態檢查用 <code>codex mcp list</code>、OAuth 登入用 <code>codex mcp login &lt;name&gt;</code>，TUI 內也有 <code>/mcp</code>。這份 <code>config.toml</code> 是 ChatGPT 桌面版、Codex CLI、IDE 擴充共用的同一份設定，改一次三邊都能用 [11][12]。</p>
-<p>需要注意的是<strong>舊版 <code>codex mcp-server</code> 指令與獨立的 <code>codex-mcp-server</code> binary 已經被移除</strong>，現在的 <code>codex app-server</code> 也不是 MCP server、不能拿來取代舊教學裡的設定，這件事<a href="tools-compare.html#6-codex-mcp-server">AI 介面比較總表</a>已經寫過完整脈絡，這裡不重複 [13]。</p>
-<h2 id="_1">資料來源</h2>
+<p>需要注意的是<strong>舊版 <code>codex mcp-server</code> 指令與獨立的 <code>codex-mcp-server</code> binary 已經被移除</strong>，現在的 <code>codex app-server</code> 也不是 MCP server、不能拿來取代舊教學裡的設定，這件事<a href="tools-compare.html#6-codex-mcp-server-教學已失效">AI 介面比較總表</a>已經寫過完整脈絡，這裡不重複 [13]。</p>
+<h2 id="資料來源">資料來源</h2>
 <table>
 <thead>
 <tr>
@@ -342,23 +342,24 @@
 </main>
 <aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
 <ul>
-<li><a href="#1-mcp">1. MCP 是什麼</a></li>
-<li><a href="#2">2. 五分鐘裝好第一個</a></li>
-<li><a href="#3-scope">3. scope 怎麼選</a></li>
-<li><a href="#4-oauth">4. OAuth 認證</a></li>
-<li><a href="#5-mcp">5. MCP 的成本與限制</a></li>
-<li><a href="#6-mcp-skill">6. MCP 還是 Skill：什麼時候該用哪個</a></li>
-<li><a href="#7">7. 安全</a></li>
-<li><a href="#8-windows">8. Windows 踩坑實錄</a></li>
-<li><a href="#9">9. 推薦清單</a><ul>
-<li><a href="#codex-mcp">Codex 的 MCP 設定</a></li>
+<li><a href="#1-mcp-是什麼">1. MCP 是什麼</a></li>
+<li><a href="#2-五分鐘裝好第一個">2. 五分鐘裝好第一個</a></li>
+<li><a href="#3-scope-怎麼選">3. scope 怎麼選</a></li>
+<li><a href="#4-oauth-認證">4. OAuth 認證</a></li>
+<li><a href="#5-mcp-的成本與限制">5. MCP 的成本與限制</a></li>
+<li><a href="#6-mcp-還是-skill什麼時候該用哪個">6. MCP 還是 Skill：什麼時候該用哪個</a></li>
+<li><a href="#7-安全">7. 安全</a></li>
+<li><a href="#8-windows-踩坑實錄">8. Windows 踩坑實錄</a></li>
+<li><a href="#9-推薦清單">9. 推薦清單</a><ul>
+<li><a href="#codex-的-mcp-設定">Codex 的 MCP 設定</a></li>
 </ul>
 </li>
-<li><a href="#_1">資料來源</a></li>
+<li><a href="#資料來源">資料來源</a></li>
 </ul>
 </div>
 </aside>
 </div>
 <script src="../assets/site.js"></script>
+<script>(function(){var m={"1-mcp":"1-mcp-是什麼","2":"2-五分鐘裝好第一個","3-scope":"3-scope-怎麼選","4-oauth":"4-oauth-認證","5-mcp":"5-mcp-的成本與限制","6-mcp-skill":"6-mcp-還是-skill什麼時候該用哪個","7":"7-安全","8-windows":"8-windows-踩坑實錄","9":"9-推薦清單","codex-mcp":"codex-的-mcp-設定","_1":"資料來源"};function f(){var h=decodeURIComponent(location.hash.slice(1));if(h&&m[h]&&!document.getElementById(h)){var n=m[h];history.replaceState(null,"","#"+encodeURIComponent(n));var g=function(){var e=document.getElementById(n);if(e)e.scrollIntoView();};document.readyState==="complete"?g():addEventListener("load",g);}}f();addEventListener("hashchange",f);})();</script>
 </body>
 </html>

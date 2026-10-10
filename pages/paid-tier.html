@@ -17,7 +17,7 @@
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
 <li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791384637">免付費區</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
 <li class="active"><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
@@ -46,7 +46,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791468632">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -59,9 +59,9 @@
 <p>查證日期：2026-10-05；Cowork 一列 2026-10-06 重查；Codex 方案 2026-10-07 重查。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p>這頁列出需要 Pro 以上、或者非得用 Claude Code／Codex 才做得到的功能。每項都標最低方案，並說明「為什麼免費帳號或純聊天介面做不到」。多數答案落在六個原因裡：能不能碰<strong>本機檔案</strong>、能不能<strong>執行指令</strong>、能不能讓 <strong>skill 自動觸發</strong>、能不能派出<strong>subagent</strong>、能不能掛 <strong>hooks</strong>、以及要不要 <strong>Claude Code + Codex 協作</strong>。免費帳號能做到的部分，見<a href="free-tier.html">免付費區</a>；不確定該用哪個介面，先看<a href="tools-compare.html">AI 介面比較總表</a>。</p>
-<h2 id="_1">一個常見錯誤要先更正</h2>
+<h2 id="一個常見錯誤要先更正">一個常見錯誤要先更正</h2>
 <p>網路上流傳「Claude Code 僅 Team／Enterprise 可用」的說法是錯的。官方有兩篇獨立文件分別對應 Pro/Max 與 Team/Enterprise，都明確寫「included」：Pro 與 Max 方案「現在都能用 Claude on the web、桌面、手機版<strong>以及 Claude Code</strong>，共用同一個訂閱」；Team 方案「每個席位都內含 Claude Code」。差別只在額度怎麼計算：Pro/Max 是跟 Chat 共用的訂閱額度，Team 是每席位額度，Enterprise 則分「usage-based（純按 API 用量計費）」與「seat-based（沿用 Team 式席位額度）」兩種 [S1][S2]。</p>
-<h2 id="_2">功能對照：最低方案與為什麼</h2>
+<h2 id="功能對照最低方案與為什麼">功能對照：最低方案與為什麼</h2>
 <table>
 <thead>
 <tr>
@@ -73,7 +73,7 @@
 <tbody>
 <tr>
 <td>讀寫本機檔案、執行終端指令</td>
-<td>Claude Code：Pro 起（或純 API key 按量付費）；Codex：CLI、IDE 擴充官方定價頁從 Plus 起列，Free／Go 只列桌面 App；也可用 API key 按用量計費，細節見<a href="free-tier.html#freego-codex">免付費區的說明</a> [O1]</td>
+<td>Claude Code：Pro 起（或純 API key 按量付費）；Codex：CLI、IDE 擴充官方定價頁從 Plus 起列，Free／Go 只列桌面 App；也可用 API key 按用量計費，細節見<a href="free-tier.html#freego-帳號用-codex-要注意的地方">免付費區的說明</a> [O1]</td>
 <td>Chat／ChatGPT 網頁版的「執行程式碼」是雲端沙盒工具，不會碰到你電腦上的檔案；只有 Claude Code 與 Codex CLI／IDE 是真的在本機終端跑，這是<strong>本機檔案</strong>與<strong>執行指令</strong>這兩個原因 [S7]</td>
 </tr>
 <tr>
@@ -128,11 +128,11 @@
 </tr>
 </tbody>
 </table>
-<h2 id="claude-code-api">Claude Code 也能用 API 按量付費，不一定要訂閱</h2>
+<h2 id="claude-code-也能用-api-按量付費不一定要訂閱">Claude Code 也能用 API 按量付費，不一定要訂閱</h2>
 <p>除了 Pro／Max／Team／Enterprise 這幾種訂閱方案，Claude Code 也支援純用 Anthropic API key 按量計費：設定好 <code>ANTHROPIC_API_KEY</code> 之後就直接用 API 費率計費，不吃訂閱額度，也不需要先辦訂閱 [S23]。這對只想偶爾跑一下 Claude Code、不想固定月費的人是另一條路，但要注意：純 API key 不含 claude.ai 網頁版的 Chat 存取，訂閱與 API 是分開計費的兩套權限 [S23b]。</p>
-<h2 id="claude-code-codex">Claude Code + Codex 協作，只需要一段先知道</h2>
+<h2 id="claude-code-codex-協作只需要一段先知道">Claude Code + Codex 協作，只需要一段先知道</h2>
 <p>Claude Code 和 Codex 可以互相搭配：OpenAI 官方 GitHub 組織發布了一個給 Claude Code 用的 <code>codex-plugin-cc</code> plugin，裝好之後能在 Claude Code 裡直接叫 Codex 幫你做唯讀 review（<code>/codex:review</code>）、挑戰設計決策（<code>/codex:adversarial-review</code>）、接手修 bug（<code>/codex:rescue</code>），或是把整個 session 轉交給 Codex 繼續（<code>/codex:transfer</code>）。這條路需要本機裝好 Codex CLI 並完成登入，且走的是「Claude Code 主持任務、Codex 支援」的分工，跟反過來讓 Codex 呼叫 Claude 是兩件不同難度的事。完整安裝步驟、指令列表與現況查證，見<a href="claude-codex.html">Claude Code + Codex 協作</a>（該頁另外撰寫）。</p>
-<h2 id="2026-09-16">資料來源（2026-09-16 查證）</h2>
+<h2 id="資料來源2026-09-16-查證">資料來源（2026-09-16 查證）</h2>
 <table>
 <thead>
 <tr>
@@ -268,15 +268,16 @@
 </main>
 <aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
 <ul>
-<li><a href="#_1">一個常見錯誤要先更正</a></li>
-<li><a href="#_2">功能對照：最低方案與為什麼</a></li>
-<li><a href="#claude-code-api">Claude Code 也能用 API 按量付費，不一定要訂閱</a></li>
-<li><a href="#claude-code-codex">Claude Code + Codex 協作，只需要一段先知道</a></li>
-<li><a href="#2026-09-16">資料來源（2026-09-16 查證）</a></li>
+<li><a href="#一個常見錯誤要先更正">一個常見錯誤要先更正</a></li>
+<li><a href="#功能對照最低方案與為什麼">功能對照：最低方案與為什麼</a></li>
+<li><a href="#claude-code-也能用-api-按量付費不一定要訂閱">Claude Code 也能用 API 按量付費，不一定要訂閱</a></li>
+<li><a href="#claude-code-codex-協作只需要一段先知道">Claude Code + Codex 協作，只需要一段先知道</a></li>
+<li><a href="#資料來源2026-09-16-查證">資料來源（2026-09-16 查證）</a></li>
 </ul>
 </div>
 </aside>
 </div>
 <script src="../assets/site.js"></script>
+<script>(function(){var m={"_1":"一個常見錯誤要先更正","_2":"功能對照最低方案與為什麼","claude-code-api":"claude-code-也能用-api-按量付費不一定要訂閱","claude-code-codex":"claude-code-codex-協作只需要一段先知道","2026-09-16":"資料來源2026-09-16-查證"};function f(){var h=decodeURIComponent(location.hash.slice(1));if(h&&m[h]&&!document.getElementById(h)){var n=m[h];history.replaceState(null,"","#"+encodeURIComponent(n));var g=function(){var e=document.getElementById(n);if(e)e.scrollIntoView();};document.readyState==="complete"?g():addEventListener("load",g);}}f();addEventListener("hashchange",f);})();</script>
 </body>
 </html>

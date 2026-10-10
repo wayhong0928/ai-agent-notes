@@ -14,7 +14,7 @@ MCP（Model Context Protocol）官方的定義是「an open-source standard for 
 - **resources**：可以讀取的資料
 - **prompts**：預先設計好的提示樣板
 
-這三種原語的分工，[extensions.md](extensions.md#mcp)已經整理過對應範例，這裡不重複。
+這三種原語的分工，[extensions.md](extensions.md#mcp接上外部工具)已經整理過對應範例，這裡不重複。
 
 **連線方式（transport）目前有兩種現行標準**[2]：
 
@@ -138,7 +138,7 @@ claude mcp add playwright -- npx -y @playwright/mcp@latest
 
 另外兩個跟本站其他頁重疊、直接連過去就好，不重複整理：
 
-- **Obsidian vault**：`coddingtonbear/obsidian-local-rest-api` 這個 Obsidian 社群 plugin 內建 MCP server，完整設定步驟與 TLS 憑證處理見[Claude Code 接上 Obsidian vault](claude-code-obsidian.md#cmcp-server-claude-obsidian-vault) [19]。
+- **Obsidian vault**：`coddingtonbear/obsidian-local-rest-api` 這個 Obsidian 社群 plugin 內建 MCP server，完整設定步驟與 TLS 憑證處理見[Claude Code 接上 Obsidian vault](claude-code-obsidian.md#路徑-cmcp-server讓-claude-透過-obsidian-本身操作-vault) [19]。
 - **官方 reference servers**：`modelcontextprotocol/servers` monorepo（90,453★，最後 push 2026-09-03）收了 filesystem 等官方範例伺服器，多數功能已被上面更成熟的獨立 repo 取代 [20]。
 
 ### Codex 的 MCP 設定
@@ -151,7 +151,7 @@ codex mcp add <name> --env VAR=VALUE -- <stdio 啟動指令>
 
 遠端 Streamable HTTP 伺服器改用 `--url`。`config.toml` 裡 stdio 型用 `[mcp_servers.<name>]` 搭配 `command`／`args`／`env`／`cwd`；HTTP 型用 `url`／`auth`（`oauth` 或 `chatgpt`）／`bearer_token_env_var`／`http_headers`。狀態檢查用 `codex mcp list`、OAuth 登入用 `codex mcp login <name>`，TUI 內也有 `/mcp`。這份 `config.toml` 是 ChatGPT 桌面版、Codex CLI、IDE 擴充共用的同一份設定，改一次三邊都能用 [11][12]。
 
-需要注意的是**舊版 `codex mcp-server` 指令與獨立的 `codex-mcp-server` binary 已經被移除**，現在的 `codex app-server` 也不是 MCP server、不能拿來取代舊教學裡的設定，這件事[AI 介面比較總表](tools-compare.md#6-codex-mcp-server)已經寫過完整脈絡，這裡不重複 [13]。
+需要注意的是**舊版 `codex mcp-server` 指令與獨立的 `codex-mcp-server` binary 已經被移除**，現在的 `codex app-server` 也不是 MCP server、不能拿來取代舊教學裡的設定，這件事[AI 介面比較總表](tools-compare.md#6-codex-mcp-server-教學已失效)已經寫過完整脈絡，這裡不重複 [13]。
 
 ## 資料來源
 

@@ -17,7 +17,7 @@
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
 <li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791384637">免付費區</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
 <li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
@@ -46,7 +46,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791468632">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -59,11 +59,11 @@
 <p>查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p>你跟 ChatGPT 或 Claude 網頁版聊天時，發生的事情很單純：你打字、模型回一段文字、結束。這頁要講的是另一種東西，叫「agent」（代理），中文教材常譯「AI 代理」。它跟聊天機器人的差別在於多了工具，跟一個會反覆執行的迴圈。搞懂這個差異，才看得懂後面 SKILL、MCP、Subagent 這些機制到底在解決什麼問題。</p>
-<h2 id="agent">一、聊天機器人跟 agent，差在哪裡</h2>
+<h2 id="一聊天機器人跟-agent差在哪裡">一、聊天機器人跟 agent，差在哪裡</h2>
 <p>聊天機器人只做一件事：讀你的訊息，輸出文字。它看不到你的檔案，也不能真的去執行任何動作，你要它「幫我查一下這個檔案有沒有錯字」，它只能憑你貼給它的內容回答，貼多少，它就只看得到多少。</p>
 <p>Agent 多了兩個東西：<strong>工具</strong>跟<strong>迴圈</strong>。Claude Code 的官方文件把這句話講得很直接：「沒有工具，Claude 只能用文字回應；有了工具，Claude 可以真的動手：讀你的程式碼、編輯檔案、執行指令、搜尋網路、串接外部服務」[1]。工具讓模型從「只會講」變成「能夠做」；迴圈則讓它一步接一步做下去，而不是回一次就結束。</p>
 <p>官方把這個迴圈拆成三個階段：<strong>蒐集脈絡（gather context）、採取行動（take action）、驗證結果（verify results）</strong>。這三個階段會交錯進行，不是死板的三步驟，模型會依照上一步學到的東西，決定下一步該做什麼，一路串起十幾個動作，中途發現方向不對還會自己修正[1]。</p>
-<h3 id="_1">走一遍實際例子</h3>
+<h3 id="走一遍實際例子">走一遍實際例子</h3>
 <p>假設你對一個代理型工具說：「幫我找出這個專案裡所有失效的連結並修好。」它大概會這樣走：</p>
 <ol>
 <li><strong>蒐集脈絡</strong>：先搜尋專案裡所有的 Markdown 檔案，抓出裡面每一個連結語法。</li>
@@ -76,14 +76,14 @@
 <li>遇到「找不到對應的新檔案，也看不出原本連去哪裡」這種情況，它會停下來問你，不會隨便猜一個答案填上去。</li>
 </ol>
 <p>這整個過程你只下了一句指令，剩下的步驟都是它自己決定的：要不要先列清單、要不要每改一個就驗一次、遇到不確定的情況要不要問你。聊天機器人做不到這件事，因為它連你的專案資料夾長什麼樣子都看不到。</p>
-<h2 id="_2">二、上下文視窗：為什麼會滿，滿了會怎樣</h2>
+<h2 id="二上下文視窗為什麼會滿滿了會怎樣">二、上下文視窗：為什麼會滿，滿了會怎樣</h2>
 <p><strong>上下文視窗（context window）</strong>是模型這一次能同時看到的所有內容：你的對話紀錄、它讀過的檔案、它跑過的指令輸出、系統指示、已載入的規則檔案，全部加起來的總量[2]。這個視窗是有限的，跟人的記憶力有限是一樣的道理，不是模型「不想記」，是塞不進去。</p>
 <p>為什麼會滿？兩個原因加在一起。一是視窗本身有上限，做得越多、讀得越多，累積的內容自然越多；二是模型的注意力機制本身，讓內容越長，模型從中間精準抓出某一句話的能力越弱，官方研究稱這個現象是「context rot」：隨著視窗裡的 token 數增加，模型從中準確回想資訊的能力會下降，而且是漸進式的衰退，不是忽然斷崖式失憶[3]。舉例來說，一場很長的對話裡，你在最前面交代過「不要動 <code>data/raw/</code> 資料夾」，這類早期講過的限制條件，到對話後段就可能被模型忽略，不是它故意不聽，是回想的準確度已經隨著內容變長而下降。</p>
 <p>滿了之後會發生什麼事？Claude Code 會自動處理，但代價是舊資訊可能被犧牲：「它會先清掉比較舊的工具輸出，需要的話再把整段對話做摘要。你的原始需求跟關鍵程式碼片段會被保留，但對話早期的詳細指示可能會遺失」[2]。這也是為什麼官方建議把「一定要記住的規則」寫進 CLAUDE.md 這類常駐檔案，不要只講一次就指望它記得，對話一旦被摘要壓縮過，早期講的細節本來就有可能保不住[2]。</p>
 <p>那「新開一個對話」跟「等它自動壓縮」有什麼不同？壓縮（compaction）是在同一個對話裡，把舊內容摘要濃縮之後繼續用同一個上下文；新開一個對話（Claude Code 裡是新的 session）則是完全重置，帶著全新的上下文視窗，不記得上一個對話的任何細節，除非你自己把重點寫進 CLAUDE.md 或機制上自動累積的記憶檔案裡[2][4]。官方對「一直反覆修正同一個錯誤，卻越改越糟」這種情況的建議，正是新開一個對話重新開始，而不是在已經被錯誤答案汙染過的上下文裡繼續修。這代表新開對話有時候是止血的辦法[4]。</p>
-<h2 id="_3">三、工具權限與沙箱：為什麼要先問過你</h2>
+<h2 id="三工具權限與沙箱為什麼要先問過你">三、工具權限與沙箱：為什麼要先問過你</h2>
 <p>Agent 能真的去改你的檔案、跑你的指令，這正是它最有價值也最危險的地方。兩家主要的代理型工具都在動手前設了預設防線，只是切法不太一樣；其中 Claude Code 從 v2.1.283 起，終端機與 VS Code 互動 session 的內建起始模式是 auto（由背景分類器先審過動作），不再是每次先問你的 Manual。<sup id="fnref:fresh1"><a class="footnote-ref" href="#fn:fresh1">1</a></sup></p>
-<h3 id="claude-code-permission-modes">Claude Code 的 permission modes</h3>
+<h3 id="claude-code-的-permission-modes">Claude Code 的 permission modes</h3>
 <p>官方文件目前列出六種 permission mode，但 <code>Shift+Tab</code> 只在其中三種之間循環（<code>default → acceptEdits → plan → default</code>），其他幾種要另外設定或啟用之後才會加入。官方原文提醒「不是每種模式都在預設循環裡」（"Not every mode is in the default cycle."）[5][8]：</p>
 <table>
 <thead>
@@ -127,7 +127,7 @@
 </tbody>
 </table>
 <p>設定檔（<code>settings.json</code>）裡還可以更細緻地指定 allow／ask／deny 規則。這幾種更進階的設定寫法，見<a href="official-config.html">Claude Code 設定總覽</a>。</p>
-<h3 id="codex-sandbox-modes">Codex 的 sandbox modes</h3>
+<h3 id="codex-的-sandbox-modes">Codex 的 sandbox modes</h3>
 <p>Codex 用三段式的沙箱模式決定它能碰到什麼[6]：</p>
 <table>
 <thead>
@@ -153,11 +153,11 @@
 </table>
 <p>搭配沙箱模式的是核准政策（approval policy），預設是 <code>on-request</code>：Codex 遇到超出目前沙箱範圍的動作，會停下來問你[6]。</p>
 <p>兩家工具的邏輯其實一致：<strong>風險越高的動作，越需要人在場核准</strong>，差別只在於「用一個分類器幫你先篩一輪」還是「用固定的三段式沙箱切好邊界」。</p>
-<h2 id="workflow-agent">四、workflow 跟 agent，官方怎麼分</h2>
+<h2 id="四workflow-跟-agent官方怎麼分">四、workflow 跟 agent，官方怎麼分</h2>
 <p>「workflow（工作流程）」跟「agent（代理）」這兩個詞常被混用，Anthropic 在〈Building effective agents〉裡給了明確定義：workflow 是「LLM 與工具依照預先寫好的程式路徑被協調運作的系統」；agent 則是「LLM 動態指揮自己的流程與工具使用方式，自己掌控要怎麼完成任務的系統」[7]。</p>
 <p>用白話說：workflow 是你事先規劃好先做 A、再做 B、最後做 C，模型只是照著這條路走；agent 是你只講目標，模型自己決定要先做 A 還是先做 B，做完 A 發現不對，自己改去做 D。前面「找失效連結」的例子，就是後者，沒有人事先寫好「第一步搜尋、第二步比對」，是模型自己拆解出這個順序的。</p>
 <p>Anthropic 也提醒，agent 要能自主運作，關鍵是每一步都要能從環境裡拿到「真實回饋」，例如工具呼叫的結果或程式碼的執行輸出，用這些回饋確認自己的進度，不是憑自己「感覺應該做完了」就結束[7]。這正是本站另一頁〈把 AI 代理的工作環境設計得可靠〉要處理的問題：怎麼確保這個回饋機制是可信的，不是自己騙自己。</p>
-<h2 id="_4">五、代理迴圈：文字版流程</h2>
+<h2 id="五代理迴圈文字版流程">五、代理迴圈：文字版流程</h2>
 <p>本頁原本想用流程圖表示這個迴圈，但這個網站的建置工具（<code>build.py</code>）沒有載入任何圖表渲染的程式庫，貼上流程圖語法只會變成一段看不出圖形的原始文字，所以改用條列式說明：</p>
 <ol>
 <li>你下一個指令或目標。</li>
@@ -169,7 +169,7 @@
 <li>確認任務完成，結束這一輪，把結果回報給你。</li>
 </ol>
 <p>這個迴圈會一直重複，直到任務完成或你叫它停下來為止[1]。</p>
-<h2 id="_5">資料來源</h2>
+<h2 id="資料來源">資料來源</h2>
 <table>
 <thead>
 <tr>
@@ -242,23 +242,24 @@
 </main>
 <aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
 <ul>
-<li><a href="#agent">一、聊天機器人跟 agent，差在哪裡</a><ul>
-<li><a href="#_1">走一遍實際例子</a></li>
+<li><a href="#一聊天機器人跟-agent差在哪裡">一、聊天機器人跟 agent，差在哪裡</a><ul>
+<li><a href="#走一遍實際例子">走一遍實際例子</a></li>
 </ul>
 </li>
-<li><a href="#_2">二、上下文視窗：為什麼會滿，滿了會怎樣</a></li>
-<li><a href="#_3">三、工具權限與沙箱：為什麼要先問過你</a><ul>
-<li><a href="#claude-code-permission-modes">Claude Code 的 permission modes</a></li>
-<li><a href="#codex-sandbox-modes">Codex 的 sandbox modes</a></li>
+<li><a href="#二上下文視窗為什麼會滿滿了會怎樣">二、上下文視窗：為什麼會滿，滿了會怎樣</a></li>
+<li><a href="#三工具權限與沙箱為什麼要先問過你">三、工具權限與沙箱：為什麼要先問過你</a><ul>
+<li><a href="#claude-code-的-permission-modes">Claude Code 的 permission modes</a></li>
+<li><a href="#codex-的-sandbox-modes">Codex 的 sandbox modes</a></li>
 </ul>
 </li>
-<li><a href="#workflow-agent">四、workflow 跟 agent，官方怎麼分</a></li>
-<li><a href="#_4">五、代理迴圈：文字版流程</a></li>
-<li><a href="#_5">資料來源</a></li>
+<li><a href="#四workflow-跟-agent官方怎麼分">四、workflow 跟 agent，官方怎麼分</a></li>
+<li><a href="#五代理迴圈文字版流程">五、代理迴圈：文字版流程</a></li>
+<li><a href="#資料來源">資料來源</a></li>
 </ul>
 </div>
 </aside>
 </div>
 <script src="../assets/site.js"></script>
+<script>(function(){var m={"agent":"一聊天機器人跟-agent差在哪裡","_1":"走一遍實際例子","_2":"二上下文視窗為什麼會滿滿了會怎樣","_3":"三工具權限與沙箱為什麼要先問過你","claude-code-permission-modes":"claude-code-的-permission-modes","codex-sandbox-modes":"codex-的-sandbox-modes","workflow-agent":"四workflow-跟-agent官方怎麼分","_4":"五代理迴圈文字版流程","_5":"資料來源"};function f(){var h=decodeURIComponent(location.hash.slice(1));if(h&&m[h]&&!document.getElementById(h)){var n=m[h];history.replaceState(null,"","#"+encodeURIComponent(n));var g=function(){var e=document.getElementById(n);if(e)e.scrollIntoView();};document.readyState==="complete"?g():addEventListener("load",g);}}f();addEventListener("hashchange",f);})();</script>
 </body>
 </html>

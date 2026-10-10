@@ -17,7 +17,7 @@
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
 <li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791384637">免付費區</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
 <li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
@@ -46,7 +46,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791468632">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -63,7 +63,7 @@
 <p class="admonition-title">整理者觀察：為什麼不直接開始寫</p>
 <p>以下是整理者的經驗歸納，不是引用自研究或官方文件：直接打開編輯器開始寫，卡關往往不出在程式碼本身，而是「要做什麼」還沒講清楚；等寫到一半才發現方向錯了，砍掉重來的代價通常比先把需求想清楚高。這句話沒有可引用的量化研究支持，讀者可以當成一個看待 SDLC 的角度，不是被證實的通則。</p>
 </div>
-<h2 id="sdlc">一、SDLC 六個階段在做什麼</h2>
+<h2 id="一sdlc-六個階段在做什麼">一、SDLC 六個階段在做什麼</h2>
 <p>不管套用哪種流程模型，底下這六件事大致都要做到，只是順序、重疊程度、反覆次數不同：</p>
 <table>
 <thead>
@@ -120,26 +120,26 @@
 </tr>
 </tbody>
 </table>
-<h2 id="v">二、瀑布式、V 模型、螺旋模型、迭代增量開發</h2>
+<h2 id="二瀑布式v-模型螺旋模型迭代增量開發">二、瀑布式、V 模型、螺旋模型、迭代增量開發</h2>
 <p>這四種是比較早出現、以「怎麼把上面六個階段排成一條路徑」為核心問題的流程模型。</p>
-<h3 id="21-waterfall">2.1 瀑布式（Waterfall）</h3>
+<h3 id="21-瀑布式waterfall">2.1 瀑布式（Waterfall）</h3>
 <p>瀑布式把六個階段排成一條單向的線：需求分析做完才進設計，設計做完才進實作，依序往下走，原則上不回頭。這個單向階段結構就是下面 Royce 論文 Figure 2 畫出來的樣子。</p>
 <p>整理者觀察（以下適用場合與缺點沒有單一出處，是整理者歸納）：這種做法適合需求一開始就能講清楚、之後基本不會變的專案，例如某些政府採購案、硬體結合軟體的專案（改需求的成本極高，甚至涉及實體零件）；缺點是一旦晚期才發現需求理解錯了，回頭修改的代價非常大。</p>
 <div class="admonition note">
 <p class="admonition-title">Royce 1970 年的論文常被誤讀</p>
 <p>瀑布式常被追溯到 Winston Royce 1970 年的論文，但論文本身沒有主張純單向的流程。畫出單向流程圖（Figure 2）之後，Royce 緊接著寫這種實作方式「risky and invites failure」（有風險、容易失敗，印刷頁 329）。下一頁的兩張圖是一組對照：Figure 3 的圖說用「希望」的語氣說反覆互動只侷限在相鄰步驟（Hopefully, the iterative interaction between the various phases is confined to successive steps），Figure 4 的圖說隨即指出實際上做不到（Unfortunately, for the process illustrated, the design iterations are never confined to the successive steps）。論文後段五項修正建議的第三項，標題直接寫「STEP 3: DO IT TWICE」（印刷頁 334），建議先用模擬或試作版做過一次，再做正式交付的版本。來源：Royce, W. W. (1970). Managing the Development of Large Software Systems. <em>Proceedings, IEEE WESCON</em>, 1–9；引文見重印版印刷頁 329、330、334，全文 328–338（<a href="https://cse.msu.edu/~cse435/Homework/HW3/royce1970.pdf">原始 PDF</a>，密西根州立大學課程網站公開重印版）。</p>
 </div>
-<h3 id="22-v">2.2 V 模型</h3>
+<h3 id="22-v-模型">2.2 V 模型</h3>
 <p>國際軟體測試資格認證委員會（ISTQB）的官方詞彙表把 V 模型定義為：「循序式的軟體開發生命週期模型，描述從商業需求規格到交付的各個主要開發階段，與從驗收測試到元件測試的各個測試層級之間，一對一的對應關係」（原文：A sequential software development lifecycle model describing a one-for-one relationship between major phases of software development from business requirements specification to delivery, and corresponding test levels from acceptance testing to component testing）[1]。同一機構的 Foundation Level 教材也把 V 模型與瀑布式並列，當成「循序式開發模型」的兩個例子[1]。</p>
 <p><strong>整理者說明</strong>：這種一對一的對應關係可以畫成一個 V 字——左半邊由上往下是開發階段，右半邊由下往上是對應的測試層級——「V 模型」這個名稱看起來也是這麼來的；不過這個圖形化的畫法不在上面的官方定義裡，這裡是整理者為了方便理解而補的說明。這樣安排的用意是每個開發階段都先想好「將來要怎麼驗證這一階段做對了」：寫需求時就先想好驗收測試要測什麼，設計架構時就先想好整合測試要測什麼，測試計畫因此跟著設計同步定案，不用等程式寫完才臨時想怎麼測。</p>
 <p>整理者觀察：適合的場合跟瀑布式接近（需求穩定、重視可預測的驗證流程，例如醫療器材、航太軟體），代價也一樣，早期沒發現的需求誤解要等到後面才會浮現。</p>
-<h3 id="23-spiral-model">2.3 螺旋模型（Spiral Model）</h3>
+<h3 id="23-螺旋模型spiral-model">2.3 螺旋模型（Spiral Model）</h3>
 <p>螺旋模型由 Barry Boehm 提出，同名論文先於 1986 年 8 月刊在《ACM SIGSOFT Software Engineering Notes》[2]，1988 年 5 月在《IEEE Computer》刊出[3]。跟瀑布式的單向線不同，螺旋模型把整個開發流程畫成一圈一圈往外擴的螺旋。Boehm 最初的圖分成四個象限：訂出目標、替代方案與限制（DETERMINE OBJECTIVES, ALTERNATIVES, CONSTRAINTS），評估替代方案、辨識並解決風險（EVALUATE ALTERNATIVES, IDENTIFY, RESOLVE RISKS），開發並驗證下一層級的產出（DEVELOP, VERIFY NEXT LEVEL PRODUCT），規劃下一階段（PLAN NEXT PHASES）——四個象限的標籤見 CMU/SEI-2000-SR-008 的 Figure 1（PDF 第 14 頁），該報告 1.2 節說明這張圖是 Boehm 1988 年論文原圖的重繪[4]。同一份報告也把「圖上每個元素都必須照標示的順序走過一遍」列為最需要避免的誤解之一（原文：that every element in the diagram needs to be visited in the order indicated）。核心主張是「風險決定這一圈該做多少工作、該做到多細」：風險高的地方多做原型、多驗證，風險低的地方可以直接照傳統的線性方式往下走。Boehm 在 2000 年的 SEI 特別報告裡，把螺旋模型定義成一種「風險驅動的流程模型產生器」（原文：The spiral development model is a risk-driven process model generator，該報告 1.2 節、印刷頁 3）[4]：不同專案的風險狀況不同，跑出來的實際流程也不同，不是每個專案套的都是同一種固定順序。</p>
-<h3 id="24">2.4 迭代與增量開發</h3>
+<h3 id="24-迭代與增量開發">2.4 迭代與增量開發</h3>
 <p>迭代開發（iterative development）跟增量開發（incremental development）常常一起講，但講的是兩件不同的事：迭代指的是同一部分功能反覆修正、一輪比一輪更完整；增量指的是把整個系統拆成一塊一塊，一塊一塊交付，先交出來的那塊可以先讓使用者用。兩者合在一起，就是「先交付一小塊夠用的功能，用了之後的回饋拿來修正下一塊要做什麼」，這正是後面敏捷式方法的基礎精神。跟瀑布式、V 模型的差異在於：後者假設一開始就能把全部需求想清楚，前者承認想不清楚是常態，用反覆交付去逐步逼近正確答案。</p>
-<h2 id="scrum">三、敏捷式與 Scrum</h2>
+<h2 id="三敏捷式與-scrum">三、敏捷式與 Scrum</h2>
 <p>敏捷式（Agile）是一組共同的價值觀與原則，具體怎麼落地要看採用哪一套做法：Scrum、XP 是明確的敏捷框架，Kanban 官方把自己定位成最佳化價值流動的「策略」（strategy）而非框架，三者的定位層級不完全一樣，但都常見於敏捷式的實務脈絡裡，詳見以下各節。</p>
-<h3 id="31-agile-manifesto">3.1 Agile Manifesto 四大價值</h3>
+<h3 id="31-agile-manifesto-四大價值">3.1 Agile Manifesto 四大價值</h3>
 <p>2001 年，17 位軟體開發者在猶他州的一次聚會上共同發表了《敏捷軟體開發宣言》（Manifesto for Agile Software Development），提出四大價值（原文附中譯，中譯採直譯，「over」譯為「重於」）：</p>
 <table>
 <thead>
@@ -168,7 +168,7 @@
 </tbody>
 </table>
 <p>宣言本身特別註明：右邊列的項目不是沒有價值，只是左邊的項目價值更高。來源：<a href="https://agilemanifesto.org/">Manifesto for Agile Software Development</a>（另有<a href="https://agilemanifesto.org/principles.html">十二項原則</a>，本頁不逐條列出，感興趣可直接看原文）。</p>
-<h3 id="32-scrum">3.2 Scrum：職責歸屬、事件、產出物</h3>
+<h3 id="32-scrum職責歸屬事件產出物">3.2 Scrum：職責歸屬、事件、產出物</h3>
 <p>Scrum 是一套敏捷框架，規則寫在官方的《The Scrum Guide》，目前引用版本是 2020 年 11 月版[5]。</p>
 <p><strong>三項職責歸屬（accountabilities，合稱 Scrum Team）：</strong></p>
 <p>2020 年版把 Scrum Team 內部的分工從「角色（roles）」改稱為「職責歸屬（accountabilities）」，強調的是每個人對什麼結果負責，而不是一個固定的職稱標籤：</p>
@@ -234,9 +234,9 @@
 <p>「承諾」是 2020 年版新增的概念。官方修訂說明給的理由是這些承諾「exist to bring transparency and focus toward the progress of each artifact」（為每個產出物的進展帶來透明度與聚焦）[6]；指南本文的說法則是「These commitments exist to reinforce empiricism and the Scrum values for the Scrum Team and their stakeholders」（強化經驗主義與 Scrum 價值觀）[5]。</p>
 <h3 id="33-kanban">3.3 Kanban</h3>
 <p>官方《Kanban Guide》（2025 年 5 月版）把 Kanban 定義為「最佳化價值流動的策略」（a strategy for optimizing the flow of value through a process），關注的重點是持續的工作流動，跟 Scrum 那種固定時間盒的衝刺是不同的節奏設計。Kanban 由三個互相搭配的做法組成：定義並視覺化工作流程（畫出工作從開始到完成要經過哪些狀態）、主動管理流程中的項目、持續改善流程本身。在製品（Work in Progress，WIP）的控制是核心機制之一，官方原文要求「團隊成員必須明確控制工作流程裡從開始到完成之間的項目數量」（Kanban system members must explicitly control the number of work items in a workflow from started to finished），但控制的具體形式由團隊自行決定，不一定要是每個階段各自訂一個數字上限，也可以是團隊認可的其他視覺化控制方式。官方另外訂出四個必須追蹤的流動指標：WIP（已開始未完成的項目數）、產出量（單位時間完成的項目數）、項目年齡（項目已經開始但還沒完成的時間）、週期時間（項目從開始到完成的時間）。來源：<a href="https://kanbanguides.org/the-kanban-guide/2025.5/">Kanban Guide 2025.5</a>。</p>
-<h3 id="34-xp">3.4 XP 極限編程（摘要）</h3>
+<h3 id="34-xp-極限編程摘要">3.4 XP 極限編程（摘要）</h3>
 <p>極限編程（Extreme Programming，簡稱 XP）由 Kent Beck 在《Extreme Programming Explained: Embrace Change》（Addison-Wesley，1999 年初版；2004 年與 Cynthia Andres 合著第二版）中提出，是一套把敏捷價值觀落實到工程實務細節的具體做法，包含測試先行、持續整合、結對程式設計、重構、簡單設計、共同擁有程式碼等一系列實踐。這幾項實踐的詳細做法（尤其測試先行，也就是 TDD 的起點）留到下一頁<a href="dev-practices.html">開發實踐：TDD、BDD、DDD 與 SDD</a>展開，這裡只點出 XP 在 SDLC 光譜上的位置：它跟 Scrum 一樣屬於明確的敏捷框架，講的是工程師寫程式當下該怎麼做；Scrum 講的是團隊怎麼安排工作節奏；Kanban 則是官方定位為策略層級的做法，三者處理的問題不完全一樣。Agile Alliance 的公開詞彙表把 XP 列為「在軟體開發工程實務上規範最具體的敏捷框架」，列出的實踐包含 Pair Programming（結對程式設計）、Test-First Programming（測試先行）、Continuous Integration（持續整合）、Incremental Design（漸進式設計）等項目[7]。</p>
-<h2 id="devops-cicd">四、DevOps 與 CI/CD</h2>
+<h2 id="四devops-與-cicd">四、DevOps 與 CI/CD</h2>
 <p>DevOps 是開發（Development）與維運（Operations）合流的做法，目標是縮短「寫完程式」到「安全上線」之間的距離。落實 DevOps 常會提到三個容易混用的詞：</p>
 <ul>
 <li><strong>持續整合（Continuous Integration，CI）</strong>：Martin Fowler 的定義是團隊每個成員至少每天把自己的修改整合進主線一次，每次整合都由自動化建置（含測試）驗證，儘快抓出整合上的錯誤[8]。前提是程式碼本身要有夠完整的自動化測試（self-testing code），沒有測試，CI 就只是「常常把可能壞掉的東西合併進主線」。</li>
@@ -244,7 +244,7 @@
 <li><strong>持續部署（Continuous Deployment）</strong>：每一次通過流程的修改都自動被部署到正式環境，一天可能發生很多次部署。持續部署是持續交付的進一步實踐，持續交付是持續部署的前提，但持續交付不強制要求持續部署[9]。</li>
 </ul>
 <p>支撐 CI 的一個常見版本控制作法是<strong>主幹開發（trunk-based development）</strong>：開發者共同在一條主線（trunk）上工作，避免長期存在的功能分支，官方說法是團隊成員至少每 24 小時要合併回主幹一次[10]。Google 主導的 DevOps 研究計畫 DORA 把主幹開發列為跟軟體交付表現相關的能力之一，2016 到 2017 年的研究發現同時採用主幹開發與 CI 的團隊，交付速度、穩定性等表現通常較好[11]。</p>
-<h2 id="nist-ssdf">五、安全開發：NIST SSDF</h2>
+<h2 id="五安全開發nist-ssdf">五、安全開發：NIST SSDF</h2>
 <p>美國國家標準與技術研究院（NIST）在《SP 800-218：Secure Software Development Framework（SSDF）》裡，把安全開發實務整理成四個高層次的實踐群組[12]：</p>
 <table>
 <thead>
@@ -278,7 +278,7 @@
 </tbody>
 </table>
 <p>SSDF 不規定用哪種流程模型（瀑布式或敏捷式都可以套），只規定在整個生命週期裡，安全這件事要在哪些節點被處理到。截至查證日，正式版仍是 SP 800-218（SSDF v1.1）；NIST 已於 2025-12-17 公開 SP 800-218 Rev. 1（SSDF v1.2）的初版公開草案，尚未定案[13]。</p>
-<h2 id="_1">六、流程模型比較與怎麼選</h2>
+<h2 id="六流程模型比較與怎麼選">六、流程模型比較與怎麼選</h2>
 <table>
 <thead>
 <tr>
@@ -335,7 +335,7 @@
 </tbody>
 </table>
 <p>怎麼選，一個粗略的判斷順序：需求已經確定、之後幾乎不會變、涉及實體或高成本變更（例如硬體整合）→ 偏向瀑布式或 V 模型；需求會隨著做出來的東西而調整、想儘早拿到使用者回饋 → 偏向 Scrum 或 Kanban；專案本身風險高、不確定性大到需要先做實驗才知道怎麼繼續 → 螺旋模型的精神值得參考（不一定要照搬整套流程）；不管選哪種流程模型，只要團隊有能力做到頻繁、可靠的整合與部署，DevOps／CI/CD 的實務都值得疊加上去，它處理的是「怎麼把已經寫好的程式碼安全送上線」，跟「怎麼安排開發階段」是兩個不同的問題，可以同時採用。</p>
-<h2 id="_2">資料來源</h2>
+<h2 id="資料來源">資料來源</h2>
 <table>
 <thead>
 <tr>
@@ -457,29 +457,30 @@
 </main>
 <aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
 <ul>
-<li><a href="#sdlc">一、SDLC 六個階段在做什麼</a></li>
-<li><a href="#v">二、瀑布式、V 模型、螺旋模型、迭代增量開發</a><ul>
-<li><a href="#21-waterfall">2.1 瀑布式（Waterfall）</a></li>
-<li><a href="#22-v">2.2 V 模型</a></li>
-<li><a href="#23-spiral-model">2.3 螺旋模型（Spiral Model）</a></li>
-<li><a href="#24">2.4 迭代與增量開發</a></li>
+<li><a href="#一sdlc-六個階段在做什麼">一、SDLC 六個階段在做什麼</a></li>
+<li><a href="#二瀑布式v-模型螺旋模型迭代增量開發">二、瀑布式、V 模型、螺旋模型、迭代增量開發</a><ul>
+<li><a href="#21-瀑布式waterfall">2.1 瀑布式（Waterfall）</a></li>
+<li><a href="#22-v-模型">2.2 V 模型</a></li>
+<li><a href="#23-螺旋模型spiral-model">2.3 螺旋模型（Spiral Model）</a></li>
+<li><a href="#24-迭代與增量開發">2.4 迭代與增量開發</a></li>
 </ul>
 </li>
-<li><a href="#scrum">三、敏捷式與 Scrum</a><ul>
-<li><a href="#31-agile-manifesto">3.1 Agile Manifesto 四大價值</a></li>
-<li><a href="#32-scrum">3.2 Scrum：職責歸屬、事件、產出物</a></li>
+<li><a href="#三敏捷式與-scrum">三、敏捷式與 Scrum</a><ul>
+<li><a href="#31-agile-manifesto-四大價值">3.1 Agile Manifesto 四大價值</a></li>
+<li><a href="#32-scrum職責歸屬事件產出物">3.2 Scrum：職責歸屬、事件、產出物</a></li>
 <li><a href="#33-kanban">3.3 Kanban</a></li>
-<li><a href="#34-xp">3.4 XP 極限編程（摘要）</a></li>
+<li><a href="#34-xp-極限編程摘要">3.4 XP 極限編程（摘要）</a></li>
 </ul>
 </li>
-<li><a href="#devops-cicd">四、DevOps 與 CI/CD</a></li>
-<li><a href="#nist-ssdf">五、安全開發：NIST SSDF</a></li>
-<li><a href="#_1">六、流程模型比較與怎麼選</a></li>
-<li><a href="#_2">資料來源</a></li>
+<li><a href="#四devops-與-cicd">四、DevOps 與 CI/CD</a></li>
+<li><a href="#五安全開發nist-ssdf">五、安全開發：NIST SSDF</a></li>
+<li><a href="#六流程模型比較與怎麼選">六、流程模型比較與怎麼選</a></li>
+<li><a href="#資料來源">資料來源</a></li>
 </ul>
 </div>
 </aside>
 </div>
 <script src="../assets/site.js"></script>
+<script>(function(){var m={"sdlc":"一sdlc-六個階段在做什麼","v":"二瀑布式v-模型螺旋模型迭代增量開發","21-waterfall":"21-瀑布式waterfall","22-v":"22-v-模型","23-spiral-model":"23-螺旋模型spiral-model","24":"24-迭代與增量開發","scrum":"三敏捷式與-scrum","31-agile-manifesto":"31-agile-manifesto-四大價值","32-scrum":"32-scrum職責歸屬事件產出物","34-xp":"34-xp-極限編程摘要","devops-cicd":"四devops-與-cicd","nist-ssdf":"五安全開發nist-ssdf","_1":"六流程模型比較與怎麼選","_2":"資料來源"};function f(){var h=decodeURIComponent(location.hash.slice(1));if(h&&m[h]&&!document.getElementById(h)){var n=m[h];history.replaceState(null,"","#"+encodeURIComponent(n));var g=function(){var e=document.getElementById(n);if(e)e.scrollIntoView();};document.readyState==="complete"?g():addEventListener("load",g);}}f();addEventListener("hashchange",f);})();</script>
 </body>
 </html>

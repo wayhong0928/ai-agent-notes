@@ -17,7 +17,7 @@
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
 <li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
-<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791384637">免付費區</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
 <li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
@@ -46,7 +46,7 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791468632">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -59,7 +59,7 @@
 <p>查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p>看懂<a href="agent-basics.html">代理迴圈</a>之後，下一個常見的卡點是：SKILL、Plugin、MCP、Subagent、Hooks，這幾個詞經常混著用，但它們解決的問題完全不同。這頁先用一張精簡的支援矩陣對照六種擴充機制，再逐一給解決什麼問題、最小範例跟常見誤用，最後給一份「該用哪一種」的決策清單。</p>
-<h2 id="_1">一、六種機制支援矩陣</h2>
+<h2 id="一六種機制支援矩陣">一、六種機制支援矩陣</h2>
 <p>「✅」代表官方文件明確查證到支援；「⚠️」代表有限制、有條件，或官方文件本身說法不一致；「❌」代表官方文件裡沒有查到對應機制，不是本站主觀認定不支援。Claude.ai 一欄把 Chat（一般對話）與 Cowork（本機或雲端 VM 裡的知識工作代理）合併標示，因為官方文件裡這兩者能碰到的機制常常不一樣，差異細節與完整來源標記在下方「一之二」逐項說明。</p>
 <table>
 <thead>
@@ -109,7 +109,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="_2">一之二、每種機制解決什麼問題、什麼時候載入、放在哪裡</h2>
+<h2 id="一之二每種機制解決什麼問題什麼時候載入放在哪裡">一之二、每種機制解決什麼問題、什麼時候載入、放在哪裡</h2>
 <ul>
 <li><strong>CLAUDE.md／AGENTS.md</strong>：解決「讓代理每次啟動都知道專案的事實與規矩，不用每次重講一遍」；啟動時整份載入，全程留在上下文裡；放在專案根目錄或 <code>~/.claude/</code>（Claude Code），<code>~/.codex/</code>＋專案路徑逐層（Codex）。Claude Code 讀 <code>CLAUDE.md</code>[1]（v2.1.277 起，2026-09-18，專案完全沒有 CLAUDE.md 時也會直接讀 AGENTS.md；有 CLAUDE.md 就跟以前一樣不讀，細節見<a href="official-config.html">Claude Code 設定總覽</a>[25]）；Codex 讀 <code>AGENTS.md</code>，逐層合併，越接近目前目錄優先權越高[2]；Claude.ai 沒有 CLAUDE.md 這個檔案機制，但 Projects 的 Project instructions 用途類似：都能讓一組指示套用到之後每一次對話，只是載入方式與作用範圍不同（Project instructions 是整個 Project 的設定，不是依檔案路徑逐層載入）；Cowork 另有跨 session 的 Global instructions，跟針對單一本機資料夾的 Folder instructions[15][16]。</li>
 <li><strong>SKILL</strong>：解決「把一套會重複用到的程序、檢查清單變成隨需載入的知識，不佔用平時的上下文」；只有 Claude 判斷相關、或使用者手動叫用時才載入完整內容；放在 <code>.claude/skills/&lt;name&gt;/SKILL.md</code>（專案或個人層）。Claude Code 支援[3]；Codex 遵循「open agent skills standard」[4]；Claude.ai 需另外開啟 code execution[5]。</li>
@@ -122,8 +122,8 @@
 <p class="admonition-title">2026-09-16 起：Chat／Cowork 的界線正在消失（Pro／Max 分階段推出中）</p>
 <p>上表把 Claude.ai 分成 Chat 與 Cowork 兩欄，是依官方文件目前的寫法整理的。但官方已公告兩者正在合併成同一個體驗：Pro／Max 帳號分階段收到（同方案帳號時間點也不同），收到之後不再有獨立 Cowork 模式可切換，上表裡「⚠️ 只在 Cowork 執行、Chat 裡顯示灰階」這類限制對這些帳號會失效，變成同一個對話視窗、能力視需要自動啟用。Free 官方說「即將推出」但目前尚未開始。Team 與 Enterprise 依 2026-10-05 更新的管理員說明頁，目前維持 chat 與 Cowork 分開<sup id="fnref:fresh8"><a class="footnote-ref" href="#fn:fresh8">8</a></sup>，Enterprise 變動前會提前至少 30 天通知。這些帳號適用的仍是上表原本的區分。查證來源與時程細節見 <a href="tools-compare.html">tools-compare.md</a> 開頭的說明 [23][24]。</p>
 </div>
-<h2 id="_3">二、每種機制的最小範例與常見誤用</h2>
-<h3 id="claudemdagentsmd">CLAUDE.md／AGENTS.md：專案事實與紅線</h3>
+<h2 id="二每種機制的最小範例與常見誤用">二、每種機制的最小範例與常見誤用</h2>
+<h3 id="claudemdagentsmd專案事實與紅線">CLAUDE.md／AGENTS.md：專案事實與紅線</h3>
 <p>官方定義的分工是：「把 CLAUDE.md 當成你原本會重複解釋的內容寫下來」[1]。放事實，不是放程序；一旦某一段變成一套步驟而不是一條事實，就該搬進 SKILL。</p>
 <p>一個研究專案的骨架（<code>AGENTS.md</code> 換成 <code>CLAUDE.md</code> 一樣適用）：</p>
 <pre><code class="language-markdown"># 專案：資料分析報告
@@ -138,7 +138,7 @@
 - 不要生成任何沒有依據的統計數字，算不出來就說算不出來
 </code></pre>
 <p><strong>常見誤用</strong>：把「Claude 讀程式碼就能自己推得出的東西」也寫進去，或者把一套多步驟的檢查流程整段塞進 CLAUDE.md。官方的判斷標準很直接：拿掉這一行，模型會不會因此犯錯？答不出來的行，就是灌水，該刪或該搬進 SKILL[14]。</p>
-<h3 id="skill">SKILL：隨需載入的程序</h3>
+<h3 id="skill隨需載入的程序">SKILL：隨需載入的程序</h3>
 <p>一個 SKILL 就是一個資料夾裡的 <code>SKILL.md</code>，YAML frontmatter 必須從檔案第一行開始：</p>
 <pre><code class="language-yaml">---
 name: check-broken-links
@@ -155,7 +155,7 @@ description: 掃描專案裡所有 Markdown 連結，找出指向不存在檔案
 </code></pre>
 <p>呼叫方式預設來自資料夾名稱；frontmatter 有設 <code>name</code> 時，<code>/</code> 選單顯示與輸入的指令改用 <code>name</code>，資料夾名稱也一樣能叫用：<sup id="fnref:fresh5"><a class="footnote-ref" href="#fn:fresh5">5</a></sup>存在 <code>.claude/skills/check-broken-links/SKILL.md</code>，就用 <code>/check-broken-links</code> 叫用，或讓 Claude 依 <code>description</code> 自己判斷要不要用[3]。</p>
 <p><strong>常見誤用</strong>：把 <code>description</code> 寫得太籠統（例如只寫「檢查文件」），代理判斷不出什麼時候該用；或者把整份參考資料塞進 <code>SKILL.md</code> 本體，官方建議本體控制在 500 行以內，細節另外放進 <code>reference.md</code> 用連結引用，需要時才載入[3]。</p>
-<h3 id="mcp">MCP：接上外部工具</h3>
+<h3 id="mcp接上外部工具">MCP：接上外部工具</h3>
 <p>在 Claude Code 專案根目錄放一個 <code>.mcp.json</code>：</p>
 <pre><code class="language-json">{
   &quot;mcpServers&quot;: {
@@ -169,7 +169,7 @@ description: 掃描專案裡所有 Markdown 連結，找出指向不存在檔案
 <p>這個檔案建議一起進版本控制，讓團隊每個人都接到同一組工具[6]。Codex 側用 <code>codex mcp</code> 指令管理連接的外部 MCP server[7]。</p>
 <p><strong>常見誤用</strong>：以為裝了 MCP 就不會有幻覺答案。MCP 只解決「有沒有真的東西可以查」的問題，代理仍然可能查了卻答錯，或者選錯了要查的工具，接上文獻庫之後還是要核對它真的引用了查到的內容，不是引用了憑空生成的內容。</p>
 <p>想知道 <code>claude mcp add</code> 的完整用法、scope 怎麼選、OAuth 認證，以及 Windows 上常見的 <code>cmd /c</code> 誤區與 Git Bash 踩坑，見專篇<a href="mcp.html">MCP 入門與實戰</a>。</p>
-<h3 id="subagent">Subagent：獨立乾淨的視角</h3>
+<h3 id="subagent獨立乾淨的視角">Subagent：獨立乾淨的視角</h3>
 <p><code>.claude/agents/</code> 底下的一個定義檔，只有 <code>name</code> 與 <code>description</code> 是必填：</p>
 <pre><code class="language-markdown">---
 name: code-improver
@@ -184,7 +184,7 @@ the problem, show the current code, and provide an improved version.
 <p>官方建議適合用 subagent 的情境：任務會產生大量你不需要留在主線的雜訊（搜尋結果、檔案內容）；想針對特定任務限制工具權限；工作自成一體，可以只回傳摘要[9]。</p>
 <p><strong>常見誤用</strong>：拿 subagent 處理需要頻繁來回微調的任務。官方明講，subagent 預設從零上下文開始，來回討論的成本反而更高；這種情境該留在主線對話，或者用 SKILL 讓主線自己套用同一套程序[9]。</p>
 <p>想知道 frontmatter 完整 18 個欄位、<code>background</code> 怎麼過濾工具、<code>isolation: worktree</code> 怎麼真的擋下越界指令、<code>SendMessage</code> 怎麼續問一個已完成的 subagent、多代理成本三層倍數怎麼算，見專篇<a href="subagent.html">Subagent 入門與實戰</a>。</p>
-<h3 id="plugin">Plugin：打包分享</h3>
+<h3 id="plugin打包分享">Plugin：打包分享</h3>
 <p><code>plugin.json</code> 只有 <code>name</code> 是必填：</p>
 <pre><code class="language-json">{
   &quot;name&quot;: &quot;my-research-kit&quot;,
@@ -193,7 +193,7 @@ the problem, show the current code, and provide an improved version.
 }
 </code></pre>
 <p><strong>容易踩的坑</strong>：只有 <code>plugin.json</code> 放在 <code>.claude-plugin/</code> 資料夾裡，<code>skills/</code>、<code>agents/</code>、<code>hooks/</code> 都要放在 plugin 根目錄，不能一起塞進 <code>.claude-plugin/</code>[11]。</p>
-<h3 id="hooks">Hooks：機制強制，不是文字提醒</h3>
+<h3 id="hooks機制強制不是文字提醒">Hooks：機制強制，不是文字提醒</h3>
 <p>官方一句話講完 Hooks 存在的理由：「hooks are deterministic, CLAUDE.md instructions are advisory」[14]。說明檔裡的規則只是建議，模型可能因為疏忽或上下文太滿而沒照做；真正不能妥協的規矩要用會強制擋下動作的機制卡住。</p>
 <p>官方範例：擋掉對敏感檔案的編輯，<code>.claude/hooks/protect-files.sh</code> 判斷路徑，命中就用 <code>exit 2</code> 擋下（<code>exit 2</code> 是唯一保證阻擋的訊號，其他 exit code 大多視為非阻擋性錯誤，動作照常進行）：</p>
 <pre><code class="language-json">{
@@ -210,7 +210,7 @@ the problem, show the current code, and provide an improved version.
 }
 </code></pre>
 <p><strong>常見誤用</strong>：把本來該用 Hooks 卡住的規矩，寫成 CLAUDE.md 裡的一句「請不要修改 xxx」。文字提醒在上下文夠乾淨時通常有效，但不是保證；真正不可退讓的邊界要靠機制，不能只靠模型記得。</p>
-<h2 id="_4">三、該用哪一種：決策清單</h2>
+<h2 id="三該用哪一種決策清單">三、該用哪一種：決策清單</h2>
 <p>依序問自己這幾個問題：</p>
 <ol>
 <li><strong>這是一條事實還是一套程序？</strong> 事實（這個專案是什麼、有什麼紅線）→ CLAUDE.md／AGENTS.md。程序（一套會重複執行的檢查或步驟）→ SKILL。</li>
@@ -221,7 +221,7 @@ the problem, show the current code, and provide an improved version.
 </ol>
 <p>不確定的時候，先從最輕的做起：一條規則先寫進 CLAUDE.md，發現自己在重複貼同一段指示三次以上，才升級成 SKILL；SKILL 累積到五個以上、且想分享時，才打包成 Plugin。</p>
 <p>想知道這些機制在 <code>settings.json</code> 裡具體怎麼寫、權限規則怎麼設，見<a href="official-config.html">Claude Code 設定總覽</a>；想看 Hooks 與 Subagent 更完整的設定範例與陷阱，見<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>（這兩頁本站尚未寫，連結先放著）。</p>
-<h2 id="_5">資料來源</h2>
+<h2 id="資料來源">資料來源</h2>
 <table>
 <thead>
 <tr>
@@ -397,23 +397,24 @@ the problem, show the current code, and provide an improved version.
 </main>
 <aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
 <ul>
-<li><a href="#_1">一、六種機制支援矩陣</a></li>
-<li><a href="#_2">一之二、每種機制解決什麼問題、什麼時候載入、放在哪裡</a></li>
-<li><a href="#_3">二、每種機制的最小範例與常見誤用</a><ul>
-<li><a href="#claudemdagentsmd">CLAUDE.md／AGENTS.md：專案事實與紅線</a></li>
-<li><a href="#skill">SKILL：隨需載入的程序</a></li>
-<li><a href="#mcp">MCP：接上外部工具</a></li>
-<li><a href="#subagent">Subagent：獨立乾淨的視角</a></li>
-<li><a href="#plugin">Plugin：打包分享</a></li>
-<li><a href="#hooks">Hooks：機制強制，不是文字提醒</a></li>
+<li><a href="#一六種機制支援矩陣">一、六種機制支援矩陣</a></li>
+<li><a href="#一之二每種機制解決什麼問題什麼時候載入放在哪裡">一之二、每種機制解決什麼問題、什麼時候載入、放在哪裡</a></li>
+<li><a href="#二每種機制的最小範例與常見誤用">二、每種機制的最小範例與常見誤用</a><ul>
+<li><a href="#claudemdagentsmd專案事實與紅線">CLAUDE.md／AGENTS.md：專案事實與紅線</a></li>
+<li><a href="#skill隨需載入的程序">SKILL：隨需載入的程序</a></li>
+<li><a href="#mcp接上外部工具">MCP：接上外部工具</a></li>
+<li><a href="#subagent獨立乾淨的視角">Subagent：獨立乾淨的視角</a></li>
+<li><a href="#plugin打包分享">Plugin：打包分享</a></li>
+<li><a href="#hooks機制強制不是文字提醒">Hooks：機制強制，不是文字提醒</a></li>
 </ul>
 </li>
-<li><a href="#_4">三、該用哪一種：決策清單</a></li>
-<li><a href="#_5">資料來源</a></li>
+<li><a href="#三該用哪一種決策清單">三、該用哪一種：決策清單</a></li>
+<li><a href="#資料來源">資料來源</a></li>
 </ul>
 </div>
 </aside>
 </div>
 <script src="../assets/site.js"></script>
+<script>(function(){var m={"_1":"一六種機制支援矩陣","_2":"一之二每種機制解決什麼問題什麼時候載入放在哪裡","_3":"二每種機制的最小範例與常見誤用","claudemdagentsmd":"claudemdagentsmd專案事實與紅線","skill":"skill隨需載入的程序","mcp":"mcp接上外部工具","subagent":"subagent獨立乾淨的視角","plugin":"plugin打包分享","hooks":"hooks機制強制不是文字提醒","_4":"三該用哪一種決策清單","_5":"資料來源"};function f(){var h=decodeURIComponent(location.hash.slice(1));if(h&&m[h]&&!document.getElementById(h)){var n=m[h];history.replaceState(null,"","#"+encodeURIComponent(n));var g=function(){var e=document.getElementById(n);if(e)e.scrollIntoView();};document.readyState==="complete"?g():addEventListener("load",g);}}f();addEventListener("hashchange",f);})();</script>
 </body>
 </html>

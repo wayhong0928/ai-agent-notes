@@ -11,6 +11,7 @@ import json
 import html
 import subprocess
 import markdown
+from markdown.extensions.toc import slugify_unicode
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(ROOT, "docs")
@@ -147,7 +148,7 @@ TEMPLATE = """<!DOCTYPE html>
 <aside class="toc" id="toc"><h2>本頁目錄</h2>{toc}</aside>
 </div>
 <script src="../assets/site.js"></script>
-</body>
+{legacy}</body>
 </html>
 """
 
@@ -235,10 +236,39 @@ def section_of(slug):
     return ""
 
 
+# 2026-10 錨點改由標題文字決定（slugify_unicode）。舊網址 #_5 這類自動編號錨點
+# 靠 reports/anchor-map.json 的對照，在每頁內嵌一小段 JS 轉到新錨點。
+ANCHOR_MAP = os.path.join(ROOT, "reports", "anchor-map.json")
+
+
+def legacy_anchor_script(slug, body):
+    if not os.path.exists(ANCHOR_MAP):
+        return ""
+    rows = json.load(open(ANCHOR_MAP, encoding="utf-8")).get(slug, [])
+    ids = set(re.findall(r'\sid="([^"]*)"', body))
+    m = {}
+    for r in rows:
+        if r["old"] == r["new"] or r["old"] in ids:
+            continue
+        if r["new"] not in ids:
+            print("  ! %s：舊錨點 #%s 的對照目標 #%s 已不存在（標題改過？）" % (slug, r["old"], r["new"]))
+            continue
+        m[r["old"]] = r["new"]
+    if not m:
+        return ""
+    data = json.dumps(m, ensure_ascii=False, separators=(",", ":"))
+    return ("<script>(function(){var m=%s;function f(){var h=decodeURIComponent(location.hash.slice(1));"
+            "if(h&&m[h]&&!document.getElementById(h)){var n=m[h];history.replaceState(null,\"\",\"#\"+encodeURIComponent(n));"
+            "var g=function(){var e=document.getElementById(n);if(e)e.scrollIntoView();};"
+            "document.readyState===\"complete\"?g():addEventListener(\"load\",g);}}"
+            "f();addEventListener(\"hashchange\",f);})();</script>\n" % data)
+
+
 def build():
     os.makedirs(PAGES, exist_ok=True)
     md = markdown.Markdown(extensions=["extra", "toc", "sane_lists", "admonition"],
-                           extension_configs={"toc": {"toc_depth": "2-3"}})
+                           extension_configs={"toc": {"toc_depth": "2-3",
+                                                  "slugify": slugify_unicode}})
     for i, (slug, title, desc) in enumerate(FLAT):
         src = os.path.join(DOCS, slug + ".md")
         if not os.path.exists(src):
@@ -267,6 +297,7 @@ def build():
         out = TEMPLATE.format(title=title, desc=html.escape(desc, quote=True),
                               nav=nav_html(slug, prefix="../"), body=body,
                               toc=toc, pager=pager, section=section_of(slug),
+                              legacy=legacy_anchor_script(slug, body),
                               updated=source_updated(src), canonical=SITE_URL + "pages/" + slug + ".html",
                               repo=REPO_URL)
         with open(os.path.join(PAGES, slug + ".html"), "w", encoding="utf-8") as f:

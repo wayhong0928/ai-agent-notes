@@ -29,8 +29,8 @@ Claude Code 內建幾種不用自己寫定義檔的 agent[1]：
 |---|---|---|
 | `Explore` | 繼承主對話的模型，在 Claude API 上最高只到 Opus | 唯讀，跳過 CLAUDE.md 與 git status 以維持輕量，用於檔案發現與程式碼搜尋 |
 | `Plan` | 繼承主對話的模型（除非設了 `CLAUDE_CODE_SUBAGENT_MODEL` 並強制套用到每個 subagent）[^fresh2] | 唯讀，用於 plan mode 下的程式庫研究 |
-| `general-purpose` | 依[模型解析順序](#4-fable) | 所有 subagent 可用工具都開，用於需要探索＋修改、複雜推理、多步驟依賴的任務 |
-| `claude` | 同上 | 無法歸類到專門 agent 時的萬用選項，所有 subagent 可用工具都開；也是[背景 session](#8-agent-viewagent-teams-dynamic-workflows) 被派工時的預設 agent |
+| `general-purpose` | 依[模型解析順序](#4-模型怎麼選fable-是什麼解析順序) | 所有 subagent 可用工具都開，用於需要探索＋修改、複雜推理、多步驟依賴的任務 |
+| `claude` | 同上 | 無法歸類到專門 agent 時的萬用選項，所有 subagent 可用工具都開；也是[背景 session](#8-其他多代理機制agent-viewagent-teams-與-dynamic-workflows) 被派工時的預設 agent |
 | `statusline-setup` | Sonnet | 設定 status line |
 | `claude-code-guide` | Haiku | 回答 Claude Code 功能問題 |
 
@@ -51,15 +51,15 @@ Claude Code 內建幾種不用自己寫定義檔的 agent[1]：
 | `description` | 是 | 決定 Claude 何時該委派給這個 subagent |
 | `tools` | 否 | 允許工具的白名單；省略則繼承所有 subagent 可用工具；清單裡沒有任何一項解析得出實際工具時，subagent 通常直接拒絕啟動並報錯 |
 | `disallowedTools` | 否 | 黑名單，從繼承或指定的清單裡移除；`Bash(git push *)` 這種帶條件的寫法會整個工具一起移除，不是只擋那個條件 |
-| `model` | 否 | `sonnet`／`opus`／`haiku`／`fable`／完整 model ID（如 `claude-opus-5`）／`inherit`；省略則依[模型解析順序](#4-fable)決定 |
+| `model` | 否 | `sonnet`／`opus`／`haiku`／`fable`／完整 model ID（如 `claude-opus-5`）／`inherit`；省略則依[模型解析順序](#4-模型怎麼選fable-是什麼解析順序)決定 |
 | `permissionMode` | 否 | `default`／`acceptEdits`／`auto`／`dontAsk`／`bypassPermissions`／`plan`／`manual`（`manual` 是 `default` 的別名，v2.1.200 起）；plugin 提供的 subagent 忽略這個欄位 |
-| `maxTurns` | 否 | 最多跑幾個 agentic turn；到上限時輸出會標記為 partial，可以用 `SendMessage`[續問](#7-sendmessage)繼續 |
+| `maxTurns` | 否 | 最多跑幾個 agentic turn；到上限時輸出會標記為 partial，可以用 `SendMessage`[續問](#7-sendmessage-續問)繼續 |
 | `skills` | 否 | 啟動時預先載進 context 的 skill 清單 |
 | `mcpServers` | 否 | 這個 subagent 可用的 MCP servers |
 | `hooks` | 否 | 只在這個 subagent 生效範圍的額外 hooks |
 | `memory` | 否 | 持久記憶範圍：`user`／`project`／`local` |
-| `isolation` | 否 | 設 `worktree` 讓 subagent 跑在獨立 git worktree，細節見[第 6 節](#6-background-isolation-worktree) |
-| `background` | 否 | 設 `true` 讓這個 subagent 即使 Claude 想立刻拿結果也留在背景執行；細節見[第 6 節](#6-background-isolation-worktree) |
+| `isolation` | 否 | 設 `worktree` 讓 subagent 跑在獨立 git worktree，細節見[第 6 節](#6-background-與-isolation-worktree-的實際行為) |
+| `background` | 否 | 設 `true` 讓這個 subagent 即使 Claude 想立刻拿結果也留在背景執行；細節見[第 6 節](#6-background-與-isolation-worktree-的實際行為) |
 | `omitClaudeMd` | 否 | 設 `true` 啟動時不載入使用者／專案／本機層的 CLAUDE.md（managed policy 檔仍會載入）；當這個 agent 被當成主線 session agent 執行（`--agent` 或 `agent` 設定）時，這個欄位會被忽略 |
 | `effort` | 否 | 這個 subagent 啟用時的推理強度：`low`／`medium`／`high`／`xhigh`／`max`，覆蓋 session 的 effort 設定，預設繼承 session；可用等級依模型而定 |
 | `color` | 否 | 顯示用顏色 |
@@ -93,7 +93,7 @@ Subagent 繼承主線對話可用的內建工具與 MCP 工具，但會經過兩
 
 **第一層，不管 `tools` 欄位寫了什麼都會被拿掉的工具**：`Agent`（在委派深度已到上限時；fork 裡這個工具會保留在清單但實際呼叫會回錯誤）、`AskUserQuestion`、`EndConversation`、`EnterPlanMode`、`ExitPlanMode`（除非該 subagent 的 `permissionMode` 是 `plan`）、`ScheduleWakeup`、`WaitForMcpServers`[^fresh3]、`Workflow`。
 
-**第二層只套用在背景執行的 subagent 身上**（背景是[預設值](#6-background-isolation-worktree)）。除了跟著第一層規則走的 `Agent` 與 `ExitPlanMode`，背景 subagent 只保留這些內建工具：`Read`、`Grep`、`Glob`、`LSP`、`Bash`、`PowerShell`[^fresh4]、`Edit`、`Write`、`NotebookEdit`、`WebFetch`、`WebSearch`、`TodoWrite`、`Skill`、`ToolSearch`、`EnterWorktree`、`ExitWorktree`、`Monitor`、`TaskStop`、`SendMessage`、`Artifact`，加上要回報用的 `SubagentHandback`；MCP 工具則全部保留。其餘內建工具，就算寫在 `tools` 欄位裡也一樣被拿掉，同一份定義檔在前景跟背景會解析出不同的工具集，這個移除動作不會報錯，除非移除後 `tools` 清單完全解析不出任何工具[1]。
+**第二層只套用在背景執行的 subagent 身上**（背景是[預設值](#6-background-與-isolation-worktree-的實際行為)）。除了跟著第一層規則走的 `Agent` 與 `ExitPlanMode`，背景 subagent 只保留這些內建工具：`Read`、`Grep`、`Glob`、`LSP`、`Bash`、`PowerShell`[^fresh4]、`Edit`、`Write`、`NotebookEdit`、`WebFetch`、`WebSearch`、`TodoWrite`、`Skill`、`ToolSearch`、`EnterWorktree`、`ExitWorktree`、`Monitor`、`TaskStop`、`SendMessage`、`Artifact`，加上要回報用的 `SubagentHandback`；MCP 工具則全部保留。其餘內建工具，就算寫在 `tools` 欄位裡也一樣被拿掉，同一份定義檔在前景跟背景會解析出不同的工具集，這個移除動作不會報錯，除非移除後 `tools` 清單完全解析不出任何工具[1]。
 
 fork 會跳過這兩層過濾，直接拿到主線對話一模一樣的工具池[1]。
 
@@ -153,7 +153,7 @@ Dynamic workflow 是一支由 Claude 寫出來、在背景由 runtime 執行的 
 
 內建的 `/deep-research` 就是一個現成的 workflow，會針對一個問題從多個角度平行搜尋、交叉核對來源、對每個論點投票，回傳一份已經濾掉沒通過交叉核對的引用報告[3]。要臨時把單一任務跑成 workflow，在提示裡加關鍵字 `ultracode`，或者直接用自己的話講「用 workflow 做」也算數；`/effort ultracode` 則是讓 Claude 對整個 session 裡每個像樣的任務都自動規劃 workflow[3]。
 
-跑 workflow 前 Claude Code 通常會先問是否放行，這個提示會依權限模式而不同；在 `claude -p` 與 Agent SDK 裡完全不會跳出這個提示，改用一般的權限規則決定，其中最直接的是在 allow 規則裡放 `Workflow`（放行所有 workflow）或 `Workflow(<name>)`（只放行某個已存檔的 workflow）[3]。跑起來的 workflow 可以用 `/workflows` 監看每個階段的 agent 數、token 用量與經過時間[3]。這也是為什麼[第 5 節](#5)提到 `Workflow` 本身被第一層過濾器整批拿掉：subagent 不能自己再派一個 workflow。
+跑 workflow 前 Claude Code 通常會先問是否放行，這個提示會依權限模式而不同；在 `claude -p` 與 Agent SDK 裡完全不會跳出這個提示，改用一般的權限規則決定，其中最直接的是在 allow 規則裡放 `Workflow`（放行所有 workflow）或 `Workflow(<name>)`（只放行某個已存檔的 workflow）[3]。跑起來的 workflow 可以用 `/workflows` 監看每個階段的 agent 數、token 用量與經過時間[3]。這也是為什麼[第 5 節](#5-工具怎麼被過濾)提到 `Workflow` 本身被第一層過濾器整批拿掉：subagent 不能自己再派一個 workflow。
 
 !!! note "併發上限"
     一個 session 裡同時跑滿 20 個 subagent 時，再用 Agent 工具派下一個會直接失敗、報 `Concurrent subagent limit reached`，Claude 收到的錯誤訊息會註明不要重試；等執行中的數量降到門檻以下才能再派。要調整這個上限，設環境變數 `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`。啟用 ultracode 的 session 不受這個限制[1]。

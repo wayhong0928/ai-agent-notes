@@ -17,7 +17,7 @@
 <div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
 <div class="navsec"><h2>先搞懂工具</h2><ul>
 <li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
-<li class="active"><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791384637">免付費區</a></li>
+<li class="active"><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
 <li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791384637">付費區</a></li>
 <li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
 </ul></div>
@@ -46,20 +46,20 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791468632">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
 <main id="main">
 <p class="crumb"><a href="../index.html">首頁</a> ／ 先搞懂工具</p>
-<article class="doc" data-updated="1791384637">
+<article class="doc" data-updated="1791616480">
 <h1>免付費區</h1>
 <p class='lede'>不付錢也做得到的 AI 輔助工作流程</p>
 <blockquote>
 <p>查證日期：2026-09-16；ChatGPT Free 一節 2026-10-05 重查；Cowork 一列 2026-10-06 重查；Codex 一節 2026-10-07 重查；ChatGPT Canvas 一列 2026-10-10 重查。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p>免費帳號能做的事，比多數人想的多一些，但也有幾個明確做不到的邊界。這頁只講「不花錢能做到哪裡」；需要付費才能解鎖的部分，見<a href="paid-tier.html">付費區</a>；不確定該用哪個介面，先看<a href="tools-compare.html">AI 介面比較總表</a>。</p>
-<h2 id="claude-free">Claude Free 能用什麼</h2>
+<h2 id="claude-free-能用什麼">Claude Free 能用什麼</h2>
 <table>
 <thead>
 <tr>
@@ -121,7 +121,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="chatgpt-free">ChatGPT Free 能用什麼</h2>
+<h2 id="chatgpt-free-能用什麼">ChatGPT Free 能用什麼</h2>
 <table>
 <thead>
 <tr>
@@ -183,14 +183,14 @@
 </tr>
 </tbody>
 </table>
-<h3 id="freego-codex">Free／Go 帳號用 Codex 要注意的地方</h3>
+<h3 id="freego-帳號用-codex-要注意的地方">Free／Go 帳號用 Codex 要注意的地方</h3>
 <p>官方定價頁開頭寫 Codex 包含在 Free、Go、Plus 等各個方案裡，但各方案列出的介面不一樣。Free（$0，「Explore Codex capabilities on quick coding tasks.」）與 Go（$8，「Use Codex for lightweight coding tasks.」）的方案卡只寫桌面 App 裡可用的模型（依推出進度開放），沒有列 CLI 或 IDE 擴充；網頁版、CLI、IDE 擴充和 iOS 要到 Plus（$20）才列出來 [O1]。Codex CLI 的 GitHub README 也只建議用 Plus、Pro、Business、Edu、Enterprise 帳號登入 [O26]。官方沒有哪一句寫「Free 不能用 CLI」，但也找不到 Free／Go 可以用的明文，所以這裡照定價頁的寫法：Free／Go 用桌面 App，要用 CLI 或 IDE 擴充從 Plus 算起。不想訂閱的話，CLI 和 IDE 擴充也可以接 API key，按 API 用量計費 [O1]。</p>
 <div class="admonition note">
 <p class="admonition-title">2026-10-07 更正</p>
 <p>這段原本寫 Free／Go 也能用 CLI 和 IDE 擴充，並把 GitHub README 只列 Plus 以上當成舊文件沒跟上。重新對照定價頁後發現，定價頁本身就只把網頁版、CLI、IDE 擴充列在 Plus 以上，原本的推論沒有根據，已改成定價頁的寫法。</p>
 </div>
-<h2 id="_1">兩個免費帳號可行的工作流程</h2>
-<h3 id="claude-free-projects">流程一：Claude Free 的 Projects 額度有限時，手動貼上文獻摘要</h3>
+<h2 id="兩個免費帳號可行的工作流程">兩個免費帳號可行的工作流程</h2>
+<h3 id="流程一claude-free-的-projects-額度有限時手動貼上文獻摘要">流程一：Claude Free 的 Projects 額度有限時，手動貼上文獻摘要</h3>
 <blockquote>
 <p><strong>2026-09-19 更正</strong>：這裡原本寫「Claude Free 沒有 Projects」，查證後發現是錯的，Free 帳號其實可以用 Projects，只是上限 5 個，且沒有付費方案才有的 RAG 知識庫擴充。完整說明見<a href="projects.html">Projects 功能</a>。以下流程改成「額度用完之後怎麼辦」。</p>
 </blockquote>
@@ -200,13 +200,13 @@
 <li>超過 5 個 Project、或臨時性的一次性任務，改回手動貼上摘要：把要討論的文獻摘要、規範或前一輪結論整理成一段文字，貼在對話開頭當「這次要用的脈絡」。</li>
 <li>需要長期保留脈絡時，把重要結論另外存到自己的筆記檔案裡，不要只依賴 Claude 的 Memory。Free 雖然有 Memory 預設開啟 [S10]，但那是跨對話的一般偏好記憶，不是 Projects 等級、可掛文件的知識庫。</li>
 </ol>
-<h3 id="chatgpt-free-app-codex">流程二：ChatGPT Free 桌面 App 的 Codex 分頁做小型程式任務</h3>
+<h3 id="流程二chatgpt-free-桌面-app-的-codex-分頁做小型程式任務">流程二：ChatGPT Free 桌面 App 的 Codex 分頁做小型程式任務</h3>
 <ol>
 <li>安裝統一版 ChatGPT Desktop App，登入 Free 帳號，切到 Codex 分頁 [O7]。</li>
 <li>針對範圍明確、單一檔案或小型腳本的任務下指令（例如「幫我寫一個整理 CSV 的 Python 腳本」），不要一次丟整個大型專案，因為 Free 帳號的定位就是「quick coding tasks」[O1]。</li>
 <li>Codex 依 sandbox mode 決定能不能直接讀寫本機檔案與執行指令，第一次使用時注意它問你的權限確認，不要看到「建議」就一律同意 [O25]。</li>
 </ol>
-<h2 id="_2">免費版常見的坑</h2>
+<h2 id="免費版常見的坑">免費版常見的坑</h2>
 <div class="admonition warning">
 <p class="admonition-title">Connectors 只能接 1 個</p>
 <p>Claude Free 的自訂 connector（remote MCP）上限是 1 個，不是「先接看看，之後再加」。如果你的工作流程需要同時接文獻管理器、雲端硬碟、資料庫，免費帳號會卡在這裡，得先想清楚優先接哪一個 [S12]。</p>
@@ -223,7 +223,7 @@
 <p class="admonition-title">檔案上傳有頻率上限，不是只看檔案大小</p>
 <p>ChatGPT Free 的單檔大小上限雖然跟付費方案一樣是 512MB，但每天只能上傳 3 次，尖峰時段官方還可能調低；Claude Free 的檔案上傳沒有另外標注頻率限制，但受單次對話最多 20 檔、圖片與 PDF 頁數等其他上限影響 [O19][S16]。</p>
 </div>
-<h2 id="2026-09-16">資料來源（2026-09-16 查證）</h2>
+<h2 id="資料來源2026-09-16-查證">資料來源（2026-09-16 查證）</h2>
 <table>
 <thead>
 <tr>
@@ -378,22 +378,23 @@
 </main>
 <aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
 <ul>
-<li><a href="#claude-free">Claude Free 能用什麼</a></li>
-<li><a href="#chatgpt-free">ChatGPT Free 能用什麼</a><ul>
-<li><a href="#freego-codex">Free／Go 帳號用 Codex 要注意的地方</a></li>
+<li><a href="#claude-free-能用什麼">Claude Free 能用什麼</a></li>
+<li><a href="#chatgpt-free-能用什麼">ChatGPT Free 能用什麼</a><ul>
+<li><a href="#freego-帳號用-codex-要注意的地方">Free／Go 帳號用 Codex 要注意的地方</a></li>
 </ul>
 </li>
-<li><a href="#_1">兩個免費帳號可行的工作流程</a><ul>
-<li><a href="#claude-free-projects">流程一：Claude Free 的 Projects 額度有限時，手動貼上文獻摘要</a></li>
-<li><a href="#chatgpt-free-app-codex">流程二：ChatGPT Free 桌面 App 的 Codex 分頁做小型程式任務</a></li>
+<li><a href="#兩個免費帳號可行的工作流程">兩個免費帳號可行的工作流程</a><ul>
+<li><a href="#流程一claude-free-的-projects-額度有限時手動貼上文獻摘要">流程一：Claude Free 的 Projects 額度有限時，手動貼上文獻摘要</a></li>
+<li><a href="#流程二chatgpt-free-桌面-app-的-codex-分頁做小型程式任務">流程二：ChatGPT Free 桌面 App 的 Codex 分頁做小型程式任務</a></li>
 </ul>
 </li>
-<li><a href="#_2">免費版常見的坑</a></li>
-<li><a href="#2026-09-16">資料來源（2026-09-16 查證）</a></li>
+<li><a href="#免費版常見的坑">免費版常見的坑</a></li>
+<li><a href="#資料來源2026-09-16-查證">資料來源（2026-09-16 查證）</a></li>
 </ul>
 </div>
 </aside>
 </div>
 <script src="../assets/site.js"></script>
+<script>(function(){var m={"claude-free":"claude-free-能用什麼","chatgpt-free":"chatgpt-free-能用什麼","freego-codex":"freego-帳號用-codex-要注意的地方","_1":"兩個免費帳號可行的工作流程","claude-free-projects":"流程一claude-free-的-projects-額度有限時手動貼上文獻摘要","chatgpt-free-app-codex":"流程二chatgpt-free-桌面-app-的-codex-分頁做小型程式任務","_2":"免費版常見的坑","2026-09-16":"資料來源2026-09-16-查證"};function f(){var h=decodeURIComponent(location.hash.slice(1));if(h&&m[h]&&!document.getElementById(h)){var n=m[h];history.replaceState(null,"","#"+encodeURIComponent(n));var g=function(){var e=document.getElementById(n);if(e)e.scrollIntoView();};document.readyState==="complete"?g():addEventListener("load",g);}}f();addEventListener("hashchange",f);})();</script>
 </body>
 </html>
