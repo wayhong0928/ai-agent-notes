@@ -1,3 +1,5 @@
+繁體中文 | [English](README.en.md)
+
 # AI Agent 筆記
 
 「AI Agent 筆記」是一個靜態網站，用來整理 Claude、Codex 與 AI 代理工具的概念、設定與協作流程。
