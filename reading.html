@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>閱讀追蹤｜AI Agent 筆記</title>
+<meta name="description" content="勾選讀過的頁面，看本站還有哪些頁面沒讀。">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/reading.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<a class="navread" href="reading.html">閱讀追蹤</a>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
+<li><a href="pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
+<li><a href="pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791622926">付費區</a></li>
+<li><a href="pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1792214180">AI Agent 怎麼運作</a></li>
+<li><a href="pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1792214180">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1792214180">Subagent 入門與實戰</a></li>
+<li><a href="pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1792214180">MCP 入門與實戰</a></li>
+<li><a href="pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
+<li><a href="pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1792214180">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1791265294">Claude Code + Codex 協作</a></li>
+<li><a href="pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1791213128">把教材做成 SKILL</a></li>
+<li><a href="pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791352825">Claude Code 接上 Obsidian</a></li>
+<li><a href="pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1791352825">Claude Code + Cowork 並用</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789655763">SDLC 與流程模型</a></li>
+<li><a href="pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789655763">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1790340239">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1791213128">Claude Code 設定總覽</a></li>
+<li><a href="pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1792214180">Hooks 與 Subagent 設定</a></li>
+<li><a href="pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
+</ul></div>
+<div class="navsec"><h2>隔離與沙箱</h2><ul>
+<li><a href="pages/wsl2-isolation.html" data-title="WSL2 當隔離環境" data-slug="wsl2-isolation" data-updated="1791632038">WSL2 當隔離環境</a></li>
+<li><a href="pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1792214180">Coding agent 沙箱：Claude Code 與 Codex</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791632038">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap solo">
+<main id="main">
+
+<header class="hero">
+<span class="tag">閱讀紀錄</span>
+<h1>閱讀追蹤</h1>
+<p>本站的文章頁都列在下面，讀完一頁就勾起來，沒勾的就是還沒讀的。勾過的頁面之後如果改版，會出現在「讀後有更新」。</p>
+</header>
+
+<div id="reading" class="rd" data-site="aan"></div>
+
+<div class="notice">
+<b>紀錄存在哪裡</b>
+<p>勾選紀錄只存在你這台裝置的這個瀏覽器，不會上傳，別人也看不到。換瀏覽器、換電腦或清除網站資料後就會不見，想保留的話，先匯出成 JSON 檔，需要時再匯入。匯入會跟現有紀錄合併。</p>
+<p class="rd-io"><button type="button" id="rd-export">匯出紀錄</button> <button type="button" id="rd-import">匯入紀錄</button><input type="file" id="rd-file" accept="application/json,.json" hidden> <span id="rd-io-msg" role="status"></span></p>
+</div>
+
+</main>
+</div>
+<script src="assets/site.js"></script>
+<script src="assets/reading.js"></script>
+</body>
+</html>

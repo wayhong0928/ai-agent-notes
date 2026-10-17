@@ -109,6 +109,7 @@ def nav_html(active, prefix=""):
                f'<span class="brand-text">AI Agent<br><small>筆記</small></span></a>')
     out.append('<div class="navsearch"><input type="search" id="navfilter" '
                'placeholder="篩選頁面…" aria-label="篩選頁面"></div>')
+    out.append(f'<a class="navread" href="{prefix}reading.html">閱讀追蹤</a>')
     for sec, items in NAV:
         out.append(f'<div class="navsec"><h2>{sec}</h2><ul>')
         for slug, title, _d in items:
@@ -316,7 +317,42 @@ def build():
         json.dump(idx, f, ensure_ascii=False, indent=1)
 
 
+READING_BODY = """
+<header class="hero">
+<span class="tag">閱讀紀錄</span>
+<h1>閱讀追蹤</h1>
+<p>本站的文章頁都列在下面，讀完一頁就勾起來，沒勾的就是還沒讀的。勾過的頁面之後如果改版，會出現在「讀後有更新」。</p>
+</header>
+
+<div id="reading" class="rd" data-site="aan"></div>
+
+<div class="notice">
+<b>紀錄存在哪裡</b>
+<p>勾選紀錄只存在你這台裝置的這個瀏覽器，不會上傳，別人也看不到。換瀏覽器、換電腦或清除網站資料後就會不見，想保留的話，先匯出成 JSON 檔，需要時再匯入。匯入會跟現有紀錄合併。</p>
+<p class="rd-io"><button type="button" id="rd-export">匯出紀錄</button> <button type="button" id="rd-import">匯入紀錄</button><input type="file" id="rd-file" accept="application/json,.json" hidden> <span id="rd-io-msg" role="status"></span></p>
+</div>
+"""
+
+
+def build_reading():
+    """閱讀追蹤頁：頁框沿用首頁模板，頁面清單由 assets/reading.js 從側邊選單讀出。"""
+    head, rest = INDEX_TEMPLATE.split('<main id="main">', 1)
+    tail = rest.split('</main>', 1)[1]
+    page = head + '<main id="main">\n' + READING_BODY + '\n</main>' + tail
+    page = page.replace('{nav}', nav_html(None, prefix=""))
+    page = page.replace('{site_url}', SITE_URL + 'reading.html')
+    page = re.sub(r'<title>([^<]*)</title>', lambda m: '<title>閱讀追蹤｜' + m.group(1) + '</title>', page, count=1)
+    page = re.sub(r'<meta name="description" content="[^"]*">',
+                  '<meta name="description" content="勾選讀過的頁面，看本站還有哪些頁面沒讀。">', page, count=1)
+    page = page.replace('<script src="assets/site.js"></script>',
+                        '<script src="assets/site.js"></script>\n<script src="assets/reading.js"></script>')
+    with open(os.path.join(ROOT, "reading.html"), "w", encoding="utf-8") as f:
+        f.write(page)
+    print("  ✓ reading.html")
+
+
 if __name__ == "__main__":
     build()
     build_index()
+    build_reading()
     print("完成。")
