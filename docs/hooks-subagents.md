@@ -18,6 +18,77 @@
 | Agent 相關 | `SubagentStart`、`SubagentStop`、`TaskCreated`、`TaskCompleted` |
 | 設定與環境 | `ConfigChange`、`FileChanged`、`CwdChanged`、`PreCompact`、`PostCompact` |
 
+<figure class="diagram">
+<svg class="dg-wide" viewBox="0 0 700 320" role="img" aria-labelledby="dghk-w">
+<title id="dghk-w">Hooks 事件在一個 session 裡的觸發時間點。SessionStart 之後，一個用到工具的回合依序是 UserPromptSubmit、PreToolUse、執行工具、PostToolUse、Stop；PreToolUse 回傳 exit 2 會擋下這次呼叫，呼叫成功後才觸發 PostToolUse，失敗時改觸發 PostToolUseFailure；session 結束時觸發 SessionEnd。</title>
+<defs><marker id="dghk-hw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-you" x="10" y="28" width="140" height="46" rx="10"/>
+<text class="dg-c" x="80" y="56" text-anchor="middle">SessionStart</text>
+<rect class="dg-you" x="580" y="28" width="110" height="46" rx="10"/>
+<text class="dg-c" x="635" y="56" text-anchor="middle">SessionEnd</text>
+<path class="dg-dash" d="M150,51 L578,51"/>
+<text class="dg-l" x="364" y="42" text-anchor="middle">一個 session</text>
+<path class="dg-line" d="M80,74 L80,138" marker-end="url(#dghk-hw)"/>
+<path class="dg-line" d="M645,140 L645,76" marker-end="url(#dghk-hw)"/>
+<rect class="dg-key" x="10" y="140" width="140" height="50" rx="10"/>
+<text class="dg-c" x="80" y="170" text-anchor="middle">UserPromptSubmit</text>
+<rect class="dg-key" x="180" y="140" width="110" height="50" rx="10"/>
+<text class="dg-c" x="235" y="170" text-anchor="middle">PreToolUse</text>
+<rect class="dg-box" x="320" y="140" width="100" height="50" rx="10"/>
+<text class="dg-t" x="370" y="170" text-anchor="middle">執行工具</text>
+<rect class="dg-key" x="450" y="140" width="120" height="50" rx="10"/>
+<text class="dg-c" x="510" y="163" text-anchor="middle">PostToolUse</text>
+<text class="dg-l" x="510" y="181" text-anchor="middle">（呼叫成功時）</text>
+<rect class="dg-key" x="600" y="140" width="90" height="50" rx="10"/>
+<text class="dg-c" x="645" y="170" text-anchor="middle">Stop</text>
+<path class="dg-line" d="M150,165 L178,165" marker-end="url(#dghk-hw)"/>
+<path class="dg-line" d="M290,165 L318,165" marker-end="url(#dghk-hw)"/>
+<path class="dg-line" d="M420,165 L448,165" marker-end="url(#dghk-hw)"/>
+<path class="dg-line" d="M570,165 L598,165" marker-end="url(#dghk-hw)"/>
+<rect class="dg-note" x="180" y="86" width="230" height="36" rx="8"/>
+<text class="dg-l" x="295" y="109" text-anchor="middle">腳本回傳 exit 2 就擋下這次呼叫</text>
+<path class="dg-line" d="M235,140 L235,124" marker-end="url(#dghk-hw)"/>
+<path class="dg-line" d="M510,190 C510,236 235,236 235,192" marker-end="url(#dghk-hw)"/>
+<text class="dg-l" x="372" y="244" text-anchor="middle">下一次工具呼叫</text>
+<path class="dg-line" d="M645,190 C645,300 80,300 80,192" marker-end="url(#dghk-hw)"/>
+<text class="dg-l" x="362" y="296" text-anchor="middle">下一個回合</text>
+</svg>
+<svg class="dg-narrow" viewBox="0 0 350 500" role="img" aria-labelledby="dghk-n">
+<title id="dghk-n">Hooks 事件在一個 session 裡的觸發時間點。SessionStart 之後，一個用到工具的回合依序是 UserPromptSubmit、PreToolUse、執行工具、PostToolUse、Stop；PreToolUse 回傳 exit 2 會擋下這次呼叫，呼叫成功後才觸發 PostToolUse，失敗時改觸發 PostToolUseFailure；session 結束時觸發 SessionEnd。</title>
+<defs><marker id="dghk-hn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-you" x="40" y="10" width="180" height="40" rx="10"/>
+<text class="dg-c" x="130" y="35" text-anchor="middle">SessionStart</text>
+<path class="dg-line" d="M130,50 L130,78" marker-end="url(#dghk-hn)"/>
+<rect class="dg-key" x="40" y="80" width="180" height="44" rx="10"/>
+<text class="dg-c" x="130" y="107" text-anchor="middle">UserPromptSubmit</text>
+<path class="dg-line" d="M130,124 L130,148" marker-end="url(#dghk-hn)"/>
+<rect class="dg-key" x="40" y="150" width="180" height="44" rx="10"/>
+<text class="dg-c" x="130" y="177" text-anchor="middle">PreToolUse</text>
+<rect class="dg-note" x="234" y="148" width="80" height="48" rx="8"/>
+<text class="dg-l" x="274" y="168" text-anchor="middle">exit 2</text>
+<text class="dg-l" x="274" y="186" text-anchor="middle">擋下呼叫</text>
+<path class="dg-line" d="M220,172 L232,172" marker-end="url(#dghk-hn)"/>
+<path class="dg-line" d="M130,194 L130,218" marker-end="url(#dghk-hn)"/>
+<rect class="dg-box" x="40" y="220" width="180" height="44" rx="10"/>
+<text class="dg-t" x="130" y="247" text-anchor="middle">執行工具</text>
+<path class="dg-line" d="M130,264 L130,288" marker-end="url(#dghk-hn)"/>
+<rect class="dg-key" x="40" y="290" width="180" height="44" rx="10"/>
+<text class="dg-c" x="130" y="309" text-anchor="middle">PostToolUse</text>
+<text class="dg-l" x="130" y="326" text-anchor="middle">（呼叫成功時）</text>
+<path class="dg-line" d="M40,312 L22,312 L22,172 L38,172" marker-end="url(#dghk-hn)"/>
+<text class="dg-l" x="14" y="242" text-anchor="middle" transform="rotate(-90 14 242)">下一次工具呼叫</text>
+<path class="dg-line" d="M130,334 L130,358" marker-end="url(#dghk-hn)"/>
+<rect class="dg-key" x="40" y="360" width="180" height="44" rx="10"/>
+<text class="dg-c" x="130" y="387" text-anchor="middle">Stop</text>
+<path class="dg-line" d="M220,382 L326,382 L326,102 L222,102" marker-end="url(#dghk-hn)"/>
+<text class="dg-l" x="338" y="300" text-anchor="middle" transform="rotate(-90 338 300)">下一個回合</text>
+<path class="dg-line" d="M130,404 L130,438" marker-end="url(#dghk-hn)"/>
+<rect class="dg-you" x="40" y="440" width="180" height="40" rx="10"/>
+<text class="dg-c" x="130" y="465" text-anchor="middle">SessionEnd</text>
+</svg>
+<figcaption>常用的幾個 hook 事件在一個用到工具的回合裡的觸發時間點。工具呼叫前觸發 PreToolUse，腳本回傳 exit 2 會擋下這次呼叫；呼叫成功後觸發 PostToolUse，失敗時改觸發 PostToolUseFailure[1]。</figcaption>
+</figure>
+
 ### 設定寫在哪裡、長什麼樣
 
 Hooks 設定寫在 `settings.json`（使用者層 `~/.claude/settings.json` 或專案層 `.claude/settings.json`，見[Claude Code 設定總覽](official-config.md)的五層優先序）。`hooks` 是一個物件，key 是事件名稱，值是一個陣列，每個項目含 `matcher`（篩選何時觸發，可以是工具名、regex，或像 `SessionStart` 這種事件專屬的來源字串）與 `hooks`（真正要跑的處理器陣列）[1]。Handler 類型有五種：`command`（跑 shell 指令）、`http`（打 HTTP request）、`mcp_tool`（呼叫 MCP 工具）、`prompt`（送給 Claude 模型判斷）、`agent`（開一個 subagent）[1]。

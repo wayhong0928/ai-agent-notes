@@ -285,6 +285,55 @@ codex sandbox linux [--permissions-profile <name>] [COMMAND]...
 
 WSL2 這層擋的是「通往 Windows 的路」，agent 沙箱擋的是「這個 distro 裡的寫入與網路」。只有 WSL2 這層，agent 在 distro 裡可以隨意改檔案、上網；只有 agent 沙箱、WSL2 用預設設定，Claude 的 Read 工具、hooks、MCP server，以及沒裝 seccomp filter 時的 Windows 程式，都還碰得到 Windows（推論，依[1][11][12]）。
 
+<figure class="diagram">
+<svg class="dg-wide" viewBox="0 0 700 330" role="img" aria-labelledby="dgsb-w">
+<title id="dgsb-w">疊兩層隔離時各層擋在哪裡。最外層是 Windows，有 C 槽檔案與 Windows 程式；WSL2 實驗 distro 不自動掛載 C 槽、關閉 interop，擋住通往 Windows 的路；distro 裡的 agent 沙箱（Claude Code 的 /sandbox 或 Codex 的 workspace-write）擋工作區以外的寫入與未允許的網路，包住 agent 執行的 shell 指令。Claude Code 的檔案工具、hooks、本機 MCP server 不在沙箱裡；它們跑在 distro 裡，是本站的推論。WSL2 不自動掛載 C 槽，但有 root 權限仍可手動掛載。</title>
+<rect class="dg-box" x="10" y="10" width="680" height="310" rx="14"/>
+<text class="dg-t" x="30" y="38">Windows</text>
+<text class="dg-s" x="110" y="38">C 槽檔案、Windows 程式</text>
+<rect class="dg-you" x="30" y="56" width="640" height="248" rx="12"/>
+<text class="dg-t" x="50" y="84">WSL2 實驗 distro</text>
+<text class="dg-s" x="50" y="106">不自動掛載 C 槽（有 root 仍可手動掛載）、interop 關閉，擋住通往 Windows 的路</text>
+<rect class="dg-key" x="50" y="124" width="380" height="164" rx="10"/>
+<text class="dg-t" x="70" y="152">agent 沙箱</text>
+<text class="dg-s" x="70" y="174">Claude Code 的 /sandbox 或 Codex 的 workspace-write</text>
+<text class="dg-s" x="70" y="194">擋工作區以外的寫入與未允許的網路</text>
+<rect class="dg-box" x="70" y="212" width="340" height="56" rx="8"/>
+<text class="dg-t" x="240" y="246" text-anchor="middle">agent 執行的 shell 指令</text>
+<rect class="dg-note" x="448" y="124" width="206" height="164" rx="10"/>
+<text class="dg-s" x="464" y="152">不在沙箱裡（Claude Code）</text>
+<text class="dg-l" x="464" y="174">跑在 distro 裡（推論）</text>
+<text class="dg-s" x="464" y="206"><tspan class="dg-c">Read</tspan> 等檔案工具</text>
+<text class="dg-c" x="464" y="232">hooks</text>
+<text class="dg-s" x="464" y="258">本機 <tspan class="dg-c">MCP server</tspan></text>
+</svg>
+<svg class="dg-narrow" viewBox="0 0 350 520" role="img" aria-labelledby="dgsb-n">
+<title id="dgsb-n">疊兩層隔離時各層擋在哪裡。最外層是 Windows，有 C 槽檔案與 Windows 程式；WSL2 實驗 distro 不自動掛載 C 槽、關閉 interop，擋住通往 Windows 的路；distro 裡的 agent 沙箱（Claude Code 的 /sandbox 或 Codex 的 workspace-write）擋工作區以外的寫入與未允許的網路，包住 agent 執行的 shell 指令。Claude Code 的檔案工具、hooks、本機 MCP server 不在沙箱裡；它們跑在 distro 裡，是本站的推論。WSL2 不自動掛載 C 槽，但有 root 權限仍可手動掛載。</title>
+<rect class="dg-box" x="10" y="10" width="330" height="500" rx="14"/>
+<text class="dg-t" x="26" y="36">Windows</text>
+<text class="dg-s" x="26" y="56">C 槽檔案、Windows 程式</text>
+<rect class="dg-you" x="22" y="70" width="306" height="428" rx="12"/>
+<text class="dg-t" x="38" y="96">WSL2 實驗 distro</text>
+<text class="dg-s" x="38" y="116">不自動掛載 C 槽，root 仍可手動掛載</text>
+<text class="dg-s" x="38" y="134">interop 關閉，擋住通往 Windows 的路</text>
+<rect class="dg-key" x="34" y="150" width="282" height="196" rx="10"/>
+<text class="dg-t" x="50" y="176">agent 沙箱</text>
+<text class="dg-s" x="50" y="196">Claude Code 的 /sandbox</text>
+<text class="dg-s" x="50" y="214">或 Codex 的 workspace-write</text>
+<text class="dg-s" x="50" y="234">擋工作區以外的寫入</text>
+<text class="dg-s" x="50" y="252">與未允許的網路</text>
+<rect class="dg-box" x="50" y="270" width="250" height="58" rx="8"/>
+<text class="dg-t" x="175" y="305" text-anchor="middle">agent 執行的 shell 指令</text>
+<rect class="dg-note" x="34" y="362" width="282" height="122" rx="10"/>
+<text class="dg-s" x="50" y="386">不在沙箱裡（Claude Code）</text>
+<text class="dg-l" x="50" y="404">跑在 distro 裡（推論）</text>
+<text class="dg-s" x="50" y="428"><tspan class="dg-c">Read</tspan> 等檔案工具</text>
+<text class="dg-c" x="50" y="452">hooks</text>
+<text class="dg-s" x="50" y="476">本機 <tspan class="dg-c">MCP server</tspan></text>
+</svg>
+<figcaption>WSL2 這層擋通往 Windows 的路，agent 沙箱擋 distro 裡的寫入與網路。Claude Code 的檔案工具、hooks、本機 MCP server 不在沙箱裡[1]；它們跑在 distro 裡、看不到沒掛載的 C 槽，是本站依[1][11]的推論。</figcaption>
+</figure>
+
 ## 五、情境測驗：這個動作會不會被擋
 
 每題選一個答案，會立刻顯示解釋和出處。題目裡的 `<你>` 代表你的 Windows 使用者名稱。「會被擋」包含「先停下來問你、你沒同意就不做」；「不會被擋」指不問就直接做到。

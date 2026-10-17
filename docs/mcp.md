@@ -23,6 +23,50 @@ MCP（Model Context Protocol）官方的定義是「an open-source standard for 
 | stdio | client 啟動一個子行程，透過標準輸入輸出、以換行分隔的 JSON-RPC 訊息通訊，適合本機工具 |
 | Streamable HTTP | 每則訊息是對單一 MCP endpoint 的 HTTP POST，回覆用一般 JSON 物件或該次請求專屬的 SSE 串流，適合遠端伺服器 |
 
+<figure class="diagram">
+<svg class="dg-wide" viewBox="0 0 700 260" role="img" aria-labelledby="dgmc-w">
+<title id="dgmc-w">MCP 規格現行的兩種標準 transport，以 Claude Code 當 client 為例。stdio 是啟動一個本機子行程，透過標準輸入輸出傳 JSON-RPC 訊息；Streamable HTTP 是對遠端伺服器的單一 endpoint 發 HTTP POST，回覆是 JSON 或 SSE 串流。兩種 server 都對外提供 tools、resources、prompts 三種原語。</title>
+<defs><marker id="dgmc-hw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-you" x="10" y="20" width="150" height="220" rx="12"/>
+<text class="dg-t" x="85" y="136" text-anchor="middle">Claude Code</text>
+<rect class="dg-box" x="430" y="20" width="260" height="100" rx="12"/>
+<text class="dg-t" x="560" y="50" text-anchor="middle">本機 MCP server</text>
+<text class="dg-s" x="560" y="74" text-anchor="middle">由 client 啟動的子行程</text>
+<text class="dg-c" x="560" y="100" text-anchor="middle">tools · resources · prompts</text>
+<rect class="dg-box" x="430" y="140" width="260" height="100" rx="12"/>
+<text class="dg-t" x="560" y="170" text-anchor="middle">遠端 MCP server</text>
+<text class="dg-s" x="560" y="194" text-anchor="middle">對外開一個 MCP endpoint</text>
+<text class="dg-c" x="560" y="220" text-anchor="middle">tools · resources · prompts</text>
+<path class="dg-line" d="M162,70 L428,70" marker-start="url(#dgmc-hw)" marker-end="url(#dgmc-hw)"/>
+<text class="dg-c" x="295" y="58" text-anchor="middle">stdio</text>
+<text class="dg-l" x="295" y="90" text-anchor="middle">標準輸入輸出上的 JSON-RPC 訊息</text>
+<path class="dg-line" d="M162,190 L428,190" marker-start="url(#dgmc-hw)" marker-end="url(#dgmc-hw)"/>
+<text class="dg-c" x="295" y="178" text-anchor="middle">Streamable HTTP</text>
+<text class="dg-l" x="295" y="210" text-anchor="middle">HTTP POST，回 JSON 或 SSE 串流</text>
+</svg>
+<svg class="dg-narrow" viewBox="0 0 350 400" role="img" aria-labelledby="dgmc-n">
+<title id="dgmc-n">MCP 規格現行的兩種標準 transport，以 Claude Code 當 client 為例。stdio 是啟動一個本機子行程，透過標準輸入輸出傳 JSON-RPC 訊息；Streamable HTTP 是對遠端伺服器的單一 endpoint 發 HTTP POST，回覆是 JSON 或 SSE 串流。兩種 server 都對外提供 tools、resources、prompts 三種原語。</title>
+<defs><marker id="dgmc-hn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-box" x="25" y="10" width="300" height="96" rx="12"/>
+<text class="dg-t" x="175" y="38" text-anchor="middle">本機 MCP server</text>
+<text class="dg-s" x="175" y="62" text-anchor="middle">由 client 啟動的子行程</text>
+<text class="dg-c" x="175" y="88" text-anchor="middle">tools · resources · prompts</text>
+<path class="dg-line" d="M100,170 L100,108" marker-start="url(#dgmc-hn)" marker-end="url(#dgmc-hn)"/>
+<text class="dg-c" x="116" y="134">stdio</text>
+<text class="dg-l" x="116" y="152">標準輸入輸出上的 JSON-RPC</text>
+<rect class="dg-you" x="25" y="172" width="300" height="46" rx="12"/>
+<text class="dg-t" x="175" y="201" text-anchor="middle">Claude Code</text>
+<path class="dg-line" d="M100,220 L100,282" marker-start="url(#dgmc-hn)" marker-end="url(#dgmc-hn)"/>
+<text class="dg-c" x="116" y="246">Streamable HTTP</text>
+<text class="dg-l" x="116" y="264">HTTP POST，回 JSON 或 SSE 串流</text>
+<rect class="dg-box" x="25" y="284" width="300" height="96" rx="12"/>
+<text class="dg-t" x="175" y="312" text-anchor="middle">遠端 MCP server</text>
+<text class="dg-s" x="175" y="336" text-anchor="middle">對外開一個 MCP endpoint</text>
+<text class="dg-c" x="175" y="362" text-anchor="middle">tools · resources · prompts</text>
+</svg>
+<figcaption>兩種現行 transport 與 server 提供的三種原語[1][2]。舊式 HTTP+SSE transport 已列入棄用，新設定用 Streamable HTTP[3]。</figcaption>
+</figure>
+
 還有一種**獨立的舊式 HTTP+SSE transport，已經正式列入棄用**。MCP 2026-07-28 版規格的 changelog 寫明：「Reclassify the HTTP+SSE transport (deprecated since protocol version 2025-03-26) as Deprecated under the feature lifecycle policy... Migrate to Streamable HTTP.」也就是說它早在 2025-03-26 版就已經軟性棄用，2026-07-28 版才正式進入受「至少 12 個月棄用期」保護的 Deprecated 清單，目前還沒到 Removed，但新設定不該再選它 [3]。對應到 Claude Code，`claude mcp add --transport sse` 指令仍然存在，官方文件寫明「The SSE (Server-Sent Events) transport is deprecated. Use HTTP servers instead, where available.」舊 server 還相容，但新設定一律建議用 `--transport http` [4]。
 
 !!! note "host／client／server 三層術語，這裡沒有逐字查證官方定義"

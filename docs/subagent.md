@@ -8,6 +8,54 @@
 
 官方原文把使用時機講得很直接：「Use one when a side task would flood your main conversation with search results, logs, or file contents you won't reference again: the subagent does that work in its own context and returns only the summary. Define a custom subagent when you keep spawning the same kind of worker with the same instructions.」[1] 白話說：一個側支任務如果會把主對話塞滿你不會再看第二次的搜尋結果、log、檔案內容，就該交給 subagent，讓它在自己的 context 裡做完，只把摘要帶回來；如果你發現自己一直在重複派同一種工人、給同一套指示，就該把它定義成一個可重複使用的自訂 subagent。
 
+<figure class="diagram">
+<svg class="dg-wide" viewBox="0 0 700 250" role="img" aria-labelledby="dgsa-w">
+<title id="dgsa-w">主對話把側支任務交給 subagent。subagent 在自己的 context 裡做事，搜尋結果、log、檔案內容都留在那裡，主對話只收到摘要。</title>
+<defs><marker id="dgsa-hw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-you" x="10" y="40" width="210" height="170" rx="12"/>
+<text class="dg-t" x="115" y="72" text-anchor="middle">主對話的 context</text>
+<rect class="dg-box" x="30" y="92" width="170" height="40" rx="8"/>
+<text class="dg-s" x="115" y="117" text-anchor="middle">你的需求與來回討論</text>
+<rect class="dg-key" x="30" y="148" width="170" height="40" rx="8"/>
+<text class="dg-s" x="115" y="173" text-anchor="middle">subagent 回來的摘要</text>
+<rect class="dg-box" x="420" y="20" width="270" height="210" rx="12"/>
+<text class="dg-t" x="555" y="52" text-anchor="middle">subagent 自己的 context</text>
+<rect class="dg-note" x="440" y="70" width="230" height="36" rx="8"/>
+<text class="dg-s" x="555" y="93" text-anchor="middle">搜尋結果</text>
+<rect class="dg-note" x="440" y="116" width="230" height="36" rx="8"/>
+<text class="dg-s" x="555" y="139" text-anchor="middle">log</text>
+<rect class="dg-note" x="440" y="162" width="230" height="36" rx="8"/>
+<text class="dg-s" x="555" y="185" text-anchor="middle">檔案內容</text>
+<path class="dg-line" d="M220,100 L418,100" marker-end="url(#dgsa-hw)"/>
+<text class="dg-l" x="319" y="90" text-anchor="middle">交付側支任務</text>
+<path class="dg-line" d="M418,168 L222,168" marker-end="url(#dgsa-hw)"/>
+<text class="dg-l" x="319" y="158" text-anchor="middle">只回摘要</text>
+</svg>
+<svg class="dg-narrow" viewBox="0 0 350 430" role="img" aria-labelledby="dgsa-n">
+<title id="dgsa-n">主對話把側支任務交給 subagent。subagent 在自己的 context 裡做事，搜尋結果、log、檔案內容都留在那裡，主對話只收到摘要。</title>
+<defs><marker id="dgsa-hn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-you" x="25" y="10" width="300" height="150" rx="12"/>
+<text class="dg-t" x="175" y="40" text-anchor="middle">主對話的 context</text>
+<rect class="dg-box" x="45" y="56" width="260" height="38" rx="8"/>
+<text class="dg-s" x="175" y="80" text-anchor="middle">你的需求與來回討論</text>
+<rect class="dg-key" x="45" y="106" width="260" height="38" rx="8"/>
+<text class="dg-s" x="175" y="130" text-anchor="middle">subagent 回來的摘要</text>
+<path class="dg-line" d="M110,160 L110,226" marker-end="url(#dgsa-hn)"/>
+<text class="dg-l" x="100" y="198" text-anchor="end">交付側支任務</text>
+<path class="dg-line" d="M240,226 L240,162" marker-end="url(#dgsa-hn)"/>
+<text class="dg-l" x="250" y="198" text-anchor="start">只回摘要</text>
+<rect class="dg-box" x="25" y="228" width="300" height="192" rx="12"/>
+<text class="dg-t" x="175" y="258" text-anchor="middle">subagent 自己的 context</text>
+<rect class="dg-note" x="45" y="274" width="260" height="36" rx="8"/>
+<text class="dg-s" x="175" y="297" text-anchor="middle">搜尋結果</text>
+<rect class="dg-note" x="45" y="320" width="260" height="36" rx="8"/>
+<text class="dg-s" x="175" y="343" text-anchor="middle">log</text>
+<rect class="dg-note" x="45" y="366" width="260" height="36" rx="8"/>
+<text class="dg-s" x="175" y="389" text-anchor="middle">檔案內容</text>
+</svg>
+<figcaption>側支任務交給 subagent 之後，搜尋結果、log、檔案內容留在 subagent 自己的 context，主對話只收到摘要[1]。</figcaption>
+</figure>
+
 官方列出五個具體好處[1][^fresh1]：
 
 - **保留 context**：把探索與實作留在自己的視窗，不進主對話

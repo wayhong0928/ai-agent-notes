@@ -72,6 +72,43 @@
 
 四級不是互斥的，愈重要的產出，愈值得疊加使用多級。
 
+<figure class="diagram">
+<svg class="dg-wide" viewBox="0 0 700 230" role="img" aria-labelledby="dghn-w">
+<title id="dghn-w">驗證的四種力度，由弱到強：1 寫在提示詞裡的驗收條件，2 用 /goal 持續驗證，3 用 hook 當硬性關卡，4 第二意見子代理互相駁斥。</title>
+<defs><marker id="dghn-hw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<path class="dg-line" d="M20,30 L680,30" marker-end="url(#dghn-hw)"/>
+<text class="dg-l" x="350" y="22" text-anchor="middle">由弱到強</text>
+<rect class="dg-box" x="10" y="160" width="164" height="60" rx="10"/>
+<text class="dg-t" x="26" y="184">1</text>
+<text class="dg-s" x="26" y="206">提示詞裡的驗收條件</text>
+<rect class="dg-box" x="182" y="130" width="164" height="90" rx="10"/>
+<text class="dg-t" x="198" y="154">2</text>
+<text class="dg-s" x="198" y="176">/goal 持續驗證</text>
+<rect class="dg-key" x="354" y="96" width="164" height="124" rx="10"/>
+<text class="dg-t" x="370" y="120">3</text>
+<text class="dg-s" x="370" y="142">hook 當硬性關卡</text>
+<rect class="dg-key" x="526" y="62" width="164" height="158" rx="10"/>
+<text class="dg-t" x="542" y="86">4</text>
+<text class="dg-s" x="542" y="108">第二意見子代理</text>
+<text class="dg-s" x="542" y="126">互相駁斥</text>
+</svg>
+<svg class="dg-narrow" viewBox="0 0 350 300" role="img" aria-labelledby="dghn-n">
+<title id="dghn-n">驗證的四種力度，由弱到強：1 寫在提示詞裡的驗收條件，2 用 /goal 持續驗證，3 用 hook 當硬性關卡，4 第二意見子代理互相駁斥。</title>
+<defs><marker id="dghn-hn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<text class="dg-l" x="25" y="26">由弱到強</text>
+<path class="dg-line" d="M334,40 L334,286" marker-end="url(#dghn-hn)"/>
+<rect class="dg-box" x="25" y="40" width="170" height="56" rx="10"/>
+<text class="dg-s" x="41" y="73"><tspan class="dg-t">1</tspan>　提示詞裡的驗收條件</text>
+<rect class="dg-box" x="25" y="104" width="210" height="56" rx="10"/>
+<text class="dg-s" x="41" y="137"><tspan class="dg-t">2</tspan>　/goal 持續驗證</text>
+<rect class="dg-key" x="25" y="168" width="250" height="56" rx="10"/>
+<text class="dg-s" x="41" y="201"><tspan class="dg-t">3</tspan>　hook 當硬性關卡</text>
+<rect class="dg-key" x="25" y="232" width="290" height="56" rx="10"/>
+<text class="dg-s" x="41" y="265"><tspan class="dg-t">4</tspan>　第二意見子代理互相駁斥</text>
+</svg>
+<figcaption>驗證的四種力度，由弱到強[4]。四級可以疊加，愈重要的產出愈值得多疊幾級。</figcaption>
+</figure>
+
 ## 三之一、把原則變成可照做的範例
 
 前面講的都是原則。這節把其中三條落到可以直接照抄的樣子（本節查證日期 2026-09-17）。這裡示範的是「原則怎麼落地」，各種機制本身怎麼設定、放在哪個資料夾，見[SKILL、Plugin、MCP 與 Subagent](extensions.md)，不在這裡重複。

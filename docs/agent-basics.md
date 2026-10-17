@@ -80,7 +80,77 @@ Anthropic 也提醒，agent 要能自主運作，關鍵是每一步都要能從�
 
 ## 五、代理迴圈：文字版流程
 
-本頁原本想用流程圖表示這個迴圈，但這個網站的建置工具（`build.py`）沒有載入任何圖表渲染的程式庫，貼上流程圖語法只會變成一段看不出圖形的原始文字，所以改用條列式說明：
+<figure class="diagram">
+<svg class="dg-wide" viewBox="0 0 640 340" role="img" aria-labelledby="dgloop-w">
+<title id="dgloop-w">代理迴圈。你下目標後，agent 在蒐集脈絡、採取行動、驗證結果之間交錯進行，採取行動時呼叫工具，確認完成後回報給你。</title>
+<defs><marker id="dgloop-hw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-you" x="16" y="136" width="124" height="68" rx="10"/>
+<text class="dg-t" x="78" y="164" text-anchor="middle">你</text>
+<text class="dg-s" x="78" y="188" text-anchor="middle">下指令或目標</text>
+<rect class="dg-key" x="230" y="24" width="180" height="64" rx="10"/>
+<text class="dg-t" x="320" y="51" text-anchor="middle">蒐集脈絡</text>
+<text class="dg-s" x="320" y="74" text-anchor="middle">讀檔、搜尋、看目前狀態</text>
+<rect class="dg-key" x="466" y="136" width="158" height="68" rx="10"/>
+<text class="dg-t" x="545" y="164" text-anchor="middle">採取行動</text>
+<text class="dg-s" x="545" y="188" text-anchor="middle">呼叫工具</text>
+<rect class="dg-key" x="230" y="252" width="180" height="64" rx="10"/>
+<text class="dg-t" x="320" y="279" text-anchor="middle">驗證結果</text>
+<text class="dg-s" x="320" y="302" text-anchor="middle">跑測試、重讀檔案、對照目標</text>
+<rect class="dg-box" x="466" y="262" width="158" height="72" rx="10"/>
+<text class="dg-t" x="545" y="285" text-anchor="middle">工具</text>
+<text class="dg-s" x="545" y="305" text-anchor="middle">編輯檔案、執行指令</text>
+<text class="dg-s" x="545" y="323" text-anchor="middle">查資料</text>
+<path class="dg-line" d="M140,150 C190,150 190,56 228,56" marker-end="url(#dgloop-hw)"/>
+<path class="dg-line" d="M410,56 C480,56 545,80 545,134" marker-end="url(#dgloop-hw)"/>
+<path class="dg-line" d="M466,190 C440,200 432,284 412,284" marker-end="url(#dgloop-hw)"/>
+<path class="dg-line" d="M300,252 L300,90" marker-end="url(#dgloop-hw)"/>
+<text class="dg-l" x="310" y="166">沒做完或做錯，再來一輪</text>
+<path class="dg-line" d="M530,204 L530,260" marker-end="url(#dgloop-hw)"/>
+<path class="dg-line" d="M560,262 L560,206" marker-end="url(#dgloop-hw)"/>
+<text class="dg-l" x="522" y="238" text-anchor="end">呼叫</text>
+<text class="dg-l" x="568" y="238">結果回傳</text>
+<path class="dg-line" d="M230,296 C150,296 78,280 78,206" marker-end="url(#dgloop-hw)"/>
+<text class="dg-l" x="100" y="330">確認完成，回報給你</text>
+<path class="dg-dash" d="M140,186 L292,186" marker-end="url(#dgloop-hw)"/>
+<text class="dg-l" x="150" y="178">隨時可以插話</text>
+</svg>
+<svg class="dg-narrow" viewBox="0 0 340 500" role="img" aria-labelledby="dgloop-n">
+<title id="dgloop-n">代理迴圈。你下目標後，agent 依序蒐集脈絡、採取行動、驗證結果，沒做完就回到蒐集脈絡，確認完成後回報給你。</title>
+<defs><marker id="dgloop-hn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-you" x="60" y="10" width="180" height="56" rx="10"/>
+<text class="dg-t" x="150" y="34" text-anchor="middle">你</text>
+<text class="dg-s" x="150" y="55" text-anchor="middle">下指令或目標</text>
+<path class="dg-line" d="M150,66 L150,96" marker-end="url(#dgloop-hn)"/>
+<rect class="dg-key" x="60" y="98" width="180" height="60" rx="10"/>
+<text class="dg-t" x="150" y="123" text-anchor="middle">蒐集脈絡</text>
+<text class="dg-s" x="150" y="146" text-anchor="middle">讀檔、搜尋、看目前狀態</text>
+<path class="dg-line" d="M150,158 L150,188" marker-end="url(#dgloop-hn)"/>
+<rect class="dg-key" x="60" y="190" width="180" height="60" rx="10"/>
+<text class="dg-t" x="150" y="215" text-anchor="middle">採取行動</text>
+<text class="dg-s" x="150" y="238" text-anchor="middle">呼叫工具</text>
+<rect class="dg-box" x="262" y="176" width="72" height="90" rx="8"/>
+<text class="dg-t" x="298" y="198" text-anchor="middle">工具</text>
+<text class="dg-s" x="298" y="218" text-anchor="middle">編輯檔案</text>
+<text class="dg-s" x="298" y="236" text-anchor="middle">執行指令</text>
+<text class="dg-s" x="298" y="254" text-anchor="middle">查資料</text>
+<path class="dg-line" d="M240,210 L260,210" marker-end="url(#dgloop-hn)"/>
+<path class="dg-line" d="M262,232 L242,232" marker-end="url(#dgloop-hn)"/>
+<path class="dg-line" d="M150,250 L150,280" marker-end="url(#dgloop-hn)"/>
+<rect class="dg-key" x="60" y="282" width="180" height="60" rx="10"/>
+<text class="dg-t" x="150" y="307" text-anchor="middle">驗證結果</text>
+<text class="dg-s" x="150" y="330" text-anchor="middle">跑測試、重讀檔案、對照目標</text>
+<path class="dg-line" d="M60,312 L32,312 L32,128 L58,128" marker-end="url(#dgloop-hn)"/>
+<text class="dg-l" x="22" y="220" text-anchor="middle" transform="rotate(-90 22 220)">沒做完或做錯，再來一輪</text>
+<path class="dg-line" d="M150,342 L150,372" marker-end="url(#dgloop-hn)"/>
+<rect class="dg-you" x="60" y="374" width="180" height="48" rx="10"/>
+<text class="dg-t" x="150" y="403" text-anchor="middle">確認完成，回報給你</text>
+<rect class="dg-note" x="60" y="444" width="180" height="40" rx="8"/>
+<text class="dg-l" x="150" y="469" text-anchor="middle">你隨時可以插話、改方向</text>
+</svg>
+<figcaption>代理迴圈。三個階段會依上一步的結果交錯進行，工具回傳的結果會變成新的脈絡；任務完成或你叫它停下來，這一輪才結束[1]。</figcaption>
+</figure>
+
+圖裡的每一步，依序展開如下：
 
 1. 你下一個指令或目標。
 2. Agent **蒐集脈絡**：讀檔、搜尋、查看目前狀態，弄清楚現在的情況是什麼。

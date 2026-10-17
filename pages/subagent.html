@@ -8,6 +8,7 @@
 <link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/subagent.html">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
 <link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/diagram.css">
 </head>
 <body>
 <a class="skip" href="#main">跳到主要內容</a>
@@ -46,11 +47,11 @@
 <li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
 </ul></div>
 <div class="navsec"><h2>隔離與沙箱</h2><ul>
-<li><a href="../pages/wsl2-isolation.html" data-title="WSL2 當隔離環境" data-slug="wsl2-isolation" data-updated="1791631526">WSL2 當隔離環境</a></li>
-<li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1791632030">Coding agent 沙箱：Claude Code 與 Codex</a></li>
+<li><a href="../pages/wsl2-isolation.html" data-title="WSL2 當隔離環境" data-slug="wsl2-isolation" data-updated="1791632038">WSL2 當隔離環境</a></li>
+<li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1791632038">Coding agent 沙箱：Claude Code 與 Codex</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791616480">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791632038">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -65,6 +66,54 @@
 <p><a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>那頁已經把 Subagent 放進六種擴充機制的總表比較過；<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>整理過 frontmatter 每個欄位的語意與內建 agent 清單。這頁只挖 Subagent 這一項，把上面兩頁沒空間深入的部分補齊：官方文件實際定義的 18 個欄位（含前兩頁沒收錄的 <code>fable</code>／<code>background</code>／<code>omitClaudeMd</code>／<code>effort</code>／<code>initialPrompt</code>／<code>experimental</code> 六項）、<code>background</code> 欄位怎麼偷偷換掉工具清單、<code>isolation: worktree</code> 實際怎麼擋住越界的指令、<code>SendMessage</code> 怎麼續問一個已經跑完的 subagent，以及多代理協作真正的成本是多少倍。</p>
 <h2 id="1-subagent-是什麼什麼時候該用">1. Subagent 是什麼、什麼時候該用</h2>
 <p>官方原文把使用時機講得很直接：「Use one when a side task would flood your main conversation with search results, logs, or file contents you won't reference again: the subagent does that work in its own context and returns only the summary. Define a custom subagent when you keep spawning the same kind of worker with the same instructions.」[1] 白話說：一個側支任務如果會把主對話塞滿你不會再看第二次的搜尋結果、log、檔案內容，就該交給 subagent，讓它在自己的 context 裡做完，只把摘要帶回來；如果你發現自己一直在重複派同一種工人、給同一套指示，就該把它定義成一個可重複使用的自訂 subagent。</p>
+<figure class="diagram">
+<svg class="dg-wide" viewBox="0 0 700 250" role="img" aria-labelledby="dgsa-w">
+<title id="dgsa-w">主對話把側支任務交給 subagent。subagent 在自己的 context 裡做事，搜尋結果、log、檔案內容都留在那裡，主對話只收到摘要。</title>
+<defs><marker id="dgsa-hw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-you" x="10" y="40" width="210" height="170" rx="12"/>
+<text class="dg-t" x="115" y="72" text-anchor="middle">主對話的 context</text>
+<rect class="dg-box" x="30" y="92" width="170" height="40" rx="8"/>
+<text class="dg-s" x="115" y="117" text-anchor="middle">你的需求與來回討論</text>
+<rect class="dg-key" x="30" y="148" width="170" height="40" rx="8"/>
+<text class="dg-s" x="115" y="173" text-anchor="middle">subagent 回來的摘要</text>
+<rect class="dg-box" x="420" y="20" width="270" height="210" rx="12"/>
+<text class="dg-t" x="555" y="52" text-anchor="middle">subagent 自己的 context</text>
+<rect class="dg-note" x="440" y="70" width="230" height="36" rx="8"/>
+<text class="dg-s" x="555" y="93" text-anchor="middle">搜尋結果</text>
+<rect class="dg-note" x="440" y="116" width="230" height="36" rx="8"/>
+<text class="dg-s" x="555" y="139" text-anchor="middle">log</text>
+<rect class="dg-note" x="440" y="162" width="230" height="36" rx="8"/>
+<text class="dg-s" x="555" y="185" text-anchor="middle">檔案內容</text>
+<path class="dg-line" d="M220,100 L418,100" marker-end="url(#dgsa-hw)"/>
+<text class="dg-l" x="319" y="90" text-anchor="middle">交付側支任務</text>
+<path class="dg-line" d="M418,168 L222,168" marker-end="url(#dgsa-hw)"/>
+<text class="dg-l" x="319" y="158" text-anchor="middle">只回摘要</text>
+</svg>
+<svg class="dg-narrow" viewBox="0 0 350 430" role="img" aria-labelledby="dgsa-n">
+<title id="dgsa-n">主對話把側支任務交給 subagent。subagent 在自己的 context 裡做事，搜尋結果、log、檔案內容都留在那裡，主對話只收到摘要。</title>
+<defs><marker id="dgsa-hn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-head" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect class="dg-you" x="25" y="10" width="300" height="150" rx="12"/>
+<text class="dg-t" x="175" y="40" text-anchor="middle">主對話的 context</text>
+<rect class="dg-box" x="45" y="56" width="260" height="38" rx="8"/>
+<text class="dg-s" x="175" y="80" text-anchor="middle">你的需求與來回討論</text>
+<rect class="dg-key" x="45" y="106" width="260" height="38" rx="8"/>
+<text class="dg-s" x="175" y="130" text-anchor="middle">subagent 回來的摘要</text>
+<path class="dg-line" d="M110,160 L110,226" marker-end="url(#dgsa-hn)"/>
+<text class="dg-l" x="100" y="198" text-anchor="end">交付側支任務</text>
+<path class="dg-line" d="M240,226 L240,162" marker-end="url(#dgsa-hn)"/>
+<text class="dg-l" x="250" y="198" text-anchor="start">只回摘要</text>
+<rect class="dg-box" x="25" y="228" width="300" height="192" rx="12"/>
+<text class="dg-t" x="175" y="258" text-anchor="middle">subagent 自己的 context</text>
+<rect class="dg-note" x="45" y="274" width="260" height="36" rx="8"/>
+<text class="dg-s" x="175" y="297" text-anchor="middle">搜尋結果</text>
+<rect class="dg-note" x="45" y="320" width="260" height="36" rx="8"/>
+<text class="dg-s" x="175" y="343" text-anchor="middle">log</text>
+<rect class="dg-note" x="45" y="366" width="260" height="36" rx="8"/>
+<text class="dg-s" x="175" y="389" text-anchor="middle">檔案內容</text>
+</svg>
+<figcaption>側支任務交給 subagent 之後，搜尋結果、log、檔案內容留在 subagent 自己的 context，主對話只收到摘要[1]。</figcaption>
+</figure>
+
 <p>官方列出五個具體好處[1]<sup id="fnref:fresh1"><a class="footnote-ref" href="#fn:fresh1">1</a></sup>：</p>
 <ul>
 <li><strong>保留 context</strong>：把探索與實作留在自己的視窗，不進主對話</li>
