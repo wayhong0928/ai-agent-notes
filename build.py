@@ -30,6 +30,7 @@ NAV = [
     ("AI Agent 原理", [
         ("agent-basics", "AI Agent 怎麼運作", "代理迴圈、工具呼叫與上下文"),
         ("extensions", "SKILL、Plugin、MCP 與 Subagent", "四種擴充機制各自解決什麼問題"),
+        ("mods", "Mods：在 Claude Code 裡加自己的功能", "事件、hook 與 mods API 怎麼運作，以 TODO 側欄當實例"),
         ("subagent", "Subagent 入門與實戰", "frontmatter 全欄位、background／isolation: worktree 實際行為、SendMessage 續問、多代理成本"),
         ("mcp", "MCP 入門與實戰", "五分鐘裝好第一個、scope／OAuth 怎麼選、Windows 踩坑實錄"),
         ("tools-catalog", "好用工具清單", "精選審查過的官方文章、skill、plugin、MCP 與學習資源"),

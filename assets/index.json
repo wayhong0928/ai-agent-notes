@@ -36,6 +36,12 @@
   "section": "AI Agent 原理"
  },
  {
+  "slug": "mods",
+  "title": "Mods：在 Claude Code 裡加自己的功能",
+  "desc": "事件、hook 與 mods API 怎麼運作，以 TODO 側欄當實例",
+  "section": "AI Agent 原理"
+ },
+ {
   "slug": "subagent",
   "title": "Subagent 入門與實戰",
   "desc": "frontmatter 全欄位、background／isolation: worktree 實際行為、SendMessage 續問、多代理成本",
