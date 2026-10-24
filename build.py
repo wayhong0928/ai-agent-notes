@@ -193,8 +193,47 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 <header class="hero">
 <span class="tag">Claude ／ Codex ／ AI Agent</span>
 <h1>AI Agent 筆記</h1>
+<p><strong>開始用 Claude Code、Codex 這類 AI 代理工具之前，先弄懂它怎麼運作、怎麼設定，以及哪些事要自己把關。</strong></p>
 <p>Claude、Codex 與 AI 代理工具的整理筆記</p>
 </header>
+
+<figure class="fam fam-shot">
+<a href="pages/agent-basics.html"><img src="assets/img/agent-loop.png" alt="代理迴圈圖：你下指令後，代理蒐集脈絡、呼叫工具採取行動、驗證結果，沒做完或做錯就再來一輪，確認完成才回報給你" width="667" height="352" loading="lazy"></a>
+<figcaption>AI 代理做事的基本迴圈，出自<a href="pages/agent-basics.html">AI Agent 怎麼運作</a>。</figcaption>
+</figure>
+
+<section class="fam fam-pains" aria-labelledby="fam-pains-h">
+<h2 id="fam-pains-h">你是不是卡在這裡</h2>
+<div class="fam-pain-grid">
+<div class="fam-pain"><b>不知道該用哪一個</b><q>網頁版、Claude Code、Codex 差在哪？要不要付錢？</q><p>先看一張比較總表，再看不付錢能做到哪裡。</p><p class="fam-go"><a href="pages/tools-compare.html">AI 介面比較總表</a><a href="pages/free-tier.html">免付費區</a></p></div>
+<div class="fam-pain"><b>每次開新對話都要重講一次</b><q>上次做到哪，能不能讓它自己記得？</q><p>先看 session_log 加 SessionStart hook 的接力做法，要直接套用就裝工作流 template。</p><p class="fam-go"><a href="pages/session-handoff.html">跨 session 接力</a><a href="https://wayhong0928.github.io/claude-workflow-template/">Claude Code 工作流 template</a></p></div>
+<div class="fam-pain"><b>怕它改壞檔案</b><q>讓 AI 代理動我的電腦，出事了怎麼退回？</q><p>先看沙箱各層擋什麼，再看哪些改動能用 /rewind 退回、哪些要靠 Git。</p><p class="fam-go"><a href="pages/agent-sandbox.html">Coding agent 沙箱</a><a href="pages/checkpoints-rewind.html">Checkpoints 與 /rewind</a></p></div>
+</div>
+</section>
+
+<!-- family:flow:start -->
+<link rel="stylesheet" href="assets/family.css">
+<div class="fam fam-flow" role="region" aria-labelledby="fam-flow-h">
+<h2 id="fam-flow-h">在整套論文流程的哪一站</h2>
+<a class="fam-guide" style="--i:0" href="https://wayhong0928.github.io/mis-thesis-guide/"><b>論文指南</b><span>每一站該怎麼做，都有一頁說明</span></a>
+<ol class="fam-stages">
+<li class="fam-stage" style="--i:1"><b>找題目</b><a class="fam-chip" href="https://github.com/wayhong0928/mis-thesis-skills">thesis-toolkit</a></li>
+<li class="fam-stage" style="--i:2"><b>讀文獻</b><a class="fam-chip" href="https://wayhong0928.github.io/thesis-notes-template/">論文筆記庫範本</a></li>
+<li class="fam-stage" style="--i:3"><b>設計與分析</b><a class="fam-chip" href="https://wayhong0928.github.io/thesis-notes-template/">論文筆記庫範本</a></li>
+<li class="fam-stage" style="--i:4"><b>寫論文</b><a class="fam-chip" href="https://github.com/wayhong0928/mis-thesis-skills">thesis-toolkit</a></li>
+<li class="fam-stage" style="--i:5"><b>口試與修訂</b><a class="fam-chip" href="https://wayhong0928.github.io/md-to-slides/">md-to-slides</a></li>
+</ol>
+<div class="fam-base fam-on" style="--i:6"><b>每一站都用得到的 AI 工作環境</b><a class="fam-chip" href="https://wayhong0928.github.io/claude-workflow-template/">Claude Code 工作流 template</a><span class="fam-chip fam-here" aria-current="page">AI Agent 筆記<em class="fam-tag">你在這裡</em></span></div>
+<p class="fam-more"><a href="https://wayhong0928.github.io/mis-thesis-guide/pages/ai-thesis-stages.html">看整套流程怎麼走</a></p>
+</div>
+<!-- family:flow:end -->
+
+<section class="fam fam-install" aria-labelledby="fam-install-h">
+<h2 id="fam-install-h">怎麼開始</h2>
+<div class="fam-box">
+<p>本站不用安裝，直接讀。還沒裝過 Claude Code 或 Codex，先照論文指南的<a href="https://wayhong0928.github.io/mis-thesis-guide/pages/ai-quickstart-agent.html">一小時上手</a>裝好，再回來看<a href="pages/commands-cheatsheet.html">新手指令速查</a>和<a href="pages/official-config.html">Claude Code 設定總覽</a>。想把論文工作環境一次裝好，用論文指南的<a href="https://wayhong0928.github.io/mis-thesis-guide/pages/ai-full-install.html">整套安裝</a>。</p>
+</div>
+</section>
 
 <div class="notice">
 <b>閱讀前請先注意</b>
@@ -206,6 +245,21 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 </div>
 
 {sections}
+
+<!-- family:cards:start -->
+<div class="fam fam-cards" role="region" aria-labelledby="fam-cards-h">
+<h2 id="fam-cards-h">同一套的工具</h2>
+<div class="fam-grid">
+<a class="fam-card" href="https://wayhong0928.github.io/mis-thesis-guide/"><small>網站</small><b>論文指南</b><span>研究方法、論文寫作和口試，每一站該怎麼做的說明。</span></a>
+<a class="fam-card" href="https://github.com/wayhong0928/mis-thesis-skills"><small>Claude Code 外掛</small><b>thesis-toolkit</b><span>幫你收斂題目、稽核研究問題、檢查學術寫法的 SKILL。</span></a>
+<a class="fam-card" href="https://wayhong0928.github.io/thesis-notes-template/"><small>Obsidian 範本</small><b>論文筆記庫範本</b><span>文獻筆記、構念卡和假說推導放在同一個筆記庫，寫第二、三章時直接取材。</span></a>
+<a class="fam-card" href="https://wayhong0928.github.io/md-to-slides/"><small>簡報工具</small><b>md-to-slides</b><span>用 Markdown 寫簡報，挑場合和主題就有一份範例可以改。</span></a>
+<a class="fam-card" href="https://wayhong0928.github.io/claude-workflow-template/"><small>Claude Code 設定</small><b>Claude Code 工作流 template</b><span>開場接上次進度，產出交給另一個 agent 驗收，論文跨很多 session 也不會斷。</span></a>
+<div class="fam-card fam-here" aria-current="page"><small>網站</small><b>AI Agent 筆記</b><span>Claude、Codex 這類 AI 代理工具的概念、設定和協作方式。</span><em class="fam-tag">你在這裡</em></div>
+</div>
+</div>
+<script src="assets/family.js" defer></script>
+<!-- family:cards:end -->
 
 <footer class="foot">
 <p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
