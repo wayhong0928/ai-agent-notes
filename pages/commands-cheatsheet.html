@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新手指令速查｜AI Agent 筆記</title>
+<meta name="description" content="依工作情境分組的斜線指令，含 /model、/effort、/compact">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/commands-cheatsheet.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/diagram.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<a class="navread" href="../reading.html">閱讀追蹤</a>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791622926">付費區</a></li>
+<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1792214180">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1792809640">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792809640">Mods：在 Claude Code 裡加自己的功能</a></li>
+<li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1792809640">Subagent 入門與實戰</a></li>
+<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1792809640">MCP 入門與實戰</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1792214180">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1791265294">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1792809640">把教材做成 SKILL</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791352825">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1791352825">Claude Code + Cowork 並用</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789655763">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789655763">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1790340239">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1792809640">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1792809640">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
+<li><a href="../pages/checkpoints-rewind.html" data-title="Checkpoints 與 /rewind：哪些能復原、哪些不能" data-slug="checkpoints-rewind" data-updated="1792818901">Checkpoints 與 /rewind：哪些能復原、哪些不能</a></li>
+<li class="active"><a href="../pages/commands-cheatsheet.html" data-title="新手指令速查" data-slug="commands-cheatsheet" data-updated="1792818393">新手指令速查</a></li>
+</ul></div>
+<div class="navsec"><h2>隔離與沙箱</h2><ul>
+<li><a href="../pages/wsl2-isolation.html" data-title="WSL2 當隔離環境" data-slug="wsl2-isolation" data-updated="1791632038">WSL2 當隔離環境</a></li>
+<li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1792214180">Coding agent 沙箱：Claude Code 與 Codex</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1792809640">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 官方建議設定</p>
+<article class="doc" data-updated="1792818393">
+<h1>新手指令速查</h1>
+<p class='lede'>依工作情境分組的斜線指令，含 /model、/effort、/compact</p>
+<blockquote>
+<p>查證日期：2026-10-24。指令常隨版本增減，請以官方最新說明為準。</p>
+</blockquote>
+<p>Claude Code 的斜線指令很多，新手不需要全記。這頁照「現在想做什麼」分組，只挑最常用的，並把 <code>/model</code>、<code>/effort</code>、<code>/compact</code> 這幾個影響效果與用量的指令講清楚。完整清單以官方文件為準[1]。</p>
+<p>在輸入框打 <code>/</code> 會跳出選單，可以邊打邊篩。指令只有放在訊息開頭才會被辨識[1]。</p>
+<h2 id="一第一次用">一、第一次用</h2>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/init</code></td>
+<td>替專案產生起始的 CLAUDE.md</td>
+</tr>
+<tr>
+<td><code>/memory</code></td>
+<td>查看與編輯 CLAUDE.md 和 auto memory</td>
+</tr>
+<tr>
+<td><code>/mcp</code></td>
+<td>管理 MCP 伺服器的連線</td>
+</tr>
+<tr>
+<td><code>/permissions</code></td>
+<td>設定允許、詢問、拒絕哪些工具動作（別名 <code>/allowed-tools</code>）</td>
+</tr>
+<tr>
+<td><code>/config</code></td>
+<td>開設定介面（別名 <code>/settings</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>設定檔與 CLAUDE.md 的載入規則見<a href="official-config.html">Claude Code 設定總覽</a>。</p>
+<h2 id="二做事的過程中">二、做事的過程中</h2>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/plan</code></td>
+<td>進入規劃模式，先討論做法再動手</td>
+</tr>
+<tr>
+<td><code>/model</code></td>
+<td>換模型，見下一節</td>
+</tr>
+<tr>
+<td><code>/effort</code></td>
+<td>調整思考力度，見下一節</td>
+</tr>
+<tr>
+<td><code>/context</code></td>
+<td>看目前 context 的用量與分類；全螢幕模式下加 <code>all</code> 會展開收合的明細</td>
+</tr>
+<tr>
+<td><code>/compact</code></td>
+<td>把到目前為止的對話壓成摘要，騰出 context 空間</td>
+</tr>
+<tr>
+<td><code>/btw</code></td>
+<td>順口問一個旁支問題</td>
+</tr>
+</tbody>
+</table>
+<p>官方把這六個歸在「During a task」[1]。</p>
+<h2 id="三model換模型">三、<code>/model</code>：換模型</h2>
+<p>跑 <code>/model</code> 不帶參數會開選單。選單裡按 <code>Enter</code> 會把這個模型存成之後新 session 的預設，按 <code>s</code> 則只換目前這個 session。<code>/model &lt;名稱&gt;</code> 的效果等同於按 <code>Enter</code>[1][2]。</p>
+<p>模型別名有 <code>default</code>、<code>best</code>、<code>fable</code>、<code>sonnet</code>、<code>opus</code>、<code>haiku</code>、<code>sonnet[1m]</code>、<code>opus[1m]</code>、<code>opusplan</code>。在 Anthropic API 上，<code>opus</code> 指向 Opus 5.5，<code>sonnet</code> 指向 Sonnet 5.5，<code>haiku</code> 指向 Haiku 5.5[2]。</p>
+<p>同一件事有好幾個地方可以設，官方列的優先順序由高到低是[2]。</p>
+<ol>
+<li>session 中跑 <code>/model</code></li>
+<li>啟動時加 <code>claude --model</code></li>
+<li>環境變數 <code>ANTHROPIC_MODEL</code></li>
+<li>設定檔</li>
+<li>環境變數 <code>ANTHROPIC_DEFAULT_MODEL</code></li>
+</ol>
+<p>想確認現在用的是哪個模型，跑 <code>/status</code>[2]。</p>
+<h2 id="四effort調思考力度">四、<code>/effort</code>：調思考力度</h2>
+<p>Effort 控制 Claude 回答前想多深。等級由低到高是 <code>low</code>、<code>medium</code>、<code>high</code>、<code>xhigh</code>、<code>max</code>，也可以用 <code>auto</code> 清掉已存的設定[1][2]。<code>max</code> 只在目前的 session 有效，用環境變數 <code>CLAUDE_CODE_EFFORT_LEVEL</code> 設定的除外[1][2]。</p>
+<p>預設是 <code>high</code>，但 Opus 5.5、Sonnet 5.5 和 Haiku 5.5 的預設是 <code>medium</code>，Opus 4.7 是 <code>xhigh</code>；組織也可以另設預設值[2]。</p>
+<p>官方的選擇建議如下[2]。</p>
+<table>
+<thead>
+<tr>
+<th>等級</th>
+<th>適合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>low</code></td>
+<td>簡短的來回，或像改名這樣的小修改</td>
+</tr>
+<tr>
+<td><code>medium</code></td>
+<td>範圍清楚的日常工作</td>
+</tr>
+<tr>
+<td><code>high</code></td>
+<td>正確性重要的任務，或修 bug</td>
+</tr>
+<tr>
+<td><code>xhigh</code></td>
+<td>需要更深的推理，代價是更多 token</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>很難的問題。官方提醒可能報酬遞減，也容易想太多</td>
+</tr>
+</tbody>
+</table>
+<p>設定的來源有三個，優先順序是明確指定（環境變數 <code>CLAUDE_CODE_EFFORT_LEVEL</code>、<code>--effort</code>、<code>/effort</code>）、設定檔、模型預設[2]。只想讓單一回合想深一點，可以在 prompt 裡寫 <code>ultrathink</code>[2]。目前的 effort 會顯示在 session 的標頭，<code>/effort status</code> 也能查[1][2]。</p>
+<h2 id="五compact壓縮對話">五、<code>/compact</code>：壓縮對話</h2>
+<p>跑 <code>/compact</code> 會把對話摘要成較短的版本，騰出 context。可以加一段指示決定摘要的重點，例如 <code>/compact focus on the auth bug fix</code>[1][3]。</p>
+<p>壓縮之後哪些內容還在、哪些會消失，見<a href="official-config.html">Claude Code 設定總覽</a>的「壓縮之後哪些還在」。想知道現在用了多少 context，先跑 <code>/context</code>[3]。</p>
+<p><code>/compact</code> 和 <code>/clear</code> 不一樣。<code>/clear</code> 開一段全新的對話（別名 <code>/reset</code>、<code>/new</code>），想在同一段對話裡釋出空間，官方的建議是改用 <code>/compact</code>[1]。只想壓縮某一段，可以用 <code>/rewind</code> 選單裡的 Summarize 選項，見<a href="checkpoints-rewind.html">Checkpoints 與 /rewind</a>。</p>
+<h2 id="六同時跑多件事">六、同時跑多件事</h2>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/tasks</code></td>
+<td>查看背景任務</td>
+</tr>
+<tr>
+<td><code>/background</code></td>
+<td>把目前的工作丟到背景</td>
+</tr>
+<tr>
+<td><code>/batch</code></td>
+<td>把一件大工作拆成多個平行的單元</td>
+</tr>
+</tbody>
+</table>
+<p>這三個在官方分組裡屬於「Run work in parallel」[1]。</p>
+<h2 id="七交付之前">七、交付之前</h2>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/diff</code></td>
+<td>看這次改了什麼</td>
+</tr>
+<tr>
+<td><code>/code-review</code></td>
+<td>審查目前的修改，也可以指定 PR 編號、分支或路徑（<code>/review</code> 是它的別名）[1]</td>
+</tr>
+<tr>
+<td><code>/security-review</code></td>
+<td>針對目前分支的修改做安全審查</td>
+</tr>
+</tbody>
+</table>
+<h2 id="八換-session接續工作">八、換 session、接續工作</h2>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/clear</code></td>
+<td>清空對話，開始新的一段</td>
+</tr>
+<tr>
+<td><code>/resume</code></td>
+<td>接續先前的 session（別名 <code>/continue</code>）</td>
+</tr>
+<tr>
+<td><code>/branch</code></td>
+<td>從目前的對話分出一條支線</td>
+</tr>
+<tr>
+<td><code>/fork</code></td>
+<td>另開一個分身接著做</td>
+</tr>
+<tr>
+<td><code>/teleport</code></td>
+<td>把雲端的 session 帶回本機</td>
+</tr>
+<tr>
+<td><code>/remote-control</code></td>
+<td>讓別的裝置遠端操控這個 session</td>
+</tr>
+</tbody>
+</table>
+<h2 id="九出狀況的時候">九、出狀況的時候</h2>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/rewind</code></td>
+<td>退回之前的 checkpoint（別名 <code>/checkpoint</code>、<code>/undo</code>），見<a href="checkpoints-rewind.html">Checkpoints 與 /rewind</a></td>
+</tr>
+<tr>
+<td><code>/doctor</code></td>
+<td>檢查安裝與設定有沒有問題</td>
+</tr>
+<tr>
+<td><code>/debug</code></td>
+<td>開除錯紀錄</td>
+</tr>
+<tr>
+<td><code>/feedback</code></td>
+<td>回報問題</td>
+</tr>
+</tbody>
+</table>
+<h2 id="本頁重點回顧">本頁重點回顧</h2>
+<ul>
+<li>在輸入框打 <code>/</code> 看選單，指令要放在訊息開頭。</li>
+<li>這頁依工作階段分成第一次用、做事過程、平行、交付前、換 session、出狀況六組，分法參考官方，<code>/config</code> 是本頁自己放進第一組的。</li>
+<li><code>/model</code> 按 <code>Enter</code> 存成預設，按 <code>s</code> 只換這個 session。</li>
+<li><code>/effort</code> 由 <code>low</code> 到 <code>max</code>，<code>max</code> 只在該 session 有效（環境變數設定的除外）；預設多數是 <code>high</code>，Opus 5.5、Sonnet 5.5、Haiku 5.5 是 <code>medium</code>。</li>
+<li><code>/compact</code> 可以帶一段重點指示；<code>/context</code> 看用量；<code>/rewind</code> 退回 checkpoint。</li>
+</ul>
+<h2 id="資料來源">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>來源</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1]</td>
+<td>Commands（指令清單、分組與別名）</td>
+<td><a href="https://code.claude.com/docs/en/commands">https://code.claude.com/docs/en/commands</a></td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>Model configuration（模型別名、優先順序、effort）</td>
+<td><a href="https://code.claude.com/docs/en/model-config">https://code.claude.com/docs/en/model-config</a></td>
+</tr>
+<tr>
+<td>[3]</td>
+<td>Context window（<code>/context</code>、<code>/compact</code>）</td>
+<td><a href="https://code.claude.com/docs/en/context-window">https://code.claude.com/docs/en/context-window</a></td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="checkpoints-rewind.html">Checkpoints 與 /rewind</a>｜<a href="official-config.html">Claude Code 設定總覽</a>｜<a href="session-handoff.html">跨 session 接力：session_log</a></p>
+</article>
+<nav class="pager"><a class="prev" href="checkpoints-rewind.html">← Checkpoints 與 /rewind：哪些能復原、哪些不能</a><a class="next" href="wsl2-isolation.html">WSL2 當隔離環境 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#一第一次用">一、第一次用</a></li>
+<li><a href="#二做事的過程中">二、做事的過程中</a></li>
+<li><a href="#三model換模型">三、/model：換模型</a></li>
+<li><a href="#四effort調思考力度">四、/effort：調思考力度</a></li>
+<li><a href="#五compact壓縮對話">五、/compact：壓縮對話</a></li>
+<li><a href="#六同時跑多件事">六、同時跑多件事</a></li>
+<li><a href="#七交付之前">七、交付之前</a></li>
+<li><a href="#八換-session接續工作">八、換 session、接續工作</a></li>
+<li><a href="#九出狀況的時候">九、出狀況的時候</a></li>
+<li><a href="#本頁重點回顧">本頁重點回顧</a></li>
+<li><a href="#資料來源">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

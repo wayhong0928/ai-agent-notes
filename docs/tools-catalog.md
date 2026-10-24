@@ -1,6 +1,6 @@
 # 好用工具清單
 
-> 查證日期：2026-09-19（2026-09-25 補入 4 項，2026-10-03 補入 1 項，2026-10-08 補入 31 項、新增第 7、8 節，並把 open-slide 移到第 7 節更新，這幾列另外標註查證日期；2026-10-05 依來源更新 agentic-engineering-handbook 一列的內容描述）。stars／最後更新日期／license 都是各列查證當天的快照，之後會變動，請自己重查一次再決定要不要裝。
+> 查證日期：2026-09-19（2026-09-25 補入 4 項，2026-10-03 補入 1 項，2026-10-08 補入 31 項、新增第 7、8 節，並把 open-slide 移到第 7 節更新，這幾列另外標註查證日期；2026-10-05 依來源更新 agentic-engineering-handbook 一列的內容描述；2026-10-24 補入 4 項：obsidian-skills、security-audit-skill、trufflehog、PageIndex）。stars／最後更新日期／license 都是各列查證當天的快照，之後會變動，請自己重查一次再決定要不要裝。
 
 這頁收的是本站作者自己讀過、審查過的 Claude Code／Codex 官方文章、skill、plugin、MCP 與學習資源。目標是「精選」不是「收全」：能找到的相關 repo 遠不只這些，這裡只留下讀過原始碼、判斷過風險之後還願意留著的項目。2026-10-08 補入的項目，查的是 README、授權與關鍵的原始碼（網路行為、hook），沒有逐檔讀完全部程式碼。想看完整清單，第 6 節的幾個 awesome-list 本身就是更大的入口。
 
@@ -76,6 +76,7 @@ Claude Code 內建 WebSearch、WebFetch，一般查資料用不到下面這幾�
 | [github/spec-kit](https://github.com/github/spec-kit) | GitHub 官方的 Spec-Driven Development 工具包，把「先出規格再執行」流程化 | 137,848★，最後 push 2026-09-18，MIT | 跟「先出規格、再交給執行者」這種分工方式同構，即使不整套裝，讀它怎麼把規格寫成可驗證的格式也有參考價值 |
 | [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) | 另一個規格驅動開發（SDD）工具：寫程式前先跟 AI 對齊提案、規格、設計與任務清單，每項變更各自一個資料夾 | 70,307★，最後 push 2026-09-23，MIT（2026-09-25 查證） | npm 套件 `@fission-ai/openspec`，全域安裝一次；每個專案各自執行 `openspec init`，會建立 `openspec/` 資料夾，並在 `.claude/` 加上 skill 與 slash command（例如 `/opsx:propose`）。跟上一列 spec-kit 定位相近，挑一個用就好；官方 README 的安裝指令用 `@latest`，照第 1 節第 4 步改成鎖定版本 |
 | [stablyai/orca](https://github.com/stablyai/orca)（官網 [onorca.dev](https://onorca.dev)） | 本機桌面 app（macOS／Windows／Linux），讓 Claude Code、Codex、OpenCode 等 CLI agent 各在自己的 git worktree 平行跑，集中在一個畫面監看；另有手機 app，可以看進度、收完成通知、補一句追問 | 77,922★，最後 push 2026-09-25，MIT（2026-09-25 查證） | 它不是模型，跑的是你自己已經登入的 CLI（官方文件原文：bring your own Claude, Codex, or OpenCode subscription），用量照算在你自己的訂閱，不會替你省額度。「不同 session 之間直接傳遞 context」在官方討論區 [#681](https://github.com/stablyai/orca/discussions/681) 是以提案（Ideas 分類）出現，README 沒有宣稱已經做到；維護者 2026-05-05 在同一串回覆已加入實驗性的 Agent Orchestration，官方文件寫明要先到 Settings → Experimental 開啟，做法是在 agent 之間傳任務規格和訊息，不是把整段對話 context 搬過去。打包版預設會送匿名使用統計，可以關掉（見官方 telemetry 文件）。repo 2026-03 才建立，半年累積近 7.8 萬★，照第 1 節的原則，星數不能當成審查過 |
+| [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) | 教 agent 寫 Obsidian 的檔案格式，含六個 skill：obsidian-markdown、obsidian-bases、json-canvas、obsidian-cli、defuddle、knap | 49,989★，最後 push 2026-09-15，MIT（2026-10-24 查證，對照 LICENSE 原文） | 目錄裡只有 SKILL.md、參考用的 .md 和 plugin 設定 JSON，沒有腳本。安裝用 `/plugin marketplace add kepano/obsidian-skills`，再 `/plugin install obsidian@obsidian-skills`；marketplace 安裝不會鎖版本，照第 1 節第 4 步自己處理 |
 
 ### 整套開發工作流
 
@@ -123,6 +124,13 @@ Claude Code 內建 WebSearch、WebFetch，一般查資料用不到下面這幾�
 | [debug-zhuweijian/ai-research-toolkit](https://github.com/debug-zhuweijian/ai-research-toolkit) | 分七階段（找文獻、處理、分析、寫作、知識管理、簡報、流程串接）的研究工具組，串 paper-search、zotero、arxiv-latex、MinerU 等 MCP | 15★，最後 push 2026-06-14，MIT | 四個月沒更新。部分 MCP 預設用智譜 BigModel；MinerU 那條可能走 OpenXLab 的雲端 API，PDF 會不會上傳要自己確認 |
 | [foundry-works/foundry-research](https://github.com/foundry-works/foundry-research) | Claude Code plugin，用 10 個 subagent 跑 Acquire → Read → Synthesize → Verify → Revise 五階段，產出研究報告 | 4★，最後 push 2026-05-05，MIT | README 一處寫 9 個、另一處寫 10 個 subagent，agents 資料夾實際是 10 個。跑一份報告會讀 20 到 30 篇全文 PDF，token 用量大 |
 
+### 資安
+
+| 項目 | 用途 | 維護狀態（截至 2026-10-24） | 備註 |
+|---|---|---|---|
+| [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | 對程式碼庫做資安稽核的 skill，分六階段：偵察、找漏洞、候選驗證、結構化輸出、獨立驗證、報告，各階段用隔離的 agent | 42,441★，最後 push 2026-09-14，MIT | 預設是指引模式，明確要求才跑完整稽核。要實際執行目標程式碼來驗證時，需要作業系統層級的沙箱，沒有的話線索會停在 `needs_validation`。用大量平行 agent，以 agent 呼叫次數計 budget，token 用量大；驗證腳本需要 Node.js。README 寫單次執行約找到多次執行總和一半的漏洞，所以跑一次沒報東西不代表乾淨。安裝指令 `npx skills add https://github.com/cloudflare/security-audit-skill --skill security-audit` 不鎖版本，照第 1 節第 4 步處理。只讀過 README、SKILL.md 與 LICENSE，沒實跑，`.cjs` 驗證腳本沒逐行讀 |
+| [trufflesecurity/trufflehog](https://github.com/trufflesecurity/trufflehog) | 掃 Git repo、檔案系統等來源裡外洩的密鑰（API key、密碼），分類超過 800 種 | 28,676★，最後 push 2026-10-24，AGPL-3.0（依 LICENSE 原文，GNU Affero General Public License Version 3） | 驗證功能會拿找到的密鑰實際向對應的服務確認是否仍有效（例如 AWS 的 `GetCallerIdentity`），結果分 verified、unverified、unknown，所以掃描時密鑰會被送去那些服務。README 的範例是 `trufflehog git https://github.com/trufflesecurity/test_keys --results=verified`，掃本機 repo 時把網址換成 `file://` 路徑；網路上舊教學常見的 `--only-verified` 沒出現在現行 README。掃本機 repo 時會先複製到暫存資料夾（README 說明是為了防範 CVE-2025-41390），`--trust-local-git-config` 可略過。只讀過 README 與 LICENSE，沒實跑，沒讀原始碼 |
+
 ### 畫圖類 skill 審查筆記
 
 以下四個是本站作者實際審查過原始碼、且經過第二輪獨立複核（換模型重新判斷，不是同一次審查自己再看一次）的畫圖類 skill。四者的觸發時機會互相衝突（都想搶「畫個流程圖／架構圖」這類請求），**同時只裝一個效果最好**，裝多個反而會有搶觸發的問題。
@@ -152,6 +160,7 @@ Claude Code 內建 WebSearch、WebFetch，一般查資料用不到下面這幾�
 | [the911fund/skill-of-skills](https://github.com/the911fund/skill-of-skills)（網站 [skills.911fund.io](https://skills.911fund.io)） | 自動更新的 AI coding 工具排行榜，收錄 skill、plugin、MCP server 等，依結構品質、星數成長、近期活躍度等訊號加權排名；README 由 GitHub Actions workflow 定時抓資料改寫，也可以接成 MCP server 查詢 | 62★，最後 push 2026-09-25，MIT（2026-09-25 查證） | 想掃一輪「最近有哪些工具」時的查詢起點。它是目錄，不是可以安裝的 skill；排名是自動算出的分數，不是人工審查結論（例如它的「Best of the Best」目前就收了本頁第 9 節不推薦的 `affaan-m/ECC`），從這裡找到的項目，裝之前仍要照第 1 節逐一審查。星數不多 |
 | [keyuchen21/agentic-engineering-handbook](https://github.com/keyuchen21/agentic-engineering-handbook) | 英文的 agent 工程學習路線，分核心的 Phase 0–6（agent loop、MCP、context 與 skill、harness、coding agent、evals 與安全），另加進階的 Phase 7（agent 訓練與搜尋）[^fresh1]，每個階段列「先讀」「再讀」與一個實作練習，收錄 206 篇 OpenAI、Anthropic、Google 官方文章與社群資源[^fresh2] | 348★，最後 push 2026-09-22，MIT（2026-09-25 查證；內容描述 2026-10-05 更新） | 想有系統補官方文章時當閱讀清單用。本體是連結整理，Phase 0 的教學改寫自 `shareAI-lab/mini-claude-code`（README 有註明）。README 標的最後更新日是 2026-10-04，之後出的文章要自己補[^fresh3] |
 | [amitshekhariitbhu/ai-system-design](https://github.com/amitshekhariitbhu/ai-system-design) | 英文的 LLM、RAG 與 AI agent 系統設計長篇教學，涵蓋推論伺服器、快取、路由、向量資料庫與 context 管理；〈Caching in AI〉分別解釋 KV Cache、Prompt Cache、Semantic Cache、Embedding Cache，提醒固定內容放在 prompt 開頭以便重用前綴 | 623★，最後 push 2026-10-03，Apache-2.0（2026-10-03 查證） | 想懂 prompt cache 為什麼沒命中、或準備 AI 系統設計面試的人，可當閱讀資料。repo 2026-09-25 才建立；作者是 Outcome School 創辦人，README 宣傳自家課程，延伸閱讀連結多導向自家部落格 |
+| [VectifyAI/PageIndex](https://github.com/VectifyAI/PageIndex) | 不用向量資料庫的 RAG：先把長文件建成樹狀目錄索引，再讓模型沿著索引推理找內容；`pip install -U pageindex` | 39,586★，最後 push 2026-10-23，MIT（2026-10-24 查證） | 想比較向量檢索以外做法的人。只讀過說明，沒實跑。範例需要 `OPENAI_API_KEY`；README 另列用 Claude 訂閱的做法，`pip install -U "pageindex[claude]"`，模型名稱前加 `claude-code/`。本機版針對文字型 PDF，掃描檔要用它的雲端服務。README 裡的索引成本、準確度與 FinanceBench 98.7% 都是作者自報 |
 
 ## 7. 簡報、影片與圖表
 
@@ -198,7 +207,7 @@ noScribe 與 VideoCaptioner 是 GPL-3.0：自己安裝使用沒有影響；要�
 | [2] | Reducing cost and improving performance with Claude Platform（Anthropic 部落格，2026-09-08，介紹 `/claude-api prompt-audit`） | <https://claude.com/blog/reducing-cost-and-improving-performance-with-claude-platform> |
 | [3] | Mods overview（Claude Code 官方文件，2026-10-08 查證，當時版本 v2.1.294） | <https://code.claude.com/docs/en/plugins/mods/overview> |
 
-stars／最後 push 日期除另有標註外，均為 2026-09-19 用 GitHub API（`gh api repos/<owner>/<repo>`）即時查證的快照。2026-09-25 補入的 OpenSpec、Orca、skill-of-skills 三列，stars 與最後 push 用 [ungh.cc](https://ungh.cc) 的公開 GitHub 查詢 API（`/repos/<owner>/<repo>`）查，並跟 shields.io 的星數徽章交叉比對；license 對照 repo 裡的 LICENSE 檔。2026-10-03 補入的 ai-system-design 1 項，stars、最後 push 與建立日期用 [GitHub 公開 API](https://api.github.com/repos/amitshekhariitbhu/ai-system-design) 即時查證；license 對照 repo 裡的 LICENSE 檔，內容與限制對照 README 原文及其中的連結。2026-10-08 補入的各列與第 7、8 節，stars、最後 push 與建立日期用 GitHub API（`gh api repos/<owner>/<repo>`）即時查證，license 對照 repo 裡的 LICENSE 檔；功能說明對照 README 原文；網路行為、hook 與遙測另外讀了 repo 裡的程式碼確認，README 沒寫、只從程式碼得知的地方會註明；Claude Code Mods 與 You should know 對照官方文件與 changelog；LM Studio 對照官方文件、部落格與使用條款頁。
+stars／最後 push 日期除另有標註外，均為 2026-09-19 用 GitHub API（`gh api repos/<owner>/<repo>`）即時查證的快照。2026-09-25 補入的 OpenSpec、Orca、skill-of-skills 三列，stars 與最後 push 用 [ungh.cc](https://ungh.cc) 的公開 GitHub 查詢 API（`/repos/<owner>/<repo>`）查，並跟 shields.io 的星數徽章交叉比對；license 對照 repo 裡的 LICENSE 檔。2026-10-03 補入的 ai-system-design 1 項，stars、最後 push 與建立日期用 [GitHub 公開 API](https://api.github.com/repos/amitshekhariitbhu/ai-system-design) 即時查證；license 對照 repo 裡的 LICENSE 檔，內容與限制對照 README 原文及其中的連結。2026-10-08 補入的各列與第 7、8 節，stars、最後 push 與建立日期用 GitHub API（`gh api repos/<owner>/<repo>`）即時查證，license 對照 repo 裡的 LICENSE 檔；功能說明對照 README 原文；網路行為、hook 與遙測另外讀了 repo 裡的程式碼確認，README 沒寫、只從程式碼得知的地方會註明；Claude Code Mods 與 You should know 對照官方文件與 changelog；LM Studio 對照官方文件、部落格與使用條款頁。2026-10-24 補入的 obsidian-skills、security-audit-skill、trufflehog、PageIndex 四列，stars、最後 push 用 GitHub API 即時查證，license 對照 repo 裡的 LICENSE 檔，功能說明對照 README（security-audit-skill 與 obsidian-skills 另讀了 SKILL.md）；四項都沒有實跑。
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[MCP 入門與實戰](mcp.md)｜[把教材做成 SKILL](skill-build.md)
 

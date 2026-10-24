@@ -51,6 +51,8 @@ NAV = [
         ("official-config", "Claude Code 設定總覽", "CLAUDE.md、rules、settings、權限怎麼寫"),
         ("hooks-subagents", "Hooks 與 Subagent 設定", "自動化檢查與子代理定義"),
         ("session-handoff", "跨 session 接力：session_log", "讓下一個對話接得上進度"),
+        ("checkpoints-rewind", "Checkpoints 與 /rewind：哪些能復原、哪些不能", "退回改壞的檔案與對話，以及要靠 Git 的情況"),
+        ("commands-cheatsheet", "新手指令速查", "依工作情境分組的斜線指令，含 /model、/effort、/compact"),
     ]),
     ("隔離與沙箱", [
         ("wsl2-isolation", "WSL2 當隔離環境", "WSL2 跟 Windows 的邊界、實驗用 distro、備份與還原"),

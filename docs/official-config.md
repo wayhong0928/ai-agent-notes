@@ -261,7 +261,13 @@ Claude 存的筆記分四類，寫在記憶檔 frontmatter 的 `type` 欄位：`
 
 ### 壓縮之後哪些還在
 
-還沒打任何字之前，CLAUDE.md、auto memory、MCP 工具名稱和 skill 說明就已經載入 context[13]。對話長了被壓縮（compact）時，各機制的下場不同[13]：
+還沒打任何字之前，CLAUDE.md、auto memory、MCP 工具名稱和 skill 說明就已經載入 context[13]。
+
+想知道自己的設定一開場佔了多少，跑 `/context`，會依類別列出目前實際的用量[13]。官方的示意圖用的是代表性數字，實際數字以這個指令為準[13]。
+
+下面是一台機器上的單次讀數（Claude Code 2.1.310，以非互動的 `claude -p "/context"` 讀取）。一般設定的起始用量約 33.7k tokens；改用空的設定資料夾，並在沒有任何 CLAUDE.md 的目錄啟動，約 19k。互動 session 和專案目錄還會再加上專案的 CLAUDE.md 與 hook 注入的內容。這只是這台機器的讀數，別人的 CLAUDE.md、skill、MCP 設定不同，數字也會不同。
+
+對話長了被壓縮（compact）時，各機制的下場不同[13]：
 
 | 內容 | 壓縮之後 |
 |---|---|

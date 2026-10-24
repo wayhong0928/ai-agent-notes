@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkpoints 與 /rewind：哪些能復原、哪些不能｜AI Agent 筆記</title>
+<meta name="description" content="退回改壞的檔案與對話，以及要靠 Git 的情況">
+<link rel="canonical" href="https://wayhong0928.github.io/ai-agent-notes/pages/checkpoints-rewind.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128218;</text></svg>">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/diagram.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+<button class="navtoggle" id="navtoggle" aria-label="開啟導覽">☰</button>
+<nav class="sidenav" id="sidenav" aria-label="全站導覽">
+<a class="brand" href="../index.html"><span class="brand-mark">◈</span><span class="brand-text">AI Agent<br><small>筆記</small></span></a>
+<div class="navsearch"><input type="search" id="navfilter" placeholder="篩選頁面…" aria-label="篩選頁面"></div>
+<a class="navread" href="../reading.html">閱讀追蹤</a>
+<div class="navsec"><h2>先搞懂工具</h2><ul>
+<li><a href="../pages/tools-compare.html" data-title="AI 介面比較總表" data-slug="tools-compare" data-updated="1791384637">AI 介面比較總表</a></li>
+<li><a href="../pages/free-tier.html" data-title="免付費區" data-slug="free-tier" data-updated="1791616480">免付費區</a></li>
+<li><a href="../pages/paid-tier.html" data-title="付費區" data-slug="paid-tier" data-updated="1791622926">付費區</a></li>
+<li><a href="../pages/projects.html" data-title="Projects 功能" data-slug="projects" data-updated="1791265294">Projects 功能</a></li>
+</ul></div>
+<div class="navsec"><h2>AI Agent 原理</h2><ul>
+<li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1792214180">AI Agent 怎麼運作</a></li>
+<li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1792809640">SKILL、Plugin、MCP 與 Subagent</a></li>
+<li><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792809640">Mods：在 Claude Code 裡加自己的功能</a></li>
+<li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1792809640">Subagent 入門與實戰</a></li>
+<li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1792809640">MCP 入門與實戰</a></li>
+<li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
+<li><a href="../pages/harness.html" data-title="把 AI 代理的工作環境設計得可靠" data-slug="harness" data-updated="1792214180">把 AI 代理的工作環境設計得可靠</a></li>
+</ul></div>
+<div class="navsec"><h2>實戰協作</h2><ul>
+<li><a href="../pages/claude-codex.html" data-title="Claude Code + Codex 協作" data-slug="claude-codex" data-updated="1791265294">Claude Code + Codex 協作</a></li>
+<li><a href="../pages/skill-build.html" data-title="把教材做成 SKILL" data-slug="skill-build" data-updated="1792809640">把教材做成 SKILL</a></li>
+<li><a href="../pages/claude-code-obsidian.html" data-title="Claude Code 接上 Obsidian" data-slug="claude-code-obsidian" data-updated="1791352825">Claude Code 接上 Obsidian</a></li>
+<li><a href="../pages/claude-code-cowork.html" data-title="Claude Code + Cowork 並用" data-slug="claude-code-cowork" data-updated="1791352825">Claude Code + Cowork 並用</a></li>
+</ul></div>
+<div class="navsec"><h2>軟體開發流程 SDLC</h2><ul>
+<li><a href="../pages/sdlc-traditional.html" data-title="SDLC 與流程模型" data-slug="sdlc-traditional" data-updated="1789655763">SDLC 與流程模型</a></li>
+<li><a href="../pages/dev-practices.html" data-title="開發實踐：TDD、BDD、DDD 與 SDD" data-slug="dev-practices" data-updated="1789655763">開發實踐：TDD、BDD、DDD 與 SDD</a></li>
+<li><a href="../pages/sdlc-ai-agent.html" data-title="AI 代理時代的 SDLC" data-slug="sdlc-ai-agent" data-updated="1790340239">AI 代理時代的 SDLC</a></li>
+</ul></div>
+<div class="navsec"><h2>官方建議設定</h2><ul>
+<li><a href="../pages/official-config.html" data-title="Claude Code 設定總覽" data-slug="official-config" data-updated="1792809640">Claude Code 設定總覽</a></li>
+<li><a href="../pages/hooks-subagents.html" data-title="Hooks 與 Subagent 設定" data-slug="hooks-subagents" data-updated="1792809640">Hooks 與 Subagent 設定</a></li>
+<li><a href="../pages/session-handoff.html" data-title="跨 session 接力：session_log" data-slug="session-handoff" data-updated="1789618549">跨 session 接力：session_log</a></li>
+<li class="active"><a href="../pages/checkpoints-rewind.html" data-title="Checkpoints 與 /rewind：哪些能復原、哪些不能" data-slug="checkpoints-rewind" data-updated="1792818901">Checkpoints 與 /rewind：哪些能復原、哪些不能</a></li>
+<li><a href="../pages/commands-cheatsheet.html" data-title="新手指令速查" data-slug="commands-cheatsheet" data-updated="1792818393">新手指令速查</a></li>
+</ul></div>
+<div class="navsec"><h2>隔離與沙箱</h2><ul>
+<li><a href="../pages/wsl2-isolation.html" data-title="WSL2 當隔離環境" data-slug="wsl2-isolation" data-updated="1791632038">WSL2 當隔離環境</a></li>
+<li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1792214180">Coding agent 沙箱：Claude Code 與 Codex</a></li>
+</ul></div>
+<div class="navsec"><h2>關於</h2><ul>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1792809640">關於這個網站</a></li>
+</ul></div>
+</nav>
+<div class="wrap">
+<main id="main">
+<p class="crumb"><a href="../index.html">首頁</a> ／ 官方建議設定</p>
+<article class="doc" data-updated="1792818901">
+<h1>Checkpoints 與 /rewind：哪些能復原、哪些不能</h1>
+<p class='lede'>退回改壞的檔案與對話，以及要靠 Git 的情況</p>
+<blockquote>
+<p>查證日期：2026-10-24。方案與功能變動快，請以官方最新說明為準。</p>
+</blockquote>
+<p>Claude 改壞了檔案、走錯方向，或對話拖太長，Claude Code 有一個內建的退路叫 checkpoint，用 <code>/rewind</code> 打開。它很好用，但只管 Claude 用檔案編輯工具改的東西，有幾種情況復原不了。這頁先講它怎麼運作，再列清楚哪些能復原、哪些要靠 Git，最後給幾個常見情境的操作順序。內容來自官方文件[1][2]，本站自己的整理會另外註明。</p>
+<h2 id="一checkpoint-什麼時候建立留多久">一、checkpoint 什麼時候建立、留多久</h2>
+<p>官方的說法是，Claude Code 會自動追蹤它的檔案編輯工具所做的修改，每次你送出一個會開始一輪的 prompt，就建立一個新的 checkpoint[1]。</p>
+<ul>
+<li>檔案快照最多保留最近 100 個 checkpoint。較舊的 checkpoint 被丟掉時，沒有其他 checkpoint 還在用的快照檔會一併刪除，但每個檔案的第一份快照例外，VS Code 擴充套件要拿它當 session diff 的基準[1]。</li>
+<li>checkpoint 跟對話一起存，所以接續舊 session 之後還是可以 <code>/rewind</code>[1]。</li>
+<li>快照有保存期限。Claude Code 的定期清理預設在 session 最後一次存快照之後約 30 天刪除它。想倒回快照已被清掉的 checkpoint，可能失敗並出現 <code>No files were restored</code>。想保留更久，調 <code>cleanupPeriodDays</code> 設定[1]。</li>
+</ul>
+<h2 id="二怎麼打開-rewind-選單">二、怎麼打開 rewind 選單</h2>
+<p>跑 <code>/rewind</code>，或在輸入框是空的時候連按兩下 <code>Esc</code>[1]。<code>/rewind</code> 另有兩個別名，<code>/checkpoint</code> 和 <code>/undo</code>[2]。</p>
+<p>輸入框裡已經有字的話，連按兩下 <code>Esc</code> 會變成清掉輸入，不會開選單。被清掉的文字會存進輸入歷史，離開選單之後按 <code>Up</code> 可以叫回來[1]。</p>
+<h2 id="三選單裡的六個動作">三、選單裡的六個動作</h2>
+<p>選單會列出這個 session 裡你送過的 prompt。先選定要回到哪一點，再選動作[1]。</p>
+<table>
+<thead>
+<tr>
+<th>動作</th>
+<th>做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Restore code and conversation</td>
+<td>程式碼和對話都退回那個時間點</td>
+</tr>
+<tr>
+<td>Restore conversation</td>
+<td>對話退回那則訊息，目前的程式碼保留</td>
+</tr>
+<tr>
+<td>Restore code</td>
+<td>還原檔案的修改，對話保留</td>
+</tr>
+<tr>
+<td>Summarize from here</td>
+<td>把這一點之後的對話壓成摘要，騰出 context window 空間</td>
+</tr>
+<tr>
+<td>Summarize up to here</td>
+<td>把這一點之前的對話壓成摘要，後面的訊息原樣保留</td>
+</tr>
+<tr>
+<td>Never mind</td>
+<td>回到訊息清單，什麼都不改</td>
+</tr>
+</tbody>
+</table>
+<p>兩個還原程式碼的選項，只有在所選的 checkpoint 之後有被追蹤到的檔案修改時才會出現。沒有的話，選單只剩 Restore conversation、兩個 Summarize 和 Never mind[1]。</p>
+<p>幾個操作細節[1]。</p>
+<ul>
+<li>還原對話，或選了 Summarize from here 之後，被選中那則訊息的原文會放回輸入框，讓你重送或修改。選 Summarize up to here 則停在對話最後面，輸入框是空的。</li>
+<li>兩個 Summarize 都會在對話裡留下一個 Summarized conversation 標記。</li>
+<li>Summarize 不會動磁碟上的檔案，原本的訊息還留在 session 紀錄裡，Claude 仍能參照細節。</li>
+<li>想指定摘要的重點，用方向鍵停在某個 Summarize 選項上，在 add context (optional) 那一行打字再按 <code>Enter</code>。直接按該選項的數字鍵，就不帶指示立刻摘要。</li>
+</ul>
+<p>Summarize 留在同一個 session 裡壓縮 context，像是指定範圍的 <code>/compact</code>。想分出另一條路試別的做法、又要保住原本的 session，官方建議改用 <code>/branch</code> 或 <code>claude --continue --fork-session</code>[1]。</p>
+<h2 id="四哪些能復原哪些不能">四、哪些能復原、哪些不能</h2>
+<table>
+<thead>
+<tr>
+<th>情況</th>
+<th>能不能用 <code>/rewind</code> 復原</th>
+<th>官方怎麼說</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude 用檔案編輯工具改的檔案</td>
+<td>能</td>
+<td>這是 checkpoint 追蹤的主要對象[1]</td>
+</tr>
+<tr>
+<td>一個 Claude 已經編輯過的檔案，之後被 Bash 指令改了</td>
+<td>能</td>
+<td>Claude 在對話裡用檔案編輯工具改過某個檔之後，<code>/rewind</code> 會連同它之後被 Bash 指令做的修改一起還原[1]</td>
+</tr>
+<tr>
+<td>只被 Bash 指令改過、Claude 沒用編輯工具碰過的檔案</td>
+<td>不能</td>
+<td>不追蹤，檔案維持現狀，要還原就用 Git 這類版本控制[1]</td>
+</tr>
+<tr>
+<td>你自己在 Claude Code 外面改的檔案、其他同時開著的 session 做的修改</td>
+<td>通常不能</td>
+<td>checkpoint 只追蹤目前 session 編輯過的檔案；剛好改到同一個檔案的情況除外[1]</td>
+</tr>
+<tr>
+<td>subagent 做的修改</td>
+<td>多半不能</td>
+<td>見下方說明[1]</td>
+</tr>
+<tr>
+<td>符號連結（symlink）或硬連結（hard link）的檔案</td>
+<td>不能</td>
+<td>還原時會跳過，顯示 <code>Restored the code, but skipped N files</code>，跳過的檔案內容不變[1]</td>
+</tr>
+<tr>
+<td>你在 Claude 還在工作時中途送出的訊息</td>
+<td>那則訊息本身沒有 checkpoint</td>
+<td>選單裡可能標成 No code restore，見下方說明[1]</td>
+</tr>
+</tbody>
+</table>
+<p>subagent 的部分，官方的說法是 subagent 用 Claude 的檔案編輯工具做修改，但 Claude Code 通常不會把這些修改記進你 session 的 checkpoint。還原得了多少，要看 subagent 怎麼跑[1]。</p>
+<ul>
+<li>在前景執行的 forked skill（<code>context: fork</code>）改的是你自己這一輪的工作目錄，所以照常還原。</li>
+<li>其他 subagent，包含在背景執行的 forked skill（這是預設）和背景執行的 <code>/code-review --fix</code>，只會還原 Claude 在你的對話裡已經編輯過的檔案，subagent 改到的其他檔案要用 Git 退。</li>
+</ul>
+<p>中途送出的訊息，官方說 checkpoint 是替「開始一輪」的 prompt 建立的，所以這則訊息沒有自己的 checkpoint，Claude 讀到它之後做的修改，算在開始那一輪的 prompt 名下。要退掉這段修改，選開始那一輪的 prompt，再選 Restore code 或 Restore code and conversation。這會把整輪的檔案修改都還原，包含你的訊息送出之前的部分。選有標記的那則訊息，仍然可以用 Restore conversation，只退對話、檔案不動[1]。</p>
+<p>想知道還原時跳過了哪些路徑，還原之前先用 <code>/debug</code> 開除錯紀錄，紀錄檔會列出每個被跳過的路徑[1]。</p>
+<p>官方最後一句提醒值得照字面讀。Checkpoint 是給 session 內快速復原用的，要永久的版本歷史和協作，繼續用 Git 這類版本控制做 commit 和分支[1]。</p>
+<h2 id="五幾個常見情境怎麼做">五、幾個常見情境怎麼做</h2>
+<h3 id="claude-改壞了想回到改之前">Claude 改壞了，想回到改之前</h3>
+<ol>
+<li>輸入框清空，連按兩下 <code>Esc</code>，或打 <code>/rewind</code>。</li>
+<li>選那個改壞的要求本身的那則 prompt。checkpoint 記的是每則 prompt 送出前的狀態，選它就回到那次修改之前[1]。</li>
+<li>想連對話一起退，選 Restore code and conversation。想保住對話、只把檔案退回去，選 Restore code。</li>
+<li>有還原對話時，那則 prompt 的原文會回到輸入框，可以改一改再送；只選 Restore code 時對話不動[1]。</li>
+</ol>
+<h3 id="倒回去之後直接關掉視窗">倒回去之後直接關掉視窗</h3>
+<p>官方提醒，倒回去的訊息在你送下一個 prompt 之前就離開的話，可能會回來。要把它們再移掉，進同一個 session 跑 <code>/rewind</code>、選同一則 prompt、再選 Restore conversation。預防的做法是離開前先送 Claude 一個 prompt，因為 Claude Code 是把倒回後的對話連同這個 prompt 一起存下來。已經還原的檔案會維持還原後的樣子[1]。</p>
+<h3 id="不小心打了-clear">不小心打了 <code>/clear</code></h3>
+<p>同一個 Claude Code 程序裡跑過 <code>/clear</code> 的話，rewind 選單最上面會多一個 <code>/resume &lt;session-id&gt; (previous session)</code> 項目，選它就回到 <code>/clear</code> 之前的對話。這個項目在你離開 Claude Code 或接續別的 session 之前都在[1]。<code>/clear</code> 的說明本身也提到這個管道[2]。</p>
+<h3 id="除錯對話拖很長想壓縮中段">除錯對話拖很長，想壓縮中段</h3>
+<p>選中段那一點的 Summarize from here，初始指示留著、後面冗長的來回壓成摘要。這是官方列的用途之一[1]。要補充摘要重點的做法見第三節。</p>
+<h3 id="想動檔案的-bash-指令或-subagent-之前">想動檔案的 Bash 指令或 subagent 之前</h3>
+<p>這一條是本站的整理，不是官方規定。上面的表顯示，只被 Bash 指令或 subagent 動過的檔案不在 checkpoint 的保護範圍，所以讓 Claude 做這類事情之前，先確認工作目錄在 Git 裡、而且目前的狀態已經 commit，出事時才有地方退。</p>
+<h2 id="本頁重點回顧">本頁重點回顧</h2>
+<ul>
+<li>每個開始一輪的 prompt 建一個 checkpoint，最多留最近 100 個，快照約 30 天後被清理。</li>
+<li><code>/rewind</code> 或空輸入框時連按兩下 <code>Esc</code> 打開選單，有三個還原選項、兩個摘要選項和一個取消。</li>
+<li>能退的是 Claude 用編輯工具改的檔案，以及這些檔案之後被 Bash 改的部分。只被 Bash 改的檔案、你自己改的、其他 session 改的、多數 subagent 改的、symlink 和 hard link，都要靠 Git。</li>
+<li>倒回去之後離開前先送一個 prompt，否則被倒掉的訊息可能回來。</li>
+<li>Checkpoint 是 session 內的快速復原，不取代版本控制。</li>
+</ul>
+<h2 id="資料來源">資料來源</h2>
+<table>
+<thead>
+<tr>
+<th>標記</th>
+<th>來源</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1]</td>
+<td>Checkpointing（checkpoint 的建立與保留、<code>/rewind</code> 選單、限制）</td>
+<td><a href="https://code.claude.com/docs/en/checkpointing">https://code.claude.com/docs/en/checkpointing</a></td>
+</tr>
+<tr>
+<td>[2]</td>
+<td>Commands（<code>/rewind</code>、<code>/clear</code> 的說明與別名）</td>
+<td><a href="https://code.claude.com/docs/en/commands">https://code.claude.com/docs/en/commands</a></td>
+</tr>
+</tbody>
+</table>
+<p>延伸：<a href="commands-cheatsheet.html">新手指令速查</a>｜<a href="official-config.html">Claude Code 設定總覽</a>｜<a href="session-handoff.html">跨 session 接力：session_log</a></p>
+</article>
+<nav class="pager"><a class="prev" href="session-handoff.html">← 跨 session 接力：session_log</a><a class="next" href="commands-cheatsheet.html">新手指令速查 →</a></nav>
+<footer class="foot">
+<p>這是個人整理筆記，不是官方文件；工具與方案變動很快，請以官方最新說明為準。</p>
+<p><a href="../pages/about.html">關於這個網站</a>　·　<a href="https://github.com/wayhong0928/ai-agent-notes">GitHub</a></p>
+</footer>
+</main>
+<aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
+<ul>
+<li><a href="#一checkpoint-什麼時候建立留多久">一、checkpoint 什麼時候建立、留多久</a></li>
+<li><a href="#二怎麼打開-rewind-選單">二、怎麼打開 rewind 選單</a></li>
+<li><a href="#三選單裡的六個動作">三、選單裡的六個動作</a></li>
+<li><a href="#四哪些能復原哪些不能">四、哪些能復原、哪些不能</a></li>
+<li><a href="#五幾個常見情境怎麼做">五、幾個常見情境怎麼做</a><ul>
+<li><a href="#claude-改壞了想回到改之前">Claude 改壞了，想回到改之前</a></li>
+<li><a href="#倒回去之後直接關掉視窗">倒回去之後直接關掉視窗</a></li>
+<li><a href="#不小心打了-clear">不小心打了 /clear</a></li>
+<li><a href="#除錯對話拖很長想壓縮中段">除錯對話拖很長，想壓縮中段</a></li>
+<li><a href="#想動檔案的-bash-指令或-subagent-之前">想動檔案的 Bash 指令或 subagent 之前</a></li>
+</ul>
+</li>
+<li><a href="#本頁重點回顧">本頁重點回顧</a></li>
+<li><a href="#資料來源">資料來源</a></li>
+</ul>
+</div>
+</aside>
+</div>
+<script src="../assets/site.js"></script>
+</body>
+</html>
