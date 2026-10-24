@@ -26,7 +26,7 @@
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1792214180">AI Agent 怎麼運作</a></li>
 <li class="active"><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1792214180">SKILL、Plugin、MCP 與 Subagent</a></li>
-<li><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792390087">Mods：在 Claude Code 裡加自己的功能</a></li>
+<li><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792390177">Mods：在 Claude Code 裡加自己的功能</a></li>
 <li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1792214180">Subagent 入門與實戰</a></li>
 <li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1792214180">MCP 入門與實戰</a></li>
 <li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
@@ -53,7 +53,7 @@
 <li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1792214180">Coding agent 沙箱：Claude Code 與 Codex</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791632038">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1792390177">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -63,7 +63,7 @@
 <h1>SKILL、Plugin、MCP 與 Subagent</h1>
 <p class='lede'>四種擴充機制各自解決什麼問題</p>
 <blockquote>
-<p>查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
+<p>查證日期：2026-10-19（SKILL 在 Claude Code 的細節）；其餘 2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p>看懂<a href="agent-basics.html">代理迴圈</a>之後，下一個常見的卡點是：SKILL、Plugin、MCP、Subagent、Hooks，這幾個詞經常混著用，但它們解決的問題完全不同。這頁先用一張精簡的支援矩陣對照六種擴充機制，再逐一給解決什麼問題、最小範例跟常見誤用，最後給一份「該用哪一種」的決策清單。</p>
 <h2 id="一六種機制支援矩陣">一、六種機制支援矩陣</h2>
@@ -222,6 +222,190 @@ description: 掃描專案裡所有 Markdown 連結，找出指向不存在檔案
 </code></pre>
 <p>呼叫方式預設來自資料夾名稱；frontmatter 有設 <code>name</code> 時，<code>/</code> 選單顯示與輸入的指令改用 <code>name</code>，資料夾名稱也一樣能叫用：<sup id="fnref:fresh5"><a class="footnote-ref" href="#fn:fresh5">5</a></sup>存在 <code>.claude/skills/check-broken-links/SKILL.md</code>，就用 <code>/check-broken-links</code> 叫用，或讓 Claude 依 <code>description</code> 自己判斷要不要用[3]。</p>
 <p><strong>常見誤用</strong>：把 <code>description</code> 寫得太籠統（例如只寫「檢查文件」），代理判斷不出什麼時候該用；或者把整份參考資料塞進 <code>SKILL.md</code> 本體，官方建議本體控制在 500 行以內，細節另外放進 <code>reference.md</code> 用連結引用，需要時才載入[3]。</p>
+<h4 id="skill-在-claude-code-的細節">SKILL 在 Claude Code 的細節</h4>
+<p><strong>放在哪，哪些 session 會載入</strong>[3]：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>路徑</th>
+<th>誰會載入</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Personal</td>
+<td><code>~/.claude/skills/&lt;skill-name&gt;/SKILL.md</code></td>
+<td>這台電腦上你的所有專案，但 Cowork 和雲端 session 不載入</td>
+</tr>
+<tr>
+<td>Project</td>
+<td><code>.claude/skills/&lt;skill-name&gt;/SKILL.md</code></td>
+<td>這個 repo 的 session，commit 進去團隊也拿得到</td>
+</tr>
+<tr>
+<td>Nested</td>
+<td><code>&lt;subdir&gt;/.claude/skills/&lt;skill-name&gt;/SKILL.md</code></td>
+<td>從 <code>&lt;subdir&gt;</code> 或更下層啟動的 session；從上層啟動的話，Claude 處理那裡的檔案時才載入</td>
+</tr>
+<tr>
+<td>Additional directory</td>
+<td>用 <code>--add-dir</code> 加進來的目錄裡的 <code>.claude/skills/&lt;skill-name&gt;/SKILL.md</code></td>
+<td>那個 session</td>
+</tr>
+<tr>
+<td>Plugin</td>
+<td><code>&lt;plugin&gt;/skills/&lt;skill-name&gt;/SKILL.md</code></td>
+<td>啟用該 plugin 的地方，名稱變成 <code>/plugin-name:skill-name</code></td>
+</tr>
+<tr>
+<td>claude.ai 帳號</td>
+<td>你的 claude.ai 帳號啟用的 skill</td>
+<td>Cowork、雲端 session，以及用這個帳號登入的終端機 session</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>同名時誰贏</strong>：組織部署的 enterprise skill 勝過 personal，personal 勝過 project。例如 <code>~/.claude/skills/</code> 和專案的 <code>.claude/skills/</code> 都有 <code>deploy</code>，<code>/deploy</code> 跑的是 personal 那份。skill 跟 <code>.claude/commands/</code> 裡的檔案同名時，skill 勝；plugin 的 skill 有命名空間，兩邊都會載入[3]。</li>
+<li><strong>從子目錄啟動</strong>：Claude Code 會讀啟動目錄和它往上一直到 repo 根目錄的每個 <code>.claude/skills/</code>，所以從 <code>packages/frontend/</code> 啟動也拿得到根目錄的 skill。啟動目錄底下的 <code>.claude/skills/</code> 啟動時不載入，要等 Claude 第一次讀或改那個子目錄的檔案才載入，之後整個 session 都能用[3]。</li>
+<li><strong>改了不用重開</strong>：在 <code>~/.claude/skills/</code>、專案的 <code>.claude/skills/</code>，或 <code>--add-dir</code> 目錄裡的 <code>.claude/skills/</code> 新增、修改、刪除 skill，目前的 session 就會套用。session 開始時還不存在的最上層 skills 資料夾，要跑 <code>/reload-skills</code> 才讀得到[3]。</li>
+<li><strong>custom command 已併入 skill</strong>：<code>.claude/commands/deploy.md</code> 和 <code>.claude/skills/deploy/SKILL.md</code> 都會建立 <code>/deploy</code>，用起來一樣，舊的 command 檔照常能用。command 檔支援同樣的 frontmatter，<code>name</code> 和 <code>paths</code> 除外；新寫的官方建議用 skill，因為 skill 才能放附屬檔[3]。</li>
+</ul>
+<p><strong>誰能叫用</strong>：預設你和 Claude 都能叫用任何 skill[3]。兩個欄位可以收緊：</p>
+<table>
+<thead>
+<tr>
+<th>frontmatter</th>
+<th>你能叫用</th>
+<th>Claude 能叫用</th>
+<th>什麼時候進 context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>（預設）</td>
+<td>能</td>
+<td>能</td>
+<td>說明一直在 context，叫用時載入全文</td>
+</tr>
+<tr>
+<td><code>disable-model-invocation: true</code></td>
+<td>能</td>
+<td>不會自己叫用</td>
+<td>說明不在 context，叫用時載入全文</td>
+</tr>
+<tr>
+<td><code>user-invocable: false</code></td>
+<td>不能</td>
+<td>能</td>
+<td>說明一直在 context，叫用時載入全文</td>
+</tr>
+</tbody>
+</table>
+<p>有副作用、想自己決定時機的流程（例如 <code>/commit</code>、<code>/deploy</code>）用 <code>disable-model-invocation: true</code>；不適合當指令的背景知識用 <code>user-invocable: false</code>[3]。要直接執行 skill，把名字放在訊息開頭，例如 <code>/deploy staging</code>；名字寫在一般文字後面，只代表允許 Claude 用它，不會直接執行[3]。</p>
+<p><strong>常用欄位</strong>（全部選填）[3]：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>description</code></td>
+<td>skill 做什麼、什麼時候用，Claude 靠它決定要不要套用。沒寫就拿內文第一個非空白行。跟 <code>when_to_use</code> 合計在 skill 清單裡只留 1,536 字元，最重要的用途放前面</td>
+</tr>
+<tr>
+<td><code>when_to_use</code></td>
+<td>補充什麼時候該叫用，例如觸發語句或範例請求，接在 <code>description</code> 後面，也算進 1,536 字元</td>
+</tr>
+<tr>
+<td><code>argument-hint</code></td>
+<td>自動完成時提示要給什麼參數，例如 <code>[issue-number]</code></td>
+</tr>
+<tr>
+<td><code>arguments</code></td>
+<td>具名參數，在內文用 <code>$name</code> 代入；整串參數用 <code>$ARGUMENTS</code>。帶了參數、內文卻沒有任何位置接，Claude Code 會在內文最後補一行 <code>ARGUMENTS: &lt;你輸入的內容&gt;</code></td>
+</tr>
+<tr>
+<td><code>allowed-tools</code></td>
+<td>叫用這個 skill 的那一回合，列出的工具不用問就能用，你送出下一則訊息就失效</td>
+</tr>
+<tr>
+<td><code>disallowed-tools</code></td>
+<td>這個 skill 作用期間，從可用工具裡拿掉的工具</td>
+</tr>
+<tr>
+<td><code>model</code>、<code>effort</code></td>
+<td>這個 skill 作用時改用的模型和 effort；模型只改到這一回合結束，不寫進設定</td>
+</tr>
+<tr>
+<td><code>context</code>、<code>agent</code></td>
+<td><code>context: fork</code> 讓 skill 在 subagent 裡跑，<code>agent</code> 指定哪一種，沒寫就是 <code>general-purpose</code></td>
+</tr>
+<tr>
+<td><code>hooks</code></td>
+<td>叫用時註冊的 hook，之後整個 session 都在跑</td>
+</tr>
+<tr>
+<td><code>paths</code></td>
+<td>glob 樣式，設了之後 Claude 只在處理符合的檔案時自動載入</td>
+</tr>
+<tr>
+<td><code>shell</code></td>
+<td><code>!`command`</code> 用的 shell，<code>bash</code>（預設）或 <code>powershell</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>frontmatter 壞掉時</strong>：開頭的 <code>---</code> 必須在檔案第一行，否則整份連 <code>---</code> 都當成內文。YAML 解析失敗的話，skill 照樣載入但欄位全空，<code>/skill-name</code> 能用，Claude 卻比對不到 <code>description</code>[3]。用 <code>--debug</code> 啟動可以看到解析錯誤，或對 skills 資料夾跑 <code>claude plugin validate .claude/skills</code>（v2.1.233 起）[3]。</li>
+<li><strong><code>allowed-tools</code> 不是限制</strong>：它只讓列出的工具在那一回合免問，不會限制哪些工具能用。沒列到的工具照你的權限設定處理[3]。</li>
+<li><strong><code>context: fork</code></strong>：Claude Code 開一個新的 subagent，把 skill 內容當它的 prompt。subagent 看不到你的對話紀錄，skill 的指示要能自己成立，所以只適合寫了明確步驟的 skill[3]。</li>
+<li><strong>動態注入</strong>：<code>!`&lt;command&gt;`</code> 會在內容送給 Claude 之前先跑，輸出取代這個位置，Claude 拿到的是實際資料。任何一條指令失敗，整次叫用中止，Claude 完全看不到這次的 skill 內容[3]。<code>shell: bash</code> 卻沒有 bash 時，一條都還沒跑就失敗，Windows 沒裝 Git Bash 就會這樣[3]。</li>
+<li><strong>限制 Claude 能叫用哪些 skill</strong>：在 <code>/permissions</code> 把 <code>Skill</code> 加進 deny 規則就全部關掉；個別規則寫 <code>Skill(name)</code>（完全相符）或 <code>Skill(name *)</code>（前綴加任何參數）[3]。不想改別人的 SKILL.md（例如專案 repo 裡共用的），改在設定裡用 <code>skillOverrides</code>[3]：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>Claude 看到的清單</th>
+<th><code>/</code> 選單</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"on"</code></td>
+<td>名稱和說明</td>
+<td>有</td>
+</tr>
+<tr>
+<td><code>"name-only"</code></td>
+<td>只有名稱</td>
+<td>有</td>
+</tr>
+<tr>
+<td><code>"user-invocable-only"</code></td>
+<td>不列</td>
+<td>有</td>
+</tr>
+<tr>
+<td><code>"off"</code></td>
+<td>不列</td>
+<td>不列</td>
+</tr>
+</tbody>
+</table>
+<p>plugin 的 skill 不受 <code>skillOverrides</code> 影響，要用 <code>/plugin</code> 管[3]。</p>
+<p><strong>佔多少 context</strong>[3]：</p>
+<ul>
+<li>平常只有說明進 context，叫用時才載入全文。叫用之後，渲染好的 <code>SKILL.md</code> 以一則訊息進到對話裡，之後每一回合都留著；Claude Code 不會再重讀檔案，所以整個任務都要遵守的指示要寫成常駐規則，不要寫成一次性的步驟。本體越短越好，留在 context 的每一行每回合都要算 token。</li>
+<li>壓縮對話時，Claude Code 會把每個 skill 最近一次的叫用重新附上，每個保留前 5,000 tokens，全部合計 25,000 tokens。最重要的指示放在 <code>SKILL.md</code> 前面。</li>
+<li>skill 清單一定列出每個名字，但 skill 一多，Claude Code 會丟掉部分說明來塞進預算，Claude 就少了比對用的關鍵字。預算是模型 context window 的 1%，先丟你最少叫用的。<code>/doctor</code> 會估清單的成本和最大的幾個來源；<code>/skill-doctor</code>（v2.1.252 起）列出每個 skill 的成本和使用次數，方便決定關掉哪些。</li>
+</ul>
+<p><strong>內建（bundled）skill</strong>：Claude Code 自帶一批靠 prompt 運作的 skill，用法跟自己寫的一樣，例如 <code>/simplify</code>（檢查改過的程式碼能不能清理並套用修正）、<code>/verify</code>（實際建置、執行 app 觀察結果，確認改動有效）、<code>/debug</code>（開這個 session 的 debug log 並據此排查）、<code>/loop</code>（session 開著時重複跑一個 prompt）、<code>/batch</code>（平行處理整個 codebase 的大規模修改）、<code>/fewer-permission-prompts</code>（掃過去的紀錄，把常用的唯讀指令加進專案的允許清單）、<code>/update-config</code>（用講的改 <code>settings.json</code>）[26]。設 <code>disableBundledSkills</code> 可以全部關掉[3]。另外，session 開始時有名叫 <code>verify</code> 或 <code>simplify</code> 的 skill 的話，Claude Code 的 commit 指示會要 Claude 在每次 commit 前先跑它，只改文件或測試時除外（v2.1.286 起）；內建的 <code>/verify</code>、<code>/simplify</code>、plugin 的 skill 和 claude.ai 帳號的 skill 不算[3]。</p>
+<p><strong>用 repo 裡的 skill 前先看 <code>allowed-tools</code></strong>：工作區信任管不到這個欄位，就算在一個從沒信任過的資料夾用 <code>-p</code> 執行，Claude Code 也會套用專案 skill 的 <code>allowed-tools</code>[3]。skill 可以替自己開很大的工具權限，在別人的 repo 跑 Claude Code 之前，先看過裡面 skill 的 <code>allowed-tools</code>[3]。動態注入的指令不會在渲染時跳權限提示，Claude Code 會先拿每一條去比對你的權限規則，被 deny 規則擋到就中止整次叫用[3]。從 claude.ai 帳號同步下來的 skill，裡面的這種指令一律不會在你的電腦上執行（v2.1.228 起）[3]。</p>
+<p><strong>沒觸發或太常觸發</strong>：Claude 拿你的任務去比對各 skill 的說明，說明模糊或彼此重疊，就可能載錯或漏掉；要指定用哪個，直接打 <code>/&lt;name&gt;</code>[27]。沒觸發時官方的排查順序：說明裡有沒有使用者自然會講的關鍵字、問 <code>What skills are available?</code> 看它在不在清單上、換個講法讓請求更貼近說明、能手動叫用就直接打 <code>/skill-name</code>[3]。太常觸發，就把說明寫得更具體，或加上 <code>disable-model-invocation: true</code> 改成只能手動叫用[3]。</p>
 <h3 id="mcp接上外部工具">MCP：接上外部工具</h3>
 <p>在 Claude Code 專案根目錄放一個 <code>.mcp.json</code>：</p>
 <pre><code class="language-json">{
@@ -287,7 +471,7 @@ the problem, show the current code, and provide an improved version.
 <li><strong>上面幾樣東西累積到值得跨專案重複使用，或想分享給別人嗎？</strong> 是 → 打包成 Plugin。</li>
 </ol>
 <p>不確定的時候，先從最輕的做起：一條規則先寫進 CLAUDE.md，發現自己在重複貼同一段指示三次以上，才升級成 SKILL；SKILL 累積到五個以上、且想分享時，才打包成 Plugin。</p>
-<p>想知道這些機制在 <code>settings.json</code> 裡具體怎麼寫、權限規則怎麼設，見<a href="official-config.html">Claude Code 設定總覽</a>；想看 Hooks 與 Subagent 更完整的設定範例與陷阱，見<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>（這兩頁本站尚未寫，連結先放著）。</p>
+<p>想知道這些機制在 <code>settings.json</code> 裡具體怎麼寫、權限規則怎麼設，見<a href="official-config.html">Claude Code 設定總覽</a>；想看 Hooks 與 Subagent 更完整的設定範例與陷阱，見<a href="hooks-subagents.html">Hooks 與 Subagent 設定</a>。</p>
 <h2 id="資料來源">資料來源</h2>
 <table>
 <thead>
@@ -310,7 +494,7 @@ the problem, show the current code, and provide an improved version.
 </tr>
 <tr>
 <td>[3]</td>
-<td>Extend agents with skills（SKILL.md 結構、呼叫方式）</td>
+<td>Extend Claude with skills（SKILL.md 結構、呼叫方式）</td>
 <td><a href="https://code.claude.com/docs/en/skills">https://code.claude.com/docs/en/skills</a></td>
 </tr>
 <tr>
@@ -325,7 +509,7 @@ the problem, show the current code, and provide an improved version.
 </tr>
 <tr>
 <td>[6]</td>
-<td>Claude Code MCP 官方文件（<code>.mcp.json</code>、<code>~/.claude.json</code> 範例）</td>
+<td>Connect Claude Code to tools via MCP（<code>.mcp.json</code>、<code>~/.claude.json</code> 範例）</td>
 <td><a href="https://code.claude.com/docs/en/mcp">https://code.claude.com/docs/en/mcp</a></td>
 </tr>
 <tr>
@@ -350,7 +534,7 @@ the problem, show the current code, and provide an improved version.
 </tr>
 <tr>
 <td>[11]</td>
-<td>Plugins reference（Claude Code plugin.json、目錄結構限制）</td>
+<td>Plugin manifest reference（Claude Code plugin.json、目錄結構限制）</td>
 <td><a href="https://code.claude.com/docs/en/plugins-reference">https://code.claude.com/docs/en/plugins-reference</a></td>
 </tr>
 <tr>
@@ -422,6 +606,16 @@ the problem, show the current code, and provide an improved version.
 <td>[25]</td>
 <td>Claude Code changelog（v2.1.277，2026-09-18，AGENTS.md support）</td>
 <td><a href="https://code.claude.com/docs/en/changelog">https://code.claude.com/docs/en/changelog</a></td>
+</tr>
+<tr>
+<td>[26]</td>
+<td>Commands（內建 skill 在 Purpose 欄標 Skill）</td>
+<td><a href="https://code.claude.com/docs/en/commands">https://code.claude.com/docs/en/commands</a></td>
+</tr>
+<tr>
+<td>[27]</td>
+<td>Extend Claude Code（Claude 怎麼選 skill）</td>
+<td><a href="https://code.claude.com/docs/en/features-overview">https://code.claude.com/docs/en/features-overview</a></td>
 </tr>
 </tbody>
 </table>

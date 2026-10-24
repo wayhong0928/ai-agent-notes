@@ -26,7 +26,7 @@
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1792214180">AI Agent 怎麼運作</a></li>
 <li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1792214180">SKILL、Plugin、MCP 與 Subagent</a></li>
-<li><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792390087">Mods：在 Claude Code 裡加自己的功能</a></li>
+<li><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792390177">Mods：在 Claude Code 裡加自己的功能</a></li>
 <li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1792214180">Subagent 入門與實戰</a></li>
 <li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1792214180">MCP 入門與實戰</a></li>
 <li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
@@ -53,7 +53,7 @@
 <li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1792214180">Coding agent 沙箱：Claude Code 與 Codex</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791632038">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1792390177">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -63,7 +63,7 @@
 <h1>把教材做成 SKILL</h1>
 <p class='lede'>安裝版與手動版的實作紀錄</p>
 <blockquote>
-<p>查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
+<p>查證日期：2026-10-19（claude.ai 上傳的欄位限制、官方評測做法、validate 與 /skill-doctor）；其餘 2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p>這一頁記錄一次真實發生的改造：把一批教材，從「使用者自己複製貼上的提示詞」，變成能用 <code>/plugin install</code> 裝進 Claude Code 的 SKILL。前半段是故事，包含一次規則被實務經驗糾正的真實教訓，都沒有美化；後半段是一套任何人都能照抄的步驟。</p>
 <p>案例背景是一組給資管碩士論文寫作用的 SKILL，公開在 <a href="https://github.com/wayhong0928/mis-thesis-skills">wayhong0928/mis-thesis-skills</a>（MIT 授權）。<strong>這個案例只是拿來示範方法，不是本頁的重點</strong>：不寫論文的讀者，可以直接跳到第十一節「一套可以照抄的步驟」，把「研究問題稽核」換成你自己領域裡任何一套「你已經整理好、會重複套用的判準或檢查清單」，例如程式碼 review checklist、客服應答準則、教學備課流程，都適用同一套方法。中間幾節講的架構決策、SKILL 互相分工的設計、evaluation 怎麼跑、規則被使用者糾正的過程，都是可以直接搬過去的通用經驗，跟「這是不是論文」無關。</p>
@@ -229,6 +229,7 @@ https://github.com/wayhong0928/mis-thesis-skills
 <li>加入後回到 Plugins 分頁點 <strong>Browse plugins</strong>，找到 <code>thesis-toolkit</code> 裝上去。</li>
 </ol>
 <p>只想裝單一 SKILL、不想管 marketplace 時，另一條路是把單個 SKILL 資料夾包成 zip，在 Customize → Skills 手動上傳；這條路才需要注意 200 字元的 <code>description</code> 上限。</p>
+<p>這條路的 frontmatter 也比 Claude Code 窄。Claude Code 接受它文件裡列的所有欄位，但上傳到 claude.ai、走 Skills API，或用 anthropics/skills 的 <code>package_skill.py</code> 打包時，只能用 Agent Skills 規格裡的 <code>name</code>、<code>description</code>、<code>license</code>、<code>compatibility</code>、<code>metadata</code>、<code>allowed-tools</code>[1]。多放了規格不允許的欄位，打包或上傳會直接報錯失敗，不會略過那個欄位[1]。動態注入這類只有 Claude Code 才有的內文功能，在 claude.ai 對話和 API 裡也不會作用[1]。</p>
 <hr />
 <h2 id="十沒有-claude-codecodex也沒有付費方案的讀者手動版怎麼用">十、沒有 Claude Code／Codex、也沒有付費方案的讀者：手動版怎麼用</h2>
 <p>三個 SKILL 都公開在 <a href="https://github.com/wayhong0928/mis-thesis-skills">wayhong0928/mis-thesis-skills</a>，<code>plugins/thesis-toolkit/skills/&lt;skill名稱&gt;/</code> 底下。但不是每個人都有 Claude Code、Cowork 或付費的 Claude.ai／Codex 帳號。如果你只有免費額度的 ChatGPT、Gemini，或 Claude.ai 網頁版的免費對話（裝不了 plugin），一樣可以用這三個 SKILL 的判準，只是要自己動手貼，不能靠 <code>/plugin install</code> 或網頁版的 Add marketplace。</p>
@@ -314,6 +315,8 @@ https://github.com/wayhong0928/mis-thesis-skills
 <p>容易被誤解的規則，配一組具體的例子：什麼情況該判不通過，什麼情況其實是例外、可以放行。規則用講的容易顯得抽象，配上例子才真正可執行，這也是最容易被漏掉、但最值得花時間補的一步。</p>
 <h3 id="6-用真實評測驗證不要只憑直覺">6. 用真實評測驗證，不要只憑直覺</h3>
 <p>寫完不代表有用。找一組測試案例，實際比較「有這個 SKILL」跟「沒有這個 SKILL」的輸出差在哪裡，用可量化的方式打分，不要只憑感覺覺得「應該有幫助」。如果評測結果顯示差異不大，誠實面對這個結果，去想 SKILL 真正的價值在哪裡（通常是一致性與覆蓋率，而不是能力升級），而不是硬凹一個好看的結論。</p>
+<p>官方文件也把「有沒有觸發」和「觸發之後有沒有用」分開看。看到 skill 被觸發，只代表 Claude 找到它，不代表它照你的意思做了；要分別量 Claude 在該用的 prompt 上有沒有叫用，以及叫用之後的輸出符不符合預期[1]。官方建議的做法是收集幾個實際會遇到的 prompt，每個都在新的 session 裡跑兩次，一次開著 skill、一次關掉，再比較結果；<code>skill-creator</code> plugin 可以在 Claude Code 裡自動跑這套比較[1]。</p>
+<p>評測之前，先確認 frontmatter 沒寫壞。YAML 解析失敗時 skill 照樣載入，但欄位全空，Claude 比對不到 <code>description</code>，看起來就像「沒觸發」[1]。對 skills 資料夾跑一次 <code>claude plugin validate</code>，例如 <code>claude plugin validate .claude/skills</code>（v2.1.233 起），就能找出解析失敗的 <code>SKILL.md</code>[1]。裝了一陣子之後，再用 <code>/skill-doctor</code>（v2.1.252 起）看每個 skill 每回合佔多少 context、多常被用到，決定哪些該關[1]。</p>
 <h3 id="7-分層發布">7. 分層發布</h3>
 <p>公開發布的部分，嚴格收窄到「可以獨立溯源、跟任何有授權疑慮的來源無關」的範圍；跟個人專屬經驗、他人原創框架綁在一起的部分，留在自己的私人筆記裡，不要為了讓 SKILL 看起來更完整就一起打包對外發布。</p>
 <hr />

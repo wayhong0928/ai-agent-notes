@@ -165,6 +165,40 @@ export function register(on) {
 
 兩個 hook 共用同一個 `calls` 變數，一個負責記，一個負責顯示。官方說明同一個 mod 的 hook 共用檔案裡的變數，一個 hook 記下的值，另一個拿來顯示[1]。
 
+除了給你打的 `/指令`，mod 也能替 Claude 加一個工具讓它呼叫，兩種都在 `session.start` hook 裡註冊[4]。
+
+### 事件有哪些
+
+官方依用途把事件分成幾組，包括 Claude 每次用工具的前後、你打的字和 Claude Code 自己送給 Claude 的文字（例如 system prompt）、指令與 `/config`、一輪回答的開始到結束、session 的開始結束和 compact、subagent、介面，還有用量紀錄[6]。寫在 `settings.json` 的那些 settings hook 事件，mod 也收得到，名稱是 `classic.<Event>`，例如 `classic.Stop`，`e` 就是 settings hook 從 stdin 拿到的那份 JSON[6]。
+
+`session.start` 的時機要特別注意。它在每個 mod 載入後、第一個 prompt 之前跑一次，這個 mod 重新載入後會再跑一次，但 `/clear`、`/resume`、`/branch` 之後不會跑[6]。
+
+介面這邊，mod 除了能開自己的側欄（`Pane`）和輸入框上方的提示帶（`AbovePrompt`），也能接手 Claude Code 自己畫的很多位置，例如你的訊息、Claude 的回覆、工具呼叫那一列、spinner、Claude 問你問題的對話框[6]。權限提示是例外，mod 改不了它的樣式，也改不了它顯示的內容[1]。
+
+hook 有時間限制。一個事件上，hook 自己的執行時間最多 10 秒（`prompt.edit` 是 50 毫秒），等 `next` 和呼叫 mods API 的時間不算（`$.clock.sleep` 除外），超過就會被跳過[6]。指令、工具、subagent 類型和側欄的名稱只能用英文字母、數字、`_`、`-`，最長 64 個字元[6]。
+
+### 好幾個 mod 和 settings hook 誰先跑
+
+同一個事件上的 hook 串成一條鏈。每個 mod 的 `next` 呼叫下一個 mod 的 hook，最後一個 `next` 才到 Claude Code 本來的行為[3]。排最前面的 mod 最先看到事件、最後拿到結果，也決定後面的 mod 跑不跑；後面的 mod 擋不住前面的 mod 看到事件[3]。你自己裝的 mod 之間，一個 mod 會排在它 manifest 裡 `dependencies` 列出的 mod 前面；同一個檔案裡，hook 照 `register` 呼叫 `on` 的順序跑[3]。
+
+`settings.json` 和 plugin `hooks/hooks.json` 裡的 `PreToolUse` hook，在最後一個 mod 呼叫 `next` 之後才跑，算是 Claude Code 本來行為的一部分[3]。所以 mod 自己接手 `tool.call`、沒有呼叫 `next` 的話，你的 `PreToolUse` hook 就不會跑；有呼叫 `next` 的 mod，則會在拿回的結果裡看到它們的決定[3]。組織 managed settings 裡的 `PreToolUse` hook 例外，它們在第一個 mod 之前就跑，擋下的呼叫任何 mod 都看不到[3]。
+
+### hook 出錯時
+
+hook 丟出錯誤、超時或回傳的格式不對，session 不會因此壞掉[3]。還沒呼叫 `next` 就失敗的 hook 會被跳過，由下一個處理者接著跑；呼叫過 `next` 才失敗的，`next` 的結果照算，不會重跑一次[3]。所以一個負責擋指令的 hook 自己出錯時，指令會照常執行。要讓它出錯時改成擋下，在註冊時接一個 `.catch`，官方範例如下[3]：
+
+```javascript
+// on returns a registration, and .catch attaches a handler to that one hook
+on('tool.call', { tool: 'Bash' }, guard).catch(async ($, e, next) => {
+  // guard had already called next, so return what came back
+  if (next.called) return next(e)
+  // next.error.kind says why the handler was asked, such as 'throw' or 'timeout'
+  return { deny: 'The command guard failed, so this command was not run: ' + next.error.kind }
+})
+```
+
+`guard` 是你自己的 hook 函式。`.catch` 裡的處理者也有自己的時間限制，它本身再出錯，Claude Code 就當作沒有處理者，直接跳過這個 hook[3]。
+
 ## 三、實例：做一個 TODO 側欄
 
 我同時在跑好幾個專案，每個專案各有一份 `TODO.md`。原本要看待辦得請 Claude 讀檔，每次都要等它想一輪，讀進來的內容也會佔掉對話的 context。所以我請 Claude 寫了一個 mod，做到三件事：開 session 時側欄自動列出未完成的條目，打 `/todo` 立刻回一份清單，Claude 改了 TODO 檔，側欄跟著更新。
@@ -263,7 +297,30 @@ export function register(on) {
 
 想自己動手寫，官方有一份完整的教學，從三個檔案開始做一個計數器加 `/tally` 指令[5]。不管誰寫的，改完都可以跑一次 `claude plugin validate <資料夾>`。它會檢查 manifest，並用跟 Claude Code 載入時相同的靜態分析讀你的程式碼[5]。
 
-版本需求是終端機 v2.1.287 以上、Desktop app v2.1.286 以上，mod 預設開啟[1]。`claude -p` 會跑 mod 的 hook，但畫不出介面；Desktop app 裡的 WSL session 不支援 plugin，mod 完全不會跑[1]。
+自己寫的時候有幾件事先知道[5]：
+
+- **不用建置**：不需要 Node.js、bundler 或 build 步驟，Claude Code 直接載入 `.js` 和 `.ts` 檔。讓一個 plugin 變成 mod 的，是 `hooks/hooks.json` 裡指向程式碼的 `modules` 欄位。
+- **寫法要讓靜態分析讀得懂**：每個 `on` 呼叫的事件名稱要寫成字串常值，例如 `'tool.call'`；每個檔案都寫成 ES module，用 `import`，不用 `require`。
+- **改了就生效**：用 `--plugin-dir` 載入的資料夾，Claude Code 會盯著，裡面的檔案一改就熱重載。在互動 session 裡，它也會把你這個版本的事件與 API 型別寫進 mod 的 `.claude-plugin/types/`。官方說事件和方法會隨版本變，型別檔和任何文件頁對不上時以型別檔為準。
+- **Claude 改 mod 會問你**：`--plugin-dir` 載入的資料夾屬於受保護路徑，在 `default` 和 `acceptEdits` 模式下，Claude 每次改 mod 都要你核准。
+- **可以寫自動測試**：在 shell 跑 `claude plugin test`，不用開 session、不用登入，也不用網路。
+- **分享前要升版號**：mod 就是 plugin，版本寫在 manifest。已安裝的 plugin 依版本快取，改了程式碼要升版號再重新安裝，裝好的那份才會更新。名稱看起來像 Anthropic 官方的（例如 `claude-` 開頭），`claude plugin validate` 會判定不通過。
+
+版本需求是終端機 v2.1.287 以上、Desktop app v2.1.286 以上，mod 預設開啟[1]。早期試用時設過 `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` 的話，把它拿掉，v2.1.287 起會忽略這個變數，設成 `0` 也關不掉 mod[1]。
+
+mod 的 hook 不管模型走哪個供應商都會跑，包括 Amazon Bedrock、Google Cloud 的 Agent Platform、Microsoft Foundry；畫介面的範圍比較窄[1]。各環境的差別如下[1]：
+
+| 在哪裡跑 Claude Code | hook 會不會跑 | 畫的東西看不看得到 |
+|---|---|---|
+| 終端機裡的 `claude`（含編輯器內建終端機、JetBrains plugin） | 會 | 看得到 |
+| Desktop app 的 Code 分頁（WSL session 除外） | 會 | 看得到，只限終端機的元素除外 |
+| Desktop app 的 WSL session | 不會，WSL session 不支援 plugin | 看不到 |
+| VS Code 擴充的對話面板 | 會 | 擴充版本 2.1.299 以上、而且 session 有抓 feature flag 才看得到 |
+| `claude -p` 和 Agent SDK | 會 | 看不到 |
+| 從 claude.ai 或手機 app 用 Remote Control | 會，在你電腦上的 session 裡跑 | 只在你電腦的終端機看得到 |
+| 雲端 session | plugin 有帶進雲端 session 才會跑 | 看不到 |
+
+會畫介面的 mod 可以先檢查自己跑在哪個 app，在畫不出來的地方改成在對話記錄裡印一行，或改用指令的文字回覆[1]。
 
 ## 五、裝別人的 mod 之前
 
@@ -271,7 +328,70 @@ export function register(on) {
 
 裝之前先把 repo 抓下來，對資料夾跑 `claude plugin validate`，看輸出裡 `hooks:` 和 `calls:` 兩行，就知道它接了哪些事件、會呼叫哪些 API，不用真的執行[1]。前面說過所有對外動作都得經過 mods API，這份清單才列得完整。
 
+清單裡出現 `tool.check` 要特別留意，意思是這個 mod 能在權限提示出現前核准或拒絕工具呼叫[11]。它在權限規則和 `PreToolUse` hook 都決定之後才回答，而且答案可以推翻它們[8]：
+
+- **ask 規則**：本來要問你的呼叫，mod 可以直接核准。
+- **`PreToolUse` hook 擋下的呼叫**：mod 可以改成核准，只有 managed settings 裡的 hook 擋下的不行。
+- **auto mode 的分類器**：mod 核准的呼叫，不經過分類器檢查就執行。
+- **deny 規則**：機器上有 managed settings，或用 Team、Enterprise 方案登入時，deny 規則預設壓過 mod，組織也可以改這個設定。其他情況下，mod 可以核准 deny 規則擋下的呼叫。
+
+也就是說，個人帳號又沒有 managed settings 的話，`settings.json` 裡的 deny 規則擋不住一個裝了的 mod。限制有兩個。plan mode 裡，mod 不能核准檔案編輯或其他不是唯讀的呼叫，只能擋下[8]。`AskUserQuestion` 這類需要你回應的工具，mod 核准了照樣會問你（v2.1.292 起）[8]。自己寫的時候，官方建議固定的指令或路徑用權限規則就好，例如 `Bash(npm test)`；要看當下狀態才能決定的，例如目前在哪個 Git branch，才寫 `tool.check`[3]。
+
+另外，在還沒信任的資料夾開互動 session，你回答工作區信任提示之前，任何 mod 都不會載入[11]。`settings.json` 裡的 settings hook 也照常運作，跟 mod 並存[11]。
+
 想先試現成的，官方在 `claude-code-playground` repo 放了幾個範例 mod（例如在輸入框上方畫 context 用量預報的 token-weather），`/diff` 這類內建功能本身也是 mod，原始碼公開[1]。其他值得看的工具見[好用工具清單](tools-catalog.md)。
+
+## 六、安裝、停用與排查
+
+### 安裝與更新
+
+mod 跟一般 plugin 一樣從 marketplace 安裝，寫法是 plugin 名稱、`@`、marketplace 名稱。在 session 裡打 `/plugin install token-chart@your-org`，或在 shell 跑 `claude plugin install token-chart@your-org`[1]。session 開著的時候從 shell 裝或更新，要在那個 session 裡跑 `/reload-plugins` 才會載入，否則等下次啟動 Claude Code[1]。marketplace 是一個含 `.claude-plugin/marketplace.json` 的 repo 或資料夾，列出 plugin 和各自去哪裡抓，官方說它是一份目錄，不是託管的商店[10]。
+
+官方範例 mod 除了 token-weather，還有 `blast-radius`（攔下 `rm -rf`、force push 這類危險指令，先顯示會改到什麼，再給你按鈕決定繼續或取消）和 `replay-theater`（加一個 `/replay` 指令，逐步重播 Claude 上一輪做的檔案修改）[1]。這些範例照原樣分享，不提供支援[1]。想試用，把 repo clone 下來，用 `--plugin-dir` 載入那個 mod 的資料夾，只在這一個 session 有效[1]。想留著用，把 clone 下來的 `claude-code/mods` 資料夾加成 marketplace，再從 `claude-code-playground-mods` 安裝；這個 marketplace 指向你的 clone，搬走或刪掉 clone，mod 就不會再載入[1]。
+
+### 停用
+
+依要停多少、停多久，有三種做法[1]：
+
+| 範圍 | 做法 |
+|---|---|
+| 單一個 mod | 在 `/plugin` 的 Installed 分頁停用或解除安裝它的 plugin |
+| 所有已安裝的 mod，只限這次 session | 用 `--safe-mode` 啟動 Claude Code，你的其他自訂設定也會一起停用 |
+| 你裝的所有 mod，每個 session | 在 `~/.claude/settings.json` 設 `"disableAllHooks": true`，你的 settings hook 和自訂 status line 也會一起停；組織管理的部分照常執行 |
+
+`disableAllHooks` 只停 mod，plugin 的其他部分還在。plugin 仍是已安裝狀態，它的 skill、指令、agent 和 MCP server 照常載入[1]。要恢復，把同一個改動還原就好[1]。
+
+### 看載入了哪些、沒作用時怎麼查
+
+在終端機 session 打 `/plugin`，分頁下方有一行淡色字列出數量和名稱，例如 `1 mod active · first-mod`[1]。這一行不列內建 mod[1]。
+
+想確認你的環境到底能不能載入 mod，不用裝任何東西，在一個沒有 mod 的資料夾從 shell 跑 `claude plugin test`，看它印出什麼[7]：
+
+| 訊息包含 | 意思 |
+|---|---|
+| `no hooks module to load` | mod 可以載入，只是這個資料夾裡沒有 mod 可測 |
+| `hooks modules are turned off here` | 有設定擋住了，可能是你自己設的 `disableAllHooks`，或組織的政策 |
+| `hooks modules are turned off in this process: the rollout switch served off` | Anthropic 從遠端關掉了已安裝的 mod |
+
+mod 載入失敗或 hook 被跳過時，Claude Code 會寫一行點名你的 mod，在哪裡看得到要看 session 的種類[7]。用 `--plugin-dir` 啟動、會熱重載的互動 session，這行會以淡色字出現在對話記錄裡。從 marketplace 安裝的 mod 等其他互動 session，只寫進 debug log，要用 `claude --debug` 啟動才有。`claude -p` 搭配 `--plugin-dir` 時，寫到 stderr。
+
+執行已安裝 mod 的 worker 當掉三次、又查不出是哪個 mod 造成的，Claude Code 會卸載所有非內建的 mod，對話記錄裡會出現 `mods that run in the hooks worker are off for this session`。跑 `/reload-plugins` 就能重新載入[7]。
+
+## 七、內建的 mod
+
+Claude Code 自己的一些功能就是 mod。在 `/plugin` 的 Installed 分頁，它們列在 Built-in 底下。內建 mod 不能更新也不能解除安裝[1]。
+
+| `/plugin` 裡的名稱 | 做什麼 | 怎麼關掉 |
+|---|---|---|
+| `cc-plugin-agents-md` | 把 `AGENTS.md` 當成專案指示載入 | 在 `/plugin` 停用，或設定要載入哪些指示檔 |
+| `cc-plugin-diff` | 接手 `/diff`，畫出它的側欄 | 在 `/plugin` 停用；`/diff` 還在，改由 Claude Code 內建的版本回答 |
+| `cc-plugin-plugin-authoring` | 提供寫 mod 用的 `plugin-authoring` skill，只有 skill，沒有 mod 程式碼 | 在 `/plugin` 停用 |
+| `cc-plugin-telemetry` | 送出 Claude Code 和內建 mod 記下的分析資料 | 在 `/plugin` 停用，或關掉分析，例如設 `DISABLE_TELEMETRY` |
+| `cc-plugin-you-should-know` | 旁邊有個 agent 發現你可能漏看的事，就在輸入框上方顯示一則提醒 | 預設關閉；開了之後在 `/plugin` 停用 |
+
+表格依官方內建 mod 表翻譯整理，另一個 `cc-plugin-sec-default` 是保護組織設定的守門 mod，使用者關不掉[1]。停掉已安裝 mod 的設定和旗標，例如 `disableAllHooks`、`--bare`、`--safe-mode`，都停不了內建 mod[1]。
+
+You should know 要自己開，在 Claude Code 裡打 `/plugin enable cc-plugin-you-should-know@builtin`，關掉用 `/plugin disable cc-plugin-you-should-know@builtin`[9]。開著的時候，旁邊的 agent 會在 Claude 做比較長的任務時不時重讀對話。它是另一個送給同一個模型的請求，沒有任何工具，不能讀檔、跑指令，也改變不了 Claude 的行為[9]。這些檢查是背景請求，會算進你方案的用量上限或 API 費用[9]。
 
 ## 資料來源
 
@@ -282,6 +402,11 @@ export function register(on) {
 | [3] | React to events with a mod（`$`、`e`、`next`，觀察／改寫／接手） | <https://code.claude.com/docs/en/plugins/mods/events> |
 | [4] | Use the mods API（指令、`$.fs` 等存取管道、指令回覆 Claude 讀得到） | <https://code.claude.com/docs/en/plugins/mods/api> |
 | [5] | Create a mod（請 Claude 寫、`dev-mods`、`--plugin-dir`、`validate`） | <https://code.claude.com/docs/en/plugins/mods/create> |
-| [6] | Mods reference（`CLAUDE_CODE_PLUGIN_DIRS`） | <https://code.claude.com/docs/en/plugins/mods/reference> |
+| [6] | Mods reference（`CLAUDE_CODE_PLUGIN_DIRS`、事件分組、render site、時間與命名限制） | <https://code.claude.com/docs/en/plugins/mods/reference> |
+| [7] | Troubleshoot a mod（`claude plugin test` 訊息、錯誤訊息出現的位置、worker 當掉） | <https://code.claude.com/docs/en/plugins/mods/troubleshoot> |
+| [8] | Configure permissions（mod 的 `tool.check` 與權限規則的先後） | <https://code.claude.com/docs/en/permissions> |
+| [9] | Interactive mode（You should know 的開關與用量） | <https://code.claude.com/docs/en/interactive-mode> |
+| [10] | Plugins overview（marketplace 是什麼） | <https://code.claude.com/docs/en/plugins/overview> |
+| [11] | Manage mods for your organization（`calls:` 清單裡的 `tool.check`、信任提示、settings hook 照常運作） | <https://code.claude.com/docs/en/plugins/mods/admin> |
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[Hooks 與 Subagent 設定](hooks-subagents.md)

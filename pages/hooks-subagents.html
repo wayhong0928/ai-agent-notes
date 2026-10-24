@@ -26,7 +26,7 @@
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1792214180">AI Agent 怎麼運作</a></li>
 <li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1792214180">SKILL、Plugin、MCP 與 Subagent</a></li>
-<li><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792390087">Mods：在 Claude Code 裡加自己的功能</a></li>
+<li><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792390177">Mods：在 Claude Code 裡加自己的功能</a></li>
 <li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1792214180">Subagent 入門與實戰</a></li>
 <li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1792214180">MCP 入門與實戰</a></li>
 <li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
@@ -53,7 +53,7 @@
 <li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1792214180">Coding agent 沙箱：Claude Code 與 Codex</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791632038">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1792390177">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
@@ -63,7 +63,7 @@
 <h1>Hooks 與 Subagent 設定</h1>
 <p class='lede'>自動化檢查與子代理定義</p>
 <blockquote>
-<p>查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
+<p>查證日期：2026-10-19（Hooks 細節、Subagent 位置優先序）；其餘 2026-10-05。方案與功能變動快，請以官方最新說明為準。</p>
 </blockquote>
 <p><a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>那頁把 Hooks 跟 Subagent 放進一張總表，講了它們各自解決什麼問題。這頁把兩者的實際設定方式攤開來講：事件有哪些、設定寫在哪個檔案、frontmatter 每個欄位實際的語意，以及一個可以直接照抄的最小範例。</p>
 <h2 id="一hooks把一定要發生的事變成機制">一、Hooks：把「一定要發生」的事變成機制</h2>
@@ -99,6 +99,7 @@
 </tr>
 </tbody>
 </table>
+<p>不是每個事件都能用 <code>exit 2</code> 擋。官方逐事件列了一張對照表，能擋的有 16 個：<code>UserPromptSubmit</code>、<code>UserPromptExpansion</code>、<code>PreToolUse</code>、<code>PostToolBatch</code>、<code>SubagentStop</code>、<code>TaskCreated</code>、<code>TaskCompleted</code>、<code>Stop</code>、<code>TeammateIdle</code>、<code>ConfigChange</code>、<code>WorktreeCreate</code>、<code>WorktreeRemove</code>、<code>PreCompact</code>、<code>PreModelSwitch</code>、<code>Elicitation</code>、<code>ElicitationResult</code>。其他事件回 <code>exit 2</code> 不會擋下任何東西。<code>PostToolUse</code> 只會把 stderr 交給 Claude，因為工具已經跑完了；<code>PermissionRequest</code> 不認 <code>exit 2</code>，要拒絕得改用 JSON 的 <code>decision</code> 物件[1]。這些事件在終端機、IDE 擴充、桌面 app 和雲端 session 裡都一樣會觸發[1]。</p>
 <figure class="diagram">
 <svg class="dg-wide" viewBox="0 0 700 320" role="img" aria-labelledby="dghk-w">
 <title id="dghk-w">Hooks 事件在一個 session 裡的觸發時間點。SessionStart 之後，一個用到工具的回合依序是 UserPromptSubmit、PreToolUse、執行工具、PostToolUse、Stop；PreToolUse 回傳 exit 2 會擋下這次呼叫，呼叫成功後才觸發 PostToolUse，失敗時改觸發 PostToolUseFailure；session 結束時觸發 SessionEnd。</title>
@@ -172,6 +173,67 @@
 
 <h3 id="設定寫在哪裡長什麼樣">設定寫在哪裡、長什麼樣</h3>
 <p>Hooks 設定寫在 <code>settings.json</code>（使用者層 <code>~/.claude/settings.json</code> 或專案層 <code>.claude/settings.json</code>，見<a href="official-config.html">Claude Code 設定總覽</a>的五層優先序）。<code>hooks</code> 是一個物件，key 是事件名稱，值是一個陣列，每個項目含 <code>matcher</code>（篩選何時觸發，可以是工具名、regex，或像 <code>SessionStart</code> 這種事件專屬的來源字串）與 <code>hooks</code>（真正要跑的處理器陣列）[1]。Handler 類型有五種：<code>command</code>（跑 shell 指令）、<code>http</code>（打 HTTP request）、<code>mcp_tool</code>（呼叫 MCP 工具）、<code>prompt</code>（送給 Claude 模型判斷）、<code>agent</code>（開一個 subagent）[1]。</p>
+<p>除了這兩個設定檔，hook 一共可以放在七個地方[1]：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>生效範圍</th>
+<th>能不能分享</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/.claude/settings.json</code></td>
+<td>你所有的專案</td>
+<td>不行，只在你的電腦上</td>
+</tr>
+<tr>
+<td><code>.claude/settings.json</code></td>
+<td>單一專案</td>
+<td>可以，能 commit 進 repo</td>
+</tr>
+<tr>
+<td><code>.claude/settings.local.json</code></td>
+<td>單一專案</td>
+<td>不行，Claude Code 把設定存進這個檔時會設成 gitignore</td>
+</tr>
+<tr>
+<td>Managed policy settings</td>
+<td>整個組織</td>
+<td>可以，由管理員控制</td>
+</tr>
+<tr>
+<td>Plugin 的 <code>hooks/hooks.json</code></td>
+<td>plugin 啟用期間</td>
+<td>可以，跟 plugin 一起打包</td>
+</tr>
+<tr>
+<td>Skill frontmatter</td>
+<td>skill 被叫用後，到 session 結束</td>
+<td>可以，寫在 skill 檔裡</td>
+</tr>
+<tr>
+<td>Subagent frontmatter</td>
+<td>那個 subagent 執行期間</td>
+<td>可以，寫在 subagent 檔裡</td>
+</tr>
+</tbody>
+</table>
+<p>雲端 session 不讀你本機的 <code>~/.claude/settings.json</code>[1]。各層的 hook 是疊加的，user、project、local 各自加進自己的 hook，不會把 managed 的 hook 蓋掉；同一個 handler 在好幾個設定檔都寫了，也只跑一次[1]。</p>
+<p>在 Claude Code 裡輸入 <code>/hooks</code>，會開一個唯讀畫面列出目前所有 hook。想移除就得從設定檔刪掉那一筆，官方沒有「留著設定、只停用其中一個」的做法。直接改設定檔，通常會被檔案監看自動讀進去[1]。</p>
+<h3 id="matcherif-與各種-handler-的細節">matcher、<code>if</code> 與各種 handler 的細節</h3>
+<ul>
+<li><strong>matcher 怎麼判讀</strong>：<code>"*"</code>、<code>""</code> 或不寫，代表全部符合。只用到字母、數字、<code>_</code>、<code>-</code>、空白、<code>,</code>、<code>|</code> 的，當成精確字串比對，所以 <code>Edit|Write</code> 只比對這兩個工具。含有其他字元就當成 JavaScript 正規表示式，而且不錨定頭尾，例如 <code>^Notebook</code> 會比對所有名稱以 Notebook 開頭的工具[1]。matcher 區分大小寫[4]。</li>
+<li><strong>MCP 工具要加 <code>.*</code></strong>：MCP 工具的名稱格式是 <code>mcp__&lt;server&gt;__&lt;tool&gt;</code>。想比對某個 server 的全部工具，要寫 <code>mcp__memory__.*</code>；只寫 <code>mcp__memory</code> 的話，裡面全是精確比對用的字元，會被當成一個完整工具名，結果什麼都比對不到[1]。</li>
+<li><strong>不支援 matcher 的事件</strong>：<code>UserPromptSubmit</code>、<code>Stop</code>、<code>PostToolBatch</code> 這類事件每次都觸發，寫了 matcher 也會被默默忽略。<code>SessionStart</code> 的 matcher 比對的是 session 怎麼開始的，值有 <code>startup</code>、<code>resume</code>、<code>clear</code>、<code>compact</code>、<code>fork</code>[1]。</li>
+<li><strong><code>if</code> 欄位</strong>：寫在 handler 裡，內容是一條權限規則，像 <code>"Bash(git *)"</code> 或 <code>"Edit(*.ts)"</code>。只能寫一條，沒有 <code>&amp;&amp;</code>、<code>||</code> 或清單語法，條件不只一個就拆成好幾個 handler。官方說 <code>if</code> 只是盡力而為的過濾，真正要硬性允許或拒絕，應該交給權限系統[1]。</li>
+<li><strong>逾時預設</strong>：<code>command</code>、<code>http</code>、<code>mcp_tool</code> 是 600 秒，<code>prompt</code> 30 秒，<code>agent</code> 60 秒。掛在 <code>UserPromptSubmit</code> 上的前三種例外，預設只有 30 秒[1]。</li>
+<li><strong><code>agent</code> handler 還是實驗功能</strong>，行為和設定以後可能會改，正式流程官方建議用 <code>command</code>[4]。</li>
+<li><strong><code>prompt</code> handler</strong>：模型回 <code>"ok": true</code> 就放行。掛在 <code>Stop</code> 或 <code>SubagentStop</code> 上時，不放行的 <code>reason</code> 會回送給 Claude 讓它接著做；如果同時回 <code>"impossible": true</code>，表示這個條件永遠達不到，Claude Code 就讓它停下[4]。</li>
+<li><strong><code>http</code> handler</strong>：光靠狀態碼擋不了，非 2xx 或連不上都只算非阻擋性錯誤。要擋就回 2xx，body 裡放帶決定欄位的 JSON[1]。</li>
+<li><strong>背景執行</strong>：<code>command</code> hook 設 <code>"async": true</code> 會在背景跑，不擋住 Claude[1]。<code>/goal</code> 指令是內建捷徑，等於開一個只在這個 session 有效、用 prompt 判斷的 <code>Stop</code> hook[1]。</li>
+</ul>
 <h3 id="官方範例編輯完自動跑格式化">官方範例：編輯完自動跑格式化</h3>
 <p><code>code.claude.com/docs/en/hooks-guide</code> 的官方範例，<code>PostToolUse</code> 搭配 <code>Edit|Write</code> matcher，編輯完成後自動跑 Prettier：</p>
 <pre><code class="language-json">{
@@ -191,16 +253,119 @@
 }
 </code></pre>
 <p>這個範例可以直接照抄：把它貼進 <code>.claude/settings.json</code>，前提是專案已經裝了 <code>prettier</code> 且 <code>jq</code> 在 PATH 裡。想擋掉某個動作而不是事後處理，改用 <code>PreToolUse</code> 並讓腳本以 <code>exit 2</code> 結束——<strong><code>exit 2</code> 是唯一保證阻擋該動作的訊號</strong>，官方原文：exit 0 依 JSON 輸出決定，exit 1 或 3 以上時，stdout 若沒有有效 JSON，多數事件視為非阻擋性錯誤、動作照常進行（若有通過驗證的 JSON，則忽略 exit code、由 JSON 決定結果）<sup id="fnref:fresh1"><a class="footnote-ref" href="#fn:fresh1">1</a></sup>，只有 exit 2 是「阻擋性錯誤，無論 JSON 輸出寫什麼都會阻擋」[1]。腳本用 <code>"${CLAUDE_PROJECT_DIR}/.claude/hooks/xxx.sh"</code> 這種寫法引用，<code>CLAUDE_PROJECT_DIR</code> 是官方保證會設定好的環境變數，指向 session 啟動時的專案根目錄，不受目前工作目錄影響[1]。</p>
+<h3 id="官方範例擋下-rm-rf">官方範例：擋下 <code>rm -rf</code></h3>
+<p>Hooks reference 的範例，<code>matcher</code> 先限縮到 Bash 工具，<code>if</code> 再限縮到符合 <code>rm *</code> 的子指令，兩個條件都符合才會啟動腳本，像 <code>npm test</code> 這種指令就不會多開一個程序[1]：</p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;PreToolUse&quot;: [
+      {
+        &quot;matcher&quot;: &quot;Bash&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;if&quot;: &quot;Bash(rm *)&quot;,
+            &quot;command&quot;: &quot;${CLAUDE_PROJECT_DIR}/.claude/hooks/block-rm.sh&quot;,
+            &quot;args&quot;: []
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<pre><code class="language-bash">#!/bin/bash
+# .claude/hooks/block-rm.sh
+COMMAND=$(jq -r '.tool_input.command')
+
+if echo &quot;$COMMAND&quot; | grep -q 'rm -rf'; then
+  jq -n '{
+    hookSpecificOutput: {
+      hookEventName: &quot;PreToolUse&quot;,
+      permissionDecision: &quot;deny&quot;,
+      permissionDecisionReason: &quot;Destructive command blocked by hook&quot;
+    }
+  }'
+else
+  exit 0  # no decision; normal permission flow applies
+fi
+</code></pre>
+<p>腳本存成 <code>.claude/hooks/block-rm.sh</code> 之後要 <code>chmod +x</code>，而且 <code>jq</code> 要在 PATH 裡[1]。這個腳本走的是 JSON 那條路，<code>exit 0</code> 再印出 <code>permissionDecision: "deny"</code>，沒有用 <code>exit 2</code>。官方另外提供 Windows PowerShell 版，matcher 寫成 <code>Bash|PowerShell</code>，因為一條 <code>if</code> 規則只對得上一種工具，兩個工具各配一個 handler[1]。</p>
+<h3 id="輸入exit-code-與-json-輸出">輸入、exit code 與 JSON 輸出</h3>
+<ul>
+<li><strong>輸入</strong>：command hook 從 stdin 收到 JSON。每個事件都有 <code>session_id</code>、<code>cwd</code>、<code>hook_event_name</code>，<code>PreToolUse</code> 另外帶 <code>tool_name</code>、<code>tool_input</code>、<code>tool_use_id</code>[1]。</li>
+<li><strong><code>exit 2</code> 時</strong>：隨著阻擋送出的訊息是 stderr。這時就算印了 JSON，裡面的欄位也翻不了案，連 <code>permissionDecision: "allow"</code> 都放不過去[1]。</li>
+<li><strong><code>exit 0</code> 時</strong>：多數事件的 stdout 只寫進 debug log，對話紀錄裡看不到。例外是 <code>UserPromptSubmit</code>、<code>UserPromptExpansion</code>、<code>SessionStart</code>、<code>PostModelSwitch</code> 四個事件，它們的純文字 stdout 會變成 Claude 看得到的上下文。另外，hook 以 <code>exit 0</code> 結束時，Claude 完全看不到它的 stderr[1]。</li>
+<li><strong>兩種做法擇一</strong>：一個 hook 要嘛只用 exit code 表達，要嘛 <code>exit 0</code> 再印 JSON。選 JSON 的話，stdout 只能有那個 JSON 物件[1]。JSON 前面多印了別的字，或把 <code>permissionDecision</code> 放在最外層、沒放進 <code>hookSpecificOutput</code>，JSON 都不會生效[4]。</li>
+<li><strong>決定欄位依事件而不同</strong>：<code>UserPromptSubmit</code>、<code>PostToolUse</code>、<code>Stop</code>、<code>SubagentStop</code>、<code>ConfigChange</code>、<code>PreCompact</code> 等事件用最外層的 <code>decision: "block"</code> 加 <code>reason</code>；<code>PreToolUse</code> 用 <code>hookSpecificOutput.permissionDecision</code>；<code>PermissionRequest</code> 用 <code>decision.behavior</code>[1]。</li>
+<li><strong><code>continue: false</code></strong>：hook 跑完後 Claude 整個停止處理，而且優先於任何事件專屬的決定欄位[1]。</li>
+</ul>
+<h3 id="pretooluse-的決定與權限規則">PreToolUse 的決定與權限規則</h3>
+<ul>
+<li><code>permissionDecision</code> 有四個值。<code>deny</code> 擋下這次呼叫，<code>ask</code> 跳出確認，<code>defer</code> 讓工具之後再接著執行，<code>allow</code> 跳過權限確認。好幾個 <code>PreToolUse</code> hook 回的決定不一樣時，優先序是 <code>deny</code> &gt; <code>defer</code> &gt; <code>ask</code> &gt; <code>allow</code>。用 <code>exit 2</code> 擋下的效果跟 <code>deny</code> 一樣，Claude 會把 stderr 當成拒絕理由[1]。</li>
+<li><code>allow</code> 也有跳不過的確認，包括任何權限模式都不會自動核准的動作、從網路路徑讀檔，以及 <code>AskUserQuestion</code>、<code>ExitPlanMode</code>（這兩個要搭配 <code>updatedInput</code>）[1]。</li>
+<li><code>defer</code> 只在加了 <code>-p</code> 的非互動模式有效，互動 session 會記一筆警告後忽略。而且 Claude 那一回合只呼叫一個工具時才有效，同時呼叫好幾個就會被忽略[1]。</li>
+<li>hook 的決定繞不過權限規則。符合的 deny 規則照樣擋，符合的 ask 規則照樣跳確認，就算 hook 回的是 <code>allow</code> 也一樣[5]。反過來，hook 回 <code>deny</code> 在每一種權限模式都有效，<code>bypassPermissions</code> 或 <code>--dangerously-skip-permissions</code> 底下也擋得住。設定檔和 plugin 裡的 hook 只能收緊權限，不能放寬到權限規則允許的範圍之外[4]。</li>
+<li>有一個例外。你安裝的 <a href="mods.html">mod</a> 如果處理 <code>tool.check</code>，可以核准被你的 <code>PreToolUse</code> hook 擋下的呼叫，除非那個 hook 寫在 managed settings 裡[4]。</li>
+<li><strong>hook 壞掉時預設不擋</strong>。逾時的 <code>command</code>、<code>http</code>、<code>mcp_tool</code> hook 不會擋下工具呼叫；多數事件上，腳本路徑打錯或腳本當掉，動作也照樣執行。想讓它失敗時改成擋下，在 <code>command</code> 或 <code>http</code> hook 加 <code>"onFailure": "block"</code>（預設是 <code>"continue"</code>，需要 v2.1.295 以上）[1]。設好一個管控用的 hook 後，第一次執行要留意有沒有跳出錯誤提示，<code>settings.json</code> 裡的路徑打錯，代表這個 hook 從來沒跑過[1]。</li>
+<li><code>PreToolUse</code> 只在 Claude 呼叫工具時觸發。你在 prompt 裡用 <code>@</code> 引用的檔案，預設不經過任何工具就直接加進來，hook 管不到[1]。<code>PostToolUse</code> 觸發時工具已經跑完，沒辦法復原[4]。</li>
+</ul>
+<h3 id="幾個事件的特別行為">幾個事件的特別行為</h3>
+<ul>
+<li><strong><code>Stop</code></strong>：Claude 每次回應結束都會觸發，不只在任務完成時，使用者手動中斷則不觸發[4]。回 <code>decision: "block"</code> 可以不讓 Claude 停下，但連續擋了 8 次，下一次就會被強制放行；Claude 只要呼叫一次工具，計數就歸零，想調高上限可以設環境變數 <code>CLAUDE_CODE_STOP_HOOK_BLOCK_CAP</code>。輸入裡的 <code>stop_hook_active</code> 是 <code>true</code>，表示這一輪本來就是被 stop hook 擋回來繼續做的[1]。</li>
+<li><strong><code>SessionStart</code></strong>：每個 session 都會跑，所以要寫得快。只支援 <code>command</code> 和 <code>mcp_tool</code> 兩種 handler；只想加上下文的話，直接印純文字就好，不必組 JSON[1]。<a href="session-handoff.html">跨 session 接力</a>那頁就是用這個機制。</li>
+</ul>
 <h3 id="安全注意事項">安全注意事項</h3>
 <ul>
 <li><strong>Hooks 是使用者自訂的 shell 指令，以你的權限、在你的環境裡執行</strong>——不是模型自己決定要不要跑，這正是它比 CLAUDE.md 指示更「決定性」的原因：官方原文「hooks are deterministic and guarantee the action happens」，對照 CLAUDE.md 指示是「advisory」[3]。也因此，寫錯的 hook 有真實的系統風險，不是頂多讓模型多囉唆一句。</li>
 <li>Hooks 在 subagent 內同樣生效：subagent 呼叫工具時，<code>PreToolUse</code>／<code>PostToolUse</code> 跟主線對話一樣觸發已設定的 hooks[1]。</li>
 <li>Managed policy 可以設 <code>allowManagedHooksOnly</code>，限制只跑組織管理來源的 hooks，使用者／專案／本機／plugin 的 hooks 全部被擋，而且使用者端的關閉開關對 managed hooks 無效[1]。</li>
-<li>多個 hook 掛在同一個高頻事件（例如 <code>PreToolUse</code>）上會平行執行[1]；平行執行是否會拖慢回應速度，官方 Hooks reference 沒有說明，這裡不臆測。</li>
+<li>多個 hook 掛在同一個高頻事件（例如 <code>PreToolUse</code>）上會平行執行[1]；平行執行是否會拖慢回應速度，官方 Hooks reference 沒有說明，這裡不臆測。一個 hook 回了 <code>deny</code>，同時觸發的其他 hook 還是會跑完[4]。</li>
+<li>暫時關掉所有 hook，在設定檔寫 <code>"disableAllHooks": true</code>。寫在個人或專案設定檔時，會關掉 user、project、local 和 plugin 的 hook，也會停掉你自己裝的 mod，但 managed hooks 照跑[6]。最後生效的是依設定優先序算出來的值，所以專案 <code>.claude/settings.json</code> 裡的 <code>false</code> 會蓋過你 user 設定裡的 <code>true</code>；想不管專案怎麼設、只在這一次執行關掉，用 <code>--settings '{"disableAllHooks": true}'</code>[1]。</li>
+<li><strong>工作區信任</strong>：互動 session 在你接受這個資料夾的信任對話框之前，所有設定檔裡的 hook 都先不跑，連你自己的 <code>~/.claude/settings.json</code> 也一樣。<code>-p</code> 和 SDK session 不會跳這個對話框，直接把資料夾當成已信任，所以 repo 裡 commit 的 hook 會在你從沒信任過的資料夾裡執行。要對不是自己寫的 repo 跑 <code>claude -p</code>，先看過它的 <code>.claude/</code> 設定檔，或用 <code>--bare</code> 啟動，或用 <code>--settings '{"disableAllHooks": true}'</code> 關掉那次執行的 hook[1]。</li>
+<li>寫 hook 腳本時，不要盲目相信輸入資料，shell 變數一律加引號寫成 <code>"$VAR"</code>，並檢查檔案路徑裡有沒有 <code>..</code>，擋掉路徑穿越[1]。</li>
+<li>除錯時用 <code>claude --debug-file &lt;path&gt;</code> 把 log 寫到指定位置，或用 <code>claude --debug</code> 啟動，再去看 <code>~/.claude/debug/&lt;session-id&gt;.txt</code>[1]。</li>
 </ul>
 <h2 id="二subagent定義檔與欄位語意">二、Subagent：定義檔與欄位語意</h2>
 <h3 id="放在哪裡">放在哪裡</h3>
 <p><code>.claude/agents/*.md</code>（專案層，適合團隊共用，走版控）或 <code>~/.claude/agents/*.md</code>（使用者層，跨你所有專案生效）；Plugin 也可以在自己的 <code>agents/</code> 目錄裡帶 subagent 定義[2]。</p>
+<p>好幾個地方有同名的 subagent 時，Claude Code 用優先順序高的那一個[2]：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>生效範圍</th>
+<th>優先順序</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Managed settings</td>
+<td>整個組織</td>
+<td>1（最高）</td>
+</tr>
+<tr>
+<td><code>--agents</code> CLI 旗標</td>
+<td>這次 session</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>.claude/agents/</code></td>
+<td>目前專案</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>~/.claude/agents/</code></td>
+<td>你所有的專案</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Plugin 的 <code>agents/</code> 目錄</td>
+<td>plugin 啟用的地方</td>
+<td>5（最低）</td>
+</tr>
+</tbody>
+</table>
+<p>基於安全考量，plugin 帶來的 subagent 不支援 <code>hooks</code>、<code>mcpServers</code>、<code>permissionMode</code> 三個 frontmatter 欄位，從 plugin 載入時這三個欄位會被忽略[2]。</p>
 <p>這頁只列欄位語意；<code>background</code> 實際怎麼換工具集、<code>isolation: worktree</code> 怎麼真的擋下越界指令、<code>SendMessage</code> 怎麼續問一個已完成的 subagent、多代理成本三層倍數怎麼算，見專篇<a href="subagent.html">Subagent 入門與實戰</a>。</p>
 <h3 id="frontmatter-欄位">frontmatter 欄位</h3>
 <p>只有 <code>name</code> 與 <code>description</code> 是必填，其餘全部可省略，省略時各自有預設行為：</p>
@@ -392,6 +557,21 @@ the problem, show the current code, and provide an improved version.
 <td>Best practices for Claude Code（hooks 是 deterministic、CLAUDE.md 是 advisory）</td>
 <td><a href="https://code.claude.com/docs/en/best-practices">https://code.claude.com/docs/en/best-practices</a></td>
 </tr>
+<tr>
+<td>[4]</td>
+<td>Automate actions with hooks（prompt／agent hook、權限模式、疑難排解）</td>
+<td><a href="https://code.claude.com/docs/en/hooks-guide">https://code.claude.com/docs/en/hooks-guide</a></td>
+</tr>
+<tr>
+<td>[5]</td>
+<td>Configure permissions（hook 決定不能繞過權限規則）</td>
+<td><a href="https://code.claude.com/docs/en/permissions">https://code.claude.com/docs/en/permissions</a></td>
+</tr>
+<tr>
+<td>[6]</td>
+<td>All settings（<code>disableAllHooks</code> 各層的作用範圍）</td>
+<td><a href="https://code.claude.com/docs/en/settings-reference">https://code.claude.com/docs/en/settings-reference</a></td>
+</tr>
 </tbody>
 </table>
 <p>延伸：<a href="extensions.html">SKILL、Plugin、MCP 與 Subagent</a>｜<a href="official-config.html">Claude Code 設定總覽</a>｜<a href="harness.html">把 AI 代理的工作環境設計得可靠</a></p>
@@ -415,7 +595,12 @@ the problem, show the current code, and provide an improved version.
 <li><a href="#一hooks把一定要發生的事變成機制">一、Hooks：把「一定要發生」的事變成機制</a><ul>
 <li><a href="#事件清單">事件清單</a></li>
 <li><a href="#設定寫在哪裡長什麼樣">設定寫在哪裡、長什麼樣</a></li>
+<li><a href="#matcherif-與各種-handler-的細節">matcher、if 與各種 handler 的細節</a></li>
 <li><a href="#官方範例編輯完自動跑格式化">官方範例：編輯完自動跑格式化</a></li>
+<li><a href="#官方範例擋下-rm-rf">官方範例：擋下 rm -rf</a></li>
+<li><a href="#輸入exit-code-與-json-輸出">輸入、exit code 與 JSON 輸出</a></li>
+<li><a href="#pretooluse-的決定與權限規則">PreToolUse 的決定與權限規則</a></li>
+<li><a href="#幾個事件的特別行為">幾個事件的特別行為</a></li>
 <li><a href="#安全注意事項">安全注意事項</a></li>
 </ul>
 </li>

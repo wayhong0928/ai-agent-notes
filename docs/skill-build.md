@@ -1,6 +1,6 @@
 # 把教材做成 SKILL：安裝版與手動版
 
-> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-19（claude.ai 上傳的欄位限制、官方評測做法、validate 與 /skill-doctor）；其餘 2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 這一頁記錄一次真實發生的改造：把一批教材，從「使用者自己複製貼上的提示詞」，變成能用 `/plugin install` 裝進 Claude Code 的 SKILL。前半段是故事，包含一次規則被實務經驗糾正的真實教訓，都沒有美化；後半段是一套任何人都能照抄的步驟。
 
@@ -220,6 +220,8 @@ Claude Code 收到後，實際上做的事跟方法一是同一件事，它會�
 
 只想裝單一 SKILL、不想管 marketplace 時，另一條路是把單個 SKILL 資料夾包成 zip，在 Customize → Skills 手動上傳；這條路才需要注意 200 字元的 `description` 上限。
 
+這條路的 frontmatter 也比 Claude Code 窄。Claude Code 接受它文件裡列的所有欄位，但上傳到 claude.ai、走 Skills API，或用 anthropics/skills 的 `package_skill.py` 打包時，只能用 Agent Skills 規格裡的 `name`、`description`、`license`、`compatibility`、`metadata`、`allowed-tools`[1]。多放了規格不允許的欄位，打包或上傳會直接報錯失敗，不會略過那個欄位[1]。動態注入這類只有 Claude Code 才有的內文功能，在 claude.ai 對話和 API 裡也不會作用[1]。
+
 ---
 
 ## 十、沒有 Claude Code／Codex、也沒有付費方案的讀者：手動版怎麼用
@@ -310,6 +312,10 @@ SKILL.md 正文本身幾乎都要整份貼，流程邏輯、檢查點定義、�
 ### 6. 用真實評測驗證，不要只憑直覺
 
 寫完不代表有用。找一組測試案例，實際比較「有這個 SKILL」跟「沒有這個 SKILL」的輸出差在哪裡，用可量化的方式打分，不要只憑感覺覺得「應該有幫助」。如果評測結果顯示差異不大，誠實面對這個結果，去想 SKILL 真正的價值在哪裡（通常是一致性與覆蓋率，而不是能力升級），而不是硬凹一個好看的結論。
+
+官方文件也把「有沒有觸發」和「觸發之後有沒有用」分開看。看到 skill 被觸發，只代表 Claude 找到它，不代表它照你的意思做了；要分別量 Claude 在該用的 prompt 上有沒有叫用，以及叫用之後的輸出符不符合預期[1]。官方建議的做法是收集幾個實際會遇到的 prompt，每個都在新的 session 裡跑兩次，一次開著 skill、一次關掉，再比較結果；`skill-creator` plugin 可以在 Claude Code 裡自動跑這套比較[1]。
+
+評測之前，先確認 frontmatter 沒寫壞。YAML 解析失敗時 skill 照樣載入，但欄位全空，Claude 比對不到 `description`，看起來就像「沒觸發」[1]。對 skills 資料夾跑一次 `claude plugin validate`，例如 `claude plugin validate .claude/skills`（v2.1.233 起），就能找出解析失敗的 `SKILL.md`[1]。裝了一陣子之後，再用 `/skill-doctor`（v2.1.252 起）看每個 skill 每回合佔多少 context、多常被用到，決定哪些該關[1]。
 
 ### 7. 分層發布
 

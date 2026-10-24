@@ -26,7 +26,7 @@
 <div class="navsec"><h2>AI Agent 原理</h2><ul>
 <li><a href="../pages/agent-basics.html" data-title="AI Agent 怎麼運作" data-slug="agent-basics" data-updated="1792214180">AI Agent 怎麼運作</a></li>
 <li><a href="../pages/extensions.html" data-title="SKILL、Plugin、MCP 與 Subagent" data-slug="extensions" data-updated="1792214180">SKILL、Plugin、MCP 與 Subagent</a></li>
-<li class="active"><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792390087">Mods：在 Claude Code 裡加自己的功能</a></li>
+<li class="active"><a href="../pages/mods.html" data-title="Mods：在 Claude Code 裡加自己的功能" data-slug="mods" data-updated="1792390177">Mods：在 Claude Code 裡加自己的功能</a></li>
 <li><a href="../pages/subagent.html" data-title="Subagent 入門與實戰" data-slug="subagent" data-updated="1792214180">Subagent 入門與實戰</a></li>
 <li><a href="../pages/mcp.html" data-title="MCP 入門與實戰" data-slug="mcp" data-updated="1792214180">MCP 入門與實戰</a></li>
 <li><a href="../pages/tools-catalog.html" data-title="好用工具清單" data-slug="tools-catalog" data-updated="1791622926">好用工具清單</a></li>
@@ -53,13 +53,13 @@
 <li><a href="../pages/agent-sandbox.html" data-title="Coding agent 沙箱：Claude Code 與 Codex" data-slug="agent-sandbox" data-updated="1792214180">Coding agent 沙箱：Claude Code 與 Codex</a></li>
 </ul></div>
 <div class="navsec"><h2>關於</h2><ul>
-<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1791632038">關於這個網站</a></li>
+<li><a href="../pages/about.html" data-title="關於這個網站" data-slug="about" data-updated="1792390177">關於這個網站</a></li>
 </ul></div>
 </nav>
 <div class="wrap">
 <main id="main">
 <p class="crumb"><a href="../index.html">首頁</a> ／ AI Agent 原理</p>
-<article class="doc" data-updated="1792390087">
+<article class="doc" data-updated="1792390177">
 <h1>Mods：在 Claude Code 裡加自己的功能</h1>
 <p class='lede'>事件、hook 與 mods API 怎麼運作，以 TODO 側欄當實例</p>
 <blockquote>
@@ -244,6 +244,26 @@ export function register(on) {
 }
 </code></pre>
 <p>兩個 hook 共用同一個 <code>calls</code> 變數，一個負責記，一個負責顯示。官方說明同一個 mod 的 hook 共用檔案裡的變數，一個 hook 記下的值，另一個拿來顯示[1]。</p>
+<p>除了給你打的 <code>/指令</code>，mod 也能替 Claude 加一個工具讓它呼叫，兩種都在 <code>session.start</code> hook 裡註冊[4]。</p>
+<h3 id="事件有哪些">事件有哪些</h3>
+<p>官方依用途把事件分成幾組，包括 Claude 每次用工具的前後、你打的字和 Claude Code 自己送給 Claude 的文字（例如 system prompt）、指令與 <code>/config</code>、一輪回答的開始到結束、session 的開始結束和 compact、subagent、介面，還有用量紀錄[6]。寫在 <code>settings.json</code> 的那些 settings hook 事件，mod 也收得到，名稱是 <code>classic.&lt;Event&gt;</code>，例如 <code>classic.Stop</code>，<code>e</code> 就是 settings hook 從 stdin 拿到的那份 JSON[6]。</p>
+<p><code>session.start</code> 的時機要特別注意。它在每個 mod 載入後、第一個 prompt 之前跑一次，這個 mod 重新載入後會再跑一次，但 <code>/clear</code>、<code>/resume</code>、<code>/branch</code> 之後不會跑[6]。</p>
+<p>介面這邊，mod 除了能開自己的側欄（<code>Pane</code>）和輸入框上方的提示帶（<code>AbovePrompt</code>），也能接手 Claude Code 自己畫的很多位置，例如你的訊息、Claude 的回覆、工具呼叫那一列、spinner、Claude 問你問題的對話框[6]。權限提示是例外，mod 改不了它的樣式，也改不了它顯示的內容[1]。</p>
+<p>hook 有時間限制。一個事件上，hook 自己的執行時間最多 10 秒（<code>prompt.edit</code> 是 50 毫秒），等 <code>next</code> 和呼叫 mods API 的時間不算（<code>$.clock.sleep</code> 除外），超過就會被跳過[6]。指令、工具、subagent 類型和側欄的名稱只能用英文字母、數字、<code>_</code>、<code>-</code>，最長 64 個字元[6]。</p>
+<h3 id="好幾個-mod-和-settings-hook-誰先跑">好幾個 mod 和 settings hook 誰先跑</h3>
+<p>同一個事件上的 hook 串成一條鏈。每個 mod 的 <code>next</code> 呼叫下一個 mod 的 hook，最後一個 <code>next</code> 才到 Claude Code 本來的行為[3]。排最前面的 mod 最先看到事件、最後拿到結果，也決定後面的 mod 跑不跑；後面的 mod 擋不住前面的 mod 看到事件[3]。你自己裝的 mod 之間，一個 mod 會排在它 manifest 裡 <code>dependencies</code> 列出的 mod 前面；同一個檔案裡，hook 照 <code>register</code> 呼叫 <code>on</code> 的順序跑[3]。</p>
+<p><code>settings.json</code> 和 plugin <code>hooks/hooks.json</code> 裡的 <code>PreToolUse</code> hook，在最後一個 mod 呼叫 <code>next</code> 之後才跑，算是 Claude Code 本來行為的一部分[3]。所以 mod 自己接手 <code>tool.call</code>、沒有呼叫 <code>next</code> 的話，你的 <code>PreToolUse</code> hook 就不會跑；有呼叫 <code>next</code> 的 mod，則會在拿回的結果裡看到它們的決定[3]。組織 managed settings 裡的 <code>PreToolUse</code> hook 例外，它們在第一個 mod 之前就跑，擋下的呼叫任何 mod 都看不到[3]。</p>
+<h3 id="hook-出錯時">hook 出錯時</h3>
+<p>hook 丟出錯誤、超時或回傳的格式不對，session 不會因此壞掉[3]。還沒呼叫 <code>next</code> 就失敗的 hook 會被跳過，由下一個處理者接著跑；呼叫過 <code>next</code> 才失敗的，<code>next</code> 的結果照算，不會重跑一次[3]。所以一個負責擋指令的 hook 自己出錯時，指令會照常執行。要讓它出錯時改成擋下，在註冊時接一個 <code>.catch</code>，官方範例如下[3]：</p>
+<pre><code class="language-javascript">// on returns a registration, and .catch attaches a handler to that one hook
+on('tool.call', { tool: 'Bash' }, guard).catch(async ($, e, next) =&gt; {
+  // guard had already called next, so return what came back
+  if (next.called) return next(e)
+  // next.error.kind says why the handler was asked, such as 'throw' or 'timeout'
+  return { deny: 'The command guard failed, so this command was not run: ' + next.error.kind }
+})
+</code></pre>
+<p><code>guard</code> 是你自己的 hook 函式。<code>.catch</code> 裡的處理者也有自己的時間限制，它本身再出錯，Claude Code 就當作沒有處理者，直接跳過這個 hook[3]。</p>
 <h2 id="三實例做一個-todo-側欄">三、實例：做一個 TODO 側欄</h2>
 <p>我同時在跑好幾個專案，每個專案各有一份 <code>TODO.md</code>。原本要看待辦得請 Claude 讀檔，每次都要等它想一輪，讀進來的內容也會佔掉對話的 context。所以我請 Claude 寫了一個 mod，做到三件事：開 session 時側欄自動列出未完成的條目，打 <code>/todo</code> 立刻回一份清單，Claude 改了 TODO 檔，側欄跟著更新。</p>
 <figure class="diagram">
@@ -355,11 +375,173 @@ export function register(on) {
 <li>想在其他 session 用，把資料夾搬出 <code>dev-mods</code>（見上一節第 1 點）。</li>
 </ol>
 <p>想自己動手寫，官方有一份完整的教學，從三個檔案開始做一個計數器加 <code>/tally</code> 指令[5]。不管誰寫的，改完都可以跑一次 <code>claude plugin validate &lt;資料夾&gt;</code>。它會檢查 manifest，並用跟 Claude Code 載入時相同的靜態分析讀你的程式碼[5]。</p>
-<p>版本需求是終端機 v2.1.287 以上、Desktop app v2.1.286 以上，mod 預設開啟[1]。<code>claude -p</code> 會跑 mod 的 hook，但畫不出介面；Desktop app 裡的 WSL session 不支援 plugin，mod 完全不會跑[1]。</p>
+<p>自己寫的時候有幾件事先知道[5]：</p>
+<ul>
+<li><strong>不用建置</strong>：不需要 Node.js、bundler 或 build 步驟，Claude Code 直接載入 <code>.js</code> 和 <code>.ts</code> 檔。讓一個 plugin 變成 mod 的，是 <code>hooks/hooks.json</code> 裡指向程式碼的 <code>modules</code> 欄位。</li>
+<li><strong>寫法要讓靜態分析讀得懂</strong>：每個 <code>on</code> 呼叫的事件名稱要寫成字串常值，例如 <code>'tool.call'</code>；每個檔案都寫成 ES module，用 <code>import</code>，不用 <code>require</code>。</li>
+<li><strong>改了就生效</strong>：用 <code>--plugin-dir</code> 載入的資料夾，Claude Code 會盯著，裡面的檔案一改就熱重載。在互動 session 裡，它也會把你這個版本的事件與 API 型別寫進 mod 的 <code>.claude-plugin/types/</code>。官方說事件和方法會隨版本變，型別檔和任何文件頁對不上時以型別檔為準。</li>
+<li><strong>Claude 改 mod 會問你</strong>：<code>--plugin-dir</code> 載入的資料夾屬於受保護路徑，在 <code>default</code> 和 <code>acceptEdits</code> 模式下，Claude 每次改 mod 都要你核准。</li>
+<li><strong>可以寫自動測試</strong>：在 shell 跑 <code>claude plugin test</code>，不用開 session、不用登入，也不用網路。</li>
+<li><strong>分享前要升版號</strong>：mod 就是 plugin，版本寫在 manifest。已安裝的 plugin 依版本快取，改了程式碼要升版號再重新安裝，裝好的那份才會更新。名稱看起來像 Anthropic 官方的（例如 <code>claude-</code> 開頭），<code>claude plugin validate</code> 會判定不通過。</li>
+</ul>
+<p>版本需求是終端機 v2.1.287 以上、Desktop app v2.1.286 以上，mod 預設開啟[1]。早期試用時設過 <code>CLAUDE_CODE_ENABLE_FUNCTION_HOOKS</code> 的話，把它拿掉，v2.1.287 起會忽略這個變數，設成 <code>0</code> 也關不掉 mod[1]。</p>
+<p>mod 的 hook 不管模型走哪個供應商都會跑，包括 Amazon Bedrock、Google Cloud 的 Agent Platform、Microsoft Foundry；畫介面的範圍比較窄[1]。各環境的差別如下[1]：</p>
+<table>
+<thead>
+<tr>
+<th>在哪裡跑 Claude Code</th>
+<th>hook 會不會跑</th>
+<th>畫的東西看不看得到</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>終端機裡的 <code>claude</code>（含編輯器內建終端機、JetBrains plugin）</td>
+<td>會</td>
+<td>看得到</td>
+</tr>
+<tr>
+<td>Desktop app 的 Code 分頁（WSL session 除外）</td>
+<td>會</td>
+<td>看得到，只限終端機的元素除外</td>
+</tr>
+<tr>
+<td>Desktop app 的 WSL session</td>
+<td>不會，WSL session 不支援 plugin</td>
+<td>看不到</td>
+</tr>
+<tr>
+<td>VS Code 擴充的對話面板</td>
+<td>會</td>
+<td>擴充版本 2.1.299 以上、而且 session 有抓 feature flag 才看得到</td>
+</tr>
+<tr>
+<td><code>claude -p</code> 和 Agent SDK</td>
+<td>會</td>
+<td>看不到</td>
+</tr>
+<tr>
+<td>從 claude.ai 或手機 app 用 Remote Control</td>
+<td>會，在你電腦上的 session 裡跑</td>
+<td>只在你電腦的終端機看得到</td>
+</tr>
+<tr>
+<td>雲端 session</td>
+<td>plugin 有帶進雲端 session 才會跑</td>
+<td>看不到</td>
+</tr>
+</tbody>
+</table>
+<p>會畫介面的 mod 可以先檢查自己跑在哪個 app，在畫不出來的地方改成在對話記錄裡印一行，或改用指令的文字回覆[1]。</p>
 <h2 id="五裝別人的-mod-之前">五、裝別人的 mod 之前</h2>
 <p>官方警告寫著「A mod is code that runs with your permissions.」[1]。mod 載入之後，能用你的身分讀寫檔案、讀到環境變數和設定檔裡的 API key、看到你送出的每個 prompt、在權限提示出現前替你核准工具呼叫，也能用你的方案呼叫模型。而且「Mods aren't sandboxed.」，開了 <code>/sandbox</code> 也只隔離 Claude 跑的 Bash 指令，mod 自己啟動的程式不在沙箱裡[1]。</p>
 <p>裝之前先把 repo 抓下來，對資料夾跑 <code>claude plugin validate</code>，看輸出裡 <code>hooks:</code> 和 <code>calls:</code> 兩行，就知道它接了哪些事件、會呼叫哪些 API，不用真的執行[1]。前面說過所有對外動作都得經過 mods API，這份清單才列得完整。</p>
+<p>清單裡出現 <code>tool.check</code> 要特別留意，意思是這個 mod 能在權限提示出現前核准或拒絕工具呼叫[11]。它在權限規則和 <code>PreToolUse</code> hook 都決定之後才回答，而且答案可以推翻它們[8]：</p>
+<ul>
+<li><strong>ask 規則</strong>：本來要問你的呼叫，mod 可以直接核准。</li>
+<li><strong><code>PreToolUse</code> hook 擋下的呼叫</strong>：mod 可以改成核准，只有 managed settings 裡的 hook 擋下的不行。</li>
+<li><strong>auto mode 的分類器</strong>：mod 核准的呼叫，不經過分類器檢查就執行。</li>
+<li><strong>deny 規則</strong>：機器上有 managed settings，或用 Team、Enterprise 方案登入時，deny 規則預設壓過 mod，組織也可以改這個設定。其他情況下，mod 可以核准 deny 規則擋下的呼叫。</li>
+</ul>
+<p>也就是說，個人帳號又沒有 managed settings 的話，<code>settings.json</code> 裡的 deny 規則擋不住一個裝了的 mod。限制有兩個。plan mode 裡，mod 不能核准檔案編輯或其他不是唯讀的呼叫，只能擋下[8]。<code>AskUserQuestion</code> 這類需要你回應的工具，mod 核准了照樣會問你（v2.1.292 起）[8]。自己寫的時候，官方建議固定的指令或路徑用權限規則就好，例如 <code>Bash(npm test)</code>；要看當下狀態才能決定的，例如目前在哪個 Git branch，才寫 <code>tool.check</code>[3]。</p>
+<p>另外，在還沒信任的資料夾開互動 session，你回答工作區信任提示之前，任何 mod 都不會載入[11]。<code>settings.json</code> 裡的 settings hook 也照常運作，跟 mod 並存[11]。</p>
 <p>想先試現成的，官方在 <code>claude-code-playground</code> repo 放了幾個範例 mod（例如在輸入框上方畫 context 用量預報的 token-weather），<code>/diff</code> 這類內建功能本身也是 mod，原始碼公開[1]。其他值得看的工具見<a href="tools-catalog.html">好用工具清單</a>。</p>
+<h2 id="六安裝停用與排查">六、安裝、停用與排查</h2>
+<h3 id="安裝與更新">安裝與更新</h3>
+<p>mod 跟一般 plugin 一樣從 marketplace 安裝，寫法是 plugin 名稱、<code>@</code>、marketplace 名稱。在 session 裡打 <code>/plugin install token-chart@your-org</code>，或在 shell 跑 <code>claude plugin install token-chart@your-org</code>[1]。session 開著的時候從 shell 裝或更新，要在那個 session 裡跑 <code>/reload-plugins</code> 才會載入，否則等下次啟動 Claude Code[1]。marketplace 是一個含 <code>.claude-plugin/marketplace.json</code> 的 repo 或資料夾，列出 plugin 和各自去哪裡抓，官方說它是一份目錄，不是託管的商店[10]。</p>
+<p>官方範例 mod 除了 token-weather，還有 <code>blast-radius</code>（攔下 <code>rm -rf</code>、force push 這類危險指令，先顯示會改到什麼，再給你按鈕決定繼續或取消）和 <code>replay-theater</code>（加一個 <code>/replay</code> 指令，逐步重播 Claude 上一輪做的檔案修改）[1]。這些範例照原樣分享，不提供支援[1]。想試用，把 repo clone 下來，用 <code>--plugin-dir</code> 載入那個 mod 的資料夾，只在這一個 session 有效[1]。想留著用，把 clone 下來的 <code>claude-code/mods</code> 資料夾加成 marketplace，再從 <code>claude-code-playground-mods</code> 安裝；這個 marketplace 指向你的 clone，搬走或刪掉 clone，mod 就不會再載入[1]。</p>
+<h3 id="停用">停用</h3>
+<p>依要停多少、停多久，有三種做法[1]：</p>
+<table>
+<thead>
+<tr>
+<th>範圍</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>單一個 mod</td>
+<td>在 <code>/plugin</code> 的 Installed 分頁停用或解除安裝它的 plugin</td>
+</tr>
+<tr>
+<td>所有已安裝的 mod，只限這次 session</td>
+<td>用 <code>--safe-mode</code> 啟動 Claude Code，你的其他自訂設定也會一起停用</td>
+</tr>
+<tr>
+<td>你裝的所有 mod，每個 session</td>
+<td>在 <code>~/.claude/settings.json</code> 設 <code>"disableAllHooks": true</code>，你的 settings hook 和自訂 status line 也會一起停；組織管理的部分照常執行</td>
+</tr>
+</tbody>
+</table>
+<p><code>disableAllHooks</code> 只停 mod，plugin 的其他部分還在。plugin 仍是已安裝狀態，它的 skill、指令、agent 和 MCP server 照常載入[1]。要恢復，把同一個改動還原就好[1]。</p>
+<h3 id="看載入了哪些沒作用時怎麼查">看載入了哪些、沒作用時怎麼查</h3>
+<p>在終端機 session 打 <code>/plugin</code>，分頁下方有一行淡色字列出數量和名稱，例如 <code>1 mod active · first-mod</code>[1]。這一行不列內建 mod[1]。</p>
+<p>想確認你的環境到底能不能載入 mod，不用裝任何東西，在一個沒有 mod 的資料夾從 shell 跑 <code>claude plugin test</code>，看它印出什麼[7]：</p>
+<table>
+<thead>
+<tr>
+<th>訊息包含</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>no hooks module to load</code></td>
+<td>mod 可以載入，只是這個資料夾裡沒有 mod 可測</td>
+</tr>
+<tr>
+<td><code>hooks modules are turned off here</code></td>
+<td>有設定擋住了，可能是你自己設的 <code>disableAllHooks</code>，或組織的政策</td>
+</tr>
+<tr>
+<td><code>hooks modules are turned off in this process: the rollout switch served off</code></td>
+<td>Anthropic 從遠端關掉了已安裝的 mod</td>
+</tr>
+</tbody>
+</table>
+<p>mod 載入失敗或 hook 被跳過時，Claude Code 會寫一行點名你的 mod，在哪裡看得到要看 session 的種類[7]。用 <code>--plugin-dir</code> 啟動、會熱重載的互動 session，這行會以淡色字出現在對話記錄裡。從 marketplace 安裝的 mod 等其他互動 session，只寫進 debug log，要用 <code>claude --debug</code> 啟動才有。<code>claude -p</code> 搭配 <code>--plugin-dir</code> 時，寫到 stderr。</p>
+<p>執行已安裝 mod 的 worker 當掉三次、又查不出是哪個 mod 造成的，Claude Code 會卸載所有非內建的 mod，對話記錄裡會出現 <code>mods that run in the hooks worker are off for this session</code>。跑 <code>/reload-plugins</code> 就能重新載入[7]。</p>
+<h2 id="七內建的-mod">七、內建的 mod</h2>
+<p>Claude Code 自己的一些功能就是 mod。在 <code>/plugin</code> 的 Installed 分頁，它們列在 Built-in 底下。內建 mod 不能更新也不能解除安裝[1]。</p>
+<table>
+<thead>
+<tr>
+<th><code>/plugin</code> 裡的名稱</th>
+<th>做什麼</th>
+<th>怎麼關掉</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cc-plugin-agents-md</code></td>
+<td>把 <code>AGENTS.md</code> 當成專案指示載入</td>
+<td>在 <code>/plugin</code> 停用，或設定要載入哪些指示檔</td>
+</tr>
+<tr>
+<td><code>cc-plugin-diff</code></td>
+<td>接手 <code>/diff</code>，畫出它的側欄</td>
+<td>在 <code>/plugin</code> 停用；<code>/diff</code> 還在，改由 Claude Code 內建的版本回答</td>
+</tr>
+<tr>
+<td><code>cc-plugin-plugin-authoring</code></td>
+<td>提供寫 mod 用的 <code>plugin-authoring</code> skill，只有 skill，沒有 mod 程式碼</td>
+<td>在 <code>/plugin</code> 停用</td>
+</tr>
+<tr>
+<td><code>cc-plugin-telemetry</code></td>
+<td>送出 Claude Code 和內建 mod 記下的分析資料</td>
+<td>在 <code>/plugin</code> 停用，或關掉分析，例如設 <code>DISABLE_TELEMETRY</code></td>
+</tr>
+<tr>
+<td><code>cc-plugin-you-should-know</code></td>
+<td>旁邊有個 agent 發現你可能漏看的事，就在輸入框上方顯示一則提醒</td>
+<td>預設關閉；開了之後在 <code>/plugin</code> 停用</td>
+</tr>
+</tbody>
+</table>
+<p>表格依官方內建 mod 表翻譯整理，另一個 <code>cc-plugin-sec-default</code> 是保護組織設定的守門 mod，使用者關不掉[1]。停掉已安裝 mod 的設定和旗標，例如 <code>disableAllHooks</code>、<code>--bare</code>、<code>--safe-mode</code>，都停不了內建 mod[1]。</p>
+<p>You should know 要自己開，在 Claude Code 裡打 <code>/plugin enable cc-plugin-you-should-know@builtin</code>，關掉用 <code>/plugin disable cc-plugin-you-should-know@builtin</code>[9]。開著的時候，旁邊的 agent 會在 Claude 做比較長的任務時不時重讀對話。它是另一個送給同一個模型的請求，沒有任何工具，不能讀檔、跑指令，也改變不了 Claude 的行為[9]。這些檢查是背景請求，會算進你方案的用量上限或 API 費用[9]。</p>
 <h2 id="資料來源">資料來源</h2>
 <table>
 <thead>
@@ -397,8 +579,33 @@ export function register(on) {
 </tr>
 <tr>
 <td>[6]</td>
-<td>Mods reference（<code>CLAUDE_CODE_PLUGIN_DIRS</code>）</td>
+<td>Mods reference（<code>CLAUDE_CODE_PLUGIN_DIRS</code>、事件分組、render site、時間與命名限制）</td>
 <td><a href="https://code.claude.com/docs/en/plugins/mods/reference">https://code.claude.com/docs/en/plugins/mods/reference</a></td>
+</tr>
+<tr>
+<td>[7]</td>
+<td>Troubleshoot a mod（<code>claude plugin test</code> 訊息、錯誤訊息出現的位置、worker 當掉）</td>
+<td><a href="https://code.claude.com/docs/en/plugins/mods/troubleshoot">https://code.claude.com/docs/en/plugins/mods/troubleshoot</a></td>
+</tr>
+<tr>
+<td>[8]</td>
+<td>Configure permissions（mod 的 <code>tool.check</code> 與權限規則的先後）</td>
+<td><a href="https://code.claude.com/docs/en/permissions">https://code.claude.com/docs/en/permissions</a></td>
+</tr>
+<tr>
+<td>[9]</td>
+<td>Interactive mode（You should know 的開關與用量）</td>
+<td><a href="https://code.claude.com/docs/en/interactive-mode">https://code.claude.com/docs/en/interactive-mode</a></td>
+</tr>
+<tr>
+<td>[10]</td>
+<td>Plugins overview（marketplace 是什麼）</td>
+<td><a href="https://code.claude.com/docs/en/plugins/overview">https://code.claude.com/docs/en/plugins/overview</a></td>
+</tr>
+<tr>
+<td>[11]</td>
+<td>Manage mods for your organization（<code>calls:</code> 清單裡的 <code>tool.check</code>、信任提示、settings hook 照常運作）</td>
+<td><a href="https://code.claude.com/docs/en/plugins/mods/admin">https://code.claude.com/docs/en/plugins/mods/admin</a></td>
 </tr>
 </tbody>
 </table>
@@ -413,10 +620,22 @@ export function register(on) {
 <aside class="toc" id="toc"><h2>本頁目錄</h2><div class="toc-body">
 <ul>
 <li><a href="#一mod-跟-settings-hookskillmcp-差在哪">一、mod 跟 settings hook、skill、MCP 差在哪</a></li>
-<li><a href="#二運作原理事件hook三種處理方式">二、運作原理：事件、hook、三種處理方式</a></li>
+<li><a href="#二運作原理事件hook三種處理方式">二、運作原理：事件、hook、三種處理方式</a><ul>
+<li><a href="#事件有哪些">事件有哪些</a></li>
+<li><a href="#好幾個-mod-和-settings-hook-誰先跑">好幾個 mod 和 settings hook 誰先跑</a></li>
+<li><a href="#hook-出錯時">hook 出錯時</a></li>
+</ul>
+</li>
 <li><a href="#三實例做一個-todo-側欄">三、實例：做一個 TODO 側欄</a></li>
 <li><a href="#四自己做一個">四、自己做一個</a></li>
 <li><a href="#五裝別人的-mod-之前">五、裝別人的 mod 之前</a></li>
+<li><a href="#六安裝停用與排查">六、安裝、停用與排查</a><ul>
+<li><a href="#安裝與更新">安裝與更新</a></li>
+<li><a href="#停用">停用</a></li>
+<li><a href="#看載入了哪些沒作用時怎麼查">看載入了哪些、沒作用時怎麼查</a></li>
+</ul>
+</li>
+<li><a href="#七內建的-mod">七、內建的 mod</a></li>
 <li><a href="#資料來源">資料來源</a></li>
 </ul>
 </div>

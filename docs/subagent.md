@@ -1,6 +1,6 @@
 # Subagent 入門與實戰
 
-> 查證日期：2026-10-05。方案與功能變動快，請以官方最新說明為準。
+> 查證日期：2026-10-19（啟動時載入的內容、叫用方式、fork、巢狀深度）；其餘 2026-10-05。方案與功能變動快，請以官方最新說明為準。
 
 [SKILL、Plugin、MCP 與 Subagent](extensions.md)那頁已經把 Subagent 放進六種擴充機制的總表比較過；[Hooks 與 Subagent 設定](hooks-subagents.md)整理過 frontmatter 每個欄位的語意與內建 agent 清單。這頁只挖 Subagent 這一項，把上面兩頁沒空間深入的部分補齊：官方文件實際定義的 18 個欄位（含前兩頁沒收錄的 `fable`／`background`／`omitClaudeMd`／`effort`／`initialPrompt`／`experimental` 六項）、`background` 欄位怎麼偷偷換掉工具清單、`isolation: worktree` 實際怎麼擋住越界的指令、`SendMessage` 怎麼續問一個已經跑完的 subagent，以及多代理協作真正的成本是多少倍。
 
@@ -64,7 +64,39 @@
 - **專門化行為**：針對特定領域寫聚焦的 system prompt
 - **控制成本**：把任務交給 Haiku 這類更快、更便宜的模型
 
-反過來，什麼時候不該用 subagent，[Hooks 與 Subagent 設定](hooks-subagents.md)第三節已經整理過官方的說法（需要頻繁來回微調、多階段共用大量 context 的任務不適合），這裡不重複。
+反過來，什麼時候不該用 subagent，[Hooks 與 Subagent 設定](hooks-subagents.md)第三節已經整理過官方的說法（需要頻繁來回微調、多階段共用大量 context 的任務不適合），這裡不重複。如果只是想問對話裡已經出現過的東西，官方建議用 `/btw`，它看得到完整的對話內容，但不能用工具，答案也不會留進對話紀錄[1]。
+
+### subagent 一開始帶著什麼
+
+不是 fork 的 subagent，每次都從一個全新、隔離的 context window 開始。它看不到你的對話紀錄、你已經叫用過的 skill，也看不到 Claude 讀過的檔案[1]。它手上只有這幾樣東西[1]：
+
+- **system prompt**：agent 定義檔自己的 prompt，加上 Claude Code 附上的環境資訊，不是 Claude Code 主線那份 system prompt。
+- **任務訊息**：Claude 派工時寫的那段委派說明。
+- **git status**：subagent 啟動當下從 repo 讀到的快照。
+- **CLAUDE.md**：`Explore` 和 `Plan` 為了跑得快又省，不載入 CLAUDE.md，也不帶 git status；其他內建和自訂 subagent 都會載入，除非自訂 agent 設了 `omitClaudeMd`。
+
+主線對話的幾樣狀態不會跟過去。你設的 output style 管不到 subagent 的回應（fork 例外），主線的 auto memory 也不會載入，要讓 subagent 有自己的記憶得用 `memory` 欄位。subagent 的 context window 大小看它自己用的模型，派給 window 比較小的模型，它拿到的就是比較小的 window[1]。
+
+主線讀 subagent 的結果時手上仍有完整的 CLAUDE.md，所以多數規則不必送到 subagent 那邊。真的非送不可的規則（例如「不要碰 `vendor/` 目錄」），要在請 Claude 派工時自己在 prompt 裡再講一次[1]。
+
+!!! note "subagent 的回報會先被掃描"
+    Claude 讀 subagent 的最終報告之前，Claude Code 會先掃描一遍。掃描不刪字也不改寫，只做兩種你可能會看到的改動。報告裡有模仿 Claude Code 自己輸出的文字，例如 `<system-reminder>` 標籤，或以 `Human:`、`Assistant:` 開頭的行，掃描會插入一個反斜線；報告模仿這類標籤，或提到 `bypassPermissions`、`--dangerously-skip-permissions` 這類權限設定時，會在最前面加一行以 `[harness: subagent output matched instruction-shaped pattern(s):` 開頭的標記。官方也說這個掃描不能取代「限制 subagent 能碰到什麼」[1]。
+
+### Claude 怎麼決定派誰、你怎麼指名
+
+Claude 會根據你的需求、各個 subagent 的 `description` 和當下的 context 自動決定要不要委派。想讓 Claude 更主動派給某個 subagent，可以在它的 `description` 寫上「use proactively」這類字眼[1]。這些 description 都會佔 context，內建以外的 subagent description 加起來超過 15,000 tokens，Claude Code 啟動時會跳警告並列出總數[1]。
+
+想自己指定，官方給了三種做法[1]：
+
+| 做法 | 效果 |
+|---|---|
+| 在 prompt 裡直接講 subagent 的名字 | Claude 還是會自己判斷要不要派 |
+| 輸入 `@` 從清單選 subagent | 保證這個任務由它跑 |
+| 用 `--agent` 旗標或 `agent` 設定 | 整個 session 都以這個 subagent 的身分執行 |
+
+用 `@` 指名時，你的整段訊息還是先交給 Claude，由 Claude 依你的要求寫出 subagent 的任務 prompt。`@` 決定的是派給誰，不是它收到什麼 prompt[1]。
+
+官方對設計自訂 subagent 的建議有四條。每個 subagent 只專精一件事；description 要寫到能明確對上某一個 subagent，全部加起來還要守住 15,000 tokens 的預算；只給必要的工具；專案層 subagent 放進版本控制跟團隊共用[1]。Best practices 另外建議兩種用法。研究型任務直接說「use subagents to investigate X」，讓探索留在另一個 context，主對話保持乾淨，留給實作用；宣告任務完成前，請一個 subagent 在全新的 context 裡審查 diff，因為它只看得到 diff 和你給的標準，看不到產生這些改動的推理過程，比較能就結果本身評判。想對照計畫檢查，就自己寫審查 prompt，講清楚要檢查哪份成果、對照哪份計畫、什麼算一個缺失[8]。
 
 !!! note "Subagent 只在一個 session 內生效"
     官方原文提醒範圍邊界：「Subagents work within a single session. To run many independent sessions in parallel and monitor them from one place, see background agents. For separate sessions that pass messages to each other, see cross-session messaging. For a coordinated team of sessions Claude spawns and supervises, see agent teams.」[1] 這頁只談「同一個 session 裡的 subagent」；agent view（`claude agents`）、agent teams、跨 session 傳訊是另外三個機制，本頁第 8 節簡單帶過，不是本頁重點。
@@ -82,9 +114,11 @@ Claude Code 內建幾種不用自己寫定義檔的 agent[1]：
 | `statusline-setup` | Sonnet | 設定 status line |
 | `claude-code-guide` | Haiku | 回答 Claude Code 功能問題 |
 
+Claude 叫用 `Explore` 時會指定搜尋的徹底程度，`quick` 用於鎖定目標的查找，`medium` 是平衡型探索，`very thorough` 是全面分析。想讓探索跑在便宜一點的模型上，自己在使用者層或專案層定義一個名為 `Explore` 的 subagent，設 `model: haiku`，它會蓋掉內建的那個，並沿用自己的 `model` 欄位[1]。`Explore` 和 `Plan` 都是一次性的，不回傳 agent ID，Claude 沒辦法續問它們；需要接著做下去的工作，改用 `general-purpose` 或自訂 subagent[1]。
+
 內建 subagent 在互動 session 裡預設就註冊好，要限制它們[1]：
 
-- 擋掉特定內建類型：把它加進 `permissions.deny`
+- 擋掉特定內建類型：把它加進 `permissions.deny`，格式是 `Agent(subagent-name)`，`subagent-name` 對應 subagent 的 `name` 欄位；這條規則對主對話和 subagent 都有效。自訂 subagent 也能這樣擋
 - 完全不讓 Claude 委派給任何 subagent：直接擋 `Agent` 這個工具本身
 - 只想拿掉 `Explore`／`Plan`：設環境變數 `CLAUDE_CODE_DISABLE_EXPLORE_PLAN_AGENTS=1`（v2.1.198 起），Claude 會改成自己直接讀檔探索
 - Agent SDK／非互動模式想拿掉全部內建類型、只用自己的：設 `CLAUDE_AGENT_SDK_DISABLE_BUILTIN_AGENTS=1`
@@ -114,13 +148,21 @@ Claude Code 內建幾種不用自己寫定義檔的 agent[1]：
 | `initialPrompt` | 否 | 這個 agent 被當成主線 session agent 執行時，自動當作第一則使用者訊息送出，會被前置在使用者實際輸入的提示之前；會經過 command／skill 處理 |
 | `experimental` | 否 | 實驗性選項的 map；目前唯一有效的鍵是 `cacheTtl`（`5m` 或 `1h`），決定這個 subagent 請求的 prompt cache 存活時間，只從 subagent 定義檔讀取這個欄位 |
 
-`--agents` CLI 旗標接受 JSON，每個 agent 除了 `prompt`（對應 Markdown 檔的內文部分，等同 system prompt），只支援上表其中 15 個欄位：`description`、`tools`、`disallowedTools`、`model`、`permissionMode`、`mcpServers`、`hooks`、`maxTurns`、`skills`、`initialPrompt`、`memory`、`effort`、`background`、`omitClaudeMd`、`isolation`；`color` 與 `experimental` 只能寫在定義檔裡[1]。
+`--agents` CLI 旗標接受 JSON，每個 agent 除了 `prompt`（對應 Markdown 檔的內文部分，等同 system prompt），只支援上表其中 15 個欄位：`description`、`tools`、`disallowedTools`、`model`、`permissionMode`、`mcpServers`、`hooks`、`maxTurns`、`skills`、`initialPrompt`、`memory`、`effort`、`background`、`omitClaudeMd`、`isolation`；`color` 與 `experimental` 只能寫在定義檔裡[1]。`--agents` 定義的 subagent 只存在那個 session，不會寫進磁碟，適合快速測試或自動化腳本[1]。
+
+`permissionMode` 不寫時，subagent 沿用主對話的權限模式。主對話處在 `bypassPermissions`、`acceptEdits` 或 auto mode 時，subagent 也跑同一個模式，你設的 `permissionMode` 會被忽略[1]。
+
+幾個管理上的細節[1]：
+
+- **改檔不用重啟**：Claude Code 會監看 `~/.claude/agents/` 和 `.claude/agents/`，新增或修改定義檔後幾秒內就會偵測到，下一次派工就用新版。監看只涵蓋 session 開始時已經存在的目錄，所以在新的 `agents` 目錄裡建第一個檔之後要重啟一次。
+- **`/agents` 現在只是提示**：執行 `/agents` 只會提醒你請 Claude 幫忙，或直接改 `.claude/agents/`、`~/.claude/agents/`。v2.1.197 以前它會開一個互動精靈。`/agents` 跟 `claude agents` 是兩回事[2]。
+- **`Task` 改名成 `Agent`**：v2.1.63 起 Task 工具改名為 Agent，設定和定義檔裡舊的 `Task(...)` 寫法仍然當成別名有效。
 
 !!! tip "`tools` 與 `disallowedTools` 同時設定時"
     官方原文：「If both are set, `disallowedTools` is applied first, then `tools` is resolved against the remaining pool. A tool listed in both is removed.」[1] 兩個欄位都接受 MCP server 層級的萬用寫法，`mcp__<server>` 或 `mcp__<server>__*` 代表整台伺服器的所有工具；`disallowedTools` 裡的 `mcp__*` 則會移除所有 MCP 工具。
 
 !!! warning "frontmatter 寫錯會被靜默跳過，不是報錯給你看"
-    `name` 以 `-` 開頭或含 `:`、有 `name` 沒 `description`、YAML 解析不出來，這三種情況 Claude Code 都是把整個檔案跳過、只寫進 debug log，不會在對話裡提醒你這個 subagent 沒生效。跑 `claude --debug` 才看得到；也可以先跑 `claude plugin validate` 對著 `.claude/agents` 或 `~/.claude/agents` 檢查[1]。
+    多字欄位名一律用 camelCase（例如 `maxTurns`、`disallowedTools`），而且要跟欄位表一字不差，Claude Code 遇到不認得的欄位會直接忽略，不會報錯[1]。`name` 以 `-` 開頭或含 `:`、有 `name` 沒 `description`、YAML 解析不出來，這三種情況 Claude Code 都是把整個檔案跳過、只寫進 debug log，不會在對話裡提醒你這個 subagent 沒生效。跑 `claude --debug` 才看得到；也可以先跑 `claude plugin validate` 對著 `.claude/agents` 或 `~/.claude/agents` 檢查[1]。
 
 ## 4. 模型怎麼選：`fable` 是什麼、解析順序
 
@@ -133,7 +175,7 @@ Claude 呼叫 subagent 時，實際套用的模型依這個順序解析（由高
 3. `CLAUDE_CODE_SUBAGENT_MODEL` 環境變數（設成 model alias 或 model ID 時才生效）
 4. 主線對話目前的模型
 
-`CLAUDE_CODE_SUBAGENT_MODEL` 只是預設值，subagent 定義檔或派工當下傳的參數仍然優先。要讓每個 subagent（含內建的 Explore／Plan、teammate、workflow agent）都強制套用同一個模型，要另外設 `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`（v2.1.257 起）；開啟後 Claude 連派工時都不能再指定模型，只有 fork、以及設了 `model: inherit` 的 skill-in-subagent 例外[1]。
+`CLAUDE_CODE_SUBAGENT_MODEL` 只是預設值，subagent 定義檔或派工當下傳的參數仍然優先。要讓每個 subagent（含內建的 Explore／Plan、teammate、workflow agent）都強制套用同一個模型，要另外設 `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`（v2.1.257 起）；開啟後 Claude 連派工時都不能再指定模型，只有 fork、以及設了 `model: inherit` 的 skill-in-subagent 例外[1]。v2.1.251 以前的順序不一樣，`CLAUDE_CODE_SUBAGENT_MODEL` 排在第一位，會蓋過派工參數和 frontmatter，連 `model: inherit` 也蓋過[1]。想確認某個 subagent 實際跑在哪個模型上，執行 `/tasks`，subagent 那一列會寫出模型名稱[1]。
 
 ## 5. 工具怎麼被過濾
 
@@ -155,16 +197,22 @@ Claude 用 Agent 工具派 subagent 時，會依序檢查以下條件決定前�
 
 1. 如果是某個 agent team teammate（in-process）自己派出的 subagent，一律跑前景；teammate 的定義檔若設了 `background: true` 會直接被拒絕派工
 2. 你設了 `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1`，一律跑前景
-3. **fork mode 開啟時**（互動 session 預設就是開的）：一律跑背景，Claude 沒辦法要求前景
+3. **fork mode 開啟時**（預設就是開的）：一律跑背景，Claude 沒辦法要求前景
 4. fork mode 關閉時：預設背景，只有 Claude 需要立刻拿到結果才跑前景；要讓某個 subagent 即使 Claude 想要結果也留在背景，就在它的 frontmatter 設 `background: true`
 
-背景 subagent 的結果是以「完成通知」的形式，在之後的某一輪送回主線；如果你這時候問進度，Claude 只能回報「還在跑」，不能編造結果（v2.1.211 前偶爾會誤報未完成的結果）[1]。背景 subagent 可以在自己的回合結束後仍讓一個背景 Bash／PowerShell 指令繼續跑，指令結束時會收到通知[1]。
+背景 subagent 的結果是以「完成通知」的形式，在之後的某一輪送回主線；如果你這時候問進度，Claude 只能回報「還在跑」，不能編造結果（v2.1.211 前偶爾會誤報未完成的結果）[1]。背景 subagent 可以在自己的回合結束後仍讓一個背景 Bash／PowerShell 指令繼續跑，指令結束時會收到通知[1]。正在前景跑的任務，按 Ctrl+B 可以丟到背景[1]。
+
+### fork：繼承整段對話的 subagent
+
+fork 是一種特別的 subagent，它繼承到目前為止的整段對話，不是從零開始。fork 的 system prompt 和工具定義跟主線一模一樣，第一個請求會沿用主線的 prompt cache，所以需要同一份 context 的任務，fork 比新開一個 subagent 便宜。fork 自己的工具呼叫一樣不會進到你的對話，回來的只有最後結果[1]。
+
+自己開 fork 用 `/subtask` 加上任務內容（v2.1.212 起，由原本的 `/fork` 改名），不管 fork mode 有沒有開都能用。關掉 agent view 時沒有 `/subtask`，改由 `/fork` 開 fork。fork mode 從 v2.1.302 起預設開啟，`-p`、Agent SDK、桌面版和 VS Code 都一樣；互動終端機 session 更早，v2.1.232 起就預設開啟[1]。
 
 ### isolation: worktree：怎麼真的擋住越界的指令
 
-官方原文：「A subagent starts in the main conversation's current working directory... To give the subagent an isolated copy of the repository instead, set `isolation: worktree`.」[1] 設了之後，它的 Bash／PowerShell 指令都會被限制跑在自己的 worktree 裡：如果指令的工作目錄解析結果落到主 checkout（例如 worktree 目錄在 subagent 跑到一半時被刪掉），指令會直接失敗回錯誤，不是靜默放行（v2.1.203 前不會擋）[1]。
+官方原文：「A subagent starts in the main conversation's current working directory... To give the subagent an isolated copy of the repository instead, set `isolation: worktree`.」[1] 不想寫進定義檔，也可以直接請 Claude「use worktrees for your agents」，讓這次派出的 subagent 各自用自己的 worktree，平行修改才不會互相衝突[9]。設了之後，它的 Bash／PowerShell 指令都會被限制跑在自己的 worktree 裡。要是指令的工作目錄解析結果落到主 checkout（例如 worktree 目錄在 subagent 跑到一半時被刪掉），指令會直接失敗並回傳錯誤（v2.1.203 前不會擋）[1]。
 
-這個檢查涵蓋整個「你啟動 Claude Code 那個目錄所在的 repository」；如果你自己的 session 本身就跑在一個 linked worktree 裡，檢查範圍還會包含那個 worktree 連回去的主 checkout（v2.1.210 前只檢查啟動目錄本身）。針對 Bash 指令，Claude Code 另外檢查指令內容本身：擋掉會把 git 重導向到主 checkout 的指令，也會拒絕它無法從指令文字判斷出「裡面呼叫的 git 是否留在 worktree 內」的指令（例如指令名稱是執行時才算出來的）。PowerShell 只做工作目錄檢查，`Monitor` 工具走跟 Bash 一樣的雙重檢查[1]。worktree 用完會自動清掉，前提是 subagent 沒有做出任何改動（frontmatter 欄位表原文：「The worktree is automatically cleaned up if the subagent makes no changes」）[1]。
+這個檢查涵蓋整個「你啟動 Claude Code 那個目錄所在的 repository」；如果你自己的 session 本身就跑在一個 linked worktree 裡，檢查範圍還會包含那個 worktree 連回去的主 checkout。針對 Bash 指令，Claude Code 另外檢查指令內容本身：擋掉會把 git 重導向到主 checkout 的指令，也會拒絕它無法從指令文字判斷出「裡面呼叫的 git 是否留在 worktree 內」的指令（例如指令名稱是執行時才算出來的）。PowerShell 只做工作目錄檢查，`Monitor` 工具走跟 Bash 一樣的雙重檢查[1]。worktree 用完會自動清掉，前提是 subagent 沒有做出任何改動（frontmatter 欄位表原文：「The worktree is automatically cleaned up if the subagent makes no changes」）[1]。
 
 當主線對話自己就跑在一個 worktree 裡時，這套檢查同時套用在 session 本身和它派出的每一個 subagent，包括沒設 `isolation: worktree` 的[1]。
 
@@ -204,13 +252,17 @@ Dynamic workflow 是一支由 Claude 寫出來、在背景由 runtime 執行的 
 跑 workflow 前 Claude Code 通常會先問是否放行，這個提示會依權限模式而不同；在 `claude -p` 與 Agent SDK 裡完全不會跳出這個提示，改用一般的權限規則決定，其中最直接的是在 allow 規則裡放 `Workflow`（放行所有 workflow）或 `Workflow(<name>)`（只放行某個已存檔的 workflow）[3]。跑起來的 workflow 可以用 `/workflows` 監看每個階段的 agent 數、token 用量與經過時間[3]。這也是為什麼[第 5 節](#5-工具怎麼被過濾)提到 `Workflow` 本身被第一層過濾器整批拿掉：subagent 不能自己再派一個 workflow。
 
 !!! note "併發上限"
-    一個 session 裡同時跑滿 20 個 subagent 時，再用 Agent 工具派下一個會直接失敗、報 `Concurrent subagent limit reached`，Claude 收到的錯誤訊息會註明不要重試；等執行中的數量降到門檻以下才能再派。要調整這個上限，設環境變數 `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`。啟用 ultracode 的 session 不受這個限制[1]。
+    一個 session 裡同時跑滿 20 個 subagent 時，再用 Agent 工具派下一個會直接失敗、報 `Concurrent subagent limit reached`，Claude 收到的錯誤訊息會註明不要重試；等執行中的數量降到門檻以下才能再派。要調整這個上限，設環境變數 `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS`。啟用 ultracode 的 session 不受這個限制[1]。整個 session 累計能派幾個 subagent 則沒有上限[1]。
+
+    另一個限制是巢狀深度。subagent 預設可以再派自己的 subagent，最多到主對話以下三層；到了上限，除了 fork 以外的 subagent 都拿不到 `Agent` 工具，只能自己做完再回一份摘要。要調整就設 `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`，設成 `1` 等於關掉巢狀（v2.1.217 到 v2.1.218 預設是一層，v2.1.219 才改成三層）[1]。
 
 ## 9. 成本：三層倍數，不能互換引用
 
 官方分析自家多代理研究系統時給過一個常被引用的數字，逐字如下：「In our data, agents typically use about 4× more tokens than chat interactions, and multi-agent systems use about 15× more tokens than chats.」[5] 也就是「一般聊天」對「單一 agent」對「多代理系統」，是 1 倍、約 4 倍、約 15 倍。15 倍的比較基準是一般聊天，不是單一 agent。
 
 另一個常被搞混的數字來自完全不同的文件，官方原文：「Agent teams use approximately 7x more tokens than standard sessions when teammates run in plan mode, because each teammate maintains its own context window and runs as a separate Claude instance.」[4] 這個 7 倍限定在「teammate 跑 plan mode」這個情境，比較基準是標準 session，跟前面的 15 倍是兩篇不同文件、兩個不同系統、不同比較基準，**不可互換引用**。[把 AI 代理的工作環境設計得可靠](harness.md)第五節點出過同一組 4 倍／15 倍數字，這裡補上 agent teams 那個獨立的 7 倍，並且明講兩者不能混為一談。
+
+倍數之外，還有兩筆容易漏算的帳。subagent 跑完後結果會回到主對話，派很多個、每個都回一大份詳細結果，主對話的 context 也會被吃掉不少，而每個 subagent 跑的時候自己也在花 token[1]。subagent 自己送出的請求，跟主對話算在同一份用量上限裡[1]。
 
 官方給的省 token 建議跟這組倍數是同一個脈絡，摘要幾條跟 subagent 直接相關的[4]：
 
@@ -264,10 +316,12 @@ Codex 內建三種現成 agent：`default`（萬用備援）、`worker`（專注
 | [1] | Create custom subagents | <https://code.claude.com/docs/en/sub-agents> |
 | [2] | Run agents in parallel | <https://code.claude.com/docs/en/agents> |
 | [3] | Orchestrate subagents at scale with dynamic workflows | <https://code.claude.com/docs/en/workflows> |
-| [4] | Costs（Reduce token usage、Agent team token costs） | <https://code.claude.com/docs/en/costs> |
+| [4] | Manage costs effectively（Reduce token usage、Agent team token costs） | <https://code.claude.com/docs/en/costs> |
 | [5] | How we built our multi-agent research system | <https://www.anthropic.com/engineering/multi-agent-research-system> |
 | [6] | Tools reference（`SendMessage`／`ListAgents`） | <https://code.claude.com/docs/en/tools-reference> |
 | [7] | Subagents（Codex） | <https://learn.chatgpt.com/docs/agent-configuration/subagents> |
+| [8] | Best practices for Claude Code（用 subagent 做研究、對抗式審查） | <https://code.claude.com/docs/en/best-practices> |
+| [9] | Run parallel sessions with worktrees（Isolate subagents with worktrees） | <https://code.claude.com/docs/en/worktrees> |
 
 延伸：[SKILL、Plugin、MCP 與 Subagent](extensions.md)｜[Hooks 與 Subagent 設定](hooks-subagents.md)｜[把 AI 代理的工作環境設計得可靠](harness.md)｜[AI Agent 怎麼運作](agent-basics.md)
 
