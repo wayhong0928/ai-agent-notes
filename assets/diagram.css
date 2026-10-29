@@ -8,7 +8,7 @@
   .diagram .dg-wide { display: none; }
   .diagram .dg-narrow { display: block; }
 }
-.diagram figcaption { margin-top: .7rem; font-size: .9rem; line-height: 1.75; color: var(--ink-soft); }
+.diagram figcaption { margin-top: .7rem; font-size: .875rem; line-height: 1.75; color: var(--ink-soft); }
 
 .dg-box { fill: var(--panel); stroke: var(--rule); stroke-width: 1.5; }
 .dg-key { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }

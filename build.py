@@ -109,7 +109,7 @@ def source_updated(src):
 def nav_html(active, prefix=""):
     out = ['<nav class="sidenav" id="sidenav" aria-label="全站導覽">']
     out.append(f'<a class="brand" href="{prefix}index.html"><span class="brand-mark">◈</span>'
-               f'<span class="brand-text">AI Agent<br><small>筆記</small></span></a>')
+               f'<span class="brand-text">AI Agent</span></a>')
     out.append('<div class="navsearch"><input type="search" id="navfilter" '
                'placeholder="篩選頁面…" aria-label="篩選頁面"></div>')
     out.append(f'<a class="navread" href="{prefix}reading.html">閱讀追蹤</a>')
@@ -191,7 +191,6 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 <main id="main">
 
 <header class="hero">
-<span class="tag">Claude ／ Codex ／ AI Agent</span>
 <h1>AI Agent 筆記</h1>
 <p><strong>開始用 Claude Code、Codex 這類 AI 代理工具之前，先弄懂它怎麼運作、怎麼設定，以及哪些事要自己把關。</strong></p>
 <p>Claude、Codex 與 AI 代理工具的整理筆記</p>
@@ -282,7 +281,7 @@ def build_index():
             cards.append(f'<a class="card" href="pages/{slug}.html">'
                          f'<h3>{title}</h3><p>{desc}</p></a>')
         parts.append(
-            f'<section class="mapsec"><h2><span class="num">{i:02d}</span>{sec}</h2>'
+            f'<section class="mapsec"><h2>{sec}</h2>'
             f'<p class="secdesc">{SEC_DESC.get(sec, "")}</p>'
             f'<div class="cards">{"".join(cards)}</div></section>')
     out = INDEX_TEMPLATE.format(nav=nav_html(None, prefix=""), sections="\n".join(parts),
@@ -376,7 +375,6 @@ def build():
 
 READING_BODY = """
 <header class="hero">
-<span class="tag">閱讀紀錄</span>
 <h1>閱讀追蹤</h1>
 <p>本站的文章頁都列在下面，讀完一頁就勾起來，沒勾的就是還沒讀的。勾過的頁面之後如果改版，會出現在「讀後有更新」。</p>
 </header>
